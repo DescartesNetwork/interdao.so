@@ -1,0 +1,2 @@
+"use strict";(globalThis.webpackChunkinterdao=globalThis.webpackChunkinterdao||[]).push([[423],{48423:(a,e,t)=>{t.r(e),t.d(e,{panels:()=>c,logo:()=>p,readme:()=>s});var d=t(59062),p=t(17100),s=t(89374);const c=[d]},89374:(a,e,t)=>{a.exports=t.p+"static/media/README.cc06a5f56da5ba785b81.md"},17100:(a,e,t)=>{a.exports=t.p+"static/media/logo.da175f6d5d1564b6bc58.png"},59062:(a,e,t)=>{a.exports=t.p+"static/media/panel.6ce7bc345912340df001.png"}}]);
+//# sourceMappingURL=423.66047ba7.chunk.js.map
