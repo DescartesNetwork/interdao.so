@@ -6,6 +6,10 @@ import { AppDispatch } from 'app/model'
 import configs from 'app/configs'
 import { getProposal } from 'app/model/proposal.controller'
 
+const {
+  sol: { interDao },
+} = configs
+
 // Watch id
 let initializeProposalEventId = 0
 let voteForEventId = 0
@@ -25,9 +29,6 @@ const ProposalWatcher = () => {
 
   // Watch dao events
   const watchData = useCallback(async () => {
-    const {
-      sol: { interDao },
-    } = configs
     initializeProposalEventId = await interDao.addListener(
       'InitializeProposalEvent',
       reloadProposalData,
@@ -52,9 +53,6 @@ const ProposalWatcher = () => {
     return () => {
       ;(async () => {
         try {
-          const {
-            sol: { interDao },
-          } = configs
           await interDao.removeListener(initializeProposalEventId)
           await interDao.removeListener(voteForEventId)
           await interDao.removeListener(voteAgainstEventId)

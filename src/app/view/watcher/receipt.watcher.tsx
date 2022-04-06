@@ -8,6 +8,10 @@ import { AppDispatch } from 'app/model'
 import configs from 'app/configs'
 import { getReceipt, getReceipts } from 'app/model/receipt.controller'
 
+const {
+  sol: { interDao },
+} = configs
+
 // Watch id
 let voteForEventId = 0
 let voteAgainstEventId = 0
@@ -41,9 +45,6 @@ const ReceiptWatcher = () => {
   }, [dispatch, walletAddress])
   // Watch dao events
   const watchData = useCallback(async () => {
-    const {
-      sol: { interDao },
-    } = configs
     voteForEventId = await interDao.addListener(
       'VoteForEvent',
       reloadReceiptData,
@@ -62,9 +63,6 @@ const ReceiptWatcher = () => {
     return () => {
       ;(async () => {
         try {
-          const {
-            sol: { interDao },
-          } = configs
           await interDao.removeListener(voteForEventId)
           await interDao.removeListener(voteAgainstEventId)
           await interDao.removeListener(closeEventId)

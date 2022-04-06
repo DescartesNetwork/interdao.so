@@ -8,6 +8,10 @@ import { AppDispatch } from 'app/model'
 import configs from 'app/configs'
 import { getDao, getDaos } from 'app/model/dao.controller'
 
+const {
+  sol: { interDao },
+} = configs
+
 // Watch id
 let initializeDAOEventId = 0
 let updateDaoMechanismEventId = 0
@@ -42,9 +46,6 @@ const DaoWatcher = () => {
   }, [dispatch, walletAddress])
   // Watch dao events
   const watchData = useCallback(async () => {
-    const {
-      sol: { interDao },
-    } = configs
     initializeDAOEventId = await interDao.addListener(
       'InitializeDAOEvent',
       reloadDaoData,
@@ -70,9 +71,6 @@ const DaoWatcher = () => {
     return () => {
       ;(async () => {
         try {
-          const {
-            sol: { interDao },
-          } = configs
           await interDao.removeListener(initializeDAOEventId)
           await interDao.removeListener(updateDaoMechanismEventId)
           await interDao.removeListener(updateSupplyEventId)
