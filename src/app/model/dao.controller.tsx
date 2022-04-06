@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { DaoData } from '@interdao/core'
 
 import configs from 'app/configs'
+import { account } from '@senswap/sen-js'
 
 const {
   sol: { interDao },
@@ -44,6 +45,38 @@ export const getDaos = createAsyncThunk(`${NAME}/getDaos`, async () => {
   return bulk
 })
 
+export const getDao = createAsyncThunk<
+  DaoState,
+  { address: string; force?: boolean },
+  { state: any }
+>(`${NAME}/getDao`, async ({ address, force }, { getState }) => {
+  if (!account.isAddress(address)) throw new Error('Invalid address')
+  const {
+    dao: { [address]: data },
+  } = getState()
+  if (data && !force) return { [address]: data }
+  const raw = await interDao.getDaoData(address)
+  return { [address]: raw }
+})
+
+export const upsetDao = createAsyncThunk<
+  DaoState,
+  { address: string; data: DaoData },
+  { state: any }
+>(`${NAME}/upsetDao`, async ({ address, data }) => {
+  if (!account.isAddress(address)) throw new Error('Invalid address')
+  if (!data) throw new Error('Data is empty')
+  return { [address]: data }
+})
+
+export const deleteDao = createAsyncThunk(
+  `${NAME}/deleteDao`,
+  async ({ address }: { address: string }) => {
+    if (!account.isAddress(address)) throw new Error('Invalid address')
+    return { address }
+  },
+)
+
 /**
  * Usual procedure
  */
@@ -53,10 +86,19 @@ const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) =>
-    void builder.addCase(
-      getDaos.fulfilled,
-      (state, { payload }) => void Object.assign(state, payload),
-    ),
+    void builder
+      .addCase(
+        getDaos.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        upsetDao.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        deleteDao.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      ),
 })
 
 export default slice.reducer

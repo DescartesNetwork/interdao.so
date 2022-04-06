@@ -3,8 +3,12 @@ import { useDispatch } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { useWallet } from '@senhub/providers'
 
-import { getDaos } from 'app/model/dao.controller'
+import { getDao, getDaos } from 'app/model/dao.controller'
 import { AppDispatch } from 'app/model'
+import configs from 'app/configs'
+
+// Watch id
+let initializeDAOEventId = 0
 
 const DaoWatcher = () => {
   const {
@@ -24,10 +28,37 @@ const DaoWatcher = () => {
       })
     }
   }, [dispatch, walletAddress])
+  // Watch dao events
+  const watchData = useCallback(async () => {
+    const {
+      sol: { interDao },
+    } = configs
+    initializeDAOEventId = await interDao.addListener(
+      'InitializeDAOEvent',
+      ({ dao: daoPublicKey }) => {
+        return dispatch(
+          getDao({ address: daoPublicKey.toBase58(), force: true }),
+        )
+      },
+    )
+  }, [dispatch])
 
   useEffect(() => {
     fetchData()
-  }, [fetchData])
+    watchData()
+    // Unwatch (cancel socket)
+    return () => {
+      ;(async () => {
+        try {
+          const {
+            sol: { interDao },
+          } = configs
+          await interDao.removeListener(initializeDAOEventId)
+        } catch (er) {}
+      })()
+      initializeDAOEventId = 0
+    }
+  }, [fetchData, watchData])
 
   return <Fragment />
 }
