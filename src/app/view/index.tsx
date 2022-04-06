@@ -1,31 +1,15 @@
-import { useCallback, useEffect, useMemo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useWallet } from '@senhub/providers'
+import { useSelector } from 'react-redux'
 
-import { Row, Col, Typography, Button, Space } from 'antd'
+import { Row, Col, Typography, Space } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
+import DaoWatcher from './watcher/dao.watcher'
 
-import { AppDispatch, AppState } from 'app/model'
-import { increaseCounter } from 'app/model/main.controller'
-import configs from 'app/configs'
-import { createPDB } from 'shared/pdb'
-
-const {
-  manifest: { appId },
-} = configs
+import { AppState } from 'app/model'
 
 const View = () => {
-  const {
-    wallet: { address },
-  } = useWallet()
-  const dispatch = useDispatch<AppDispatch>()
-  const { counter } = useSelector((state: AppState) => state.main)
+  const { dao } = useSelector((state: AppState) => state)
 
-  const pdb = useMemo(() => createPDB(address, appId), [address])
-  const increase = useCallback(() => dispatch(increaseCounter()), [dispatch])
-  useEffect(() => {
-    if (pdb) pdb.setItem('counter', counter)
-  }, [pdb, counter])
+  console.log(dao)
 
   return (
     <Row gutter={[24, 24]} align="middle">
@@ -35,15 +19,7 @@ const View = () => {
           <Typography.Title level={4}>App View</Typography.Title>
         </Space>
       </Col>
-      <Col span={24}>
-        <Typography.Text>Address: {address}</Typography.Text>
-      </Col>
-      <Col>
-        <Typography.Text>Counter: {counter}</Typography.Text>
-      </Col>
-      <Col>
-        <Button onClick={increase}>Increase</Button>
-      </Col>
+      <DaoWatcher />
     </Row>
   )
 }

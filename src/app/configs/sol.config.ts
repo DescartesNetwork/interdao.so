@@ -1,12 +1,13 @@
+import InterDAO from '@interdao/core'
+import SafeWallet from 'app/helpers/safeWallet'
 import { Net } from 'shared/runtime'
 
 /**
  * Contructor
  */
 type Conf = {
-  node: string
-  spltAddress: string
-  splataAddress: string
+  rpc: string
+  interDao: InterDAO
 }
 
 const conf: Record<Net, Conf> = {
@@ -14,27 +15,24 @@ const conf: Record<Net, Conf> = {
    * Development configurations
    */
   devnet: {
-    node: 'https://api.devnet.solana.com',
-    spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-    splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+    rpc: 'https://api.devnet.solana.com',
+    interDao: new InterDAO(new SafeWallet()),
   },
 
   /**
    * Staging configurations
    */
   testnet: {
-    node: 'https://api.testnet.solana.com',
-    spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-    splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+    rpc: 'https://api.testnet.solana.com',
+    interDao: new InterDAO(new SafeWallet()),
   },
 
   /**
    * Production configurations
    */
   mainnet: {
-    node: 'https://api.mainnet-beta.solana.com',
-    spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-    splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+    rpc: 'https://ssc-dao.genesysgo.net',
+    interDao: new InterDAO(new SafeWallet()),
   },
 }
 
