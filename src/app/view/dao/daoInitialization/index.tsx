@@ -4,7 +4,7 @@ import { Button } from 'antd'
 import DaoInitializationForm from './form'
 
 const DaoInitialization = () => {
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(false)
 
   return (
     <Fragment>
