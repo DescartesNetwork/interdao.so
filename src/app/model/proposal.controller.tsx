@@ -1,6 +1,6 @@
 import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { DaoData } from '@interdao/core'
+import { ProposalData } from '@interdao/core'
 import { account } from '@senswap/sen-js'
 
 import configs from 'app/configs'
@@ -13,64 +13,73 @@ const {
  * Interface & Utility
  */
 
-export type DaoState = Record<string, DaoData>
+export type ProposalState = Record<string, ProposalData>
 
 /**
  * Store constructor
  */
 
-const NAME = 'dao'
-const initialState: DaoState = {}
+const NAME = 'proposal'
+const initialState: ProposalState = {}
 
 /**
  * Actions
  */
 
-export const getDaos = createAsyncThunk(`${NAME}/getDaos`, async () => {
-  const {
-    provider: { connection },
-    programId,
-    account: { dao },
-  } = interDao.program
-  const value: Array<{ pubkey: PublicKey; account: AccountInfo<Buffer> }> =
-    await connection.getProgramAccounts(programId, {
-      filters: [{ dataSize: dao.size }],
+export const getProposals = createAsyncThunk(
+  `${NAME}/getProposals`,
+  async ({ daoAddress }: { daoAddress: string }) => {
+    const {
+      provider: { connection },
+      programId,
+    } = interDao.program
+    const value: Array<{ pubkey: PublicKey; account: AccountInfo<Buffer> }> =
+      await connection.getProgramAccounts(programId, {
+        filters: [
+          {
+            memcmp: {
+              offset: 48,
+              bytes: daoAddress,
+            },
+          },
+        ],
+      })
+    let bulk: ProposalState = {}
+    value.forEach(({ pubkey, account: { data: buf } }) => {
+      const address = pubkey.toBase58()
+      const data = interDao.parseProposalData(buf)
+      bulk[address] = data
     })
-  let bulk: DaoState = {}
-  value.forEach(({ pubkey, account: { data: buf } }) => {
-    const address = pubkey.toBase58()
-    const data = interDao.parseDaoData(buf)
-    bulk[address] = data
-  })
-  return bulk
-})
+    return bulk
+  },
+)
 
-export const getDao = createAsyncThunk<
-  DaoState,
+export const getProposal = createAsyncThunk<
+  ProposalState,
   { address: string; force?: boolean },
   { state: any }
->(`${NAME}/getDao`, async ({ address, force }, { getState }) => {
+>(`${NAME}/getProposal`, async ({ address, force }, { getState }) => {
   if (!account.isAddress(address)) throw new Error('Invalid address')
   const {
     dao: { [address]: data },
   } = getState()
   if (data && !force) return { [address]: data }
-  const raw = await interDao.getDaoData(address)
+  const raw = await interDao.getProposalData(address)
   return { [address]: raw }
 })
 
-export const upsetDao = createAsyncThunk<
-  DaoState,
-  { address: string; data: DaoData },
+export const upsetProposal = createAsyncThunk<
+  ProposalState,
+  { address: string; data: ProposalData },
   { state: any }
->(`${NAME}/upsetDao`, async ({ address, data }) => {
+>(`${NAME}/upsetProposal`, async ({ address, data }) => {
   if (!account.isAddress(address)) throw new Error('Invalid address')
   if (!data) throw new Error('Data is empty')
   return { [address]: data }
 })
 
-export const deleteDao = createAsyncThunk(
-  `${NAME}/deleteDao`,
+export const deleteProposal = createAsyncThunk(
+  `${NAME}/deleteProposal`,
   async ({ address }: { address: string }) => {
     if (!account.isAddress(address)) throw new Error('Invalid address')
     return { address }
@@ -88,19 +97,19 @@ const slice = createSlice({
   extraReducers: (builder) =>
     void builder
       .addCase(
-        getDaos.fulfilled,
+        getProposals.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        getDao.fulfilled,
+        getProposal.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        upsetDao.fulfilled,
+        upsetProposal.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        deleteDao.fulfilled,
+        deleteProposal.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })

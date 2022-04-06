@@ -1,16 +1,10 @@
-import { useSelector } from 'react-redux'
-
 import { Row, Col, Typography, Space } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import DaoWatcher from './watcher/dao.watcher'
-
-import { AppState } from 'app/model'
+import ProposalWatcher from './watcher/proposal.watcher'
+import ReceiptWatcher from './watcher/receipt.watcher'
 
 const View = () => {
-  const { dao } = useSelector((state: AppState) => state)
-
-  console.log(dao)
-
   return (
     <Row gutter={[24, 24]} align="middle">
       <Col span={24}>
@@ -20,6 +14,8 @@ const View = () => {
         </Space>
       </Col>
       <DaoWatcher />
+      <ProposalWatcher />
+      <ReceiptWatcher />
     </Row>
   )
 }

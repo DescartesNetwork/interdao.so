@@ -2,15 +2,17 @@ import { Fragment, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { useWallet } from '@senhub/providers'
+import { PublicKey } from '@solana/web3.js'
 
-import { getDao, getDaos } from 'app/model/dao.controller'
 import { AppDispatch } from 'app/model'
 import configs from 'app/configs'
+import { getDao, getDaos } from 'app/model/dao.controller'
 
 // Watch id
 let initializeDAOEventId = 0
 let updateDaoMechanismEventId = 0
 let updateSupplyEventId = 0
+let transferAuthorityEventId = 0
 
 const DaoWatcher = () => {
   const {
@@ -19,7 +21,8 @@ const DaoWatcher = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   const reloadDaoData = useCallback(
-    (daoAddress: string) => {
+    ({ dao: daoPublicKey }: { dao: PublicKey }) => {
+      const daoAddress = daoPublicKey.toBase58()
       return dispatch(getDao({ address: daoAddress, force: true }))
     },
     [dispatch],
@@ -44,15 +47,19 @@ const DaoWatcher = () => {
     } = configs
     initializeDAOEventId = await interDao.addListener(
       'InitializeDAOEvent',
-      ({ dao: daoPublicKey }) => reloadDaoData(daoPublicKey.toBase58()),
+      reloadDaoData,
     )
     updateDaoMechanismEventId = await interDao.addListener(
       'UpdateDaoMechanismEvent',
-      ({ dao: daoPublicKey }) => reloadDaoData(daoPublicKey.toBase58()),
+      reloadDaoData,
     )
     updateSupplyEventId = await interDao.addListener(
       'UpdateSupplyEvent',
-      ({ dao: daoPublicKey }) => reloadDaoData(daoPublicKey.toBase58()),
+      reloadDaoData,
+    )
+    transferAuthorityEventId = await interDao.addListener(
+      'TransferAuthorityEvent',
+      reloadDaoData,
     )
   }, [reloadDaoData])
 
@@ -69,11 +76,16 @@ const DaoWatcher = () => {
           await interDao.removeListener(initializeDAOEventId)
           await interDao.removeListener(updateDaoMechanismEventId)
           await interDao.removeListener(updateSupplyEventId)
-        } catch (er) {}
+          await interDao.removeListener(transferAuthorityEventId)
+        } catch (er: any) {
+          console.warn(er.message)
+        } finally {
+          initializeDAOEventId = 0
+          updateDaoMechanismEventId = 0
+          updateSupplyEventId = 0
+          transferAuthorityEventId = 0
+        }
       })()
-      initializeDAOEventId = 0
-      updateDaoMechanismEventId = 0
-      updateSupplyEventId = 0
     }
   }, [fetchData, watchData])
 
