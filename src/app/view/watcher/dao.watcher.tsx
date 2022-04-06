@@ -9,12 +9,21 @@ import configs from 'app/configs'
 
 // Watch id
 let initializeDAOEventId = 0
+let updateDaoMechanismEventId = 0
+let updateSupplyEventId = 0
 
 const DaoWatcher = () => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
   const dispatch = useDispatch<AppDispatch>()
+
+  const reloadDaoData = useCallback(
+    (daoAddress: string) => {
+      return dispatch(getDao({ address: daoAddress, force: true }))
+    },
+    [dispatch],
+  )
 
   // First-time fetching
   const fetchData = useCallback(async () => {
@@ -35,13 +44,17 @@ const DaoWatcher = () => {
     } = configs
     initializeDAOEventId = await interDao.addListener(
       'InitializeDAOEvent',
-      ({ dao: daoPublicKey }) => {
-        return dispatch(
-          getDao({ address: daoPublicKey.toBase58(), force: true }),
-        )
-      },
+      ({ dao: daoPublicKey }) => reloadDaoData(daoPublicKey.toBase58()),
     )
-  }, [dispatch])
+    updateDaoMechanismEventId = await interDao.addListener(
+      'UpdateDaoMechanismEvent',
+      ({ dao: daoPublicKey }) => reloadDaoData(daoPublicKey.toBase58()),
+    )
+    updateSupplyEventId = await interDao.addListener(
+      'UpdateSupplyEvent',
+      ({ dao: daoPublicKey }) => reloadDaoData(daoPublicKey.toBase58()),
+    )
+  }, [reloadDaoData])
 
   useEffect(() => {
     fetchData()
@@ -54,9 +67,13 @@ const DaoWatcher = () => {
             sol: { interDao },
           } = configs
           await interDao.removeListener(initializeDAOEventId)
+          await interDao.removeListener(updateDaoMechanismEventId)
+          await interDao.removeListener(updateSupplyEventId)
         } catch (er) {}
       })()
       initializeDAOEventId = 0
+      updateDaoMechanismEventId = 0
+      updateSupplyEventId = 0
     }
   }, [fetchData, watchData])
 
