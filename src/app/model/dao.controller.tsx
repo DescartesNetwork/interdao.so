@@ -30,7 +30,6 @@ export const getDaos = createAsyncThunk(`${NAME}/getDaos`, async () => {
     provider: { connection },
     programId,
     account,
-    coder,
   } = interDao.program
   const value: Array<{ pubkey: PublicKey; account: AccountInfo<Buffer> }> =
     await connection.getProgramAccounts(programId, {
@@ -39,7 +38,7 @@ export const getDaos = createAsyncThunk(`${NAME}/getDaos`, async () => {
   let bulk: DaoState = {}
   value.forEach(({ pubkey, account: { data: buf } }) => {
     const address = pubkey.toBase58()
-    const data = coder.accounts.decode('dao', buf)
+    const data = interDao.parseDaoData(buf)
     bulk[address] = data
   })
   return bulk

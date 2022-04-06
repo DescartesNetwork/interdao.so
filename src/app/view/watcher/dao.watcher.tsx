@@ -17,8 +17,7 @@ const DaoWatcher = () => {
     try {
       if (!account.isAddress(walletAddress)) return
       await dispatch(getDaos()).unwrap()
-    } catch (er: any) {
-      console.log(er.message)
+    } catch (er) {
       return window.notify({
         type: 'error',
         description: 'Cannot fetch data of DAOs',
