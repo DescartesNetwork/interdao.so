@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { devTools, bigintSerializationMiddleware } from 'shared/devTools'
 
 import dao from 'app/model/dao.controller'
+import metadata from 'app/model/metadata.controller'
 import proposal from 'app/model/proposal.controller'
 import receipt from 'app/model/receipt.controller'
 
@@ -14,6 +15,7 @@ const model = configureStore({
   devTools: devTools(process.env.REACT_APP_ID as string),
   reducer: {
     dao,
+    metadata,
     proposal,
     receipt,
   },
