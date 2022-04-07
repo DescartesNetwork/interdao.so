@@ -1,4 +1,6 @@
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import { DaoMechanisms } from '@interdao/core'
+import { account } from '@senswap/sen-js'
 import BN from 'bn.js'
 
 import {
@@ -16,8 +18,6 @@ import IonIcon from 'shared/antd/ionicon'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 
 import configs from 'app/configs'
-import { DaoMechanisms } from '@interdao/core'
-import { account } from '@senswap/sen-js'
 import { explorer } from 'shared/util'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 

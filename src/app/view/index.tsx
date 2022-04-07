@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import { Row, Col } from 'antd'
 import Dao from './dao'
 import Proposal from './proposal'
+import ProposalInitialization from './proposal/proposalInitialization'
 import DaoWatcher from './watcher/dao.watcher'
 import ProposalWatcher from './watcher/proposal.watcher'
 import ReceiptWatcher from './watcher/receipt.watcher'
@@ -23,6 +24,11 @@ const View = () => {
             exact
             path={`/app/${appId}/dao/:daoAddress`}
             component={Proposal}
+          />
+          <Route
+            exact
+            path={`/app/${appId}/dao/:daoAddress/new-proposal`}
+            component={ProposalInitialization}
           />
           <Redirect from="*" to={`/app/${appId}/dao`} />
         </Switch>

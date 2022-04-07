@@ -32,7 +32,16 @@ const Proposal = () => {
           </Typography.Title>
         </Space>
       </Col>
-      <Col>{/* <DaoInitialization /> */}</Col>
+      <Col>
+        <Button
+          type="primary"
+          onClick={() =>
+            history.push(`/app/${appId}/dao/${daoAddress}/new-proposal`)
+          }
+        >
+          New Proposal
+        </Button>
+      </Col>
       <Col span={24}>
         <ProposalList daoAddress={daoAddress} />
       </Col>
