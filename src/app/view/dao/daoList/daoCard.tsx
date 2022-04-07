@@ -1,18 +1,21 @@
-import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import { account } from '@senswap/sen-js'
+import { useWallet } from '@senhub/providers'
 import { DaoData } from '@interdao/core'
 
-import { Avatar, Card, Col, Row, Space, Typography } from 'antd'
+import { Avatar, Card, Col, Row, Space, Spin, Typography } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 import MechanismTag from 'app/components/mechanismTag'
 
-import { AppState } from 'app/model'
+import { AppDispatch, AppState } from 'app/model'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import { shortenAddress } from 'shared/util'
+import { getMember, Metadata } from 'app/model/metadata.controller'
+import IonIcon from 'shared/antd/ionicon'
 
 import imgAvt from 'app/static/images/system/avatar.svg'
-import IonIcon from 'shared/antd/ionicon'
-import { useWallet } from '@senhub/providers'
-import { account } from '@senswap/sen-js'
 
 export type DaoCardProps = { daoAddress: string }
 
@@ -20,21 +23,26 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const { dao } = useSelector((state: AppState) => state)
+  const { dao, metadata } = useSelector((state: AppState) => state)
   const history = useHistory()
+  const dispatch = useDispatch<AppDispatch>()
 
   const { mechanism, supply, mint, nonce, authority } =
     dao[daoAddress] || ({} as DaoData)
+  const { members } = metadata[daoAddress] || ({} as Metadata)
   const decimals = useMintDecimals(mint.toBase58()) || 0
   const circulatingSupply = supply.toNumber() / 10 ** decimals
   const authAddress = authority.toBase58()
   const isAuthor =
     account.isAddress(authAddress) && authAddress === walletAddress
 
+  useEffect(() => {
+    if (account.isAddress(daoAddress)) dispatch(getMember({ daoAddress }))
+  }, [dispatch, daoAddress])
+
   return (
     <Card
       bordered={false}
-      style={{ height: '100%' }}
       bodyStyle={{ boxShadow: 'unset', cursor: 'pointer' }}
       onClick={() => history.push(`dao/${daoAddress}`)}
     >
@@ -51,7 +59,15 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
               </Space>
               <Space>
                 <Typography.Text className="caption">
-                  Member ({'~'})
+                  Members (
+                  {members || (
+                    <Spin
+                      size="small"
+                      spinning
+                      indicator={<LoadingOutlined style={{ fontSize: 12 }} />}
+                    />
+                  )}
+                  )
                 </Typography.Text>
                 <Typography.Text className="caption">
                   Proposals ({nonce.toNumber()})
@@ -64,7 +80,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
           </Space>
         </Col>
         <Col span={24}>
-          <Typography.Text>
+          <Typography.Text className="ellipsis-text">
             About: dOrg is helping to build the SafeSnap app, which enables
             cheap yet secure governance through on-chain execution of off-chain
             votes.
