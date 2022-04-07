@@ -107,7 +107,7 @@ const DaoInitialization = () => {
         <Button
           type="text"
           icon={<IonIcon name="arrow-back-outline" />}
-          onClick={() => history.push('')}
+          onClick={() => history.push('/app/interdao/dao')}
           style={{ margin: -12 }}
         >
           Back
