@@ -6,6 +6,7 @@ import { Row, Col } from 'antd'
 import Dao from './dao'
 import Proposal from './proposal'
 import ProposalInitialization from './proposal/proposalInitialization'
+import DaoInitialization from './dao/daoInitialization'
 import DaoWatcher from './watcher/dao.watcher'
 import ProposalWatcher from './watcher/proposal.watcher'
 import ReceiptWatcher from './watcher/receipt.watcher'
@@ -29,6 +30,11 @@ const View = () => {
       <Col span={24}>
         <Switch>
           <Route exact path={`/app/${appId}/dao`} component={Dao} />
+          <Route
+            exact
+            path={`/app/${appId}/new-dao`}
+            component={DaoInitialization}
+          />
           <Route
             exact
             path={`/app/${appId}/dao/:daoAddress`}

@@ -5,31 +5,22 @@ import BN from 'bn.js'
 
 import {
   Button,
+  Card,
   Col,
   Input,
-  Modal,
   Radio,
   RadioChangeEvent,
   Row,
   Space,
   Typography,
 } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 
 import configs from 'app/configs'
 import { explorer } from 'shared/util'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 
-export type DaoInitializationFormProps = {
-  visible: boolean
-  onClose: () => void
-}
-
-const DaoInitializationForm = ({
-  visible = true,
-  onClose = () => {},
-}: DaoInitializationFormProps) => {
+const DaoInitialization = () => {
   const [mechanism, setMechanism] = useState('Dictatorial')
   const [mintAddress, setMintAddress] = useState('')
   const [circulatingSupply, setCirculatingSupply] = useState('')
@@ -47,8 +38,7 @@ const DaoInitializationForm = ({
     setMechanism('Dictatorial')
     setMintAddress('')
     setCirculatingSupply('')
-    return onClose()
-  }, [onClose])
+  }, [])
 
   const newDao = useCallback(async () => {
     if (!valid) return
@@ -83,12 +73,7 @@ const DaoInitializationForm = ({
   }, [valid, mechanism, mintAddress, circulatingSupply, decimals, close])
 
   return (
-    <Modal
-      visible={visible}
-      onCancel={onClose}
-      footer={null}
-      closeIcon={<IonIcon name="close-outline" />}
-    >
+    <Card>
       <Row gutter={[24, 24]}>
         <Col span={24}>
           <Typography.Title level={5}>New DAO</Typography.Title>
@@ -147,8 +132,8 @@ const DaoInitializationForm = ({
           </Button>
         </Col>
       </Row>
-    </Modal>
+    </Card>
   )
 }
 
-export default DaoInitializationForm
+export default DaoInitialization
