@@ -34,7 +34,6 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
   return (
     <Card
       bordered={false}
-      style={{ height: '100%' }}
       bodyStyle={{ boxShadow: 'unset', cursor: 'pointer' }}
       onClick={() => history.push(`dao/${daoAddress}`)}
     >
@@ -64,7 +63,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
           </Space>
         </Col>
         <Col span={24}>
-          <Typography.Text>
+          <Typography.Text className="ellipsis-text">
             About: dOrg is helping to build the SafeSnap app, which enables
             cheap yet secure governance through on-chain execution of off-chain
             votes.
