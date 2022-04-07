@@ -18,6 +18,7 @@
   box-shadow: unset;
   border-radius: 0;
   text-transform: capitalize;
+  text-align: center;
   &::after {
     content: '';
     position: absolute;
@@ -29,6 +30,12 @@
     border-bottom: 14px solid transparent;
     border-left: 8px solid #f4f4f5;
   }
+}
+.ellipsis-text {
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  display: -webkit-box;
 }
 
 #dark {

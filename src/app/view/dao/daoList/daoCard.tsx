@@ -1,20 +1,21 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import { account } from '@senswap/sen-js'
+import { useWallet } from '@senhub/providers'
 import { DaoData } from '@interdao/core'
 
-import { Avatar, Card, Col, Row, Space, Typography } from 'antd'
+import { Avatar, Card, Col, Row, Space, Spin, Typography } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 import MechanismTag from 'app/components/mechanismTag'
 
 import { AppDispatch, AppState } from 'app/model'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import { shortenAddress } from 'shared/util'
+import { getMember, Metadata } from 'app/model/metadata.controller'
+import IonIcon from 'shared/antd/ionicon'
 
 import imgAvt from 'app/static/images/system/avatar.svg'
-import IonIcon from 'shared/antd/ionicon'
-import { useWallet } from '@senhub/providers'
-import { account } from '@senswap/sen-js'
-import { useEffect } from 'react'
-import { getMember, Metadata } from 'app/model/metadata.controller'
 
 export type DaoCardProps = { daoAddress: string }
 
@@ -42,7 +43,6 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
   return (
     <Card
       bordered={false}
-      style={{ height: '100%' }}
       bodyStyle={{ boxShadow: 'unset', cursor: 'pointer' }}
       onClick={() => history.push(`dao/${daoAddress}`)}
     >
@@ -59,7 +59,15 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
               </Space>
               <Space>
                 <Typography.Text className="caption">
-                  Members ({members})
+                  Members (
+                  {members || (
+                    <Spin
+                      size="small"
+                      spinning
+                      indicator={<LoadingOutlined style={{ fontSize: 12 }} />}
+                    />
+                  )}
+                  )
                 </Typography.Text>
                 <Typography.Text className="caption">
                   Proposals ({nonce.toNumber()})
@@ -72,7 +80,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
           </Space>
         </Col>
         <Col span={24}>
-          <Typography.Text>
+          <Typography.Text className="ellipsis-text">
             About: dOrg is helping to build the SafeSnap app, which enables
             cheap yet secure governance through on-chain execution of off-chain
             votes.
