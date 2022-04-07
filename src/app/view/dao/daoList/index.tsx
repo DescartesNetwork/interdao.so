@@ -2,8 +2,9 @@ import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
 import { Col, Row } from 'antd'
-import { AppState } from 'app/model'
 import DaoCard from './daoCard'
+
+import { AppState } from 'app/model'
 
 const DaoList = () => {
   const { dao } = useSelector((state: AppState) => state)
