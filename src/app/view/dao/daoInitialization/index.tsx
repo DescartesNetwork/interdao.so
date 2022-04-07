@@ -8,7 +8,7 @@ const DaoInitialization = () => {
 
   return (
     <Fragment>
-      <Button type="primary" onClick={() => setVisible(true)}>
+      <Button ghost onClick={() => setVisible(true)}>
         New DAO
       </Button>
       <DaoInitializationForm
