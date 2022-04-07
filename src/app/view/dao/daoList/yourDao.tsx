@@ -54,7 +54,6 @@ const YourDaos = () => {
         >
           <Space direction="vertical" align="center">
             <Typography.Text type="secondary">Your DAO's empty</Typography.Text>
-            {/* <Button icon={<IonIcon name="add-outline" />}>Create DAO</Button> */}
             <DaoInitialization />
           </Space>
         </Card>
