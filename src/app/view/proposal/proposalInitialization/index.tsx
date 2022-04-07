@@ -14,6 +14,7 @@ import {
   Typography,
 } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
+import Templates from './templates'
 
 import configs from 'app/configs'
 import { explorer, shortenAddress } from 'shared/util'
@@ -174,6 +175,10 @@ const ProposalInitialization = () => {
             </Space>
           </Col>
         </Row>
+      </Col>
+      {/* Proposal Templates */}
+      <Col span={24}>
+        <Templates />
       </Col>
     </Row>
   )
