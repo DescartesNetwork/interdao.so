@@ -8,8 +8,8 @@ const DaoList = () => {
 
   return (
     <Row gutter={[24, 24]}>
-      {Object.keys(dao).map((daoAddress, i) => (
-        <Col key={i} xs={24} md={12} lg={8} xl={6}>
+      {Object.keys(dao).map((daoAddress) => (
+        <Col key={daoAddress} xs={24} md={12} lg={8} xl={6}>
           <DaoCard daoAddress={daoAddress} />
         </Col>
       ))}
