@@ -1,11 +1,11 @@
 import { useHistory, useParams } from 'react-router-dom'
 
-import { Button, Col, Row, Space, Typography } from 'antd'
+import { Button, Col, Row } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import ProposalList from './proposalList'
 
-import { shortenAddress } from 'shared/util'
 import configs from 'app/configs'
+import DaoDetails from '../dao/daoDetails'
 
 const {
   manifest: { appId },
@@ -17,20 +17,15 @@ const Proposal = () => {
 
   return (
     <Row gutter={[24, 24]} align="middle">
-      <Col flex="auto">
-        <Space>
-          <Button
-            icon={<IonIcon name="arrow-back-outline" />}
-            type="text"
-            onClick={() => history.push(`/app/${appId}/dao`)}
-          />
-          <Typography.Title level={3} type="secondary">
-            DAO:
-          </Typography.Title>
-          <Typography.Title level={3}>
-            {shortenAddress(daoAddress)}
-          </Typography.Title>
-        </Space>
+      <Col span={24}>
+        <Button
+          icon={<IonIcon name="arrow-back-outline" />}
+          type="text"
+          onClick={() => history.push(`/app/${appId}/dao`)}
+        />
+      </Col>
+      <Col span={24}>
+        <DaoDetails daoAddress={daoAddress} />
       </Col>
       <Col>
         <Button

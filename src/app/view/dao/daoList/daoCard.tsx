@@ -1,44 +1,25 @@
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { account } from '@senswap/sen-js'
-import { useWallet } from '@senhub/providers'
 import { DaoData } from '@interdao/core'
 
-import { Avatar, Card, Col, Row, Space, Spin, Typography } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
+import { Avatar, Card, Col, Row, Space, Typography } from 'antd'
 import MechanismTag from 'app/components/mechanismTag'
+import OwnerIcon from 'app/components/ownerIcon'
+import MembersCount from 'app/components/membersCount'
 
-import { AppDispatch, AppState } from 'app/model'
-import useMintDecimals from 'shared/hooks/useMintDecimals'
+import { AppState } from 'app/model'
 import { shortenAddress } from 'shared/util'
-import { getMember, Metadata } from 'app/model/metadata.controller'
-import IonIcon from 'shared/antd/ionicon'
 
 import imgAvt from 'app/static/images/system/avatar.svg'
+import DaoSupply from 'app/components/daoSupply'
 
 export type DaoCardProps = { daoAddress: string }
 
 const DaoCard = ({ daoAddress }: DaoCardProps) => {
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
-  const { dao, metadata } = useSelector((state: AppState) => state)
+  const { dao } = useSelector((state: AppState) => state)
   const history = useHistory()
-  const dispatch = useDispatch<AppDispatch>()
 
-  const { mechanism, supply, mint, nonce, authority } =
-    dao[daoAddress] || ({} as DaoData)
-  const { members } = metadata[daoAddress] || ({} as Metadata)
-  const decimals = useMintDecimals(mint.toBase58()) || 0
-  const circulatingSupply = supply.toNumber() / 10 ** decimals
-  const authAddress = authority.toBase58()
-  const isAuthor =
-    account.isAddress(authAddress) && authAddress === walletAddress
-
-  useEffect(() => {
-    if (account.isAddress(daoAddress)) dispatch(getMember({ daoAddress }))
-  }, [dispatch, daoAddress])
+  const { mechanism, nonce } = dao[daoAddress] || ({} as DaoData)
 
   return (
     <Card
@@ -55,25 +36,17 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
                 <Typography.Title level={3}>
                   {shortenAddress(daoAddress)}
                 </Typography.Title>
-                {isAuthor && <IonIcon name="person-outline" />}
+                <OwnerIcon daoAddress={daoAddress} />
               </Space>
               <Space>
                 <Typography.Text className="caption">
-                  Members (
-                  {members || (
-                    <Spin
-                      size="small"
-                      spinning
-                      indicator={<LoadingOutlined style={{ fontSize: 12 }} />}
-                    />
-                  )}
-                  )
+                  <MembersCount daoAddress={daoAddress} />
                 </Typography.Text>
                 <Typography.Text className="caption">
                   Proposals ({nonce.toNumber()})
                 </Typography.Text>
                 <Typography.Text className="caption gradient-text">
-                  {circulatingSupply.toString()} veACM
+                  <DaoSupply daoAddress={daoAddress} />
                 </Typography.Text>
               </Space>
             </Space>
