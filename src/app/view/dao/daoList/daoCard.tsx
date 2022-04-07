@@ -1,11 +1,11 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { DaoData } from '@interdao/core'
 
 import { Avatar, Card, Col, Row, Space, Typography } from 'antd'
 import MechanismTag from 'app/components/mechanismTag'
 
-import { AppState } from 'app/model'
+import { AppDispatch, AppState } from 'app/model'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import { shortenAddress } from 'shared/util'
 
@@ -13,6 +13,8 @@ import imgAvt from 'app/static/images/system/avatar.svg'
 import IonIcon from 'shared/antd/ionicon'
 import { useWallet } from '@senhub/providers'
 import { account } from '@senswap/sen-js'
+import { useEffect } from 'react'
+import { getMember, Metadata } from 'app/model/metadata.controller'
 
 export type DaoCardProps = { daoAddress: string }
 
@@ -20,16 +22,22 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const { dao } = useSelector((state: AppState) => state)
+  const { dao, metadata } = useSelector((state: AppState) => state)
   const history = useHistory()
+  const dispatch = useDispatch<AppDispatch>()
 
   const { mechanism, supply, mint, nonce, authority } =
     dao[daoAddress] || ({} as DaoData)
+  const { members } = metadata[daoAddress] || ({} as Metadata)
   const decimals = useMintDecimals(mint.toBase58()) || 0
   const circulatingSupply = supply.toNumber() / 10 ** decimals
   const authAddress = authority.toBase58()
   const isAuthor =
     account.isAddress(authAddress) && authAddress === walletAddress
+
+  useEffect(() => {
+    if (account.isAddress(daoAddress)) dispatch(getMember({ daoAddress }))
+  }, [dispatch, daoAddress])
 
   return (
     <Card
@@ -50,7 +58,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
               </Space>
               <Space>
                 <Typography.Text className="caption">
-                  Member ({'~'})
+                  Members ({members})
                 </Typography.Text>
                 <Typography.Text className="caption">
                   Proposals ({nonce.toNumber()})
