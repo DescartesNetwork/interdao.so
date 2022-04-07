@@ -1,0 +1,40 @@
+.caption {
+  font-size: 12px;
+}
+.gradient-text {
+  background: linear-gradient(81.55deg, #f148fb 0%, #4e6abe 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.mechanism-tag {
+  position: absolute;
+  min-width: 120px;
+  right: 0;
+  margin: 0px !important;
+  padding: 4px 24px !important;
+  border-radius: 0px !important;
+  border: none;
+  box-shadow: unset;
+  border-radius: 0;
+  text-transform: capitalize;
+  &::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 100%;
+    left: -1px;
+    top: 0px;
+    border-top: 14px solid transparent;
+    border-bottom: 14px solid transparent;
+    border-left: 8px solid #f4f4f5;
+  }
+}
+
+#dark {
+  .mechanism-tag {
+    &::after {
+      border-left-color: #212433;
+    }
+  }
+}

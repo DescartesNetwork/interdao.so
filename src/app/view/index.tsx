@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
+import { useUI } from '@senhub/providers'
 
 import { Row, Col } from 'antd'
 import Dao from './dao'
@@ -8,6 +10,8 @@ import DaoWatcher from './watcher/dao.watcher'
 import ProposalWatcher from './watcher/proposal.watcher'
 import ReceiptWatcher from './watcher/receipt.watcher'
 
+import BG from 'app/static/images/system/bg.png'
+import 'app/static/styles/index.less'
 import configs from 'app/configs'
 
 const {
@@ -15,6 +19,11 @@ const {
 } = configs
 
 const View = () => {
+  const { setBackground } = useUI()
+
+  useEffect(() => {
+    setBackground({ light: BG, dark: BG })
+  }, [setBackground])
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>
