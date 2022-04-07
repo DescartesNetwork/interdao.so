@@ -29,9 +29,9 @@ import NumericInput from 'shared/antd/numericInput'
 
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import configs from 'app/configs'
+import { explorer } from 'shared/util'
 
 import './index.less'
-import { explorer } from 'shared/util'
 
 const ContentLayout = ({
   label,
