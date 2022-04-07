@@ -1,17 +1,26 @@
-import { Row, Col, Typography, Space } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import { useEffect } from 'react'
+import { useUI } from '@senhub/providers'
+
+import { Row, Col } from 'antd'
+import ListDAO from 'app/view/listDAO'
+
 import DaoWatcher from './watcher/dao.watcher'
 import ProposalWatcher from './watcher/proposal.watcher'
 import ReceiptWatcher from './watcher/receipt.watcher'
 
+import BG from 'app/static/images/system/bg.png'
+import 'app/static/styles/index.less'
+
 const View = () => {
+  const { setBackground } = useUI()
+
+  useEffect(() => {
+    setBackground({ light: BG, dark: BG })
+  }, [setBackground])
   return (
-    <Row gutter={[24, 24]} align="middle">
+    <Row gutter={[24, 24]} style={{ paddingBottom: 24 }} align="middle">
       <Col span={24}>
-        <Space align="center">
-          <IonIcon name="newspaper-outline" />
-          <Typography.Title level={4}>App View</Typography.Title>
-        </Space>
+        <ListDAO />
       </Col>
       <DaoWatcher />
       <ProposalWatcher />
