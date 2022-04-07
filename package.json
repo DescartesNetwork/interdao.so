@@ -4,7 +4,7 @@
   "dependencies": {
     "@dnd-kit/core": "^4.0.1",
     "@dnd-kit/sortable": "^5.0.0",
-    "@interdao/core": "^0.1.8",
+    "@interdao/core": "^0.1.9",
     "@project-serum/sol-wallet-adapter": "^0.2.6",
     "@reduxjs/toolkit": "^1.8.0",
     "@senswap/sen-js": "^1.3.5",
@@ -17,6 +17,7 @@
     "js-file-download": "^0.4.12",
     "localforage": "^1.10.0",
     "lunr": "^2.3.9",
+    "moment": "^2.29.2",
     "numbro": "^2.3.5",
     "qrcode.react": "^3.0.0",
     "react": "^17.0.2",
