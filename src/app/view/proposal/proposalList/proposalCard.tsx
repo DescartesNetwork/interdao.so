@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { ProposalData } from '@interdao/core'
 import { utils } from '@senswap/sen-js'
 
@@ -19,6 +20,12 @@ import moment from 'moment'
 import MechanismTag from 'app/components/mechanismTag'
 import IonIcon from 'shared/antd/ionicon'
 
+import configs from 'app/configs'
+
+const {
+  manifest: { appId },
+} = configs
+
 export type ProposalCardProps = { proposalAddress: string }
 type ConsensusQuarumType = 'oneThird' | 'half' | 'twoThird'
 
@@ -30,6 +37,7 @@ const PROPOSAL_QUORUM = {
 
 const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
   const { proposal } = useSelector((state: AppState) => state)
+  const history = useHistory()
 
   const {
     // index,
@@ -73,6 +81,11 @@ const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
               <Button
                 type="text"
                 icon={<IonIcon name="chevron-forward-outline" />}
+                onClick={() =>
+                  history.push(
+                    `/app/${appId}/dao/${daoAddress}/proposal/${proposalAddress}`,
+                  )
+                }
               />
             </Col>
           </Row>

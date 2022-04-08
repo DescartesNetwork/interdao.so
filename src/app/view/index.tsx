@@ -7,6 +7,7 @@ import Dao from './dao'
 import Proposal from './proposal'
 import ProposalInitialization from './proposal/proposalInitialization'
 import DaoInitialization from './dao/daoInitialization'
+import ProposalDetails from './proposal/proposalDetails'
 import DaoWatcher from './watcher/dao.watcher'
 import ProposalWatcher from './watcher/proposal.watcher'
 import ReceiptWatcher from './watcher/receipt.watcher'
@@ -32,7 +33,7 @@ const View = () => {
           <Route exact path={`/app/${appId}/dao`} component={Dao} />
           <Route
             exact
-            path={`/app/${appId}/new-dao`}
+            path={`/app/${appId}/dao/new-dao`}
             component={DaoInitialization}
           />
           <Route
@@ -44,6 +45,11 @@ const View = () => {
             exact
             path={`/app/${appId}/dao/:daoAddress/new-proposal`}
             component={ProposalInitialization}
+          />
+          <Route
+            exact
+            path={`/app/${appId}/dao/:daoAddress/proposal/:proposalAddress`}
+            component={ProposalDetails}
           />
           <Redirect from="*" to={`/app/${appId}/dao`} />
         </Switch>
