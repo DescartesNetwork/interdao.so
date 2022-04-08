@@ -22,7 +22,7 @@ import IonIcon from 'shared/antd/ionicon'
 export type ProposalCardProps = { proposalAddress: string }
 type ConsensusQuarumType = 'oneThird' | 'half' | 'twoThird'
 
-const PROPOSAL_QUARUM = {
+const PROPOSAL_QUORUM = {
   oneThird: 1 / 3,
   half: 1 / 2,
   twoThird: 2 / 3,
@@ -52,7 +52,7 @@ const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
   const voteAgainstPercentage = totalVote
     ? (voteAgainstPower / totalVote) * 100
     : 0
-  const quarum = Object.keys(consensusQuorum)[0] as ConsensusQuarumType
+  const quorum = Object.keys(consensusQuorum)[0] as ConsensusQuarumType
 
   return (
     <Card>
@@ -160,7 +160,7 @@ const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
                 success={{
                   percent:
                     voteForPower /
-                    (totalPower * Number(PROPOSAL_QUARUM[quarum])),
+                    (totalPower * Number(PROPOSAL_QUORUM[quorum])),
                   strokeColor: '#63E0B3',
                 }}
               />
