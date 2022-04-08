@@ -78,8 +78,9 @@ const DaoDetails = ({ daoAddress }: { daoAddress: string }) => {
                   </Typography.Text>
                 </Avatar>
                 <Space direction="vertical">
-                  {LEGEND_VOTING.map((legend) => (
+                  {LEGEND_VOTING.map((legend, i) => (
                     <Typography.Text
+                      key={i}
                       className={`legend-status legend-${legend}`}
                     >
                       {legend}
