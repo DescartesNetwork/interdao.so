@@ -10,8 +10,8 @@ import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import DaoCard from './daoCard'
 
 import { AppState } from 'app/model'
-
 import configs from 'app/configs'
+
 const {
   manifest: { appId },
 } = configs
@@ -60,7 +60,7 @@ const YourDaos = () => {
         >
           <Space direction="vertical" align="center">
             <Typography.Text type="secondary">Your DAO's empty</Typography.Text>
-            <Button onClick={() => history.push(`/app/${appId}/new-dao`)}>
+            <Button onClick={() => history.push(`/app/${appId}/dao/new-dao`)}>
               Add new DAO
             </Button>
           </Space>
