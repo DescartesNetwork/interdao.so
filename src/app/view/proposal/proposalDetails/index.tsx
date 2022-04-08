@@ -52,7 +52,8 @@ const ProposalDetails = () => {
   const { proposalAddress, daoAddress } =
     useParams<{ daoAddress: string; proposalAddress: string }>()
   const { proposal } = useSelector((state: AppState) => state)
-  const {} = proposal[proposalAddress] || {}
+  const { supply } = proposal[proposalAddress] || {}
+  console.log(supply)
 
   return (
     <Row gutter={[24, 24]}>
@@ -95,7 +96,9 @@ const ProposalDetails = () => {
                     </Typography.Text>
                   </Space>
                 </Col>
-                <Col xs={24} lg={12}></Col>
+                <Col xs={24} lg={12}>
+                  <VotingCard proposalAddress={proposalAddress} />
+                </Col>
               </Row>
             </Col>
           </Row>
