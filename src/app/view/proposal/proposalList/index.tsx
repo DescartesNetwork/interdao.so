@@ -30,7 +30,7 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
   return (
     <Row gutter={[24, 24]}>
       {proposalAddresses.map((proposalAddress) => (
-        <Col key={proposalAddress} xs={24} md={12} lg={8} xl={6}>
+        <Col key={proposalAddress} span={24}>
           <ProposalCard proposalAddress={proposalAddress} />
         </Col>
       ))}

@@ -31,6 +31,11 @@
     border-left: 8px solid #f4f4f5;
   }
 }
+.normal-tag {
+  padding: 2px 16px !important;
+  border-radius: 4px !important;
+  margin: 0;
+}
 .ellipsis-text {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -43,6 +48,28 @@
   padding: 5px 16px;
   border-radius: 16px;
   background: #d0e9fe;
+}
+.legend-status {
+  position: relative;
+  padding-left: 16px;
+  color: #fff !important;
+  text-align: left;
+  &::after {
+    content: '';
+    position: absolute;
+    left: -16px;
+    width: 4px;
+    height: 100%;
+  }
+  &.legend-voting::after {
+    background-color: #ff00f5;
+  }
+  &.legend-passed::after {
+    background-color: #63e0b3;
+  }
+  &.legend-failed::after {
+    background-color: #dadada;
+  }
 }
 
 #dark {

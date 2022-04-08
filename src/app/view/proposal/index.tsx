@@ -1,11 +1,11 @@
 import { useHistory, useParams } from 'react-router-dom'
 
-import { Button, Col, Row } from 'antd'
+import { Button, Card, Col, Row } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import ProposalList from './proposalList'
+import DaoDetails from '../dao/daoDetails'
 
 import configs from 'app/configs'
-import DaoDetails from '../dao/daoDetails'
 
 const {
   manifest: { appId },
@@ -18,24 +18,20 @@ const Proposal = () => {
   return (
     <Row gutter={[24, 24]} align="middle">
       <Col span={24}>
-        <Button
-          icon={<IonIcon name="arrow-back-outline" />}
-          type="text"
-          onClick={() => history.push(`/app/${appId}/dao`)}
-        />
-      </Col>
-      <Col span={24}>
-        <DaoDetails daoAddress={daoAddress} />
-      </Col>
-      <Col>
-        <Button
-          type="primary"
-          onClick={() =>
-            history.push(`/app/${appId}/dao/${daoAddress}/new-proposal`)
-          }
-        >
-          New Proposal
-        </Button>
+        <Card bordered={false} style={{ borderRadius: 0, boxShadow: 'unset' }}>
+          <Row gutter={[8, 8]}>
+            <Col span={24}>
+              <Button
+                icon={<IonIcon name="arrow-back-outline" />}
+                type="text"
+                onClick={() => history.push(`/app/${appId}/dao`)}
+              />
+            </Col>
+            <Col span={24}>
+              <DaoDetails daoAddress={daoAddress} />
+            </Col>
+          </Row>
+        </Card>
       </Col>
       <Col span={24}>
         <ProposalList daoAddress={daoAddress} />
