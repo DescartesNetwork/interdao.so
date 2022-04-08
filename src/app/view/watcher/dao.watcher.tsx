@@ -14,7 +14,7 @@ const {
 
 // Watch id
 let initializeDAOEventId = 0
-let updateDaoMechanismEventId = 0
+let updateDaoRegimeEventId = 0
 let updateSupplyEventId = 0
 let transferAuthorityEventId = 0
 
@@ -50,8 +50,8 @@ const DaoWatcher = () => {
       'InitializeDAOEvent',
       reloadDaoData,
     )
-    updateDaoMechanismEventId = await interDao.addListener(
-      'UpdateDaoMechanismEvent',
+    updateDaoRegimeEventId = await interDao.addListener(
+      'UpdateDaoRegimeEvent',
       reloadDaoData,
     )
     updateSupplyEventId = await interDao.addListener(
@@ -72,14 +72,14 @@ const DaoWatcher = () => {
       ;(async () => {
         try {
           await interDao.removeListener(initializeDAOEventId)
-          await interDao.removeListener(updateDaoMechanismEventId)
+          await interDao.removeListener(updateDaoRegimeEventId)
           await interDao.removeListener(updateSupplyEventId)
           await interDao.removeListener(transferAuthorityEventId)
         } catch (er: any) {
           console.warn(er.message)
         } finally {
           initializeDAOEventId = 0
-          updateDaoMechanismEventId = 0
+          updateDaoRegimeEventId = 0
           updateSupplyEventId = 0
           transferAuthorityEventId = 0
         }

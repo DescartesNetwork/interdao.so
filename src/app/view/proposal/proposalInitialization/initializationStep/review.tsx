@@ -1,9 +1,11 @@
+import { useCallback, useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { account } from '@senswap/sen-js'
 import moment from 'moment'
+import { BN } from 'bn.js'
 import { ConsensusMechanisms, ConsensusQuorums } from '@interdao/core'
-import { useCallback, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useWallet } from '@senhub/providers'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import Header from './header'
@@ -25,6 +27,9 @@ const Review = ({
   const {
     proposalAction: { proposalData },
   } = useSelector((state: AppState) => state)
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
 
   const valid = useMemo(() => {
     if (!proposalData) return false
@@ -65,12 +70,13 @@ const Review = ({
         daoAddress, // invokedProgramAddress
         Buffer.from([]), // data
         [], // pubkeys
-        [], // prevIsSigners
-        [], // prevIsWritables
-        [], // nextIsSigners
-        [], // nextIsWritables
+        [], // isSigners
+        [], // isWritables
+        [], // isMasters
         startDate,
         endDate,
+        new BN(10 ** 6), // fee
+        walletAddress, // taxman
         ConsensusMechanisms[consensusMechanism],
         ConsensusQuorums[consensusQuorum],
       )
@@ -87,7 +93,7 @@ const Review = ({
     } finally {
       return setLoading(false)
     }
-  }, [proposalData, valid])
+  }, [proposalData, valid, walletAddress])
 
   return (
     <Card bordered={false}>

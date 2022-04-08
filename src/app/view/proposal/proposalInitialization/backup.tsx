@@ -1,7 +1,9 @@
 import { useCallback, useMemo, useState } from 'react'
-import { ConsensusMechanisms, ConsensusQuorums } from '@interdao/core'
 import { useHistory, useParams } from 'react-router-dom'
+import { ConsensusMechanisms, ConsensusQuorums } from '@interdao/core'
 import { account } from '@senswap/sen-js'
+import { useWallet } from '@senhub/providers'
+import { BN } from 'bn.js'
 
 import {
   Button,
@@ -31,6 +33,9 @@ const ProposalInitialization = () => {
   const [consensusQuorum, setConsensusQuorum] = useState('Half')
   const [date, setDate] = useState(['', ''])
   const [loading, setLoading] = useState(false)
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
 
   const startDate = useMemo(
     () => Math.floor(Number(new Date(date[0])) / 1000) || 0,
@@ -63,12 +68,13 @@ const ProposalInitialization = () => {
         daoAddress, // invokedProgramAddress
         Buffer.from([]), // data
         [], // pubkeys
-        [], // prevIsSigners
-        [], // prevIsWritables
-        [], // nextIsSigners
-        [], // nextIsWritables
+        [], // isSigners
+        [], // isWritables
+        [], // isSigners
         startDate,
         endDate,
+        new BN(10 ** 6), // fee
+        walletAddress, // taxman
         ConsensusMechanisms[consensusMechanism],
         ConsensusQuorums[consensusQuorum],
       )

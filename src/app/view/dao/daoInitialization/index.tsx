@@ -9,7 +9,7 @@ import {
 } from 'react'
 import { account } from '@senswap/sen-js'
 import BN from 'bn.js'
-import { DaoMechanisms } from '@interdao/core'
+import { DaoRegimes } from '@interdao/core'
 
 import {
   Button,
@@ -49,7 +49,7 @@ const ContentLayout = ({
 )
 
 const DaoInitialization = () => {
-  const [mechanism, setMechanism] = useState('Dictatorial')
+  const [regime, setRegime] = useState('Dictatorial')
   const [mintAddress, setMintAddress] = useState('')
   const [circulatingSupply, setCirculatingSupply] = useState('')
   const [loading, setLoading] = useState(false)
@@ -64,7 +64,7 @@ const DaoInitialization = () => {
   }, [mintAddress, circulatingSupply, decimals])
 
   const close = useCallback(() => {
-    setMechanism('Dictatorial')
+    setRegime('Dictatorial')
     setMintAddress('')
     setCirculatingSupply('')
   }, [])
@@ -83,7 +83,7 @@ const DaoInitialization = () => {
         mintAddress,
         supply,
         undefined,
-        DaoMechanisms[mechanism],
+        DaoRegimes[regime],
       )
       window.notify({
         type: 'success',
@@ -99,7 +99,7 @@ const DaoInitialization = () => {
     } finally {
       return setLoading(false)
     }
-  }, [valid, mechanism, mintAddress, circulatingSupply, decimals, close])
+  }, [valid, regime, mintAddress, circulatingSupply, decimals, close])
 
   return (
     <Row gutter={[24, 24]} justify="center">
@@ -121,12 +121,12 @@ const DaoInitialization = () => {
             </Col>
             <Col span={24}>
               <Space style={{ width: '100%' }} direction="vertical">
-                <Typography.Text> Dao Mechanism</Typography.Text>
+                <Typography.Text> Dao Regime</Typography.Text>
                 <Radio.Group
                   onChange={(e: RadioChangeEvent) =>
-                    setMechanism(e.target.value || 'Dictatorial')
+                    setRegime(e.target.value || 'Dictatorial')
                   }
-                  value={mechanism}
+                  value={regime}
                   className="mechanism"
                 >
                   <Radio className="mechanism-item" value="Dictatorial">

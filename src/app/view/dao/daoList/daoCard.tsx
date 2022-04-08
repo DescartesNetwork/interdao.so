@@ -19,7 +19,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
   const { dao } = useSelector((state: AppState) => state)
   const history = useHistory()
 
-  const { mechanism, nonce } = dao[daoAddress] || ({} as DaoData)
+  const { regime, nonce } = dao[daoAddress] || ({} as DaoData)
 
   return (
     <Card
@@ -59,7 +59,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
             votes.
           </Typography.Text>
         </Col>
-        <MechanismTag tag={Object.keys(mechanism)[0]} special />
+        <MechanismTag tag={Object.keys(regime)[0]} special />
       </Row>
     </Card>
   )
