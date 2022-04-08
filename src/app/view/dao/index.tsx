@@ -4,6 +4,12 @@ import { Row, Col, Typography, Button } from 'antd'
 import DaoList from './daoList'
 import YourDaos from './daoList/yourDao'
 
+import configs from 'app/configs'
+
+const {
+  manifest: { appId },
+} = configs
+
 const Dao = () => {
   const history = useHistory()
 
@@ -22,7 +28,10 @@ const Dao = () => {
             <Typography.Title level={3}>DAOs</Typography.Title>
           </Col>
           <Col>
-            <Button ghost onClick={() => history.push('new-dao')}>
+            <Button
+              ghost
+              onClick={() => history.push(`/app/${appId}/dao/new-dao`)}
+            >
               New DAO
             </Button>
           </Col>
