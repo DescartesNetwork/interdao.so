@@ -1,21 +1,27 @@
 import { useMemo } from 'react'
 import LazyLoad from '@senswap/react-lazyload'
 import { useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { useWallet } from '@senhub/providers'
 import { account } from '@senswap/sen-js'
 import { DaoData } from '@interdao/core'
 
-import { Card, Col, Row, Space, Typography } from 'antd'
+import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import DaoCard from './daoCard'
-import DaoInitialization from '../daoInitialization'
 
 import { AppState } from 'app/model'
+import configs from 'app/configs'
+
+const {
+  manifest: { appId },
+} = configs
 
 const YourDaos = () => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
   const { dao } = useSelector((state: AppState) => state)
+  const history = useHistory()
 
   const filteredDaos = useMemo(
     () =>
@@ -54,7 +60,9 @@ const YourDaos = () => {
         >
           <Space direction="vertical" align="center">
             <Typography.Text type="secondary">Your DAO's empty</Typography.Text>
-            <DaoInitialization />
+            <Button onClick={() => history.push(`/app/${appId}/dao/new-dao`)}>
+              Add new DAO
+            </Button>
           </Space>
         </Card>
       </Col>

@@ -2,10 +2,14 @@ import { Tag } from 'antd'
 
 import { randomColor } from 'shared/util'
 
-const MechanismTag = ({ tag }: { tag: string }) => {
+type MechanismTagProps = { tag: string; special?: boolean }
+
+const MechanismTag = ({ tag, special = false }: MechanismTagProps) => {
+  const tagClass = special ? 'mechanism-tag' : 'normal-tag'
+
   return (
     <Tag
-      className="mechanism-tag"
+      className={tagClass}
       style={{
         color: randomColor(tag),
       }}

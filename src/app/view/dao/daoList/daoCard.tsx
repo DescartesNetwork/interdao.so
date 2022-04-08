@@ -59,7 +59,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
             votes.
           </Typography.Text>
         </Col>
-        <MechanismTag tag={Object.keys(mechanism)[0]} />
+        <MechanismTag tag={Object.keys(mechanism)[0]} special />
       </Row>
     </Card>
   )
