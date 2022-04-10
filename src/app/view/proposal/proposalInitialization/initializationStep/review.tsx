@@ -9,7 +9,7 @@ import { useWallet } from '@senhub/providers'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import Header from './header'
-import MechanismTag from 'app/components/mechanismTag'
+import RegimeTag from 'app/components/regimeTag'
 
 import { ProposalInitializeStep } from 'app/constants'
 import { AppState } from 'app/model'
@@ -123,9 +123,7 @@ const Review = ({
                       <Typography.Title level={5}>
                         Consensus mechanism
                       </Typography.Title>
-                      <MechanismTag
-                        tag={proposalData?.consensusMechanism || ''}
-                      />
+                      <RegimeTag tag={proposalData?.consensusMechanism || ''} />
                     </Space>
                   </Col>
                 </Row>

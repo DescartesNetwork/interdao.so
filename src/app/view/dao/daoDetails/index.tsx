@@ -3,15 +3,13 @@ import { DaoData } from '@interdao/core'
 import { useHistory } from 'react-router-dom'
 
 import { Row, Col, Card, Space, Avatar, Typography, Button } from 'antd'
+import IonIcon from 'shared/antd/ionicon'
 import OwnerIcon from 'app/components/ownerIcon'
-import MembersCount from 'app/components/membersCount'
 import { DaoSupply, DaoSymbol } from 'app/components/daoSupply'
 
 import { shortenAddress } from 'shared/util'
 import { AppState } from 'app/model'
-import imgAvt from 'app/static/images/system/avatar.svg'
-import IonIcon from 'shared/antd/ionicon'
-
+import AvatarImage from 'app/static/images/system/avatar.png'
 import configs from 'app/configs'
 
 const {
@@ -30,14 +28,13 @@ const DaoDetails = ({ daoAddress }: { daoAddress: string }) => {
     <Row gutter={[24, 24]} justify="space-between">
       <Col>
         <Space align="start">
-          <Avatar src={imgAvt} size={64} />
+          <Avatar src={AvatarImage} size={56} />
           <Space direction="vertical">
             <Space>
               <Typography.Title level={3}>
                 {shortenAddress(daoAddress)}
               </Typography.Title>
               <OwnerIcon daoAddress={daoAddress} />
-              <MembersCount daoAddress={daoAddress} />
             </Space>
             <Space style={{ maxWidth: 600 }}>
               <Typography.Text>

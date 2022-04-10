@@ -1,11 +1,12 @@
 import { useHistory } from 'react-router-dom'
 
-import { Row, Col, Typography, Button } from 'antd'
+import { Row, Col, Button, Tabs } from 'antd'
 import Hero from './hero'
 import DaoList from './daoList'
 import YourDaos from './daoList/yourDao'
 
 import configs from 'app/configs'
+import IonIcon from 'shared/antd/ionicon'
 
 const {
   manifest: { appId },
@@ -19,30 +20,26 @@ const Dao = () => {
       <Col span={24}>
         <Hero />
       </Col>
-      <Col xs={24}>
-        <Typography.Title level={3}>Your DAOs</Typography.Title>
-      </Col>
-      <Col xs={24}>
-        <YourDaos />
-      </Col>
-      <Col span={24} /> {/* Safe space */}
-      <Col xs={24}>
-        <Row gutter={[24, 24]} align="middle">
-          <Col flex="auto">
-            <Typography.Title level={3}>DAOs</Typography.Title>
-          </Col>
-          <Col>
+      <Col span={24}>
+        <Tabs
+          style={{ overflow: 'visible' }}
+          tabBarExtraContent={
             <Button
-              ghost
+              type="primary"
               onClick={() => history.push(`/app/${appId}/dao/new-dao`)}
+              icon={<IonIcon name="add-outline" />}
             >
               New DAO
             </Button>
-          </Col>
-        </Row>
-      </Col>
-      <Col xs={24}>
-        <DaoList />
+          }
+        >
+          <Tabs.TabPane tab="Community DAOs" key="community-daos">
+            <DaoList />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Your DAOs" key="your-daos">
+            <YourDaos />
+          </Tabs.TabPane>
+        </Tabs>
       </Col>
     </Row>
   )

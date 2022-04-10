@@ -17,7 +17,7 @@ import {
 import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
 import moment from 'moment'
-import MechanismTag from 'app/components/mechanismTag'
+import RegimeTag from 'app/components/regimeTag'
 import IonIcon from 'shared/antd/ionicon'
 
 import configs from 'app/configs'
@@ -70,7 +70,7 @@ const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
           <Row gutter={[16, 16]} justify="space-between">
             <Col>
               <Space size={24} align="end">
-                <MechanismTag tag={'Voting'} />
+                <RegimeTag tag={'Voting'} />
                 <Typography.Text>
                   End date:
                   {moment(Number(endDate) * 1000).format('MMM Do YYYY, HH:mm')}

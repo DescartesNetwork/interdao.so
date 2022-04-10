@@ -12,27 +12,27 @@ const {
  * Interface & Utility
  */
 
-export type Metadata = {
+export type MetaData = {
   members: number
   description: string
   bannel: string
   avatar: string
 }
-export type MetadataState = Record<string, Metadata>
+export type MetaDataState = Record<string, MetaData>
 
 /**
  * Store constructor
  */
 
 const NAME = 'metadata'
-const initialState: MetadataState = {}
+const initialState: MetaDataState = {}
 
 /**
  * Actions
  */
 
 export const getMember = createAsyncThunk<
-  MetadataState,
+  MetaDataState,
   { daoAddress: string; force?: boolean },
   { state: any }
 >(`${NAME}/getMember`, async ({ daoAddress, force }, { getState }) => {
