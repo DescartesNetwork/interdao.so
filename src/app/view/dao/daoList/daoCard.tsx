@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { DaoData } from '@interdao/core'
 
-import { Avatar, Button, Card, Col, Row, Space, Typography } from 'antd'
+import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import DaoCardStatistic from './daoCardStatistic'
 import RegimeTag from 'app/components/regimeTag'
@@ -10,8 +10,8 @@ import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 
 import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
-import AvatarImage from 'app/static/images/system/avatar.png'
 import useMembers from 'app/hooks/useMembers'
+import GradientAvatar from 'app/components/gradientAvatar'
 
 export type DaoCardProps = { daoAddress: string }
 
@@ -32,7 +32,10 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
         <Col span={24}>
           <Row gutter={[16, 16]}>
             <Col>
-              <Avatar shape="square" src={AvatarImage} size={56} />
+              <GradientAvatar
+                seed={daoAddress}
+                avatarProps={{ shape: 'square', size: 56 }}
+              />
             </Col>
             <Col flex="auto">
               <Space direction="vertical" size={0}>
