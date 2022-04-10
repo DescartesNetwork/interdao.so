@@ -80,11 +80,11 @@ const ProposalInitialization = () => {
             <Col flex="auto">
               <Button
                 type="text"
-                icon={<IonIcon name="arrow-back-outline" />}
+                icon={<IonIcon name="trash-outline" />}
                 onClick={() => history.push(`/app/${appId}/dao/${daoAddress}`)}
                 size="large"
               >
-                Back
+                Cancel
               </Button>
             </Col>
             <Col>

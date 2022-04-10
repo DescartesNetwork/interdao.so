@@ -92,11 +92,11 @@ const DaoInitialization = () => {
             <Col flex="auto">
               <Button
                 type="text"
-                icon={<IonIcon name="arrow-back-outline" />}
+                icon={<IonIcon name="trash-outline" />}
                 onClick={() => history.push(`/app/${appId}/dao`)}
                 size="large"
               >
-                Back
+                Cancel
               </Button>
             </Col>
             <Col>
