@@ -1,55 +1,21 @@
+import { useCallback, useMemo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import {
-  ChangeEvent,
-  CSSProperties,
-  ReactNode,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react'
 import { account } from '@senswap/sen-js'
 import BN from 'bn.js'
 import { DaoRegimes } from '@interdao/core'
 
-import {
-  Button,
-  Card,
-  Col,
-  Radio,
-  Row,
-  Space,
-  Tag,
-  Typography,
-  Input,
-  RadioChangeEvent,
-} from 'antd'
+import { Button, Card, Col, Row, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import { MintSymbol } from 'shared/antd/mint'
-import NumericInput from 'shared/antd/numericInput'
+import DaoRegimeInput from './daoRegimeInput'
+import DaoTokenInput from './daoTokenInput'
+import DaoCirculatingSupply from './daoCirculatingSupply'
 
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import configs from 'app/configs'
 import { explorer } from 'shared/util'
 
-import './index.less'
-
-const ContentLayout = ({
-  label,
-  value,
-  style = {},
-}: {
-  label: string
-  value: ReactNode
-  style?: CSSProperties
-}) => (
-  <Row style={style} gutter={[8, 8]}>
-    <Col span={24}>{label}</Col>
-    <Col span={24}>{value}</Col>
-  </Row>
-)
-
 const DaoInitialization = () => {
-  const [regime, setRegime] = useState('Dictatorial')
+  const [regime, setRegime] = useState(DaoRegimes.Dictatorial)
   const [mintAddress, setMintAddress] = useState('')
   const [circulatingSupply, setCirculatingSupply] = useState('')
   const [loading, setLoading] = useState(false)
@@ -63,15 +29,10 @@ const DaoInitialization = () => {
     return true
   }, [mintAddress, circulatingSupply, decimals])
 
-  const close = useCallback(() => {
-    setRegime('Dictatorial')
-    setMintAddress('')
-    setCirculatingSupply('')
-  }, [])
-
   const newDao = useCallback(async () => {
     if (!valid) return
     const {
+      manifest: { appId },
       sol: { interDao },
     } = configs
     try {
@@ -79,18 +40,18 @@ const DaoInitialization = () => {
       const supply = new BN(circulatingSupply).mul(
         new BN(10).pow(new BN(decimals)),
       )
-      const { txId } = await interDao.initializeDao(
+      const { txId, daoAddress } = await interDao.initializeDao(
         mintAddress,
         supply,
         undefined,
-        DaoRegimes[regime],
+        regime,
       )
       window.notify({
         type: 'success',
         description: 'A new DAO is created. Click here to view details.',
         onClick: () => window.open(explorer(txId), '_blank'),
       })
-      return close()
+      return history.push(`/app/${appId}/dao/${daoAddress}`)
     } catch (er: any) {
       return window.notify({
         type: 'error',
@@ -99,136 +60,52 @@ const DaoInitialization = () => {
     } finally {
       return setLoading(false)
     }
-  }, [valid, regime, mintAddress, circulatingSupply, decimals, close])
+  }, [valid, regime, mintAddress, circulatingSupply, decimals, history])
 
   return (
-    <Row gutter={[24, 24]} justify="center">
-      <Col xs={24} md={16} lg={14}>
-        <Button
-          type="text"
-          icon={<IonIcon name="arrow-back-outline" />}
-          onClick={() => history.push('/app/interdao/dao')}
-          style={{ margin: -12 }}
-        >
-          Back
-        </Button>
-      </Col>
-      <Col xs={24} md={16} lg={14}>
-        <Card bordered={false} style={{ borderRadius: 16, boxShadow: 'none' }}>
-          <Row gutter={[24, 24]}>
-            <Col span={24}>
-              <Typography.Title level={2}>DAO Information</Typography.Title>
-            </Col>
-            <Col span={24}>
-              <Space style={{ width: '100%' }} direction="vertical">
-                <Typography.Text> Dao Regime</Typography.Text>
-                <Radio.Group
-                  onChange={(e: RadioChangeEvent) =>
-                    setRegime(e.target.value || 'Dictatorial')
-                  }
-                  value={regime}
-                  className="mechanism"
-                >
-                  <Radio className="mechanism-item" value="Dictatorial">
-                    Dictatorial
-                  </Radio>
-                  <Radio className="mechanism-item" value="Democratic">
-                    Democratic
-                  </Radio>
-                  <Radio className="mechanism-item" value="Autonomous">
-                    Autonomous
-                  </Radio>
-                </Radio.Group>
-              </Space>
-            </Col>
-            <Col span={24}>
-              <Space style={{ width: '100%' }} direction="vertical">
-                <Typography.Title level={4}>Total power</Typography.Title>
-                <Row gutter={[24, 24]} className="form-input-token">
-                  <Col span={24}>
-                    <Space size={16}>
-                      <Tag style={{ padding: '5px 16px' }} color="#9B9B9B">
-                        Use address token
-                      </Tag>
-                      <Button type="text" disabled>
-                        New Token (Coming soon)
-                      </Button>
-                    </Space>
-                  </Col>
-                  <Col span={24}>
-                    <Row align="middle">
-                      <Col flex="auto">
-                        <ContentLayout
-                          label="Token accepted token for vote"
-                          value={
-                            <Input
-                              placeholder="Token Address"
-                              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                setMintAddress(e.target.value || '')
-                              }
-                              value={mintAddress}
-                            />
-                          }
-                        />
-                      </Col>
-                      <Col>
-                        <ContentLayout
-                          style={{ textAlign: 'right' }}
-                          label="Token Symbol"
-                          value={<MintSymbol mintAddress={mintAddress} />}
-                        />
-                      </Col>
-                    </Row>
-                  </Col>
-                  <Col span={24}>
-                    <Typography.Title level={4}>
-                      Token Distribute
-                    </Typography.Title>
-                  </Col>
-                  <Col span={24}>
-                    <Row align="middle">
-                      <Col flex="auto">
-                        <ContentLayout
-                          label="Circulating Supply"
-                          value={
-                            <NumericInput
-                              placeholder="Circulating Supply"
-                              onValue={setCirculatingSupply}
-                              value={circulatingSupply}
-                            />
-                          }
-                        />
-                      </Col>
-                      <Col>
-                        <ContentLayout
-                          style={{ textAlign: 'right' }}
-                          label="Total token supply"
-                          value={
-                            <Typography.Text>
-                              {circulatingSupply || 0}
-                            </Typography.Text>
-                          }
-                        />
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
-              </Space>
-            </Col>
-            <Col span={24} style={{ textAlign: 'right' }}>
-              <Button
-                onClick={newDao}
-                loading={loading}
-                type="primary"
-                size="large"
-              >
-                Create
-              </Button>
-            </Col>
-          </Row>
-        </Card>
-      </Col>
-    </Row>
+    <Card bordered={false}>
+      <Row gutter={[24, 24]}>
+        <Col span={24}>
+          <Typography.Title level={2}>DAO Information</Typography.Title>
+        </Col>
+        <Col span={24} />
+        <Col span={24}>
+          <DaoRegimeInput value={regime} onChange={setRegime} />
+        </Col>
+        <Col span={24}>
+          <DaoTokenInput value={mintAddress} onChange={setMintAddress} />
+        </Col>
+        <Col span={24}>
+          <DaoCirculatingSupply
+            mintAddress={mintAddress}
+            value={circulatingSupply}
+            onChange={setCirculatingSupply}
+          />
+        </Col>
+        <Col span={24} />
+        <Col flex="auto">
+          <Button
+            type="text"
+            icon={<IonIcon name="arrow-back-outline" />}
+            onClick={() => history.push('/app/interdao/dao')}
+            size="large"
+          >
+            Back
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            onClick={newDao}
+            loading={loading}
+            type="primary"
+            size="large"
+            icon={<IonIcon name="add-outline" />}
+          >
+            Create the DAO
+          </Button>
+        </Col>
+      </Row>
+    </Card>
   )
 }
 

@@ -10,9 +10,7 @@ export type ProposalStatusProps = {
 const ProposalStatus = ({ status }: ProposalStatusProps) => {
   return (
     <Tag
-      style={{
-        color: randomColor(status),
-      }}
+      style={{ color: randomColor(status), margin: 0 }}
       color={randomColor(status, 0.2)}
     >
       {status}

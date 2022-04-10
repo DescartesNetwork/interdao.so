@@ -9,12 +9,12 @@ import { useWallet } from '@senhub/providers'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import Header from './header'
-import RegimeTag from 'app/components/regimeTag'
 
 import { ProposalInitializeStep } from 'app/constants'
 import { AppState } from 'app/model'
 import configs from 'app/configs'
 import { explorer } from 'shared/util'
+import ConsensusMechanismTag from 'app/components/consensusMechanismTag'
 
 const Review = ({
   step,
@@ -38,8 +38,6 @@ const Review = ({
     if (!startDate || !endDate || startDate >= endDate) return false
     return true
   }, [proposalData])
-
-  console.log(proposalData)
 
   const newProposal = useCallback(async () => {
     if (!valid || !proposalData) return
@@ -123,7 +121,11 @@ const Review = ({
                       <Typography.Title level={5}>
                         Consensus mechanism
                       </Typography.Title>
-                      <RegimeTag tag={proposalData?.consensusMechanism || ''} />
+                      <ConsensusMechanismTag
+                        consensusMechanism={
+                          proposalData?.consensusMechanism || ''
+                        }
+                      />
                     </Space>
                   </Col>
                 </Row>

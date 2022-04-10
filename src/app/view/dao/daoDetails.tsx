@@ -29,7 +29,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
     <Card bordered={false}>
       <Row gutter={[24, 24]}>
         <Col span={24}>
-          <Row gutter={[16, 16]}>
+          <Row gutter={[16, 16]} wrap={false}>
             <Col>
               <GradientAvatar
                 seed={daoAddress}
@@ -52,7 +52,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
               <Divider type="vertical" style={{ height: '100%' }} />
             </Col>
             <Col flex="auto">
-              <Row gutter={[48, 48]}>
+              <Row gutter={[48, 48]} wrap={false}>
                 <Col>
                   <StatisticCard
                     title="Token"
@@ -76,10 +76,13 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
                     value={numeric(members).format('0,0')}
                   />
                 </Col>
+                <Col>
+                  <StatisticCard
+                    title="Regime"
+                    value={<RegimeTag regime={regime} />}
+                  />
+                </Col>
               </Row>
-            </Col>
-            <Col>
-              <RegimeTag tag={Object.keys(regime)[0]} />
             </Col>
           </Row>
         </Col>

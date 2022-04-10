@@ -7,11 +7,11 @@ import IonIcon from 'shared/antd/ionicon'
 import StatisticCard from 'app/components/statisticCard'
 import RegimeTag from 'app/components/regimeTag'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
+import GradientAvatar from 'app/components/gradientAvatar'
 
 import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
 import useMembers from 'app/hooks/useMembers'
-import GradientAvatar from 'app/components/gradientAvatar'
 
 export type DaoCardProps = { daoAddress: string }
 
@@ -50,7 +50,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
               </Space>
             </Col>
             <Col>
-              <RegimeTag tag={Object.keys(regime)[0]} />
+              <RegimeTag regime={regime} />
             </Col>
           </Row>
         </Col>
