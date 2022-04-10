@@ -6,13 +6,18 @@ import { DaoRegimes } from '@interdao/core'
 
 import { Button, Card, Col, Row, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import DaoRegimeInput from './daoRegimeInput'
-import DaoTokenInput from './daoTokenInput'
-import DaoCirculatingSupply from './daoCirculatingSupply'
+import RegimeInput from './regimeInput'
+import TokenAddressInput from './tokenAddressInput'
+import CirculatingSupplyInput from './circulatingSupplyInput'
 
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import configs from 'app/configs'
 import { explorer } from 'shared/util'
+
+const {
+  manifest: { appId },
+  sol: { interDao },
+} = configs
 
 const DaoInitialization = () => {
   const [regime, setRegime] = useState(DaoRegimes.Dictatorial)
@@ -31,10 +36,6 @@ const DaoInitialization = () => {
 
   const newDao = useCallback(async () => {
     if (!valid) return
-    const {
-      manifest: { appId },
-      sol: { interDao },
-    } = configs
     try {
       setLoading(true)
       const supply = new BN(circulatingSupply).mul(
@@ -63,49 +64,56 @@ const DaoInitialization = () => {
   }, [valid, regime, mintAddress, circulatingSupply, decimals, history])
 
   return (
-    <Card bordered={false}>
-      <Row gutter={[24, 24]}>
-        <Col span={24}>
-          <Typography.Title level={2}>DAO Information</Typography.Title>
-        </Col>
-        <Col span={24} />
-        <Col span={24}>
-          <DaoRegimeInput value={regime} onChange={setRegime} />
-        </Col>
-        <Col span={24}>
-          <DaoTokenInput value={mintAddress} onChange={setMintAddress} />
-        </Col>
-        <Col span={24}>
-          <DaoCirculatingSupply
-            mintAddress={mintAddress}
-            value={circulatingSupply}
-            onChange={setCirculatingSupply}
-          />
-        </Col>
-        <Col span={24} />
-        <Col flex="auto">
-          <Button
-            type="text"
-            icon={<IonIcon name="arrow-back-outline" />}
-            onClick={() => history.push('/app/interdao/dao')}
-            size="large"
-          >
-            Back
-          </Button>
-        </Col>
-        <Col>
-          <Button
-            onClick={newDao}
-            loading={loading}
-            type="primary"
-            size="large"
-            icon={<IonIcon name="add-outline" />}
-          >
-            Create the DAO
-          </Button>
-        </Col>
-      </Row>
-    </Card>
+    <Row gutter={[24, 24]} justify="center">
+      <Col xs={24} md={16}>
+        <Card bordered={false}>
+          <Row gutter={[24, 24]}>
+            <Col span={24}>
+              <Typography.Title level={3}>New DAO Information</Typography.Title>
+            </Col>
+            <Col span={24} />
+            <Col span={24}>
+              <RegimeInput value={regime} onChange={setRegime} />
+            </Col>
+            <Col span={24}>
+              <TokenAddressInput
+                value={mintAddress}
+                onChange={setMintAddress}
+              />
+            </Col>
+            <Col span={24}>
+              <CirculatingSupplyInput
+                mintAddress={mintAddress}
+                value={circulatingSupply}
+                onChange={setCirculatingSupply}
+              />
+            </Col>
+            <Col span={24} />
+            <Col flex="auto">
+              <Button
+                type="text"
+                icon={<IonIcon name="arrow-back-outline" />}
+                onClick={() => history.push(`/app/${appId}/dao`)}
+                size="large"
+              >
+                Back
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                onClick={newDao}
+                loading={loading}
+                type="primary"
+                size="large"
+                icon={<IonIcon name="add-outline" />}
+              >
+                Create the DAO
+              </Button>
+            </Col>
+          </Row>
+        </Card>
+      </Col>
+    </Row>
   )
 }
 

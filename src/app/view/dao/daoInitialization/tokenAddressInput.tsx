@@ -5,12 +5,12 @@ import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import IonIcon from 'shared/antd/ionicon'
 import { explorer } from 'shared/util'
 
-export type DaoTokenInputProps = {
+export type TokenAddressInputProps = {
   value: string
   onChange: (value: string) => void
 }
 
-const DaoTokenInput = ({ value, onChange }: DaoTokenInputProps) => {
+const TokenAddressInput = ({ value, onChange }: TokenAddressInputProps) => {
   return (
     <Row gutter={[8, 8]}>
       <Col span={24}>
@@ -43,4 +43,4 @@ const DaoTokenInput = ({ value, onChange }: DaoTokenInputProps) => {
   )
 }
 
-export default DaoTokenInput
+export default TokenAddressInput

@@ -5,7 +5,7 @@ import { SystemProgram } from '@solana/web3.js'
 import moment from 'moment'
 import BN from 'bn.js'
 
-import { Card, Col, Row, Space, Typography } from 'antd'
+import { Card, Col, Divider, Row, Space, Typography } from 'antd'
 import GradientAvatar from 'app/components/gradientAvatar'
 import ProposalStatus, {
   ProposalStatusType,
@@ -26,10 +26,11 @@ const currentDate = Math.floor(Number(new Date()) / 1000)
 const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
   const history = useHistory()
   const { proposal } = useSelector((state: AppState) => state)
-  const { dao, startDate, endDate } = proposal[proposalAddress] || {
+  const { dao, startDate, endDate, index } = proposal[proposalAddress] || {
     dao: SystemProgram.programId,
     startDate: new BN(currentDate),
     endDate: new BN(currentDate),
+    index: new BN(0),
   }
 
   let status: ProposalStatusType = useMemo(() => {
@@ -58,9 +59,17 @@ const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
               <Row>
                 <Col span={24}>
                   <Row>
-                    <Col flex="auto">
+                    <Col>
                       <Typography.Title level={5}>
                         {shortenAddress(proposalAddress)}
+                      </Typography.Title>
+                    </Col>
+                    <Col>
+                      <Divider type="vertical" />
+                    </Col>
+                    <Col flex="auto">
+                      <Typography.Title level={5} type="secondary">
+                        {`#${Number(index) + 1}`}
                       </Typography.Title>
                     </Col>
                     <Col>

@@ -8,17 +8,17 @@ import useMintDecimals from 'shared/hooks/useMintDecimals'
 import useMintSupply from 'shared/hooks/useMintSupply'
 import { numeric } from 'shared/util'
 
-export type DaoCirculatingSupplyProps = {
+export type CirculatingSupplyInputProps = {
   mintAddress?: string
   value: string
   onChange: (value: string) => void
 }
 
-const DaoCirculatingSupply = ({
+const CirculatingSupplyInput = ({
   mintAddress = '',
   value,
   onChange,
-}: DaoCirculatingSupplyProps) => {
+}: CirculatingSupplyInputProps) => {
   const decimals = useMintDecimals(mintAddress) || 0
   const supply = useMintSupply(mintAddress)
   const suggestion = String(supply?.div(new BN(10 ** decimals)) || new BN(0))
@@ -58,4 +58,4 @@ const DaoCirculatingSupply = ({
   )
 }
 
-export default DaoCirculatingSupply
+export default CirculatingSupplyInput

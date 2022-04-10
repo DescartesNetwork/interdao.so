@@ -5,7 +5,6 @@ import dao from 'app/model/dao.controller'
 import metadata from 'app/model/metadata.controller'
 import proposal from 'app/model/proposal.controller'
 import receipt from 'app/model/receipt.controller'
-import proposalAction from 'app/model/proposalAction.controller'
 
 /**
  * Isolated store
@@ -19,7 +18,6 @@ const model = configureStore({
     metadata,
     proposal,
     receipt,
-    proposalAction,
   },
 })
 

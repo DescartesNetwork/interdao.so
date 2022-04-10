@@ -52,7 +52,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
               <Divider type="vertical" style={{ height: '100%' }} />
             </Col>
             <Col flex="auto">
-              <Row gutter={[48, 48]} wrap={false}>
+              <Row gutter={[36, 36]} wrap={false}>
                 <Col>
                   <StatisticCard
                     title="Token"
