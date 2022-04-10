@@ -36,8 +36,8 @@ const YourDaos = () => {
   if (!!filteredDaos.length)
     return (
       <Row gutter={[24, 24]}>
-        {filteredDaos.map((daoAddress, idx) => (
-          <Col span={24} key={daoAddress + idx}>
+        {filteredDaos.map((daoAddress) => (
+          <Col span={12} key={daoAddress}>
             <LazyLoad height={191.5}>
               <DaoCard daoAddress={daoAddress} />
             </LazyLoad>
@@ -49,19 +49,13 @@ const YourDaos = () => {
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>
-        <Card
-          bordered={false}
-          bodyStyle={{
-            boxShadow: 'unset',
-            paddingTop: 45,
-            paddingBottom: 45,
-            textAlign: 'center',
-          }}
-        >
+        <Card bordered={false} bodyStyle={{ padding: 45, textAlign: 'center' }}>
           <Space direction="vertical" align="center">
-            <Typography.Text type="secondary">Your DAO's empty</Typography.Text>
+            <Typography.Text type="secondary">
+              You have no DAO yet!
+            </Typography.Text>
             <Button onClick={() => history.push(`/app/${appId}/dao/new-dao`)}>
-              Add new DAO
+              Build your DAO
             </Button>
           </Space>
         </Card>
