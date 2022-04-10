@@ -164,7 +164,7 @@ const Review = ({
                             {moment(
                               Number(new Date(proposalData?.startDate || 0)) *
                                 1000,
-                            ).format('DD-MM-YYYY HH:MM')}
+                            ).format('DD-MM-YYYY HH:mm')}
                           </Typography.Text>
                         </Space>
                       </Col>
@@ -177,7 +177,7 @@ const Review = ({
                             {moment(
                               Number(new Date(proposalData?.endDate || 0)) *
                                 1000,
-                            ).format('DD-MM-YYYY HH:MM')}
+                            ).format('DD-MM-YYYY HH:mm')}
                           </Typography.Text>
                         </Space>
                       </Col>

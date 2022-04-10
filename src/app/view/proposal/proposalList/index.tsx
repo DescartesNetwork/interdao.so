@@ -1,11 +1,13 @@
 import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Col, Row } from 'antd'
+import { Button, Col, Row, Typography } from 'antd'
+import IonIcon from 'shared/antd/ionicon'
 import ProposalCard from './proposalCard'
 
 import { AppDispatch, AppState } from 'app/model'
 import { getProposals } from 'app/model/proposal.controller'
+import LazyLoad from '@senswap/react-lazyload'
 
 export type ProposalListProps = { daoAddress: string }
 
@@ -29,9 +31,23 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
 
   return (
     <Row gutter={[24, 24]}>
+      <Col span={24}>
+        <Row gutter={[16, 16]} wrap={false} align="bottom">
+          <Col flex="auto">
+            <Typography.Title level={4}>Proposals</Typography.Title>
+          </Col>
+          <Col>
+            <Button type="primary" icon={<IonIcon name="add-outline" />}>
+              New Proposal
+            </Button>
+          </Col>
+        </Row>
+      </Col>
       {proposalAddresses.map((proposalAddress) => (
         <Col key={proposalAddress} span={24}>
-          <ProposalCard proposalAddress={proposalAddress} />
+          <LazyLoad height={176}>
+            <ProposalCard proposalAddress={proposalAddress} />
+          </LazyLoad>
         </Col>
       ))}
     </Row>

@@ -2,11 +2,11 @@ import { ReactNode } from 'react'
 
 import { Space, Typography } from 'antd'
 
-export type DaoCardStatisticProps = {
+export type StatisticCardProps = {
   title: string
   value: string | number | ReactNode
 }
-const DaoCardStatistic = ({ title, value }: DaoCardStatisticProps) => {
+const StatisticCard = ({ title, value }: StatisticCardProps) => {
   return (
     <Space direction="vertical">
       <Typography.Text className="caption" type="secondary">
@@ -21,4 +21,4 @@ const DaoCardStatistic = ({ title, value }: DaoCardStatisticProps) => {
   )
 }
 
-export default DaoCardStatistic
+export default StatisticCard
