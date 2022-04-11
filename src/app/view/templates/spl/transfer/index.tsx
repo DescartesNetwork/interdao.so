@@ -7,8 +7,7 @@ import * as soproxABI from 'soprox-abi'
 
 import { Button, Card, Col, Input, Modal, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import MintSelection from 'app/components/mintSelection'
-import { MintSymbol } from 'shared/antd/mint'
+import { MintSelection, MintSymbol } from 'shared/antd/mint'
 
 import { ProposalAccountType, ProposalDataType } from 'app/view/templates/types'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
