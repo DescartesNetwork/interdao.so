@@ -3,14 +3,16 @@ import { MintAvatar, MintName, MintSymbol } from 'shared/antd/mint'
 
 export type MintSelectionProps = {
   mintAddress: string
+  onClick?: (mintAddress: string) => void
 }
 
-const MintCard = ({ mintAddress }: MintSelectionProps) => {
+const MintCard = ({ mintAddress, onClick = () => {} }: MintSelectionProps) => {
   return (
     <Card
       bodyStyle={{ padding: 8 }}
       style={{ boxShadow: 'unset', cursor: 'pointer' }}
       bordered={false}
+      onClick={() => onClick(mintAddress)}
     >
       <Row gutter={[16, 16]} align="middle">
         <Col>

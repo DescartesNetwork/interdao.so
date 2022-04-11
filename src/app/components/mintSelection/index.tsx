@@ -2,6 +2,7 @@ import {
   ChangeEvent,
   CSSProperties,
   Fragment,
+  useCallback,
   useEffect,
   useState,
 } from 'react'
@@ -16,6 +17,7 @@ import MintCard from './mintCard'
 import { useRecommendedMintAddresses } from './useRecommendedMintAddresses'
 import { useSearchedMintAddresses } from './useSearchedMintAddresses'
 import { useAllMintAddresses } from './useAllMintAddresses'
+import { account } from '@senswap/sen-js'
 
 export type MintSelectionProps = {
   value: string
@@ -29,6 +31,14 @@ const MintSelection = ({ value, onChange, style = {} }: MintSelectionProps) => {
   const recommendedMintAddresses = useRecommendedMintAddresses()
   const allMintAddresses = useAllMintAddresses()
   const { searchedMintAddresses, loading } = useSearchedMintAddresses(keyword)
+
+  const onSelect = useCallback(
+    (mintAddress) => {
+      setVisible(false)
+      onChange(mintAddress)
+    },
+    [onChange],
+  )
 
   useEffect(() => {
     forceCheck()
@@ -83,9 +93,14 @@ const MintSelection = ({ value, onChange, style = {} }: MintSelectionProps) => {
           </Col>
           <Col span={24}>
             <Row gutter={[8, 8]}>
+              {account.isAddress(value) ? (
+                <Col>
+                  <MintTag mintAddress={value} active />
+                </Col>
+              ) : null}
               {recommendedMintAddresses.map((mintAddress) => (
                 <Col key={mintAddress}>
-                  <MintTag mintAddress={mintAddress} />
+                  <MintTag mintAddress={mintAddress} onClick={onSelect} />
                 </Col>
               ))}
             </Row>
@@ -100,7 +115,7 @@ const MintSelection = ({ value, onChange, style = {} }: MintSelectionProps) => {
                 (mintAddress) => (
                   <Col span={24} key={mintAddress}>
                     <LazyLoad height={56.05} overflow>
-                      <MintCard mintAddress={mintAddress} />
+                      <MintCard mintAddress={mintAddress} onClick={onSelect} />
                     </LazyLoad>
                   </Col>
                 ),

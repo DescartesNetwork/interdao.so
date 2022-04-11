@@ -5,11 +5,14 @@ import { BN } from 'bn.js'
 // @ts-ignore
 import * as soproxABI from 'soprox-abi'
 
-import { Card, Col, Input, Modal, Row, Typography } from 'antd'
+import { Button, Card, Col, Input, Modal, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import MintSelection from 'app/components/mintSelection'
+import { MintSymbol } from 'shared/antd/mint'
 
 import { ProposalAccountType, ProposalDataType } from 'app/view/templates/types'
+import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
+import { numeric } from 'shared/util'
 
 export const toData = (amount = new BN(0)) => {
   const schema = [
@@ -77,6 +80,7 @@ const TransferSplPlugin = ({
   const [amount, setAmount] = useState('')
   const [mintAddress, setMintAddress] = useState('')
   const [receiverAddress, setReceiverAddress] = useState('')
+  const { balance } = useAccountBalanceByMintAddress(mintAddress)
 
   const _onClick = useCallback(() => {
     onClick(DEFAULT_VALUE.name)
@@ -99,7 +103,7 @@ const TransferSplPlugin = ({
         </Row>
       </Card>
       <Modal
-        visible={true || visible}
+        visible={visible}
         onCancel={() => setVisible(false)}
         closeIcon={<IonIcon name="close-outline" />}
         footer={null}
@@ -111,20 +115,46 @@ const TransferSplPlugin = ({
             </Typography.Title>
           </Col>
           <Col span={24}>
-            <Input
-              placeholder="Input Amount"
-              value={amount}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setAmount(e.target.value || '')
-              }
-              prefix={
-                <MintSelection
-                  value={mintAddress}
-                  onChange={setMintAddress}
-                  style={{ marginLeft: -7 }}
+            <Row gutter={[4, 4]} justify="end">
+              <Col span={24}>
+                <Input
+                  placeholder="Input Amount"
+                  value={amount}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setAmount(e.target.value || '')
+                  }
+                  prefix={
+                    <MintSelection
+                      value={mintAddress}
+                      onChange={setMintAddress}
+                      style={{ marginLeft: -7 }}
+                    />
+                  }
+                  suffix={
+                    <Button
+                      type="text"
+                      style={{ marginRight: -7 }}
+                      onClick={() => setAmount(balance.toString())}
+                    >
+                      MAX
+                    </Button>
+                  }
                 />
-              }
-            />
+              </Col>
+              <Col>
+                <Space>
+                  <Typography.Text type="secondary" className="caption">
+                    Available:
+                  </Typography.Text>
+                  <Typography.Text className="caption">
+                    {numeric(balance).format('0,0.[00]')}
+                  </Typography.Text>
+                  <Typography.Text className="caption">
+                    <MintSymbol mintAddress={mintAddress} />
+                  </Typography.Text>
+                </Space>
+              </Col>
+            </Row>
           </Col>
           <Col span={24}>
             <Input
