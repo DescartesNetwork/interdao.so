@@ -1,6 +1,11 @@
 import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import LazyLoad from '@senswap/react-lazyload'
+import { useWallet } from '@senhub/providers'
+import { DaoRegimes } from '@interdao/core'
+import isEqual from 'react-fast-compare'
+import { SystemProgram } from '@solana/web3.js'
 
 import { Button, Col, Row, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -9,7 +14,6 @@ import ProposalCard from './proposalCard'
 import { AppDispatch, AppState } from 'app/model'
 import { getProposals } from 'app/model/proposal.controller'
 import configs from 'app/configs'
-import { useHistory } from 'react-router-dom'
 
 const {
   manifest: { appId },
@@ -18,9 +22,22 @@ const {
 export type ProposalListProps = { daoAddress: string }
 
 const ProposalList = ({ daoAddress }: ProposalListProps) => {
-  const { proposal } = useSelector((state: AppState) => state)
+  const { proposal, dao } = useSelector((state: AppState) => state)
   const dispatch = useDispatch<AppDispatch>()
   const history = useHistory()
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
+
+  const { regime, authority } = dao[daoAddress] || {
+    regime: DaoRegimes.Dictatorial,
+    authority: SystemProgram.programId,
+  }
+  const authorized = useMemo(() => {
+    if (isEqual(regime, DaoRegimes.Autonomous)) return true
+    if (authority.toBase58() === walletAddress) return true
+    return false
+  }, [regime, authority, walletAddress])
 
   useEffect(() => {
     dispatch(getProposals({ daoAddress }))
@@ -50,6 +67,7 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
               onClick={() =>
                 history.push(`/app/${appId}/dao/${daoAddress}/new-proposal`)
               }
+              disabled={!authorized}
             >
               New Proposal
             </Button>

@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { ConsensusMechanisms, ConsensusQuorums } from '@interdao/core'
 
-import { Button, Card, Col, Divider, Row, Typography } from 'antd'
+import { Button, Card, Col, Row, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import ConsensusMechanismInput from './consensusMechanismInput'
 import ConsensusQuorumInput from './consensusQuorumInput'
@@ -10,6 +10,7 @@ import DurationInput from './durationInput'
 
 import configs from 'app/configs'
 import ProposalPreview from './proposalPreview'
+import TemplateInput from './templateInput'
 
 const {
   manifest: { appId },
@@ -74,7 +75,7 @@ const ProposalInitialization = () => {
               />
             </Col>
             <Col span={24}>
-              <Divider style={{ margin: 0 }} />
+              <TemplateInput daoAddress={daoAddress} />
             </Col>
             <Col span={24} />
             <Col flex="auto">
