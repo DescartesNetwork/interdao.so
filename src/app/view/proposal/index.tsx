@@ -6,6 +6,7 @@ import ProposalList from './proposalList'
 import DaoDetails from '../dao/daoDetails'
 
 import configs from 'app/configs'
+import './index.less'
 
 const {
   manifest: { appId },
