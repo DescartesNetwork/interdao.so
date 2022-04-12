@@ -178,7 +178,13 @@ const TransferSplPlugin = ({
               <Typography.Text type="secondary"> to </Typography.Text>
               <Typography.Text>{receiverAddress}.</Typography.Text>
             </Col>
-          ) : null}
+          ) : (
+            <Col span={24}>
+              <Typography.Text type="secondary">
+                Please input the params
+              </Typography.Text>
+            </Col>
+          )}
         </Row>
       </Card>
       <Modal
