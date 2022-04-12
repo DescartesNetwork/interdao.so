@@ -41,8 +41,6 @@ const CardProgress = ({
     mintDecimal,
   )
 
-  console.log(parseVotingAgainst, parseVotingFor, consensusMechanism, 2)
-
   return (
     <Card bordered={false}>
       <Row gutter={[16, 16]}>

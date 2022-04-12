@@ -1,16 +1,26 @@
-import { DaoData } from '@interdao/core'
-import { utils } from '@senswap/sen-js'
-import { Button, Card, Col, Row, Typography, Input, Space } from 'antd'
-import useProposal from 'app/hooks/useProposal'
-import { AppState } from 'app/model'
-import { setVoteBidAmount } from 'app/model/voteBid.controller'
-import moment from 'moment'
 import { Fragment, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import IonIcon from 'shared/antd/ionicon'
-import useMintDecimals from 'shared/hooks/useMintDecimals'
+import { account, utils } from '@senswap/sen-js'
+import moment from 'moment'
+import { DaoData } from '@interdao/core'
 
+import { Button, Card, Col, Row, Typography, Input, Space, Radio } from 'antd'
+import IonIcon from 'shared/antd/ionicon'
+
+import useProposal from 'app/hooks/useProposal'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
+import { AppState } from 'app/model'
+import { setVoteBidAmount } from 'app/model/voteBid.controller'
 import { ProposalChildCardProps } from './index'
+
+import configs from 'app/configs'
+import { BN } from 'bn.js'
+import { explorer } from 'shared/util'
+
+const {
+  sol: { interDao },
+} = configs
+
 type LockedVotingProps = {
   proposalAddress: string
   daoAddress: string
@@ -23,12 +33,15 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
     proposalAddress,
     daoAddress,
   )
+  const { dao } = useSelector((state: AppState) => state)
+  const { mint } = dao[daoAddress] || ({} as DaoData)
+  const mintDecimal = useMintDecimals(mint?.toBase58()) || 0
+
   const voteNow = new Date().getTime()
-  const endTime = Number(endDate)
+  const endTime = Number(endDate) * 1000
   const isLockedVote =
     Object.keys(consensusMechanism || [])?.[0] === 'lockedTokenCounter'
-  const remaining = voteNow > endTime ? voteNow - endTime : 0
-
+  const remaining = voteNow > endTime ? endTime - voteNow : 0
   if (!isLockedVote) return <Fragment />
 
   return (
@@ -37,14 +50,17 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
         <Space direction="vertical">
           <Typography.Text>Time remaining</Typography.Text>
           <Typography.Title level={5}>
-            {moment(Number(endDate), 'YYYYMMDD').fromNow()}
+            {moment(endTime || voteNow, 'YYYYMMDD').fromNow()}
           </Typography.Title>
         </Space>
       </Col>
       <Col>
         <Space direction="vertical">
           <Typography.Text>Power of your vote</Typography.Text>
-          <Typography.Title level={5}>{}</Typography.Title>
+          <Typography.Title level={5} style={{ textAlign: 'right' }}>
+            {(Number(utils.undecimalize(voteAmount, mintDecimal)) * remaining) /
+              1000}
+          </Typography.Title>
         </Space>
       </Col>
     </Row>
@@ -52,10 +68,13 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
 }
 
 const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
-  const { dao } = useSelector((state: AppState) => state)
+  const {
+    dao,
+    voteBid: { amount },
+  } = useSelector((state: AppState) => state)
   const dispatch = useDispatch()
   const { mint } = dao[daoAddress] || ({} as DaoData)
-  const mintDecimal = useMintDecimals(mint.toBase58())
+  const mintDecimal = useMintDecimals(mint?.toBase58()) || 0
 
   const onChange = useCallback(
     (value: string) => {
@@ -67,30 +86,51 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     [dispatch, mintDecimal],
   )
 
+  const onVote = useCallback(async () => {
+    try {
+      if (!amount || !account.isAddress(proposalAddress)) return
+      const nextAmount = new BN(amount.toString())
+      const { txId } = await interDao.voteFor(proposalAddress, nextAmount)
+      window.notify({
+        type: 'success',
+        description: 'Voted successfully. Click to view details!',
+        onClick: () => window.open(explorer(txId), '_blank'),
+      })
+    } catch (error: any) {
+      window.notify({
+        type: 'error',
+        description: error.message,
+      })
+    }
+  }, [amount, proposalAddress])
+
   return (
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Typography.Title level={5}>Cast your vote</Typography.Title>
         </Col>
-        <Col span={12}>
-          <Button
-            className="voting-btn"
-            style={{ borderRadius: 4, border: 'none' }}
-            icon={<IonIcon name="thumbs-up-outline" />}
-            block
-          >
-            Yes
-          </Button>
-        </Col>
-        <Col span={12}>
-          <Button
-            style={{ borderRadius: 4, border: 'none', background: '#E9E9EB' }}
-            icon={<IonIcon name="thumbs-down-outline" />}
-            block
-          >
-            No
-          </Button>
+        <Col span={24}>
+          <Radio.Group onChange={() => {}} className="btn-radio-voting">
+            <Row gutter={[24, 24]}>
+              <Col span={12}>
+                <Radio.Button value="yes">
+                  <Space>
+                    <IonIcon name="thumbs-up-outline" />
+                    Yes
+                  </Space>
+                </Radio.Button>
+              </Col>
+              <Col span={12}>
+                <Radio.Button value="no">
+                  <Space>
+                    <IonIcon name="thumbs-down-outline" />
+                    No
+                  </Space>
+                </Radio.Button>
+              </Col>
+            </Row>
+          </Radio.Group>
         </Col>
         <Col span={24}>
           <Card
@@ -127,7 +167,12 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
           />
         </Col>
         <Col span={24}>
-          <Button type="primary" disabled block>
+          <Button
+            onClick={onVote}
+            type="primary"
+            disabled={!amount || !account.isAddress(proposalAddress)}
+            block
+          >
             Vote
           </Button>
         </Col>

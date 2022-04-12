@@ -38,11 +38,15 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
             />
             <RowSpaceBetween
               label="Start time"
-              value={moment(startDate?.toNumber()).format('MMM DD,yyyy HH:mm')}
+              value={moment(startDate?.toNumber() * 1000).format(
+                'MMM DD,yyyy HH:mm',
+              )}
             />
             <RowSpaceBetween
               label="End time"
-              value={moment(endDate?.toNumber()).format('MMM DD,yyyy HH:mm')}
+              value={moment(endDate?.toNumber() * 1000).format(
+                'MMM DD,yyyy HH:mm',
+              )}
             />
             <RowSpaceBetween label="Author" value={'1'} />
             <RowSpaceBetween
