@@ -60,8 +60,10 @@ export const getReceipts = createAsyncThunk(
     let bulk: ReceiptState = {}
     value.forEach(({ pubkey, account: { data: buf } }) => {
       const address = pubkey.toBase58()
-      const data = interDao.parseProposalData(buf)
-      bulk[address] = data
+      try {
+        const data = interDao.parseProposalData(buf)
+        bulk[address] = data
+      } catch (er) {}
     })
     return bulk
   },

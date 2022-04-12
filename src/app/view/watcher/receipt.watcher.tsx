@@ -37,6 +37,7 @@ const ReceiptWatcher = () => {
       if (!account.isAddress(walletAddress)) return
       await dispatch(getReceipts({ authorityAddress: walletAddress })).unwrap()
     } catch (er) {
+      console.log(er)
       return window.notify({
         type: 'error',
         description: 'Cannot fetch data of receipts',
