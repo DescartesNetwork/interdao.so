@@ -7,3 +7,9 @@ export type ProposalAccountType = {
   isSigner: boolean
   isMaster: boolean
 }
+export type ProposalReturnType = {
+  name: string
+  data: ProposalDataType
+  accounts: Record<string, ProposalAccountType>
+  programId: PublicKey
+}

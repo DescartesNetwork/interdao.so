@@ -35,6 +35,7 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
   }
   const authorized = useMemo(() => {
     if (isEqual(regime, DaoRegimes.Autonomous)) return true
+    if (isEqual(regime, DaoRegimes.Democratic)) return true
     if (authority.toBase58() === walletAddress) return true
     return false
   }, [regime, authority, walletAddress])
