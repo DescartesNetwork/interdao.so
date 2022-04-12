@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { ConsensusMechanisms, ConsensusQuorums } from '@interdao/core'
+import BN from 'bn.js'
 
 import { Button, Card, Col, Row, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -11,6 +12,8 @@ import DurationInput from './durationInput'
 import configs from 'app/configs'
 import ProposalPreview from './proposalPreview'
 import TemplateInput from './templateInput'
+import { ProposalReturnType } from 'app/view/templates/types'
+import { explorer } from 'shared/util'
 
 const {
   manifest: { appId },
@@ -27,14 +30,49 @@ const ProposalInitialization = () => {
     CURRENT_TIME + ONE_DAY,
     CURRENT_TIME + 15 * ONE_DAY,
   ])
+  const [tx, setTx] = useState<ProposalReturnType | undefined>()
   const [loading, setLoading] = useState(false)
   const history = useHistory()
   const { daoAddress } = useParams<{ daoAddress: string }>()
 
-  const newProposal = useCallback(() => {
+  const newProposal = useCallback(async () => {
     try {
       setLoading(true)
-      console.log(daoAddress, consensusMechanism, consensusQuorum, duration)
+      const {
+        sol: { interDao, fee, taxman },
+      } = configs
+      if (!tx) return
+      const {
+        programId,
+        data,
+        accounts: { src, dst, payer },
+      } = tx
+      const accounts = [src, dst, payer]
+      console.log(typeof programId, data, accounts)
+      const { txId, proposalAddress } = await interDao.initializeProposal(
+        daoAddress,
+        programId.toBase58(),
+        data,
+        accounts.map(({ pubkey }) => pubkey),
+        accounts.map(({ isSigner }) => isSigner),
+        accounts.map(({ isWritable }) => isWritable),
+        accounts.map(({ isMaster }) => isMaster),
+        Math.floor(duration[0] / 1000),
+        Math.floor(duration[1] / 1000),
+        new BN(fee),
+        taxman,
+        consensusMechanism,
+        consensusQuorum,
+      )
+      window.notify({
+        type: 'success',
+        description:
+          'Create a new proposal successfully. Click here to view details.',
+        onClick: () => window.open(explorer(txId), '_blank'),
+      })
+      return history.push(
+        `/app/${appId}/dao/${daoAddress}/proposal/${proposalAddress}`,
+      )
     } catch (er: any) {
       return window.notify({
         type: 'error',
@@ -43,7 +81,7 @@ const ProposalInitialization = () => {
     } finally {
       return setLoading(false)
     }
-  }, [daoAddress, consensusMechanism, consensusQuorum, duration])
+  }, [daoAddress, consensusMechanism, consensusQuorum, duration, tx, history])
 
   return (
     <Row gutter={[24, 24]} justify="center">
@@ -75,7 +113,7 @@ const ProposalInitialization = () => {
               />
             </Col>
             <Col span={24}>
-              <TemplateInput daoAddress={daoAddress} />
+              <TemplateInput daoAddress={daoAddress} onChange={setTx} />
             </Col>
             <Col span={24} />
             <Col flex="auto">
