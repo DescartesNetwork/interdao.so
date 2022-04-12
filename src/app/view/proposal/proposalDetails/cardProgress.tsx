@@ -10,32 +10,21 @@ import { AppState } from 'app/model'
 import { utils } from '@senswap/sen-js'
 import { numeric } from 'shared/util'
 
-const QUORUM = {
-  half: 1 / 2,
-  oneThird: 1 / 3,
-  twoThird: 2 / 3,
-}
-
 const CardProgress = ({
   proposalAddress,
   daoAddress,
 }: ProposalChildCardProps) => {
   const { dao } = useSelector((state: AppState) => state)
-  const {
-    dataLen,
-    votingAgainstPower,
-    votingForPower,
-    supply,
-    consensusQuorum,
-    consensusMechanism,
-  } = useProposal(proposalAddress, daoAddress)
+  const { dataLen, votingAgainstPower, votingForPower, supply } = useProposal(
+    proposalAddress,
+    daoAddress,
+  )
   const { mint } = dao[daoAddress] || ({} as DaoData)
   const mintDecimal = useMintDecimals(mint?.toBase58()) || 0
 
   const totalPower = Number(supply) / 10 ** mintDecimal
   const votingFor = Number(votingForPower) || 0
   const votingAgainst = Number(votingAgainstPower) || 0
-  const mechanismType = Object.keys(consensusMechanism || {})[0]
   const parseVotingFor = Number(
     utils.undecimalize(BigInt(votingFor), mintDecimal),
   )
