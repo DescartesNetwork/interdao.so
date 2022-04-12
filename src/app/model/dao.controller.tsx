@@ -1,9 +1,7 @@
 import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { DaoData } from '@interdao/core'
+import { DaoData, DAO_DISCRIMINATOR } from '@interdao/core'
 import { account } from '@senswap/sen-js'
-import bs58 from 'bs58'
-import { BorshAccountsCoder } from '@project-serum/anchor'
 
 import configs from 'app/configs'
 
@@ -41,7 +39,7 @@ export const getDaos = createAsyncThunk(`${NAME}/getDaos`, async () => {
         {
           memcmp: {
             offset: 0,
-            bytes: bs58.encode(BorshAccountsCoder.accountDiscriminator('dao')),
+            bytes: DAO_DISCRIMINATOR,
           },
         },
       ],

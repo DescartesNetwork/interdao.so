@@ -1,9 +1,11 @@
 import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { ProposalData, ReceiptData } from '@interdao/core'
+import {
+  ProposalData,
+  ReceiptData,
+  RECEIPT_DISCRIMINATOR,
+} from '@interdao/core'
 import { account } from '@senswap/sen-js'
-import bs58 from 'bs58'
-import { BorshAccountsCoder } from '@project-serum/anchor'
 
 import configs from 'app/configs'
 
@@ -44,9 +46,7 @@ export const getReceipts = createAsyncThunk(
           {
             memcmp: {
               offset: 0,
-              bytes: bs58.encode(
-                BorshAccountsCoder.accountDiscriminator('receipt'),
-              ),
+              bytes: RECEIPT_DISCRIMINATOR,
             },
           },
           {
