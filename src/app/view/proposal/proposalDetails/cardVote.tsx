@@ -64,7 +64,7 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
         <Space direction="vertical">
           <Typography.Text>Time remaining</Typography.Text>
           <Typography.Title level={5}>
-            {moment(endTime || voteNow, 'YYYYMMDD').fromNow()}
+            {moment(endTime).endOf('day').fromNow()}
           </Typography.Title>
         </Space>
       </Col>
