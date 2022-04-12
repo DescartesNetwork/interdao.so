@@ -2,6 +2,8 @@ import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { DaoData } from '@interdao/core'
 import { account } from '@senswap/sen-js'
+import bs58 from 'bs58'
+import { BorshAccountsCoder } from '@project-serum/anchor'
 
 import configs from 'app/configs'
 
@@ -34,15 +36,21 @@ export const getDaos = createAsyncThunk(`${NAME}/getDaos`, async () => {
   } = interDao.program
   const value: Array<{ pubkey: PublicKey; account: AccountInfo<Buffer> }> =
     await connection.getProgramAccounts(programId, {
-      filters: [{ dataSize: dao.size }],
+      filters: [
+        { dataSize: dao.size },
+        {
+          memcmp: {
+            offset: 0,
+            bytes: bs58.encode(BorshAccountsCoder.accountDiscriminator('dao')),
+          },
+        },
+      ],
     })
   let bulk: DaoState = {}
   value.forEach(({ pubkey, account: { data: buf } }) => {
     const address = pubkey.toBase58()
-    try {
-      const data = interDao.parseDaoData(buf)
-      bulk[address] = data
-    } catch (er) {}
+    const data = interDao.parseDaoData(buf)
+    bulk[address] = data
   })
   return bulk
 })
