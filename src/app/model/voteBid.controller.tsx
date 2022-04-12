@@ -6,6 +6,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export type VoteBidState = {
   amount: bigint
+  votePower: bigint
 }
 
 /**
@@ -15,6 +16,7 @@ export type VoteBidState = {
 const NAME = 'voteBid'
 const initialState: VoteBidState = {
   amount: BigInt(0),
+  votePower: BigInt(0),
 }
 
 /**
@@ -29,6 +31,14 @@ export const setVoteBidAmount = createAsyncThunk(
   },
 )
 
+export const setVotePower = createAsyncThunk(
+  `${NAME}/setVotePower`,
+  async (votePower: bigint) => {
+    if (!votePower) return { votePower: BigInt(0) }
+    return { votePower }
+  },
+)
+
 /**
  * Usual procedure
  */
@@ -38,10 +48,15 @@ const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) =>
-    void builder.addCase(
-      setVoteBidAmount.fulfilled,
-      (state, { payload }) => void Object.assign(state, payload),
-    ),
+    void builder
+      .addCase(
+        setVoteBidAmount.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        setVotePower.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      ),
 })
 
 export default slice.reducer

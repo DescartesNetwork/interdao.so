@@ -8,6 +8,7 @@ import useMintDecimals from 'shared/hooks/useMintDecimals'
 import useProposal from 'app/hooks/useProposal'
 import { AppState } from 'app/model'
 import { utils } from '@senswap/sen-js'
+import { numeric } from 'shared/util'
 
 const QUORUM = {
   half: 1 / 2,
@@ -31,14 +32,15 @@ const CardProgress = ({
   const { mint } = dao[daoAddress] || ({} as DaoData)
   const mintDecimal = useMintDecimals(mint?.toBase58()) || 0
 
-  const totalPower = Number(supply)
+  const totalPower = Number(supply) / 10 ** mintDecimal
   const votingFor = Number(votingForPower) || 0
   const votingAgainst = Number(votingAgainstPower) || 0
   const mechanismType = Object.keys(consensusMechanism || {})[0]
-  const parseVotingFor = utils.undecimalize(BigInt(votingFor), mintDecimal)
-  const parseVotingAgainst = utils.undecimalize(
-    BigInt(votingAgainst),
-    mintDecimal,
+  const parseVotingFor = Number(
+    utils.undecimalize(BigInt(votingFor), mintDecimal),
+  )
+  const parseVotingAgainst = Number(
+    utils.undecimalize(BigInt(votingAgainst), mintDecimal),
   )
 
   return (
@@ -70,16 +72,21 @@ const CardProgress = ({
               <Col>
                 <Space>
                   <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                    55,07%
+                    {numeric(parseVotingFor / totalPower).format('0,0.[00]%')}
                   </Typography.Text>
-                  <Typography.Title level={5}>102,161,162</Typography.Title>
+                  <Typography.Title level={5}>
+                    {numeric(totalPower).format('0,0.[000]')}
+                  </Typography.Title>
                 </Space>
               </Col>
               <Col span={24}>
                 <Progress
                   percent={100}
                   strokeColor="#d3d3d6"
-                  success={{ percent: 60, strokeColor: '#F9575E' }}
+                  success={{
+                    percent: (parseVotingFor / totalPower) * 100,
+                    strokeColor: '#F9575E',
+                  }}
                   showInfo={false}
                 />
               </Col>
@@ -95,16 +102,23 @@ const CardProgress = ({
               <Col>
                 <Space>
                   <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                    55,07%
+                    {numeric(parseVotingAgainst / totalPower).format(
+                      '0,0.[00]%',
+                    )}
                   </Typography.Text>
-                  <Typography.Title level={5}>102,161,162</Typography.Title>
+                  <Typography.Title level={5}>
+                    {numeric(totalPower).format('0,0.[000]')}
+                  </Typography.Title>
                 </Space>
               </Col>
               <Col span={24}>
                 <Progress
                   percent={100}
                   strokeColor="#d3d3d6"
-                  success={{ percent: 60, strokeColor: '#F9575E' }}
+                  success={{
+                    percent: (parseVotingAgainst / totalPower) * 100,
+                    strokeColor: '#F9575E',
+                  }}
                   showInfo={false}
                 />
               </Col>
