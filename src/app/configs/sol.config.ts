@@ -8,6 +8,8 @@ import { Net } from 'shared/runtime'
 type Conf = {
   rpc: string
   interDao: InterDAO
+  fee: string
+  taxman: string
 }
 
 const conf: Record<Net, Conf> = {
@@ -17,6 +19,8 @@ const conf: Record<Net, Conf> = {
   devnet: {
     rpc: 'https://api.devnet.solana.com',
     interDao: new InterDAO(new SafeWallet()),
+    fee: '0',
+    taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',
   },
 
   /**
@@ -25,6 +29,8 @@ const conf: Record<Net, Conf> = {
   testnet: {
     rpc: 'https://api.testnet.solana.com',
     interDao: new InterDAO(new SafeWallet()),
+    fee: '0',
+    taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',
   },
 
   /**
@@ -33,6 +39,8 @@ const conf: Record<Net, Conf> = {
   mainnet: {
     rpc: 'https://ssc-dao.genesysgo.net',
     interDao: new InterDAO(new SafeWallet()),
+    fee: '0',
+    taxman: '',
   },
 }
 
