@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
 import moment from 'moment'
 import { DaoData } from '@interdao/core'
+import { BN } from 'bn.js'
 
 import {
   Button,
@@ -24,8 +25,8 @@ import { setVoteBidAmount } from 'app/model/voteBid.controller'
 import { ProposalChildCardProps } from './index'
 
 import configs from 'app/configs'
-import { BN } from 'bn.js'
 import { explorer, numeric } from 'shared/util'
+import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 
 const {
   sol: { interDao },
@@ -88,16 +89,16 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch()
   const { mint } = dao[daoAddress] || ({} as DaoData)
-  const mintDecimal = useMintDecimals(mint?.toBase58()) || 0
+  const { balance, decimals } = useAccountBalanceByMintAddress(mint?.toBase58())
 
   const onChange = useCallback(
     (value: string) => {
-      if (!value || !mintDecimal) return
+      if (!value || !decimals) return
 
-      const voteAmount = utils.decimalize(value, mintDecimal)
+      const voteAmount = utils.decimalize(value, decimals)
       dispatch(setVoteBidAmount(voteAmount))
     },
-    [dispatch, mintDecimal],
+    [dispatch, decimals],
   )
 
   const onVoteFor = useCallback(async () => {
@@ -193,7 +194,9 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
                 <Typography.Text>Amount vote</Typography.Text>
               </Col>
               <Col>
-                <Typography.Text>Available: {0}</Typography.Text>
+                <Typography.Text>
+                  Available: {numeric(balance).format('0,0.[00]')}
+                </Typography.Text>
               </Col>
               <Col span={24}>
                 <Input
@@ -202,7 +205,11 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
                   placeholder="0"
                   onChange={(e) => onChange(e.target.value)}
                   suffix={
-                    <Button size="small" type="text">
+                    <Button
+                      size="small"
+                      type="text"
+                      onClick={() => onChange(balance.toString())}
+                    >
                       Max
                     </Button>
                   }
