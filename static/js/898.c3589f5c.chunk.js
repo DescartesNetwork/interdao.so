@@ -1,2 +1,0 @@
-"use strict";(globalThis.webpackChunkinterdao=globalThis.webpackChunkinterdao||[]).push([[898],{19898:(a,e,c)=>{c.r(e),c.d(e,{logo:()=>s,panels:()=>o,readme:()=>t});var d=c(59062);c(92950);const s=c.p+"static/media/logo.fadfb35f0aca6b94ca9b5aeddb5e64d0.svg";var t=c(89374);const o=[d]},89374:(a,e,c)=>{a.exports=c.p+"static/media/README.cc06a5f56da5ba785b81.md"},59062:(a,e,c)=>{a.exports=c.p+"static/media/panel.6ce7bc345912340df001.png"}}]);
-//# sourceMappingURL=898.c3589f5c.chunk.js.map
