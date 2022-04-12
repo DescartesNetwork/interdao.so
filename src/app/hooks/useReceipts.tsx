@@ -1,14 +1,16 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { account } from '@senswap/sen-js'
 import { AccountInfo, PublicKey } from '@solana/web3.js'
 
 import configs from 'app/configs'
+import { ReceiptData } from '@interdao/core'
 
 const {
   sol: { interDao },
 } = configs
 
 const useReceipts = ({ proposalAddress }: { proposalAddress: string }) => {
+  const [receipts, setReceipts] = useState<ReceiptData[]>([])
   const getReceipts = useCallback(async () => {
     if (!account.isAddress(proposalAddress)) throw new Error('Invalid address')
     const {
@@ -22,25 +24,26 @@ const useReceipts = ({ proposalAddress }: { proposalAddress: string }) => {
           { dataSize: receipt.size },
           {
             memcmp: {
-              offset: 16,
+              offset: 48,
               bytes: proposalAddress,
             },
           },
         ],
       })
-    console.log(value)
-    value.forEach(({ pubkey, account: { data: buf } }) => {
-      const address = pubkey.toBase58()
-      const data = interDao.parseProposalData(buf)
-      console.log(address, data)
+    let bulk: ReceiptData[] = []
+
+    value.forEach(({ account: { data: buf } }) => {
+      const data = interDao.parseReceiptData(buf)
+      bulk.push(data)
     })
+    setReceipts(bulk)
   }, [proposalAddress])
 
   useEffect(() => {
     getReceipts()
   }, [getReceipts])
 
-  return {}
+  return { receipts }
 }
 
 export default useReceipts

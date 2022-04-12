@@ -12,7 +12,8 @@ const History = ({
   proposalAddress: string
   daoAddress: string
 }) => {
-  const tmp = useReceipts({ proposalAddress })
+  const { receipts } = useReceipts({ proposalAddress })
+
   return (
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
@@ -22,11 +23,12 @@ const History = ({
         <Col span={24}>
           <Table
             columns={HISTORY_COLUMNS}
-            dataSource={[]}
+            dataSource={receipts}
             rowClassName={(record, index) =>
               index % 2 ? 'odd-row' : 'even-row'
             }
             pagination={false}
+            rowKey={(record) => record.index.toNumber()}
           />
         </Col>
       </Row>
