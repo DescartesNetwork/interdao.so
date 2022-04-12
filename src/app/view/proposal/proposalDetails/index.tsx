@@ -5,9 +5,11 @@ import CardStatus from './cardStatus'
 import CardVote from './cardVote'
 import CardInfo from './cardInfo'
 import CardProgress from './cardProgress'
+import History from './history'
 import IonIcon from 'shared/antd/ionicon'
 
 import configs from 'app/configs'
+
 import './index.less'
 
 const {
@@ -47,6 +49,12 @@ const ProposalDetails = () => {
               </Col>
               <Col span={24}>
                 <CardVote
+                  proposalAddress={proposalAddress}
+                  daoAddress={daoAddress}
+                />
+              </Col>
+              <Col span={24}>
+                <History
                   proposalAddress={proposalAddress}
                   daoAddress={daoAddress}
                 />
