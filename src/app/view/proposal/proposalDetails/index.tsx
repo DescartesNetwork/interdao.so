@@ -1,13 +1,14 @@
 import { useParams, useHistory } from 'react-router-dom'
 
 import { Button, Col, Row } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
-
-import configs from 'app/configs'
 import CardStatus from './cardStatus'
 import CardVote from './cardVote'
 import CardInfo from './cardInfo'
 import CardProgress from './cardProgress'
+import IonIcon from 'shared/antd/ionicon'
+
+import configs from 'app/configs'
+import './index.less'
 
 const {
   manifest: { appId },
