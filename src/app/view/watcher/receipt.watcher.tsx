@@ -39,7 +39,7 @@ const ReceiptWatcher = () => {
     } catch (er) {
       return window.notify({
         type: 'error',
-        description: 'Cannot fetch data of DAOs',
+        description: 'Cannot fetch data of receipts',
       })
     }
   }, [dispatch, walletAddress])

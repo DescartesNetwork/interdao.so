@@ -39,8 +39,10 @@ export const getDaos = createAsyncThunk(`${NAME}/getDaos`, async () => {
   let bulk: DaoState = {}
   value.forEach(({ pubkey, account: { data: buf } }) => {
     const address = pubkey.toBase58()
-    const data = interDao.parseDaoData(buf)
-    bulk[address] = data
+    try {
+      const data = interDao.parseDaoData(buf)
+      bulk[address] = data
+    } catch (er) {}
   })
   return bulk
 })
