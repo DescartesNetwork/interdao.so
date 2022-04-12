@@ -48,7 +48,6 @@ const ProposalInitialization = () => {
         accounts: { src, dst, payer },
       } = tx
       const accounts = [src, dst, payer]
-      console.log(typeof programId, data, accounts)
       const { txId, proposalAddress } = await interDao.initializeProposal(
         daoAddress,
         programId.toBase58(),
