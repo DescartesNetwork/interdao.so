@@ -1,9 +1,7 @@
 import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import {
-  DAO_DISCRIMINATOR,
   ProposalData,
-  PROPOSAL_DISCRIMINATOR,
   ReceiptData,
   RECEIPT_DISCRIMINATOR,
 } from '@interdao/core'
@@ -41,9 +39,6 @@ export const getReceipts = createAsyncThunk(
       programId,
       account: { receipt },
     } = interDao.program
-    console.log('DAO_DISCRIMINATOR', DAO_DISCRIMINATOR)
-    console.log('PROPOSAL_DISCRIMINATOR', PROPOSAL_DISCRIMINATOR)
-    console.log('RECEIPT_DISCRIMINATOR', RECEIPT_DISCRIMINATOR)
     const value: Array<{ pubkey: PublicKey; account: AccountInfo<Buffer> }> =
       await connection.getProgramAccounts(programId, {
         filters: [
@@ -65,12 +60,8 @@ export const getReceipts = createAsyncThunk(
     let bulk: ReceiptState = {}
     value.forEach(({ pubkey, account: { data: buf } }) => {
       const address = pubkey.toBase58()
-      try {
-        const data = interDao.parseProposalData(buf)
-        bulk[address] = data
-      } catch (er: any) {
-        console.log(er.message, address)
-      }
+      const data = interDao.parseReceiptData(buf)
+      bulk[address] = data
     })
     return bulk
   },
