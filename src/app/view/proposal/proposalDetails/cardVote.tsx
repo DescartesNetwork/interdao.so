@@ -5,28 +5,17 @@ import moment from 'moment'
 import { DaoData } from '@interdao/core'
 import { BN } from 'bn.js'
 
-import {
-  Button,
-  Card,
-  Col,
-  Row,
-  Typography,
-  Input,
-  Space,
-  Radio,
-  RadioChangeEvent,
-} from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import { Button, Card, Col, Row, Typography, Space } from 'antd'
 
 import useProposal from 'app/hooks/useProposal'
-import useMintDecimals from 'shared/hooks/useMintDecimals'
 import { AppState } from 'app/model'
 import { setVoteBidAmount } from 'app/model/voteBid.controller'
 import { ProposalChildCardProps } from './index'
-
-import configs from 'app/configs'
-import { explorer, numeric } from 'shared/util'
+import NumericInput from 'shared/antd/numericInput'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
+
+import { explorer, numeric } from 'shared/util'
+import configs from 'app/configs'
 
 const {
   sol: { interDao },
@@ -44,17 +33,13 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
     proposalAddress,
     daoAddress,
   )
-  const { dao } = useSelector((state: AppState) => state)
-  const { mint } = dao[daoAddress] || ({} as DaoData)
-  const mintDecimal = useMintDecimals(mint?.toBase58()) || 0
 
   const voteNow = new Date().getTime()
   const endTime = Number(endDate) * 1000
   const isLockedVote =
     Object.keys(consensusMechanism || [])?.[0] === 'lockedTokenCounter'
   const remaining = voteNow < endTime ? endTime - voteNow : 0
-  const votePower =
-    (Number(utils.undecimalize(voteAmount, mintDecimal)) * remaining) / 1000
+  const votePower = (Number(voteAmount) * remaining) / 1000
 
   if (!isLockedVote) return <Fragment />
 
@@ -81,8 +66,8 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
 }
 
 const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
-  const [loading, setLoading] = useState(false)
-  const [voteType, setVoteType] = useState('yes')
+  const [loadingFor, setLoadingFor] = useState(false)
+  const [loadingAgainst, setLoadingAgainst] = useState(false)
   const {
     dao,
     voteBid: { amount },
@@ -93,19 +78,18 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
 
   const onChange = useCallback(
     (value: string) => {
-      if (!value || !decimals) return
-
-      const voteAmount = utils.decimalize(value, decimals)
-      dispatch(setVoteBidAmount(voteAmount))
+      if (!decimals) return
+      dispatch(setVoteBidAmount(value))
     },
     [dispatch, decimals],
   )
 
   const onVoteFor = useCallback(async () => {
-    setLoading(true)
+    setLoadingFor(true)
     try {
       if (!amount || !account.isAddress(proposalAddress)) return
-      const nextAmount = new BN(amount.toString())
+      const voteAmount = utils.decimalize(amount, decimals)
+      const nextAmount = new BN(voteAmount.toString())
       const { txId } = await interDao.voteFor(proposalAddress, nextAmount)
       window.notify({
         type: 'success',
@@ -118,15 +102,16 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
         description: error.message,
       })
     } finally {
-      setLoading(false)
+      setLoadingFor(false)
     }
-  }, [amount, proposalAddress])
+  }, [amount, decimals, proposalAddress])
 
   const onVoteAgainst = useCallback(async () => {
-    setLoading(true)
+    setLoadingAgainst(true)
     try {
       if (!amount || !account.isAddress(proposalAddress)) return
-      const nextAmount = new BN(amount.toString())
+      const voteAmount = utils.decimalize(amount, decimals)
+      const nextAmount = new BN(voteAmount.toString())
       const { txId } = await interDao.voteAgainst(proposalAddress, nextAmount)
       window.notify({
         type: 'success',
@@ -139,50 +124,15 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
         description: error.message,
       })
     } finally {
-      setLoading(false)
+      setLoadingAgainst(false)
     }
-  }, [amount, proposalAddress])
-
-  const onVote = useCallback(() => {
-    if (voteType === 'yes') return onVoteFor()
-    return onVoteAgainst()
-  }, [onVoteAgainst, onVoteFor, voteType])
-
-  const onChangeVoteType = (e: RadioChangeEvent) => {
-    setVoteType(e.target.value)
-  }
+  }, [amount, decimals, proposalAddress])
 
   return (
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Typography.Title level={5}>Cast your vote</Typography.Title>
-        </Col>
-        <Col span={24}>
-          <Radio.Group
-            defaultValue={voteType}
-            onChange={onChangeVoteType}
-            className="btn-radio-voting"
-          >
-            <Row gutter={[24, 24]}>
-              <Col span={12}>
-                <Radio.Button value="yes">
-                  <Space>
-                    <IonIcon name="thumbs-up-outline" />
-                    Yes
-                  </Space>
-                </Radio.Button>
-              </Col>
-              <Col span={12}>
-                <Radio.Button value="no">
-                  <Space>
-                    <IonIcon name="thumbs-down-outline" />
-                    No
-                  </Space>
-                </Radio.Button>
-              </Col>
-            </Row>
-          </Radio.Group>
         </Col>
         <Col span={24}>
           <Card
@@ -199,11 +149,12 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
                 </Typography.Text>
               </Col>
               <Col span={24}>
-                <Input
+                <NumericInput
                   bordered={false}
                   style={{ padding: 0 }}
                   placeholder="0"
-                  onChange={(e) => onChange(e.target.value)}
+                  value={amount}
+                  onValue={onChange}
                   suffix={
                     <Button
                       size="small"
@@ -224,15 +175,26 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
             daoAddress={daoAddress}
           />
         </Col>
-        <Col span={24}>
+        <Col span={12}>
           <Button
-            onClick={onVote}
+            onClick={onVoteFor}
             type="primary"
             disabled={!amount || !account.isAddress(proposalAddress)}
-            loading={loading}
+            loading={loadingFor}
             block
           >
-            Vote
+            Vote For
+          </Button>
+        </Col>
+        <Col span={12}>
+          <Button
+            onClick={onVoteAgainst}
+            type="primary"
+            disabled={!amount || !account.isAddress(proposalAddress)}
+            loading={loadingAgainst}
+            block
+          >
+            Vote Against
           </Button>
         </Col>
       </Row>

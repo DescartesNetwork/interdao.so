@@ -5,7 +5,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
  */
 
 export type VoteBidState = {
-  amount: bigint
+  amount: string
 }
 
 /**
@@ -14,7 +14,7 @@ export type VoteBidState = {
 
 const NAME = 'voteBid'
 const initialState: VoteBidState = {
-  amount: BigInt(0),
+  amount: '',
 }
 
 /**
@@ -23,8 +23,8 @@ const initialState: VoteBidState = {
 
 export const setVoteBidAmount = createAsyncThunk(
   `${NAME}/setVoteBidAmount`,
-  async (amount: bigint) => {
-    if (!amount) return { amount: BigInt(0) }
+  async (amount: string) => {
+    if (!amount) return { amount: '' }
     return { amount }
   },
 )
