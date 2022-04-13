@@ -5,17 +5,7 @@ import moment from 'moment'
 import { DaoData } from '@interdao/core'
 import { BN } from 'bn.js'
 
-import {
-  Button,
-  Card,
-  Col,
-  Row,
-  Typography,
-  Space,
-  Radio,
-  RadioChangeEvent,
-} from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import { Button, Card, Col, Row, Typography, Space } from 'antd'
 
 import useProposal from 'app/hooks/useProposal'
 import { AppState } from 'app/model'
