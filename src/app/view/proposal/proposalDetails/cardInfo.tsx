@@ -1,14 +1,17 @@
+import { ReactNode, useState } from 'react'
 import moment from 'moment'
+import CopyToClipboard from 'react-copy-to-clipboard'
 
-import { Card, Col, Row, Space, Typography } from 'antd'
+import { Card, Col, Row, Space, Typography, Tooltip } from 'antd'
 
 import { ProposalChildCardProps } from './index'
 import useProposal from 'app/hooks/useProposal'
-import { shortenAddress } from 'shared/util'
+import { asyncWait, explorer, shortenAddress } from 'shared/util'
+import IonIcon from 'shared/antd/ionicon'
 
 type RowSpaceBetweenProps = {
   label?: string
-  value?: string
+  value?: string | ReactNode
 }
 
 const RowSpaceBetween = ({ label = '', value = '' }: RowSpaceBetweenProps) => {
@@ -21,9 +24,16 @@ const RowSpaceBetween = ({ label = '', value = '' }: RowSpaceBetweenProps) => {
 }
 
 const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
+  const [copied, setCopied] = useState(false)
   const { consensusQuorum, startDate, endDate, consensusMechanism, creator } =
     useProposal(proposalAddress, daoAddress)
   const authProposalAddress = creator?.toBase58() || ''
+
+  const onCopy = async () => {
+    setCopied(true)
+    await asyncWait(1500)
+    setCopied(false)
+  }
 
   return (
     <Card bordered={false}>
@@ -51,7 +61,27 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
             />
             <RowSpaceBetween
               label="Author"
-              value={shortenAddress(authProposalAddress, 4)}
+              value={
+                <Space size={10}>
+                  <Typography.Text
+                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                    onClick={() =>
+                      window.open(explorer(authProposalAddress), '_blank')
+                    }
+                  >
+                    {shortenAddress(authProposalAddress, 3)}
+                  </Typography.Text>
+                  <Tooltip title="Copied" visible={copied}>
+                    <CopyToClipboard text={authProposalAddress} onCopy={onCopy}>
+                      <IonIcon
+                        style={{ cursor: 'pointer' }}
+                        name="copy-outline"
+                        onClick={onCopy}
+                      />
+                    </CopyToClipboard>
+                  </Tooltip>
+                </Space>
+              }
             />
             <RowSpaceBetween
               label="Quorum"
