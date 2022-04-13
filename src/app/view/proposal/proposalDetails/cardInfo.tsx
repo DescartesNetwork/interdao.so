@@ -21,8 +21,9 @@ const RowSpaceBetween = ({ label = '', value = '' }: RowSpaceBetweenProps) => {
 }
 
 const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
-  const { consensusQuorum, startDate, endDate, consensusMechanism } =
+  const { consensusQuorum, startDate, endDate, consensusMechanism, creator } =
     useProposal(proposalAddress, daoAddress)
+  const authProposalAddress = creator?.toBase58() || ''
 
   return (
     <Card bordered={false}>
@@ -48,7 +49,10 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
                 'MMM DD,yyyy HH:mm',
               )}
             />
-            <RowSpaceBetween label="Author" value={'1'} />
+            <RowSpaceBetween
+              label="Author"
+              value={shortenAddress(authProposalAddress, 4)}
+            />
             <RowSpaceBetween
               label="Quorum"
               value={consensusQuorum ? Object.keys(consensusQuorum)[0] : '1/2'}
