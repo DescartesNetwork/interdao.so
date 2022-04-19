@@ -1,3 +1,4 @@
+import { useCallback, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { DaoData } from '@interdao/core'
 
@@ -6,8 +7,6 @@ import IonIcon from 'shared/antd/ionicon'
 import ProposalStatus, {
   ProposalStatusType,
 } from 'app/components/proposalStatus'
-
-import { useCallback, useMemo, useState } from 'react'
 
 import { ProposalChildCardProps } from './index'
 import useProposal from 'app/hooks/useProposal'
