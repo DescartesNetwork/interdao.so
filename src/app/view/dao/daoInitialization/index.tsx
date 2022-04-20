@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { account } from '@senswap/sen-js'
 import BN from 'bn.js'
 import { DaoRegimes } from '@interdao/core'
+import { CID } from 'ipfs-core'
 
 import { Button, Card, Col, Row, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -14,14 +15,23 @@ import MetaDataForm from './metaDataForm'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import configs from 'app/configs'
 import { explorer } from 'shared/util'
+import { MetaData } from './metaDataForm'
+import IPFS from 'shared/pdb/ipfs'
 
 const {
   manifest: { appId },
   sol: { interDao },
 } = configs
 
+const DEFAULT_METADATA = {
+  daoName: '',
+  description: '',
+  image: '',
+}
+
 const DaoInitialization = () => {
   const [regime, setRegime] = useState(DaoRegimes.Dictatorial)
+  const [metaData, setMetaData] = useState<MetaData>(DEFAULT_METADATA)
   const [mintAddress, setMintAddress] = useState('')
   const [circulatingSupply, setCirculatingSupply] = useState('')
   const [loading, setLoading] = useState(false)
@@ -40,10 +50,18 @@ const DaoInitialization = () => {
     if (!valid) return
     try {
       setLoading(true)
+      const ipfs = new IPFS()
+      const cid = await ipfs.set(metaData)
+      const {
+        multihash: { digest },
+      } = CID.parse(cid)
+      const metadata = Buffer.from(digest)
+
+      console.log(metadata, 1)
+
       const supply = new BN(circulatingSupply).mul(
         new BN(10).pow(new BN(decimals)),
       )
-      const metadata = Buffer.from([]) // Replace the real hash here
       const { txId, daoAddress } = await interDao.initializeDao(
         mintAddress,
         supply,
@@ -65,7 +83,15 @@ const DaoInitialization = () => {
     } finally {
       return setLoading(false)
     }
-  }, [valid, regime, mintAddress, circulatingSupply, decimals, history])
+  }, [
+    valid,
+    metaData,
+    circulatingSupply,
+    decimals,
+    mintAddress,
+    regime,
+    history,
+  ])
 
   return (
     <Row gutter={[24, 24]} justify="center">
@@ -91,7 +117,7 @@ const DaoInitialization = () => {
             <Col span={24} />
             {advanceSetting && (
               <Col span={24}>
-                <MetaDataForm />
+                <MetaDataForm metaData={metaData} setMetaData={setMetaData} />
               </Col>
             )}
             <Col span={24}>

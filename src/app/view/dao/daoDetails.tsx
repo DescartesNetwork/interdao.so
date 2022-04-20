@@ -2,7 +2,16 @@ import { useSelector } from 'react-redux'
 import { SystemProgram } from '@solana/web3.js'
 import BN from 'bn.js'
 
-import { Button, Card, Col, Divider, Row, Space, Typography } from 'antd'
+import {
+  Avatar,
+  Button,
+  Card,
+  Col,
+  Divider,
+  Row,
+  Space,
+  Typography,
+} from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import StatisticCard from 'app/components/statisticCard'
 import RegimeTag from 'app/components/regimeTag'
@@ -12,18 +21,19 @@ import GradientAvatar from 'app/components/gradientAvatar'
 import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
 import useMembers from 'app/hooks/useMembers'
+import useMetaData from 'app/hooks/useMetaData'
 
 export type DaoCardProps = { daoAddress: string }
 
 const DaoCard = ({ daoAddress }: DaoCardProps) => {
   const { dao } = useSelector((state: AppState) => state)
-
   const { regime, nonce, mint } = dao[daoAddress] || {
     regime: {},
     nonce: new BN(0),
     mint: SystemProgram.programId,
   }
   const members = useMembers(daoAddress)
+  const metaData = useMetaData(daoAddress)
 
   return (
     <Card bordered={false}>
@@ -31,15 +41,22 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
         <Col span={24}>
           <Row gutter={[16, 16]} wrap={false}>
             <Col>
-              <GradientAvatar
-                seed={daoAddress}
-                avatarProps={{ shape: 'square', size: 56 }}
-              />
+              {!metaData?.image ? (
+                <GradientAvatar
+                  seed={daoAddress}
+                  avatarProps={{ shape: 'square', size: 56 }}
+                />
+              ) : (
+                <Avatar shape="square" size={56} src={metaData?.image} />
+              )}
             </Col>
+
             <Col>
               <Space direction="vertical" size={0}>
                 <Typography.Title level={4}>
-                  {shortenAddress(daoAddress)}
+                  {metaData?.daoName
+                    ? metaData.daoName
+                    : shortenAddress(daoAddress)}
                 </Typography.Title>
                 <Space size={2} style={{ marginLeft: -8 }}>
                   <Button type="text" icon={<IonIcon name="logo-discord" />} />
@@ -88,11 +105,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
         </Col>
         <Col span={24}>
           <Typography.Paragraph type="secondary">
-            About: dOrg is helping to build the SafeSnap app, which enables
-            cheap yet secure governance through on-chain execution of off-chain
-            votes. dOrg is helping to build the SafeSnap app, which enables
-            cheap yet secure governance through on-chain execution of off-chain
-            votes.
+            {metaData?.description}
           </Typography.Paragraph>
         </Col>
       </Row>

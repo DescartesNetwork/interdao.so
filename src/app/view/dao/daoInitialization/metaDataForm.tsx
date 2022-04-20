@@ -1,57 +1,39 @@
-import { useState } from 'react'
+import { ChangeEvent } from 'react'
 
-import { Col, Input, Row, Space, Typography, Upload, Button, Image } from 'antd'
+import { Col, Input, Row, Space, Typography, Upload } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { UploadChangeParam } from 'antd/lib/upload'
 import { fileToBase64 } from 'app/helpers'
-import IPFS from 'shared/pdb/ipfs'
 
-const MetaDataForm = () => {
-  const [loading, setLoading] = useState(false)
-  const [daoName, setDaoName] = useState('')
-  const [daoDesc, setDaoDesc] = useState('')
-  const [img, setImg] = useState('')
-  const [cid, setCID] = useState('')
-  const [fileList, setFileList] = useState<UploadChangeParam>()
+export type MetaData = {
+  daoName: string
+  description: string
+  image: string | ArrayBuffer | null
+}
 
-  const getMetaData = async () => {
-    if (!cid) return
-    const ipfs = new IPFS()
-    setLoading(true)
-    try {
-      const metaData = await ipfs.get(cid)
-      setImg(metaData.image)
-    } catch (err) {
-      console.log(err)
-    } finally {
-      setLoading(false)
-    }
-  }
+type MetaDataFormProps = {
+  metaData: MetaData
+  setMetaData: (data: MetaData) => void
+}
 
-  const sendToIPFS = async (imgBase64: string | ArrayBuffer | null) => {
-    const ipfs = new IPFS()
-
-    const metaData = {
-      name: daoName,
-      description: daoDesc,
+const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
+  const formatMetaData = async (imgBase64: string | ArrayBuffer | null) => {
+    const nextMetaData: MetaData = {
+      ...metaData,
       image: imgBase64,
     }
-
-    const cid = await ipfs.set(metaData)
-    setCID(cid)
+    setMetaData(nextMetaData)
   }
 
-  const setMetaData = async () => {
-    setLoading(true)
-    try {
-      const file = fileList?.fileList[0].originFileObj as File
-      await fileToBase64(file, sendToIPFS)
-    } catch (err) {
-      console.log(err)
-    } finally {
-      setLoading(false)
-    }
+  const onFileChange = (file: UploadChangeParam) => {
+    const { fileList } = file
+    const originFile = fileList[0].originFileObj as File
+    fileToBase64(originFile, formatMetaData)
+  }
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setMetaData({ ...metaData, [e.target.name]: e.target.value })
   }
 
   return (
@@ -64,7 +46,7 @@ const MetaDataForm = () => {
             listType="picture-card"
             maxCount={1}
             showUploadList
-            onChange={setFileList}
+            onChange={onFileChange}
           >
             <IonIcon name="add-outline" />
           </Upload>
@@ -77,8 +59,9 @@ const MetaDataForm = () => {
           </Col>
           <Col span={24}>
             <Input
-              value={daoName}
-              onChange={(e) => setDaoName(e.target.value)}
+              value={metaData.daoName}
+              onChange={onChange}
+              name="daoName"
             />
           </Col>
         </Row>
@@ -89,28 +72,14 @@ const MetaDataForm = () => {
             <Typography.Text>Dao description</Typography.Text>
           </Col>
           <Col span={24}>
-            <Input.TextArea
-              value={daoDesc}
-              onChange={(e) => setDaoDesc(e.target.value)}
+            <Input
+              value={metaData.description}
+              name="description"
+              onChange={onChange}
             />
           </Col>
         </Row>
       </Col>
-      <Col span={24}>
-        <Space>
-          <Button type="primary" onClick={setMetaData}>
-            Set MetaData
-          </Button>
-          <Button type="primary" onClick={getMetaData} loading={loading}>
-            Get Image
-          </Button>
-        </Space>
-      </Col>
-      {img && (
-        <Col span={24}>
-          <Image src={img} preview={false} />
-        </Col>
-      )}
     </Row>
   )
 }
