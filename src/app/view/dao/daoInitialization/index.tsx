@@ -9,6 +9,7 @@ import IonIcon from 'shared/antd/ionicon'
 import RegimeInput from './regimeInput'
 import TokenAddressInput from './tokenAddressInput'
 import CirculatingSupplyInput from './circulatingSupplyInput'
+import MetaDataForm from './metaDataForm'
 
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import configs from 'app/configs'
@@ -24,6 +25,7 @@ const DaoInitialization = () => {
   const [mintAddress, setMintAddress] = useState('')
   const [circulatingSupply, setCirculatingSupply] = useState('')
   const [loading, setLoading] = useState(false)
+  const [advanceSetting, setAdvanceSetting] = useState(false)
   const decimals = useMintDecimals(mintAddress) || 0
   const history = useHistory()
 
@@ -69,9 +71,27 @@ const DaoInitialization = () => {
         <Card bordered={false}>
           <Row gutter={[24, 24]}>
             <Col span={24}>
-              <Typography.Title level={3}>New DAO Information</Typography.Title>
+              <Row>
+                <Col flex="auto">
+                  <Typography.Title level={3}>
+                    New DAO Information
+                  </Typography.Title>
+                </Col>
+                <Col>
+                  <Button
+                    type="text"
+                    onClick={() => setAdvanceSetting(!advanceSetting)}
+                    icon={<IonIcon name="cog-outline" />}
+                  />
+                </Col>
+              </Row>
             </Col>
             <Col span={24} />
+            {advanceSetting && (
+              <Col span={24}>
+                <MetaDataForm />
+              </Col>
+            )}
             <Col span={24}>
               <RegimeInput value={regime} onChange={setRegime} />
             </Col>
