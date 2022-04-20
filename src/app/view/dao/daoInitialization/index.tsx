@@ -43,10 +43,12 @@ const DaoInitialization = () => {
       const supply = new BN(circulatingSupply).mul(
         new BN(10).pow(new BN(decimals)),
       )
+      const metadata = Buffer.from([]) // Replace the real hash here
       const { txId, daoAddress } = await interDao.initializeDao(
         mintAddress,
         supply,
-        undefined,
+        metadata,
+        undefined, // Optional DAO's keypair
         regime,
       )
       window.notify({

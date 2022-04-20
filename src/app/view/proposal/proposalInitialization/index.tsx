@@ -47,6 +47,7 @@ const ProposalInitialization = () => {
         data,
         accounts: { src, dst, payer },
       } = tx
+      const metadata = Buffer.from([]) // Replace the real hash here
       const accounts = [src, dst, payer]
       const { txId, proposalAddress } = await interDao.initializeProposal(
         daoAddress,
@@ -60,6 +61,7 @@ const ProposalInitialization = () => {
         Math.floor(duration[1] / 1000),
         new BN(fee),
         taxman,
+        metadata,
         consensusMechanism,
         consensusQuorum,
       )

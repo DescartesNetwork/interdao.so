@@ -1,4 +1,5 @@
 import InterDAO from '@interdao/core'
+
 import SafeWallet from 'app/helpers/safeWallet'
 import { Net } from 'shared/runtime'
 
@@ -19,7 +20,7 @@ const conf: Record<Net, Conf> = {
   devnet: {
     rpc: 'https://api.devnet.solana.com',
     interDao: new InterDAO(new SafeWallet()),
-    fee: '0',
+    fee: '1000000', // 0.001 SOL
     taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',
   },
 
@@ -29,7 +30,7 @@ const conf: Record<Net, Conf> = {
   testnet: {
     rpc: 'https://api.testnet.solana.com',
     interDao: new InterDAO(new SafeWallet()),
-    fee: '0',
+    fee: '1000000', // 0.001 SOL
     taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',
   },
 
@@ -39,8 +40,8 @@ const conf: Record<Net, Conf> = {
   mainnet: {
     rpc: 'https://ssc-dao.genesysgo.net',
     interDao: new InterDAO(new SafeWallet()),
-    fee: '0',
-    taxman: '',
+    fee: '100000000', // 0.01 SOL
+    taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',
   },
 }
 
