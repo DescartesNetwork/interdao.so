@@ -57,8 +57,6 @@ const DaoInitialization = () => {
       } = CID.parse(cid)
       const metadata = Buffer.from(digest)
 
-      console.log(metadata, 1)
-
       const supply = new BN(circulatingSupply).mul(
         new BN(10).pow(new BN(decimals)),
       )
