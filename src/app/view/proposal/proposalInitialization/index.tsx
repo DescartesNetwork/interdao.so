@@ -8,10 +8,10 @@ import IonIcon from 'shared/antd/ionicon'
 import ConsensusMechanismInput from './consensusMechanismInput'
 import ConsensusQuorumInput from './consensusQuorumInput'
 import DurationInput from './durationInput'
-
-import configs from 'app/configs'
 import ProposalPreview from './proposalPreview'
 import TemplateInput from './templateInput'
+
+import configs from 'app/configs'
 import { ProposalReturnType } from 'app/view/templates/types'
 import { explorer } from 'shared/util'
 
