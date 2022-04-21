@@ -2,14 +2,14 @@ import { useState } from 'react'
 
 import { Col, Row, Typography } from 'antd'
 import TransferSplPlugin from 'app/view/templates/spl/transfer'
-
-import { ProposalReturnType } from 'app/view/templates/types'
 import ApproveSplPlugin from 'app/view/templates/spl/approve'
 import SwapAtrixPlugin from 'app/view/templates/atrix/swap'
 import DepositAtrixPlugin from 'app/view/templates/atrix/deposit'
 import WithdrawAtrixPlugin from 'app/view/templates/atrix/withdraw'
 import StakeQuarryPlugin from 'app/view/templates/quarry/stake'
 import UnstakeQuarryPlugin from 'app/view/templates/quarry/unstake'
+
+import { ProposalReturnType } from 'app/view/templates/types'
 
 export type TemplateInputProps = {
   daoAddress: string

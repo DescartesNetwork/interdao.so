@@ -1,9 +1,5 @@
-import { ChangeEvent } from 'react'
-
-import { Button, Col, Input, Row, Space, Typography } from 'antd'
-import { MintAvatar, MintSymbol } from 'shared/antd/mint'
-import IonIcon from 'shared/antd/ionicon'
-import { explorer } from 'shared/util'
+import { Col, Input, Row, Typography } from 'antd'
+import { MintSelection } from 'shared/antd/mint'
 
 export type TokenAddressInputProps = {
   value: string
@@ -21,21 +17,13 @@ const TokenAddressInput = ({ value, onChange }: TokenAddressInputProps) => {
           size="large"
           placeholder="Input Token Address"
           value={value}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            onChange(e.target.value || '')
-          }
+          onChange={(e) => onChange(e.target.value || '')}
           suffix={
-            <Button
-              type="text"
-              icon={<IonIcon name="open-outline" />}
-              onClick={() => window.open(explorer(value), '_blank')}
+            <MintSelection
+              value={value}
+              onChange={onChange}
               style={{ marginRight: -7 }}
-            >
-              <Space style={{ marginLeft: 7 }}>
-                <MintSymbol mintAddress={value} />
-                <MintAvatar mintAddress={value} />
-              </Space>
-            </Button>
+            />
           }
         />
       </Col>

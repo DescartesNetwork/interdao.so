@@ -1,8 +1,9 @@
 import { Col, Row } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import { numeric } from 'shared/util'
 import Banner from './banner'
 import InfoCard from './infoCard'
+
+import { numeric } from 'shared/util'
 
 const Hero = () => {
   return (

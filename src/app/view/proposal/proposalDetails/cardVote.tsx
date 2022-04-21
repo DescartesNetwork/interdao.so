@@ -6,16 +6,15 @@ import { DaoData } from '@interdao/core'
 import { BN } from 'bn.js'
 
 import { Button, Card, Col, Row, Typography, Space } from 'antd'
+import NumericInput from 'shared/antd/numericInput'
 
 import useProposal from 'app/hooks/useProposal'
 import { AppState } from 'app/model'
 import { setVoteBidAmount } from 'app/model/voteBid.controller'
 import { ProposalChildCardProps } from './index'
-import NumericInput from 'shared/antd/numericInput'
-import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
-
 import { explorer, numeric } from 'shared/util'
 import configs from 'app/configs'
+import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 
 const {
   sol: { interDao },

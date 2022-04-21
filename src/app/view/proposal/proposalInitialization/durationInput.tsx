@@ -1,5 +1,6 @@
-import { Col, DatePicker, Row, Space, Typography } from 'antd'
 import moment from 'moment'
+
+import { Col, DatePicker, Row, Space, Typography } from 'antd'
 
 export type DurationInputType = {
   value: Array<number>

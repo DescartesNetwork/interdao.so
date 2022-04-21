@@ -7,12 +7,11 @@ import IonIcon from 'shared/antd/ionicon'
 import ProposalStatus, {
   ProposalStatusType,
 } from 'app/components/proposalStatus'
+import { MintSymbol } from 'shared/antd/mint'
 
 import { ProposalChildCardProps } from './index'
 import useProposal from 'app/hooks/useProposal'
 import { AppState } from 'app/model'
-import { MintSymbol } from 'shared/antd/mint'
-
 import configs from 'app/configs'
 import { explorer } from 'shared/util'
 

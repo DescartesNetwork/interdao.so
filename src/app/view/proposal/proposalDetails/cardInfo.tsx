@@ -3,11 +3,11 @@ import moment from 'moment'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { Card, Col, Row, Space, Typography, Tooltip } from 'antd'
+import IonIcon from 'shared/antd/ionicon'
 
 import { ProposalChildCardProps } from './index'
 import useProposal from 'app/hooks/useProposal'
 import { asyncWait, explorer, shortenAddress } from 'shared/util'
-import IonIcon from 'shared/antd/ionicon'
 
 type RowSpaceBetweenProps = {
   label?: string

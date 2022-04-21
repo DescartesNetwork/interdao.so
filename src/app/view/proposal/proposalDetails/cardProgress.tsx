@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux'
 import { DaoData } from '@interdao/core'
+import { utils } from '@senswap/sen-js'
 
 import { Card, Col, Row, Space, Typography, Progress } from 'antd'
 
@@ -7,7 +8,6 @@ import { ProposalChildCardProps } from './index'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import useProposal from 'app/hooks/useProposal'
 import { AppState } from 'app/model'
-import { utils } from '@senswap/sen-js'
 import { numeric } from 'shared/util'
 import useReceipts from 'app/hooks/useReceipts'
 

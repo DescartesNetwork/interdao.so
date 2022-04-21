@@ -1,11 +1,11 @@
-import { ReceiptData } from '@interdao/core'
-import { Card, Col, Row, Typography, Table, Button } from 'antd'
-import useReceipts from 'app/hooks/useReceipts'
 import { useMemo, useState } from 'react'
+import { ReceiptData } from '@interdao/core'
+
+import { Card, Col, Row, Typography, Table, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { HISTORY_COLUMNS } from './column'
-
+import useReceipts from 'app/hooks/useReceipts'
 import './index.less'
 
 const DEFAULT_AMOUNT_HISTORY = 5

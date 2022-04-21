@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import LazyLoad from '@senswap/react-lazyload'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import LazyLoad from '@senswap/react-lazyload'
 import { useWallet } from '@senhub/providers'
 import { account } from '@senswap/sen-js'
 import { DaoData } from '@interdao/core'

@@ -1,5 +1,5 @@
-import { ReceiptData } from '@interdao/core'
 import { useMemo } from 'react'
+import { ReceiptData } from '@interdao/core'
 
 import { Typography } from 'antd'
 
