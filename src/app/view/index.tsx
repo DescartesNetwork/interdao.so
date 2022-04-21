@@ -10,7 +10,8 @@ import DaoWatcher from './watcher/dao.watcher'
 import ProposalWatcher from './watcher/proposal.watcher'
 import ReceiptWatcher from './watcher/receipt.watcher'
 
-import 'app/static/styles/index.less'
+import 'app/static/styles/dark.less'
+import 'app/static/styles/light.less'
 import configs from 'app/configs'
 
 const {
