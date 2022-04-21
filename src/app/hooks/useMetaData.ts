@@ -9,10 +9,10 @@ import IPFS from 'shared/pdb/ipfs'
 const useMetaData = (daoAddress: string) => {
   const { dao } = useSelector((state: AppState) => state)
   const [metaData, setMetaData] = useState<MetaData>()
-  const { metadata: digest } = dao?.[daoAddress]
+  const { metadata: digest } = dao?.[daoAddress] || {}
 
   const getMetaData = useCallback(async () => {
-    if (!digest) return
+    if (!digest) return setMetaData(undefined)
     const cid = getCID(digest)
     const ipfs = new IPFS()
     const data = await ipfs.get(cid)
