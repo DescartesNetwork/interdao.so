@@ -36,6 +36,7 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
     regime: DaoRegimes.Dictatorial,
     authority: SystemProgram.programId,
   }
+
   const isSuccess = useCallback(
     (quorum: string, votingPower: number, numSupply: number) => {
       if (votingPower <= 0) return false
@@ -55,13 +56,21 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
     return false
   }, [regime, authority, walletAddress])
 
-  useEffect(() => {
-    dispatch(getProposals({ daoAddress }))
-  }, [dispatch, daoAddress])
+  const proposalAddresses = useMemo(() => {
+    const expandedProposal = Object.keys(proposal).map((address) => ({
+      address,
+      ...proposal[address],
+    }))
+    return expandedProposal
+      .filter(({ dao }) => dao.toBase58() === daoAddress)
+      .map(({ address }) => address)
+  }, [proposal, daoAddress])
 
   const filterProposalAddresses = useMemo(() => {
+    if (!proposalAddresses.length) return []
     const filteredAddress = []
-    for (const address in proposal) {
+
+    for (const address of proposalAddresses) {
       let valid = false
       const {
         endDate,
@@ -71,7 +80,7 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
         votingForPower,
         consensusQuorum,
         votingAgainstPower,
-      } = proposal[address]
+      } = proposal[address] || {}
 
       const quorum = consensusQuorum ? Object.keys(consensusQuorum)[0] : ''
       const votingPower = Number(votingForPower) - Number(votingAgainstPower)
@@ -94,13 +103,11 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
             !executed &&
             currentDate > Number(endDate)
           break
-
         case 'failed':
           valid =
             !isSuccess(quorum, votingPower, numSupply) &&
             currentDate > Number(endDate)
           break
-
         default:
           valid = true
           break
@@ -108,7 +115,11 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
       if (valid) filteredAddress.push(address)
     }
     return filteredAddress
-  }, [isSuccess, proposal, status])
+  }, [isSuccess, proposal, proposalAddresses, status])
+
+  useEffect(() => {
+    dispatch(getProposals({ daoAddress }))
+  }, [dispatch, daoAddress])
 
   return (
     <Row gutter={[24, 24]}>

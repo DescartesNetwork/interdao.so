@@ -25,7 +25,6 @@ const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
   const { proposal } = useSelector((state: AppState) => state)
   const { dao, endDate } = proposal[proposalAddress] || {
     dao: SystemProgram.programId,
-    startDate: new BN(currentDate),
     endDate: new BN(currentDate),
   }
   const { status } = useProposalStatus(proposalAddress)
