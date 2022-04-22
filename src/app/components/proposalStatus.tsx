@@ -1,17 +1,29 @@
 import { Tag } from 'antd'
 
-import { randomColor } from 'shared/util'
+export type ProposalStatusType =
+  | 'Failed'
+  | 'Voting'
+  | 'Preparing'
+  | 'Succeeded'
+  | 'Executed'
 
-export type ProposalStatusType = 'Completed' | 'Voting' | 'Preparing'
 export type ProposalStatusProps = {
   status: ProposalStatusType
+}
+
+const STATUS_COLOR: Record<string, string> = {
+  Succeeded: '#0CA1BF',
+  Failed: '#F9575E',
+  Preparing: '#D4B106',
+  Executed: '#03A326',
+  Voting: '#40A9FF',
 }
 
 const ProposalStatus = ({ status }: ProposalStatusProps) => {
   return (
     <Tag
-      style={{ color: randomColor(status), margin: 0 }}
-      color={randomColor(status, 0.2)}
+      style={{ color: STATUS_COLOR[status], border: 'solid', margin: 0 }}
+      color={'transparent'}
     >
       {status}
     </Tag>

@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { ConsensusMechanisms, ConsensusQuorums } from '@interdao/core'
 import BN from 'bn.js'
+import { CID } from 'ipfs-core'
 
 import { Button, Card, Col, Row, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -14,6 +15,7 @@ import TemplateInput from './templateInput'
 import configs from 'app/configs'
 import { ProposalReturnType } from 'app/view/templates/types'
 import { explorer } from 'shared/util'
+import IPFS from 'shared/pdb/ipfs'
 
 const {
   manifest: { appId },
@@ -38,6 +40,13 @@ const ProposalInitialization = () => {
   const newProposal = useCallback(async () => {
     try {
       setLoading(true)
+
+      const ipfs = new IPFS()
+      const cid = await ipfs.set({ data: 'Tuan le Test' })
+      const {
+        multihash: { digest },
+      } = CID.parse(cid)
+
       const {
         sol: { interDao, fee, taxman },
       } = configs
@@ -47,7 +56,7 @@ const ProposalInitialization = () => {
         data,
         accounts: { src, dst, payer },
       } = tx
-      const metadata = Buffer.from([]) // Replace the real hash here
+      const metadata = Buffer.from(digest) // Replace the real hash here
       const accounts = [src, dst, payer]
       const { txId, proposalAddress } = await interDao.initializeProposal(
         daoAddress,
