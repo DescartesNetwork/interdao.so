@@ -32,12 +32,28 @@ const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
     fileToBase64(originFile, formatMetaData)
   }
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setMetaData({ ...metaData, [e.target.name]: e.target.value })
   }
 
   return (
     <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Typography.Text>Dao name</Typography.Text>
+          <Input value={metaData.daoName} onChange={onChange} name="daoName" />
+        </Space>
+      </Col>
+      <Col span={24}>
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Typography.Text>Dao description</Typography.Text>
+          <Input.TextArea
+            value={metaData.description}
+            name="description"
+            onChange={onChange}
+          />
+        </Space>
+      </Col>
       <Col span={24}>
         <Space direction="vertical">
           <Typography.Text>Avatar</Typography.Text>
@@ -51,34 +67,6 @@ const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
             <IonIcon name="add-outline" />
           </Upload>
         </Space>
-      </Col>
-      <Col span={24}>
-        <Row gutter={[8, 8]}>
-          <Col span={24}>
-            <Typography.Text>Dao name</Typography.Text>
-          </Col>
-          <Col span={24}>
-            <Input
-              value={metaData.daoName}
-              onChange={onChange}
-              name="daoName"
-            />
-          </Col>
-        </Row>
-      </Col>
-      <Col span={24}>
-        <Row gutter={[8, 8]}>
-          <Col span={24}>
-            <Typography.Text>Dao description</Typography.Text>
-          </Col>
-          <Col span={24}>
-            <Input
-              value={metaData.description}
-              name="description"
-              onChange={onChange}
-            />
-          </Col>
-        </Row>
       </Col>
     </Row>
   )

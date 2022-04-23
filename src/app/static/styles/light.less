@@ -37,7 +37,7 @@
 @border-color-split: @border-color-base;
 
 // Card
-@card-radius: @border-radius-base * 2;
+@card-radius: @border-radius-base;
 @card-actions-background: @NEUTRAL05;
 @card-background: @NEUTRAL05;
 @card-shadow: @LIGHT_SHADOW2;
@@ -59,6 +59,8 @@
 @btn-default-border: @NEUTRAL20;
 @btn-default-ghost-color: @NEUTRAL100;
 @btn-default-ghost-border: @NEUTRAL100;
+@btn-border-radius-base: 4px;
+@btn-border-radius-sm: 4px;
 
 // Input
 @input-placeholder-color: @NEUTRAL60;
@@ -73,11 +75,4 @@
 // Patch
 .@{ant-prefix}-layout {
   background: unset;
-}
-.@{ant-prefix}-card {
-  box-shadow: @LIGHT_SHADOW1;
-  &.glass {
-    background-color: color(~`('@{card-background}aa') `);
-    backdrop-filter: blur(16px);
-  }
 }

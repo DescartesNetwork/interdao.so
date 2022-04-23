@@ -21,25 +21,30 @@ const Dao = () => {
         <Hero />
       </Col>
       <Col span={24}>
-        <Tabs
-          style={{ overflow: 'visible' }}
-          tabBarExtraContent={
-            <Button
-              type="primary"
-              onClick={() => history.push(`/app/${appId}/dao/new-dao`)}
-              icon={<IonIcon name="add-outline" />}
+        <Row justify="center">
+          <Col xs={24} lg={18}>
+            <Tabs
+              style={{ overflow: 'visible' }}
+              className="dao-tabs"
+              tabBarExtraContent={
+                <Button
+                  type="primary"
+                  onClick={() => history.push(`/app/${appId}/dao/new-dao`)}
+                  icon={<IonIcon name="add-outline" />}
+                >
+                  New DAO
+                </Button>
+              }
             >
-              New DAO
-            </Button>
-          }
-        >
-          <Tabs.TabPane tab="Community DAOs" key="community-daos">
-            <DaoList />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Your DAOs" key="your-daos">
-            <YourDaos />
-          </Tabs.TabPane>
-        </Tabs>
+              <Tabs.TabPane tab="Community DAOs" key="community-daos">
+                <DaoList />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Your DAOs" key="your-daos">
+                <YourDaos />
+              </Tabs.TabPane>
+            </Tabs>
+          </Col>
+        </Row>
       </Col>
     </Row>
   )

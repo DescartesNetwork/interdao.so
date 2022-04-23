@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { AppState } from 'app/model'
 import { MetaData } from 'app/view/dao/daoInitialization/metaDataForm'
+import { AppState } from 'app/model'
 import { getCID } from 'app/helpers'
 import IPFS from 'shared/pdb/ipfs'
 

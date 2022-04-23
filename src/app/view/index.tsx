@@ -30,7 +30,7 @@ const View = () => {
 
   return (
     <Row gutter={[24, 24]} justify="center">
-      <Col xs={24} lg={18}>
+      <Col span={24}>
         <Switch>
           <Route exact path={`/app/${appId}/dao`} component={Dao} />
           <Route

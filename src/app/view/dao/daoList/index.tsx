@@ -10,11 +10,11 @@ const DaoList = () => {
   const { dao } = useSelector((state: AppState) => state)
 
   return (
-    <Row gutter={[24, 24]}>
+    <Row gutter={[24, 16]}>
       {Object.keys(dao).map((daoAddress) => (
         <Col key={daoAddress} xs={24} md={12}>
           <LazyLoad height={282.05}>
-            <DaoCard daoAddress={daoAddress} />
+            <DaoCard daoAddress={daoAddress} special />
           </LazyLoad>
         </Col>
       ))}

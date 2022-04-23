@@ -17,8 +17,8 @@ const Proposal = () => {
   const { daoAddress } = useParams<{ daoAddress: string }>()
 
   return (
-    <Row gutter={[24, 24]} align="middle">
-      <Col span={24}>
+    <Row gutter={[24, 24]} justify="center" align="middle">
+      <Col xs={24} lg={18}>
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Button
@@ -35,7 +35,7 @@ const Proposal = () => {
           </Col>
         </Row>
       </Col>
-      <Col span={24}>
+      <Col xs={24} lg={18}>
         <ProposalList daoAddress={daoAddress} />
       </Col>
     </Row>

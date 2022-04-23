@@ -37,7 +37,7 @@
 @popover-customize-border-color: @border-color-base;
 
 // Card
-@card-radius: @border-radius-base * 2;
+@card-radius: @border-radius-base;
 @card-actions-background: @CARD_BG;
 @card-background: @CARD_BG;
 @card-shadow: @DARK_SHADOW2;
@@ -63,6 +63,8 @@
 @btn-disable-color: @PRIMARY60;
 @btn-disable-border: @PRIMARY20;
 @btn-disable-bg: @TRANSPARENT;
+@btn-border-radius-base: 4px;
+@btn-border-radius-sm: 4px;
 
 // Input
 @input-placeholder-color: @SECONDARY;
@@ -77,11 +79,4 @@
 // Patch
 .@{ant-prefix}-layout {
   background: unset;
-}
-.@{ant-prefix}-card {
-  box-shadow: @DARK_SHADOW1;
-  &.glass {
-    background-color: color(~`('@{card-background}aa') `);
-    backdrop-filter: blur(16px);
-  }
 }
