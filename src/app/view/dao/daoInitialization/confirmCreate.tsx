@@ -57,7 +57,7 @@ const ConfirmCreate = ({
               </Typography.Title>
             </Space>
           </Space>
-          <Space direction="vertical">
+          <Space direction="vertical" className="dao-logo-img">
             <Typography.Text>DAO Logo</Typography.Text>
             <Image src={metaData?.image?.toString()} preview={false} />
           </Space>
