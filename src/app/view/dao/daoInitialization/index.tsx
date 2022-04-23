@@ -69,7 +69,7 @@ const ContinuesAction = ({
 
 const DaoInitialization = () => {
   const createDaoStepRef = useRef<CreateStepsHandle>(null)
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(0)
   const [cid, setCid] = useState('')
 
   const onNextStep = useCallback(async () => {
