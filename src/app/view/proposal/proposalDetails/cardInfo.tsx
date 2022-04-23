@@ -4,8 +4,8 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { Card, Col, Row, Space, Typography, Tooltip } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-
 import { ProposalChildCardProps } from './index'
+
 import useProposal from 'app/hooks/useProposal'
 import { asyncWait, explorer, shortenAddress } from 'shared/util'
 
@@ -39,7 +39,7 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Typography.Title level={5}>Infomation</Typography.Title>
+          <Typography.Title level={5}>Information</Typography.Title>
         </Col>
         <Col span={24}>
           <Space style={{ width: '100%' }} direction="vertical">
@@ -85,7 +85,7 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
             />
             <RowSpaceBetween
               label="Quorum"
-              value={consensusQuorum ? Object.keys(consensusQuorum)[0] : '1/2'}
+              value={consensusQuorum ? Object.keys(consensusQuorum)[0] : '-'}
             />
             <RowSpaceBetween
               label="Vote method"

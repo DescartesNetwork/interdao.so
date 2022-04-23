@@ -23,9 +23,9 @@ import { numeric, shortenAddress } from 'shared/util'
 import useMembers from 'app/hooks/useMembers'
 import useMetaData from 'app/hooks/useMetaData'
 
-export type DaoCardProps = { daoAddress: string }
+export type DaoDetailsProps = { daoAddress: string }
 
-const DaoCard = ({ daoAddress }: DaoCardProps) => {
+const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
   const { dao } = useSelector((state: AppState) => state)
   const { regime, nonce, mint } = dao[daoAddress] || {
     regime: {},
@@ -50,7 +50,6 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
                 <Avatar shape="square" size={56} src={metaData?.image} />
               )}
             </Col>
-
             <Col>
               <Space direction="vertical" size={0}>
                 <Typography.Title level={4}>
@@ -70,7 +69,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
             </Col>
             <Col flex="auto">
               <Row gutter={[36, 36]} wrap={false}>
-                <Col>
+                <Col md={4}>
                   <StatisticCard
                     title="Token"
                     value={
@@ -81,19 +80,19 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
                     }
                   />
                 </Col>
-                <Col>
+                <Col md={4}>
                   <StatisticCard
                     title="Proposals"
                     value={numeric(Number(nonce)).format('0,0')}
                   />
                 </Col>
-                <Col>
+                <Col md={4}>
                   <StatisticCard
                     title="Members"
                     value={numeric(members).format('0,0')}
                   />
                 </Col>
-                <Col>
+                <Col md={4}>
                   <StatisticCard
                     title="Regime"
                     value={<RegimeTag regime={regime} />}
@@ -113,4 +112,4 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
   )
 }
 
-export default DaoCard
+export default DaoDetails
