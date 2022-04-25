@@ -9,11 +9,12 @@ export type CreateDaoTitleProps = {
 
 const DEFAULT_PERCENT = 25
 
-const CreateDaoTitle = ({ step }: CreateDaoTitleProps) => {
+const CreateDaoProgress = ({ step }: CreateDaoTitleProps) => {
   return (
     <Space direction="vertical" size={12}>
       <Typography.Title level={1}>Choose type of DAO</Typography.Title>
       <Progress
+        className="create-progress"
         percent={step * DEFAULT_PERCENT + DEFAULT_PERCENT}
         steps={4}
         showInfo={false}
@@ -22,4 +23,4 @@ const CreateDaoTitle = ({ step }: CreateDaoTitleProps) => {
   )
 }
 
-export default CreateDaoTitle
+export default CreateDaoProgress

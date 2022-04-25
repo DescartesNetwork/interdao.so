@@ -17,7 +17,7 @@
 @error-color: @ERROR;
 @popover-background: @CARD_BG;
 @body-background: @ACCENT;
-@component-background: @CARD_BG;
+@component-background: @ACCENT;
 @disabled-bg: @PRIMARY20;
 
 // Typography
@@ -30,14 +30,14 @@
 @typography-title-margin-bottom: 0px;
 
 // Border
-@border-radius-base: 8px;
+@border-radius-base: 4px;
 @border-color-base: @PRIMARY;
 @border-width-base: 1px;
 @border-color-split: @border-color-base;
 @popover-customize-border-color: @border-color-base;
 
 // Card
-@card-radius: @border-radius-base;
+@card-radius: @border-radius-base * 2;
 @card-actions-background: @CARD_BG;
 @card-background: @CARD_BG;
 @card-shadow: @DARK_SHADOW2;
@@ -68,6 +68,7 @@
 
 // Input
 @input-placeholder-color: @SECONDARY;
+@input-bg: @ACCENT;
 
 // Divider
 @divider-color: @NEUTRAL90;
@@ -75,6 +76,9 @@
 
 // Checkbox
 @checkbox-border-radius: @border-radius-base - 4;
+
+// Progress
+@progress-default-color: @PRIMARY;
 
 // Patch
 .@{ant-prefix}-layout {

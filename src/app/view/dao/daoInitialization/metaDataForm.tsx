@@ -10,12 +10,14 @@ export type MetaData = {
   daoName: string
   description: string
   image: string | ArrayBuffer | null
+  optionals: string[]
 }
 
 type MetaDataFormProps = {
   metaData: MetaData
   setMetaData: (data: MetaData) => void
 }
+const SOCIAL_MEDIA = ['twitter', 'discord']
 
 const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
   const formatMetaData = async (imgBase64: string | ArrayBuffer | null) => {
@@ -32,8 +34,16 @@ const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
     fileToBase64(originFile, formatMetaData)
   }
 
-  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setMetaData({ ...metaData, [e.target.name]: e.target.value })
+
+  const onOptionalChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    idx: number,
+  ) => {
+    const nextMetaData: MetaData = JSON.parse(JSON.stringify(metaData))
+    nextMetaData.optionals.splice(idx, 1, e.target.value)
+    setMetaData(nextMetaData)
   }
 
   return (
@@ -41,7 +51,12 @@ const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
       <Col span={24}>
         <Space direction="vertical" style={{ width: '100%' }}>
           <Typography.Text>Dao name</Typography.Text>
-          <Input value={metaData.daoName} onChange={onChange} name="daoName" />
+          <Input
+            value={metaData.daoName}
+            onChange={onChange}
+            name="daoName"
+            className="border-less"
+          />
         </Space>
       </Col>
       <Col span={24}>
@@ -51,6 +66,7 @@ const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
             value={metaData.description}
             name="description"
             onChange={onChange}
+            className="border-less"
           />
         </Space>
       </Col>
@@ -68,6 +84,21 @@ const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
           </Upload>
         </Space>
       </Col>
+      {SOCIAL_MEDIA.map((social, idx) => (
+        <Col span={24} key={idx}>
+          <Space direction="vertical" style={{ width: '100%' }}>
+            <Typography.Text style={{ textTransform: 'capitalize' }}>
+              {social}
+            </Typography.Text>
+            <Input
+              value={metaData.optionals[idx]}
+              onChange={(e) => onOptionalChange(e, idx)}
+              name="optionals"
+              className="border-less"
+            />
+          </Space>
+        </Col>
+      ))}
     </Row>
   )
 }

@@ -1,19 +1,19 @@
-import { account } from '@senswap/sen-js'
-import { BN } from 'bn.js'
-import { CID } from 'ipfs-core'
 import { forwardRef, useImperativeHandle, useMemo, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { account } from '@senswap/sen-js'
+import { CID } from 'ipfs-core'
+import { BN } from 'bn.js'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import IPFS from 'shared/pdb/ipfs'
 
 import ChooseDaoType from './chooseDaoType'
 import ConfirmCreate from './confirmCreate'
-import { CreateDaoTitleProps } from './createDaoTitle'
 import DaoRule, { DaoDataProps } from './daoRule'
 import MetaDataForm, { MetaData } from './metaDataForm'
+import { CreateDaoTitleProps } from './createDaoProgress'
 
-import configs from 'app/configs'
 import { explorer } from 'shared/util'
-import { useHistory } from 'react-router-dom'
+import configs from 'app/configs'
 
 const {
   sol: { interDao },
@@ -24,6 +24,7 @@ const DEFAULT_METADATA = {
   daoName: '',
   description: '',
   image: '',
+  optionals: [],
 }
 
 const DEFAULT_DAO_DATA = {

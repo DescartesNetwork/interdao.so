@@ -25,7 +25,7 @@ const View = () => {
   const { setBackground } = useUI()
 
   useEffect(() => {
-    setBackground({ light: undefined, dark: BG })
+    setBackground({ light: BG, dark: BG })
   }, [setBackground])
 
   return (

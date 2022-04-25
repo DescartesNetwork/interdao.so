@@ -6,7 +6,7 @@ import CreateDaoSteps, {
   CreateSteps,
   CreateStepsHandle,
 } from './createDaoSteps'
-import CreateDaoTitle, { CreateDaoTitleProps } from './createDaoTitle'
+import CreateDaoProgress, { CreateDaoTitleProps } from './createDaoProgress'
 import IonIcon from 'shared/antd/ionicon'
 
 import configs from 'app/configs'
@@ -113,7 +113,7 @@ const DaoInitialization = () => {
         <Card bordered={false}>
           <Row gutter={[24, 32]}>
             <Col span={24}>
-              <CreateDaoTitle step={step} />
+              <CreateDaoProgress step={step} />
             </Col>
             <Col span={24}>
               <CreateDaoSteps step={step} ref={createDaoStepRef} />
