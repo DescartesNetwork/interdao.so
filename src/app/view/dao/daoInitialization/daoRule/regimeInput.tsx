@@ -20,7 +20,6 @@ const RegimeInput = ({
   value = DaoRegimes.Dictatorial,
   onChange = () => {},
 }: RegimeInputProps) => {
-  console.log(REGIME_LIST, 'ss')
   return (
     <Row gutter={[8, 8]}>
       <Col span={24}>
