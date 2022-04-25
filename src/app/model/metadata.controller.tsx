@@ -11,11 +11,18 @@ const {
 /**
  * Interface & Utility
  */
+
+export const SOCIAL_MEDIA = ['twitter', 'discord']
+
+const getDefaultSocial = () => {
+  return SOCIAL_MEDIA.map(() => '')
+}
+
 const DEFAULT_CREATE_METADATA = {
   daoName: '',
   description: '',
   image: '',
-  optionals: [],
+  optionals: getDefaultSocial(),
 }
 
 export type MetaData = {

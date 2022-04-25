@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { account } from '@senswap/sen-js'
-import { DaoData, DAO_DISCRIMINATOR, DaoRegime } from '@interdao/core'
+import {
+  DaoData,
+  DAO_DISCRIMINATOR,
+  DaoRegime,
+  DaoRegimes,
+} from '@interdao/core'
 import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { web3 } from '@project-serum/anchor'
 import BN from 'bn.js'
@@ -20,7 +25,7 @@ export const DEFAULT_CREATE_DAO_DATA = {
   supply: new BN(0),
   metadata: undefined,
   dao: undefined,
-  regime: {},
+  regime: DaoRegimes.Dictatorial,
 }
 
 export type CreateDaoData = {

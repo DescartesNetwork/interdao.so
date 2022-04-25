@@ -32,6 +32,7 @@ const CirculatingSupplyInput = ({
         <NumericInput
           value={value}
           onValue={onChange}
+          className="border-less"
           size="large"
           placeholder="Input Total DAO Power"
           suffix={

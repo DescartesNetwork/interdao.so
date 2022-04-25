@@ -6,10 +6,12 @@ import IonIcon from 'shared/antd/ionicon'
 
 import { UploadChangeParam } from 'antd/lib/upload'
 import { fileToBase64 } from 'app/helpers'
-import { MetaData, setCreateDaoMetaData } from 'app/model/metadata.controller'
+import {
+  MetaData,
+  setCreateDaoMetaData,
+  SOCIAL_MEDIA,
+} from 'app/model/metadata.controller'
 import { AppDispatch, AppState } from 'app/model'
-
-const SOCIAL_MEDIA = ['twitter', 'discord']
 
 const MetaDataForm = () => {
   const {
