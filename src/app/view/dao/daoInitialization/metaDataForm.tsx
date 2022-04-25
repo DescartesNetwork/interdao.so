@@ -10,12 +10,14 @@ export type MetaData = {
   daoName: string
   description: string
   image: string | ArrayBuffer | null
+  optionals: string[]
 }
 
 type MetaDataFormProps = {
   metaData: MetaData
   setMetaData: (data: MetaData) => void
 }
+const SOCIAL_MEDIA = ['twitter', 'discord']
 
 const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
   const formatMetaData = async (imgBase64: string | ArrayBuffer | null) => {
@@ -32,12 +34,42 @@ const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
     fileToBase64(originFile, formatMetaData)
   }
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setMetaData({ ...metaData, [e.target.name]: e.target.value })
+
+  const onOptionalChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    idx: number,
+  ) => {
+    const nextMetaData: MetaData = JSON.parse(JSON.stringify(metaData))
+    nextMetaData.optionals.splice(idx, 1, e.target.value)
+    setMetaData(nextMetaData)
   }
 
   return (
     <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Typography.Text>Dao name</Typography.Text>
+          <Input
+            value={metaData.daoName}
+            onChange={onChange}
+            name="daoName"
+            className="border-less"
+          />
+        </Space>
+      </Col>
+      <Col span={24}>
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Typography.Text>Dao description</Typography.Text>
+          <Input.TextArea
+            value={metaData.description}
+            name="description"
+            onChange={onChange}
+            className="border-less"
+          />
+        </Space>
+      </Col>
       <Col span={24}>
         <Space direction="vertical">
           <Typography.Text>Avatar</Typography.Text>
@@ -52,34 +84,21 @@ const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
           </Upload>
         </Space>
       </Col>
-      <Col span={24}>
-        <Row gutter={[8, 8]}>
-          <Col span={24}>
-            <Typography.Text>Dao name</Typography.Text>
-          </Col>
-          <Col span={24}>
+      {SOCIAL_MEDIA.map((social, idx) => (
+        <Col span={24} key={idx}>
+          <Space direction="vertical" style={{ width: '100%' }}>
+            <Typography.Text style={{ textTransform: 'capitalize' }}>
+              {social}
+            </Typography.Text>
             <Input
-              value={metaData.daoName}
-              onChange={onChange}
-              name="daoName"
+              value={metaData.optionals[idx]}
+              onChange={(e) => onOptionalChange(e, idx)}
+              name="optionals"
+              className="border-less"
             />
-          </Col>
-        </Row>
-      </Col>
-      <Col span={24}>
-        <Row gutter={[8, 8]}>
-          <Col span={24}>
-            <Typography.Text>Dao description</Typography.Text>
-          </Col>
-          <Col span={24}>
-            <Input
-              value={metaData.description}
-              name="description"
-              onChange={onChange}
-            />
-          </Col>
-        </Row>
-      </Col>
+          </Space>
+        </Col>
+      ))}
     </Row>
   )
 }

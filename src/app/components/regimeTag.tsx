@@ -6,9 +6,9 @@ import { Tag } from 'antd'
 
 import { randomColor } from 'shared/util'
 
-export type RegimeTagProps = { regime: DaoRegime }
+export type RegimeTagProps = { regime: DaoRegime; special?: boolean }
 
-const RegimeTag = ({ regime }: RegimeTagProps) => {
+const RegimeTag = ({ regime, special }: RegimeTagProps) => {
   const tag = useMemo(() => {
     if (isEqual(regime, DaoRegimes.Dictatorial)) return 'Dictatorial'
     if (isEqual(regime, DaoRegimes.Democratic)) return 'Democratic'
@@ -16,8 +16,11 @@ const RegimeTag = ({ regime }: RegimeTagProps) => {
     return 'DAO Regime'
   }, [regime])
 
+  const className = special ? 'regime-tag' : ''
+
   return (
     <Tag
+      className={className}
       style={{ color: randomColor(tag), margin: 0 }}
       color={randomColor(tag, 0.2)}
     >

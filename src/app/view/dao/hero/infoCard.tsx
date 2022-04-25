@@ -10,8 +10,18 @@ export type InfoCardProps = {
 
 const InfoCard = ({ icon, title, value }: InfoCardProps) => {
   return (
-    <Card bordered={false}>
-      <Row gutter={[16, 16]}>
+    <Card
+      bordered={false}
+      style={{
+        background: 'transparent',
+        borderLeft: '1px solid',
+        borderRadius: 'unset',
+      }}
+      bodyStyle={{
+        padding: '0 24px',
+      }}
+    >
+      <Row gutter={[5, 5]}>
         <Col span={24}>
           <Space>
             {icon}

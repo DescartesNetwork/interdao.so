@@ -1,18 +1,26 @@
 import { DaoRegime, DaoRegimes } from '@interdao/core'
-import isEqual from 'react-fast-compare'
 
 import { Button, Row, Col, Space, Typography, Popover } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
+
+import CardRegmie from './cardRegmie'
 
 export type RegimeInputProps = {
   value: DaoRegime
   onChange: (value: DaoRegime) => void
 }
 
+const REGIME_LIST = [
+  DaoRegimes.Dictatorial,
+  DaoRegimes.Democratic,
+  DaoRegimes.Autonomous,
+]
+
 const RegimeInput = ({
   value = DaoRegimes.Dictatorial,
   onChange = () => {},
 }: RegimeInputProps) => {
+  console.log(REGIME_LIST, 'ss')
   return (
     <Row gutter={[8, 8]}>
       <Col span={24}>
@@ -55,33 +63,11 @@ const RegimeInput = ({
           </Popover>
         </Space>
       </Col>
-      <Col span={24}>
-        <Space>
-          <Button
-            type={
-              isEqual(value, DaoRegimes.Dictatorial) ? 'primary' : 'default'
-            }
-            onClick={() => onChange(DaoRegimes.Dictatorial)}
-            ghost
-          >
-            Dictatorial
-          </Button>
-          <Button
-            type={isEqual(value, DaoRegimes.Democratic) ? 'primary' : 'default'}
-            onClick={() => onChange(DaoRegimes.Democratic)}
-            ghost
-          >
-            Democratic
-          </Button>
-          <Button
-            type={isEqual(value, DaoRegimes.Autonomous) ? 'primary' : 'default'}
-            onClick={() => onChange(DaoRegimes.Autonomous)}
-            ghost
-          >
-            Autonomous
-          </Button>
-        </Space>
-      </Col>
+      {REGIME_LIST.map((regmie, idx) => (
+        <Col xs={24} md={8} key={idx}>
+          <CardRegmie value={value} regmie={regmie} onChange={onChange} />
+        </Col>
+      ))}
     </Row>
   )
 }
