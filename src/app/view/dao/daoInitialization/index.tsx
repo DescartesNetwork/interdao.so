@@ -1,111 +1,78 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import IPFS from 'shared/pdb/ipfs'
+import { CID } from 'ipfs-core'
+import { BN } from 'bn.js'
 
-import { Row, Col, Card, Button } from 'antd'
-import CreateDaoSteps, {
-  CreateSteps,
-  CreateStepsHandle,
-} from './createDaoSteps'
-import CreateDaoProgress, { CreateDaoTitleProps } from './createDaoProgress'
-import IonIcon from 'shared/antd/ionicon'
+import { Row, Col, Card } from 'antd'
+import CreateDaoSteps, { CreateSteps } from './createDaoSteps'
+import CreateDaoProgress from './createDaoProgress'
+import BackAction from './actions/backAction'
+import ContinuesAction from './actions/continuesAction'
+
+import { AppState } from 'app/model'
+import { explorer } from 'shared/util'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 import configs from 'app/configs'
 
 const {
+  sol: { interDao },
   manifest: { appId },
 } = configs
 
-const BackActions = ({
-  step,
-  onHandleStep = () => {},
-}: CreateDaoTitleProps) => {
+const DaoInitialization = () => {
+  const [step, setStep] = useState(0)
+  const {
+    dao: { createDaoData },
+    metadata: { createMetaData },
+  } = useSelector((state: AppState) => state)
   const history = useHistory()
 
-  if (step > 0)
-    return (
-      <Button
-        type="text"
-        icon={<IonIcon name="arrow-back-outline" />}
-        onClick={onHandleStep}
-        size="large"
-      >
-        Back
-      </Button>
-    )
-  return (
-    <Button
-      type="text"
-      icon={<IonIcon name="trash-outline" />}
-      onClick={() => history.push(`/app/${appId}/dao`)}
-      size="large"
-    >
-      Cancel
-    </Button>
-  )
-}
-
-const ContinuesAction = ({
-  step,
-  onHandleStep,
-  onConfirm,
-  onSetMetaData,
-}: CreateDaoTitleProps) => {
-  const onClick = () => {
-    if (step === CreateSteps.stepOne) return onSetMetaData?.()
-    return onHandleStep?.()
-  }
-  if (step === CreateSteps.stepThree)
-    return (
-      <Button onClick={onConfirm} type="primary" size="large">
-        Confirm
-      </Button>
-    )
-  return (
-    <Button onClick={onClick} type="primary" size="large">
-      Continues
-    </Button>
-  )
-}
-
-const DaoInitialization = () => {
-  const createDaoStepRef = useRef<CreateStepsHandle>(null)
-  const [step, setStep] = useState(0)
-  const [cid, setCid] = useState('')
+  const { mintAddress, supply, regime } = createDaoData
+  const decimals = useMintDecimals(mintAddress) || 0
 
   const onNextStep = useCallback(async () => {
     try {
-      if (!createDaoStepRef?.current) throw new Error('Something went wrong!')
-      const validDao = await createDaoStepRef.current.validDaoData(cid)
-      if (step === CreateSteps.stepTwo && !validDao)
-        throw new Error('Invalid Dao!')
+      if (step === CreateSteps.stepOne && !createMetaData)
+        throw new Error('Invalid Metadata')
+      if (step === CreateSteps.stepTwo && !createDaoData)
+        throw new Error('Invalid DAO data')
       return setStep(step + 1)
     } catch (err: any) {
       window.notify({ type: 'error', description: err.message })
     }
-  }, [cid, step])
+  }, [createDaoData, createMetaData, step])
 
-  const onSetMetaData = useCallback(async () => {
+  const onCreateDao = useCallback(async () => {
     try {
-      if (!createDaoStepRef?.current) throw new Error('Something went wrong!')
-      const validMetaData = await createDaoStepRef.current.validMetaData()
-      if (!validMetaData) throw new Error('Invalid metadata')
-      const cid = await createDaoStepRef.current.uploadMetaData()
-      if (!cid) throw new Error('Invalid CID')
-      setCid(cid)
-      onNextStep()
+      const ipfs = new IPFS()
+      const cid = await ipfs.set(createMetaData)
+      const {
+        multihash: { digest },
+      } = CID.parse(cid)
+      const metadata = Buffer.from(digest)
+
+      const totalSupply = supply.mul(new BN(10).pow(new BN(decimals)))
+
+      const { txId, daoAddress } = await interDao.initializeDao(
+        mintAddress,
+        totalSupply,
+        metadata,
+        undefined, // Optional DAO's keypair
+        regime,
+      )
+      window.notify({
+        type: 'success',
+        description: 'A new DAO is created. Click here to view details.',
+        onClick: () => window.open(explorer(txId), '_blank'),
+      })
+      return history.push(`/app/${appId}/dao/${daoAddress}`)
     } catch (err: any) {
       window.notify({ type: 'error', description: err.message })
     }
-  }, [onNextStep])
-
-  const onConfirm = useCallback(async () => {
-    try {
-      if (!createDaoStepRef?.current) throw new Error('Something went wrong!')
-      await createDaoStepRef.current.createDao(cid)
-    } catch (err: any) {
-      window.notify({ type: 'error', description: err.message })
-    }
-  }, [cid])
+  }, [createMetaData, decimals, history, mintAddress, regime, supply])
 
   return (
     <Row gutter={[24, 24]} justify="center">
@@ -116,18 +83,17 @@ const DaoInitialization = () => {
               <CreateDaoProgress step={step} />
             </Col>
             <Col span={24}>
-              <CreateDaoSteps step={step} ref={createDaoStepRef} />
+              <CreateDaoSteps step={step} />
             </Col>
             <Col span={24} />
             <Col flex="auto">
-              <BackActions step={step} onHandleStep={() => setStep(step - 1)} />
+              <BackAction step={step} onHandleStep={() => setStep(step - 1)} />
             </Col>
             <Col>
               <ContinuesAction
                 step={step}
                 onHandleStep={onNextStep}
-                onSetMetaData={onSetMetaData}
-                onConfirm={onConfirm}
+                onConfirm={onCreateDao}
               />
             </Col>
           </Row>

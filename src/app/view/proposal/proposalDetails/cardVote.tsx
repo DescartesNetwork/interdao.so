@@ -68,11 +68,11 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
   const [loadingFor, setLoadingFor] = useState(false)
   const [loadingAgainst, setLoadingAgainst] = useState(false)
   const {
-    dao,
+    dao: { daoData },
     voteBid: { amount },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch()
-  const { mint } = dao[daoAddress] || ({} as DaoData)
+  const { mint } = daoData[daoAddress] || ({} as DaoData)
   const { balance, decimals } = useAccountBalanceByMintAddress(mint?.toBase58())
 
   const onChange = useCallback(

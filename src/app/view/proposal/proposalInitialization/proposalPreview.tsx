@@ -25,10 +25,12 @@ export type ProposalPreviewProps = {
 
 const ProposalPreview = ({ daoAddress }: ProposalPreviewProps) => {
   const [proposalAddress, setProposalAddress] = useState('')
-  const { dao } = useSelector((state: AppState) => state)
+  const {
+    dao: { daoData },
+  } = useSelector((state: AppState) => state)
 
   const { regime, nonce, mint } =
-    dao[daoAddress] ||
+    daoData[daoAddress] ||
     ({
       regime: {},
       mint: SystemProgram.programId,

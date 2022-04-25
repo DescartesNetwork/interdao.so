@@ -41,13 +41,15 @@ const HEIGHT_RATIO = 1.777777
 const MAX_WIDHT_RATE = 24 / 18 // full screen is 24 col, max width is 18 col
 
 const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
-  const { dao } = useSelector((state: AppState) => state)
+  const {
+    dao: { daoData },
+  } = useSelector((state: AppState) => state)
   const history = useHistory()
   const {
     ui: { width },
   } = useUI()
 
-  const { regime, nonce, mint } = dao[daoAddress] || ({} as DaoData)
+  const { regime, nonce, mint } = daoData?.[daoAddress] || ({} as DaoData)
   const members = useMembers(daoAddress)
   const metaData = useMetaData(daoAddress)
   const parseRegime = Object.keys(regime)?.[0]

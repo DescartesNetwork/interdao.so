@@ -1,3 +1,6 @@
+import BN from 'bn.js'
+import { web3 } from '@project-serum/anchor'
+import { DaoRegime } from '@interdao/core'
 import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { DaoData, DAO_DISCRIMINATOR } from '@interdao/core'
@@ -13,14 +16,36 @@ const {
  * Interface & Utility
  */
 
-export type DaoState = Record<string, DaoData>
+export const DEFAULT_CREATE_DAO_DATA = {
+  mintAddress: '',
+  supply: new BN(0),
+  metadata: undefined,
+  dao: undefined,
+  regime: {},
+}
+
+export type CreateDaoData = {
+  mintAddress: string
+  supply: BN
+  metadata?: Buffer
+  dao?: web3.Keypair
+  regime: DaoRegime
+}
+export type DaoDataState = Record<string, DaoData>
+export type DaoState = {
+  daoData: DaoDataState
+  createDaoData: CreateDaoData
+}
 
 /**
  * Store constructor
  */
 
 const NAME = 'dao'
-const initialState: DaoState = {}
+const initialState: DaoState = {
+  daoData: {},
+  createDaoData: DEFAULT_CREATE_DAO_DATA,
+}
 
 /**
  * Actions
@@ -44,38 +69,48 @@ export const getDaos = createAsyncThunk(`${NAME}/getDaos`, async () => {
         },
       ],
     })
-  let bulk: DaoState = {}
+  let bulk: DaoDataState = {}
   value.forEach(({ pubkey, account: { data: buf } }) => {
     const address = pubkey.toBase58()
     const data = interDao.parseDaoData(buf)
     bulk[address] = data
   })
-  return bulk
+  return { daoData: bulk }
 })
 
 export const getDao = createAsyncThunk<
-  DaoState,
+  Partial<DaoState>,
   { address: string; force?: boolean },
   { state: any }
 >(`${NAME}/getDao`, async ({ address, force }, { getState }) => {
   if (!account.isAddress(address)) throw new Error('Invalid address')
   const {
-    dao: { [address]: data },
+    dao: {
+      daoData: { [address]: data },
+    },
   } = getState()
   if (data && !force) return { [address]: data }
   const raw = await interDao.getDaoData(address)
-  return { [address]: raw }
+  return { daoData: { [address]: raw } }
 })
 
 export const upsetDao = createAsyncThunk<
-  DaoState,
+  Partial<DaoState>,
   { address: string; data: DaoData },
   { state: any }
 >(`${NAME}/upsetDao`, async ({ address, data }) => {
   if (!account.isAddress(address)) throw new Error('Invalid address')
   if (!data) throw new Error('Data is empty')
-  return { [address]: data }
+  return { daoData: { [address]: data } }
 })
+
+export const setCreateDaoData = createAsyncThunk(
+  `${NAME}/setCreateDaoData`,
+  async (createDaoData?: CreateDaoData) => {
+    if (!createDaoData) return { createDaoData: DEFAULT_CREATE_DAO_DATA }
+    return { createDaoData }
+  },
+)
 
 export const deleteDao = createAsyncThunk(
   `${NAME}/deleteDao`,
@@ -108,8 +143,12 @@ const slice = createSlice({
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        deleteDao.fulfilled,
+        setCreateDaoData.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        deleteDao.fulfilled,
+        (state, { payload }) => void Object.assign(state.daoData, payload),
       ),
 })
 

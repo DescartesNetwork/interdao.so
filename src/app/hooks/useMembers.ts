@@ -7,15 +7,18 @@ import { getMember, MetaData } from 'app/model/metadata.controller'
 
 const useMembers = (daoAddress: string) => {
   const dispatch = useDispatch<AppDispatch>()
-  const { metadata, dao } = useSelector((state: AppState) => state)
+  const {
+    metadata: { daoMetaData },
+    dao: { daoData },
+  } = useSelector((state: AppState) => state)
 
   const { members } = useMemo(
-    () => metadata[daoAddress] || ({} as MetaData),
-    [daoAddress, metadata],
+    () => daoMetaData[daoAddress] || ({} as MetaData),
+    [daoAddress, daoMetaData],
   )
   const isExistDao = useMemo(() => {
-    return !!Object.keys(dao).length
-  }, [dao])
+    return !!Object.keys(daoData).length
+  }, [daoData])
 
   useEffect(() => {
     if (isExistDao && account.isAddress(daoAddress)) {

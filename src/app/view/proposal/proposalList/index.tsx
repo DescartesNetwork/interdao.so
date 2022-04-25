@@ -25,14 +25,17 @@ const currentDate = Math.floor(Number(new Date()) / 1000)
 
 const ProposalList = ({ daoAddress }: ProposalListProps) => {
   const [status, setStatus] = useState('all-status')
-  const { proposal, dao } = useSelector((state: AppState) => state)
+  const {
+    proposal,
+    dao: { daoData },
+  } = useSelector((state: AppState) => state)
   const dispatch = useDispatch<AppDispatch>()
   const history = useHistory()
   const {
     wallet: { address: walletAddress },
   } = useWallet()
 
-  const { regime, authority } = dao[daoAddress] || {
+  const { regime, authority } = daoData[daoAddress] || {
     regime: DaoRegimes.Dictatorial,
     authority: SystemProgram.programId,
   }
