@@ -8,6 +8,8 @@ import YourDaos from './daoList/yourDao'
 
 import configs from 'app/configs'
 
+import './index.less'
+
 const {
   manifest: { appId },
 } = configs

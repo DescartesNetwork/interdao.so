@@ -1,12 +1,14 @@
+import { useDispatch, useSelector } from 'react-redux'
 import BN from 'bn.js'
 
 import { Col, Row } from 'antd'
 import RegimeInput from './regimeInput'
 import CirculatingSupplyInput from './circulatingSupplyInput'
 import TokenAddressInput from './tokenAddressInput'
-import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, AppState } from 'app/model'
 import { setCreateDaoData } from 'app/model/dao.controller'
+
+import './index.less'
 
 const DaoRule = () => {
   const {

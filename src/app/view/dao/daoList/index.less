@@ -1,0 +1,29 @@
+.dao-card-wrapper {
+  cursor: pointer;
+  .dao-card-img {
+    position: relative;
+    bottom: -8px;
+    .interdao-image {
+      width: 100%;
+      height: 100%;
+      border-radius: 8px 8px 0 0;
+      overflow: hidden;
+      img {
+        height: 100%;
+        transition: all 0.2s linear;
+      }
+    }
+  }
+  &:hover {
+    .dao-card-img {
+      img {
+        filter: blur(1.5px);
+      }
+    }
+  }
+}
+.regmie-tag-wrapper {
+  position: absolute;
+  top: 24px;
+  right: -10px;
+}

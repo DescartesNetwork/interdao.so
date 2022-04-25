@@ -6,6 +6,8 @@ import DaoCard from './daoCard'
 
 import { AppState } from 'app/model'
 
+import './index.less'
+
 const DaoList = () => {
   const {
     dao: { daoData },

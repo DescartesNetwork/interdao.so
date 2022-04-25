@@ -16,6 +16,7 @@ import { explorer } from 'shared/util'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 import configs from 'app/configs'
+import './index.less'
 
 const {
   sol: { interDao },
