@@ -12,6 +12,8 @@ import { AppState } from 'app/model'
 import configs from 'app/configs'
 import useProposalStatus from 'app/hooks/useProposalStatus'
 
+import bg from 'app/static/images/templates/bg-quarry.png'
+
 const {
   manifest: { appId },
 } = configs
@@ -39,6 +41,7 @@ const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
         )
       }
       className="proposal-card"
+      style={{ background: `url(${bg})` }}
       hoverable
     >
       <Row gutter={[8, 8]}>
