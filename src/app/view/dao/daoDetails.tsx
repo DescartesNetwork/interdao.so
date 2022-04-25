@@ -26,8 +26,10 @@ import useMetaData from 'app/hooks/useMetaData'
 export type DaoDetailsProps = { daoAddress: string }
 
 const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
-  const { dao } = useSelector((state: AppState) => state)
-  const { regime, nonce, mint } = dao[daoAddress] || {
+  const {
+    dao: { daoData },
+  } = useSelector((state: AppState) => state)
+  const { regime, nonce, mint } = daoData?.[daoAddress] || {
     regime: {},
     nonce: new BN(0),
     mint: SystemProgram.programId,

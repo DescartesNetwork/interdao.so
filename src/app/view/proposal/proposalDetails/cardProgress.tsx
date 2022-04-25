@@ -15,13 +15,15 @@ const CardProgress = ({
   proposalAddress,
   daoAddress,
 }: ProposalChildCardProps) => {
-  const { dao } = useSelector((state: AppState) => state)
+  const {
+    dao: { daoData },
+  } = useSelector((state: AppState) => state)
   const { votingAgainstPower, votingForPower, supply } = useProposal(
     proposalAddress,
     daoAddress,
   )
   const { receipts } = useReceipts({ proposalAddress })
-  const { mint } = dao[daoAddress] || ({} as DaoData)
+  const { mint } = daoData[daoAddress] || ({} as DaoData)
   const mintDecimal = useMintDecimals(mint?.toBase58()) || 0
 
   const totalPower = Number(supply) / 10 ** mintDecimal

@@ -1,31 +1,28 @@
 import { ChangeEvent } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Col, Input, Row, Space, Typography, Upload } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { UploadChangeParam } from 'antd/lib/upload'
 import { fileToBase64 } from 'app/helpers'
+import { MetaData, setCreateDaoMetaData } from 'app/model/metadata.controller'
+import { AppDispatch, AppState } from 'app/model'
 
-export type MetaData = {
-  daoName: string
-  description: string
-  image: string | ArrayBuffer | null
-  optionals: string[]
-}
-
-type MetaDataFormProps = {
-  metaData: MetaData
-  setMetaData: (data: MetaData) => void
-}
 const SOCIAL_MEDIA = ['twitter', 'discord']
 
-const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
+const MetaDataForm = () => {
+  const {
+    metadata: { createMetaData },
+  } = useSelector((state: AppState) => state)
+  const dispatch = useDispatch<AppDispatch>()
+
   const formatMetaData = async (imgBase64: string | ArrayBuffer | null) => {
     const nextMetaData: MetaData = {
-      ...metaData,
+      ...createMetaData,
       image: imgBase64,
     }
-    setMetaData(nextMetaData)
+    return dispatch(setCreateDaoMetaData(nextMetaData))
   }
 
   const onFileChange = (file: UploadChangeParam) => {
@@ -35,15 +32,20 @@ const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
   }
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setMetaData({ ...metaData, [e.target.name]: e.target.value })
+    dispatch(
+      setCreateDaoMetaData({
+        ...createMetaData,
+        [e.target.name]: e.target.value,
+      }),
+    )
 
   const onOptionalChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     idx: number,
   ) => {
-    const nextMetaData: MetaData = JSON.parse(JSON.stringify(metaData))
+    const nextMetaData: MetaData = JSON.parse(JSON.stringify(createMetaData))
     nextMetaData.optionals.splice(idx, 1, e.target.value)
-    setMetaData(nextMetaData)
+    dispatch(setCreateDaoMetaData(nextMetaData))
   }
 
   return (
@@ -52,7 +54,7 @@ const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
         <Space direction="vertical" style={{ width: '100%' }}>
           <Typography.Text>Dao name</Typography.Text>
           <Input
-            value={metaData.daoName}
+            value={createMetaData.daoName}
             onChange={onChange}
             name="daoName"
             className="border-less"
@@ -63,7 +65,7 @@ const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
         <Space direction="vertical" style={{ width: '100%' }}>
           <Typography.Text>Dao description</Typography.Text>
           <Input.TextArea
-            value={metaData.description}
+            value={createMetaData.description}
             name="description"
             onChange={onChange}
             className="border-less"
@@ -91,7 +93,7 @@ const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
               {social}
             </Typography.Text>
             <Input
-              value={metaData.optionals[idx]}
+              value={createMetaData.optionals[idx]}
               onChange={(e) => onOptionalChange(e, idx)}
               name="optionals"
               className="border-less"

@@ -1,36 +1,18 @@
-import { useCallback, useEffect, useState } from 'react'
-import IPFS from 'shared/pdb/ipfs'
+import { useSelector } from 'react-redux'
 
 import { Col, Image, Row, Space, Typography } from 'antd'
 import CardRegmie from './daoRule/cardRegmie'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
-import { DaoDataProps } from './daoRule'
-import { MetaData } from './metaDataForm'
+import { AppState } from 'app/model'
 
-const ConfirmCreate = ({
-  daoData,
-  cid,
-}: {
-  daoData: DaoDataProps
-  cid: string
-}) => {
-  const { regime, mintAddress, supply } = daoData
-  const [metaData, setMetaData] = useState<MetaData>()
+const ConfirmCreate = () => {
+  const {
+    dao: { createDaoData },
+    metadata: { createMetaData },
+  } = useSelector((state: AppState) => state)
 
-  const getMetaData = useCallback(async () => {
-    if (!cid) return setMetaData(undefined)
-    try {
-      const ipfs = new IPFS()
-      const data = await ipfs.get(cid)
-      setMetaData(data)
-    } catch (err: any) {
-      window.notify({ type: 'error', description: err.message })
-    }
-  }, [cid])
-
-  useEffect(() => {
-    getMetaData()
-  }, [getMetaData])
+  const { regime, mintAddress, supply } = createDaoData
+  const { daoName, description, image } = createMetaData
 
   return (
     <Row gutter={[24, 24]}>
@@ -38,7 +20,7 @@ const ConfirmCreate = ({
         <Space direction="vertical" size={24}>
           <Space direction="vertical">
             <Typography.Text type="secondary">Name of DAO</Typography.Text>
-            <Typography.Title level={1}>{metaData?.daoName}</Typography.Title>
+            <Typography.Title level={1}>{daoName}</Typography.Title>
           </Space>
           <Space direction="vertical">
             <Typography.Text>DAO Regmie</Typography.Text>
@@ -59,7 +41,7 @@ const ConfirmCreate = ({
           </Space>
           <Space direction="vertical" className="dao-logo-img">
             <Typography.Text>DAO Logo</Typography.Text>
-            <Image src={metaData?.image?.toString()} preview={false} />
+            <Image src={image?.toString()} preview={false} />
           </Space>
         </Space>
       </Col>
@@ -72,7 +54,7 @@ const ConfirmCreate = ({
       <Col span={24}>
         <Space direction="vertical">
           <Typography.Text type="secondary">Description</Typography.Text>
-          <Typography.Text>{metaData?.description}</Typography.Text>
+          <Typography.Text>{description}</Typography.Text>
         </Space>
       </Col>
     </Row>

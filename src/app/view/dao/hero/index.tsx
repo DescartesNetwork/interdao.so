@@ -5,6 +5,8 @@ import InfoCard from './infoCard'
 
 import { numeric } from 'shared/util'
 
+import './index.less'
+
 const Hero = () => {
   return (
     <Row className="interdao-banner" justify="center">

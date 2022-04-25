@@ -1,41 +1,39 @@
+import { useDispatch, useSelector } from 'react-redux'
 import BN from 'bn.js'
-import { web3 } from '@project-serum/anchor'
-import { DaoRegime } from '@interdao/core'
 
 import { Col, Row } from 'antd'
 import RegimeInput from './regimeInput'
 import CirculatingSupplyInput from './circulatingSupplyInput'
 import TokenAddressInput from './tokenAddressInput'
+import { AppDispatch, AppState } from 'app/model'
+import { setCreateDaoData } from 'app/model/dao.controller'
 
-export type DaoDataProps = {
-  mintAddress: string
-  supply: BN
-  metadata?: Buffer
-  dao?: web3.Keypair
-  regime: DaoRegime
-}
+import './index.less'
 
-const DaoRule = ({
-  daoData,
-  setDaoData,
-}: {
-  daoData: DaoDataProps
-  setDaoData: (daoData: DaoDataProps) => void
-}) => {
-  const { mintAddress, supply, regime } = daoData
+const DaoRule = () => {
+  const {
+    dao: { createDaoData },
+  } = useSelector((state: AppState) => state)
+  const dispatch = useDispatch<AppDispatch>()
+
+  const { mintAddress, supply, regime } = createDaoData
 
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>
         <RegimeInput
           value={regime}
-          onChange={(regime) => setDaoData({ ...daoData, regime })}
+          onChange={(regime) =>
+            dispatch(setCreateDaoData({ ...createDaoData, regime }))
+          }
         />
       </Col>
       <Col span={24}>
         <TokenAddressInput
           value={mintAddress}
-          onChange={(mintAddress) => setDaoData({ ...daoData, mintAddress })}
+          onChange={(mintAddress) =>
+            dispatch(setCreateDaoData({ ...createDaoData, mintAddress }))
+          }
         />
       </Col>
       <Col span={24}>
@@ -43,7 +41,9 @@ const DaoRule = ({
           mintAddress={mintAddress}
           value={supply?.toString()}
           onChange={(supply) =>
-            setDaoData({ ...daoData, supply: new BN(supply) })
+            dispatch(
+              setCreateDaoData({ ...createDaoData, supply: new BN(supply) }),
+            )
           }
         />
       </Col>

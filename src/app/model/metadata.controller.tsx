@@ -11,37 +11,55 @@ const {
 /**
  * Interface & Utility
  */
+const DEFAULT_CREATE_METADATA = {
+  daoName: '',
+  description: '',
+  image: '',
+  optionals: [],
+}
 
 export type MetaData = {
-  members: number
+  daoName: string
   description: string
-  bannel: string
-  avatar: string
+  image: string | ArrayBuffer | null
+  optionals: string[]
 }
-export type MetaDataState = Record<string, MetaData>
+export type MetaDataMember = { members: number }
+export type DaoMetaDataState = Record<string, MetaDataMember>
+export type MetaDataState = {
+  daoMetaData: DaoMetaDataState
+  createMetaData: MetaData
+}
 
 /**
  * Store constructor
  */
 
 const NAME = 'metadata'
-const initialState: MetaDataState = {}
+const initialState: MetaDataState = {
+  daoMetaData: {},
+  createMetaData: DEFAULT_CREATE_METADATA,
+}
 
 /**
  * Actions
  */
 
 export const getMember = createAsyncThunk<
-  MetaDataState,
+  Partial<MetaDataState>,
   { daoAddress: string; force?: boolean },
   { state: any }
 >(`${NAME}/getMember`, async ({ daoAddress, force }, { getState }) => {
   if (!account.isAddress(daoAddress)) throw new Error('Invalid address')
   const {
     dao: {
-      [daoAddress]: { mint },
+      daoData: {
+        [daoAddress]: { mint },
+      },
     },
-    metadata: { [daoAddress]: data },
+    metadata: {
+      daoMetaData: { [daoAddress]: data },
+    },
   } = getState()
   const mintAddress = mint.toBase58()
   if (!account.isAddress(mintAddress)) return {}
@@ -58,8 +76,16 @@ export const getMember = createAsyncThunk<
       ],
     },
   )
-  return { [daoAddress]: { members: accounts.length } }
+  return { daoMetaData: { [daoAddress]: { members: accounts.length } } }
 })
+
+export const setCreateDaoMetaData = createAsyncThunk(
+  `${NAME}/setCreateDaoMetaData`,
+  async (metaData?: MetaData) => {
+    if (!metaData) return { createMetaData: DEFAULT_CREATE_METADATA }
+    return { createMetaData: metaData }
+  },
+)
 
 /**
  * Usual procedure
@@ -70,10 +96,15 @@ const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) =>
-    void builder.addCase(
-      getMember.fulfilled,
-      (state, { payload }) => void Object.assign(state, payload),
-    ),
+    void builder
+      .addCase(
+        getMember.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        setCreateDaoMetaData.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      ),
 })
 
 export default slice.reducer

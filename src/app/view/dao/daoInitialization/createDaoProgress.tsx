@@ -3,7 +3,6 @@ import { Progress, Space, Typography } from 'antd'
 export type CreateDaoTitleProps = {
   step: number
   onHandleStep?: () => void
-  onSetMetaData?: () => void
   onConfirm?: () => void
 }
 
