@@ -1,10 +1,9 @@
-import BN from 'bn.js'
-import { web3 } from '@project-serum/anchor'
-import { DaoRegime } from '@interdao/core'
-import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { DaoData, DAO_DISCRIMINATOR } from '@interdao/core'
 import { account } from '@senswap/sen-js'
+import { DaoData, DAO_DISCRIMINATOR, DaoRegime } from '@interdao/core'
+import { AccountInfo, PublicKey } from '@solana/web3.js'
+import { web3 } from '@project-serum/anchor'
+import BN from 'bn.js'
 
 import configs from 'app/configs'
 
