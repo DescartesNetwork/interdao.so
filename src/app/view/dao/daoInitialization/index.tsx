@@ -1,68 +1,65 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { account } from '@senswap/sen-js'
-import BN from 'bn.js'
-import { DaoRegimes } from '@interdao/core'
-import { CID } from 'ipfs-core'
-
-import { Button, Card, Col, Row, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
-import RegimeInput from './regimeInput'
-import TokenAddressInput from './tokenAddressInput'
-import CirculatingSupplyInput from './circulatingSupplyInput'
-import MetaDataForm from './metaDataForm'
-
-import useMintDecimals from 'shared/hooks/useMintDecimals'
-import configs from 'app/configs'
-import { explorer } from 'shared/util'
-import { MetaData } from './metaDataForm'
 import IPFS from 'shared/pdb/ipfs'
+import { CID } from 'ipfs-core'
+import { BN } from 'bn.js'
+
+import { Row, Col, Card } from 'antd'
+import CreateDaoSteps, { CreateSteps } from './createDaoSteps'
+import CreateDaoProgress from './createDaoProgress'
+import BackAction from './actions/backAction'
+import ContinuesAction from './actions/continuesAction'
+
+import { AppState } from 'app/model'
+import { explorer } from 'shared/util'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
+
+import configs from 'app/configs'
+import './index.less'
 
 const {
-  manifest: { appId },
   sol: { interDao },
+  manifest: { appId },
 } = configs
 
-const DEFAULT_METADATA = {
-  daoName: '',
-  description: '',
-  image: '',
-}
-
 const DaoInitialization = () => {
-  const [regime, setRegime] = useState(DaoRegimes.Dictatorial)
-  const [metaData, setMetaData] = useState<MetaData>(DEFAULT_METADATA)
-  const [mintAddress, setMintAddress] = useState('')
-  const [circulatingSupply, setCirculatingSupply] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [advanceSetting, setAdvanceSetting] = useState(false)
-  const decimals = useMintDecimals(mintAddress) || 0
+  const [step, setStep] = useState(0)
+  const {
+    dao: { createDaoData },
+    metadata: { createMetaData },
+  } = useSelector((state: AppState) => state)
   const history = useHistory()
 
-  const valid = useMemo(() => {
-    if (!account.isAddress(mintAddress)) return false
-    if (!circulatingSupply || !Number(circulatingSupply)) return false
-    if (!decimals) return false
-    return true
-  }, [mintAddress, circulatingSupply, decimals])
+  const { mintAddress, supply, regime } = createDaoData
+  const decimals = useMintDecimals(mintAddress) || 0
 
-  const newDao = useCallback(async () => {
-    if (!valid) return
+  const onNextStep = useCallback(async () => {
     try {
-      setLoading(true)
+      if (step === CreateSteps.stepOne && !createMetaData)
+        throw new Error('Invalid Metadata')
+      if (step === CreateSteps.stepTwo && !createDaoData)
+        throw new Error('Invalid DAO data')
+      return setStep(step + 1)
+    } catch (err: any) {
+      window.notify({ type: 'error', description: err.message })
+    }
+  }, [createDaoData, createMetaData, step])
+
+  const onCreateDao = useCallback(async () => {
+    try {
       const ipfs = new IPFS()
-      const cid = await ipfs.set(metaData)
+      const cid = await ipfs.set(createMetaData)
       const {
         multihash: { digest },
       } = CID.parse(cid)
       const metadata = Buffer.from(digest)
 
-      const supply = new BN(circulatingSupply).mul(
-        new BN(10).pow(new BN(decimals)),
-      )
+      const totalSupply = supply.mul(new BN(10).pow(new BN(decimals)))
+
       const { txId, daoAddress } = await interDao.initializeDao(
         mintAddress,
-        supply,
+        totalSupply,
         metadata,
         undefined, // Optional DAO's keypair
         regime,
@@ -73,88 +70,32 @@ const DaoInitialization = () => {
         onClick: () => window.open(explorer(txId), '_blank'),
       })
       return history.push(`/app/${appId}/dao/${daoAddress}`)
-    } catch (er: any) {
-      return window.notify({
-        type: 'error',
-        description: er.message,
-      })
-    } finally {
-      return setLoading(false)
+    } catch (err: any) {
+      window.notify({ type: 'error', description: err.message })
     }
-  }, [
-    valid,
-    metaData,
-    circulatingSupply,
-    decimals,
-    mintAddress,
-    regime,
-    history,
-  ])
+  }, [createMetaData, decimals, history, mintAddress, regime, supply])
 
   return (
     <Row gutter={[24, 24]} justify="center">
-      <Col xs={24} md={16}>
+      <Col xs={24} lg={16}>
         <Card bordered={false}>
-          <Row gutter={[24, 24]}>
+          <Row gutter={[24, 32]}>
             <Col span={24}>
-              <Row>
-                <Col flex="auto">
-                  <Typography.Title level={3}>
-                    New DAO Information
-                  </Typography.Title>
-                </Col>
-                <Col>
-                  <Button
-                    type="text"
-                    onClick={() => setAdvanceSetting(!advanceSetting)}
-                    icon={<IonIcon name="cog-outline" />}
-                  />
-                </Col>
-              </Row>
-            </Col>
-            <Col span={24} />
-            {advanceSetting && (
-              <Col span={24}>
-                <MetaDataForm metaData={metaData} setMetaData={setMetaData} />
-              </Col>
-            )}
-            <Col span={24}>
-              <RegimeInput value={regime} onChange={setRegime} />
+              <CreateDaoProgress step={step} />
             </Col>
             <Col span={24}>
-              <TokenAddressInput
-                value={mintAddress}
-                onChange={setMintAddress}
-              />
-            </Col>
-            <Col span={24}>
-              <CirculatingSupplyInput
-                mintAddress={mintAddress}
-                value={circulatingSupply}
-                onChange={setCirculatingSupply}
-              />
+              <CreateDaoSteps step={step} />
             </Col>
             <Col span={24} />
             <Col flex="auto">
-              <Button
-                type="text"
-                icon={<IonIcon name="trash-outline" />}
-                onClick={() => history.push(`/app/${appId}/dao`)}
-                size="large"
-              >
-                Cancel
-              </Button>
+              <BackAction step={step} onHandleStep={() => setStep(step - 1)} />
             </Col>
             <Col>
-              <Button
-                onClick={newDao}
-                loading={loading}
-                type="primary"
-                size="large"
-                icon={<IonIcon name="add-outline" />}
-              >
-                Create the DAO
-              </Button>
+              <ContinuesAction
+                step={step}
+                onHandleStep={onNextStep}
+                onConfirm={onCreateDao}
+              />
             </Col>
           </Row>
         </Card>

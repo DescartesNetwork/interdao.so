@@ -1,9 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap');
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('./font-family/HelveticaNeue.otf');
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('./font-family/HelveticaNeue-CondensedBold.otf');
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('./font-family/HelveticaNeue-Bold.otf');
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('./font-family/HelveticaNeue-Light.otf');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('./font-family/HelveticaNeue-Medium.otf');
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Helvetica Neue';
+  src: url('./font-family/HelveticaNeue-UltraLight.otf');
+  font-weight: 300;
+}
+
 .interdao-col-container {
   max-width: 1920px;
   width: 100%;
   margin-bottom: 12px;
 }
 
+.regime-tag {
+  position: relative;
+  border-radius: unset !important;
+  padding: 1px 8px 1px 30px;
+  min-width: 110px;
+  text-align: center;
+  &::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: -0.8px;
+    top: -1px;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-left: 12px solid #2b2523;
+  }
+}
+.border-less {
+  border: none !important;
+}
 
 #light {
   .dummy {

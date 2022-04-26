@@ -23,10 +23,12 @@ const CardStatus = ({
   daoAddress,
 }: ProposalChildCardProps) => {
   const [loading, setLoading] = useState(false)
-  const { dao } = useSelector((state: AppState) => state)
+  const {
+    dao: { daoData },
+  } = useSelector((state: AppState) => state)
   const { accountsLen } = useProposal(proposalAddress, daoAddress)
   const { status } = useProposalStatus(proposalAddress)
-  const { mint } = dao[daoAddress] || ({} as DaoData)
+  const { mint } = daoData[daoAddress] || ({} as DaoData)
 
   const onExcute = useCallback(async () => {
     setLoading(true)

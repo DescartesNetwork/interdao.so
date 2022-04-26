@@ -17,6 +17,7 @@ const TokenAddressInput = ({ value, onChange }: TokenAddressInputProps) => {
           size="large"
           placeholder="Input Token Address"
           value={value}
+          className="border-less"
           onChange={(e) => onChange(e.target.value || '')}
           suffix={
             <MintSelection

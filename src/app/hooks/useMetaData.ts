@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-
-import { AppState } from 'app/model'
-import { MetaData } from 'app/view/dao/daoInitialization/metaDataForm'
-import { getCID } from 'app/helpers'
 import IPFS from 'shared/pdb/ipfs'
 
+import { MetaData } from 'app/model/metadata.controller'
+import { AppState } from 'app/model'
+import { getCID } from 'app/helpers'
+
 const useMetaData = (daoAddress: string) => {
-  const { dao } = useSelector((state: AppState) => state)
+  const {
+    dao: { daoData },
+  } = useSelector((state: AppState) => state)
   const [metaData, setMetaData] = useState<MetaData>()
-  const { metadata: digest } = dao?.[daoAddress] || {}
+  const { metadata: digest } = daoData?.[daoAddress] || {}
 
   const getMetaData = useCallback(async () => {
     if (!digest) return setMetaData(undefined)

@@ -83,13 +83,15 @@ const TransferSplPlugin = ({
   const [srcAddress, setSrcAddress] = useState('')
   const [dstAddress, setDstAddress] = useState('')
   const [amount, setAmount] = useState('')
-  const { dao } = useSelector((state: AppState) => state)
+  const {
+    dao: { daoData },
+  } = useSelector((state: AppState) => state)
   const decimals = useMintDecimals(mintAddress)
 
   const senderAddress = useMemo(() => {
-    const { master } = dao[daoAddress] || {}
+    const { master } = daoData[daoAddress] || {}
     return master?.toBase58() || ''
-  }, [dao, daoAddress])
+  }, [daoData, daoAddress])
 
   const _onClick = useCallback(() => {
     onClick(NAME)

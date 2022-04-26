@@ -6,15 +6,19 @@ import DaoCard from './daoCard'
 
 import { AppState } from 'app/model'
 
+import './index.less'
+
 const DaoList = () => {
-  const { dao } = useSelector((state: AppState) => state)
+  const {
+    dao: { daoData },
+  } = useSelector((state: AppState) => state)
 
   return (
-    <Row gutter={[24, 24]}>
-      {Object.keys(dao).map((daoAddress) => (
+    <Row gutter={[24, 16]}>
+      {Object.keys(daoData).map((daoAddress) => (
         <Col key={daoAddress} xs={24} md={12}>
           <LazyLoad height={282.05}>
-            <DaoCard daoAddress={daoAddress} />
+            <DaoCard daoAddress={daoAddress} special />
           </LazyLoad>
         </Col>
       ))}

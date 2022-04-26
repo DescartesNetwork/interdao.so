@@ -10,6 +10,8 @@ import { numeric } from 'shared/util'
 import { AppDispatch, AppState } from 'app/model'
 import { getProposals } from 'app/model/proposal.controller'
 
+import './index.less'
+
 const Hero = () => {
   const { dao, proposal } = useSelector((state: AppState) => state)
   const dispatch = useDispatch<AppDispatch>()
