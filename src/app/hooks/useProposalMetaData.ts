@@ -1,17 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import IPFS from 'shared/pdb/ipfs'
 
-import { MetaData } from 'app/model/metadata.controller'
 import { AppState } from 'app/model'
 import { getCID } from 'app/helpers'
+import { ProposalMetaData } from 'app/view/proposal/proposalInitialization'
+import IPFS from 'shared/pdb/ipfs'
 
-const useMetaData = (daoAddress: string) => {
-  const {
-    dao: { daoData },
-  } = useSelector((state: AppState) => state)
-  const [metaData, setMetaData] = useState<MetaData>()
-  const { metadata: digest } = daoData?.[daoAddress] || {}
+const useProposalMetaData = (proposalAddress: string) => {
+  const [metaData, setMetaData] = useState<ProposalMetaData>()
+  const { proposal } = useSelector((state: AppState) => state)
+  const { metadata: digest } = proposal[proposalAddress] || {}
 
   const getMetaData = useCallback(async () => {
     if (!digest) return setMetaData(undefined)
@@ -32,4 +30,4 @@ const useMetaData = (daoAddress: string) => {
   return metaData
 }
 
-export default useMetaData
+export default useProposalMetaData

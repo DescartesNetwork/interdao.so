@@ -11,6 +11,7 @@ import { shortenAddress } from 'shared/util'
 import { AppState } from 'app/model'
 import configs from 'app/configs'
 import useProposalStatus from 'app/hooks/useProposalStatus'
+import useProposalMetaData from 'app/hooks/useProposalMetaData'
 
 const {
   manifest: { appId },
@@ -21,13 +22,14 @@ export type ProposalCardProps = { proposalAddress: string }
 const currentDate = Math.floor(Number(new Date()) / 1000)
 
 const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
-  const history = useHistory()
   const { proposal } = useSelector((state: AppState) => state)
   const { dao, endDate } = proposal[proposalAddress] || {
     dao: SystemProgram.programId,
     endDate: new BN(currentDate),
   }
   const { status } = useProposalStatus(proposalAddress)
+  const history = useHistory()
+  const metaData = useProposalMetaData(proposalAddress)
 
   return (
     <Card
@@ -38,6 +40,7 @@ const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
         )
       }
       className="proposal-card"
+      style={{ background: `url(${metaData?.imageBackground})` }}
       hoverable
     >
       <Row gutter={[8, 8]}>
@@ -45,7 +48,9 @@ const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
           <Row>
             <Col flex="auto">
               <Typography.Title level={4}>
-                {shortenAddress(proposalAddress)}
+                {metaData?.title
+                  ? metaData.title
+                  : shortenAddress(proposalAddress)}
               </Typography.Title>
             </Col>
             <Col>
@@ -65,11 +70,7 @@ const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
         </Col>
         <Col span={24}>
           <Typography.Paragraph type="secondary" ellipsis={{ rows: 2 }}>
-            Lorem ipsum, sem, vulputate fusce magna non mattis, diam auctor,
-            commodo risus. Lorem ipsum, sem, vulputate fusce magna non mattis,
-            diam auctor, commodo risus. Lorem ipsum, sem, vulputate fusce magna
-            non mattis, diam auctor, commodo risus. Lorem ipsum, sem, vulputate
-            fusce magna non mattis, diam auctor, commodo risus.
+            {metaData?.description}
           </Typography.Paragraph>
         </Col>
       </Row>

@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
 import LazyLoad from '@senswap/react-lazyload'
 import { useWallet } from '@senhub/providers'
 import { DaoRegimes } from '@interdao/core'
@@ -13,11 +12,8 @@ import ProposalCard from './proposalCard'
 
 import { AppDispatch, AppState } from 'app/model'
 import { getProposals } from 'app/model/proposal.controller'
-import configs from 'app/configs'
-
-const {
-  manifest: { appId },
-} = configs
+import Template from 'app/view/templates'
+import { setVisible } from 'app/model/template.controller'
 
 export type ProposalListProps = { daoAddress: string }
 
@@ -30,7 +26,6 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
     dao: { daoData },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch<AppDispatch>()
-  const history = useHistory()
   const {
     wallet: { address: walletAddress },
   } = useWallet()
@@ -149,9 +144,7 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
               <Button
                 type="primary"
                 icon={<IonIcon name="add-outline" />}
-                onClick={() =>
-                  history.push(`/app/${appId}/dao/${daoAddress}/new-proposal`)
-                }
+                onClick={() => dispatch(setVisible(true))}
                 disabled={!authorized}
               >
                 New Proposal
@@ -177,6 +170,7 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
           )}
         </Row>
       </Col>
+      <Template daoAddress={daoAddress} />
     </Row>
   )
 }

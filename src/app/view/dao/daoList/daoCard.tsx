@@ -38,7 +38,7 @@ const DAO_CARD_BG = {
 }
 const PAGE_PADDING = 24
 const HEIGHT_RATIO = 1.777777
-const MAX_WIDHT_RATE = 24 / 18 // full screen is 24 col, max width is 18 col
+const MAX_WIDTH_RATE = 24 / 18 // full screen is 24 col, max width is 18 col
 
 const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
   const {
@@ -54,7 +54,7 @@ const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
   const metaData = useMetaData(daoAddress)
   const parseRegime = Object.keys(regime)?.[0]
   const isMobile = width < 768
-  const deskopWidth = width > 992 ? width / MAX_WIDHT_RATE : width
+  const desktopWidth = width > 992 ? width / MAX_WIDTH_RATE : width
   const heightRatio = isMobile ? HEIGHT_RATIO : HEIGHT_RATIO * 2
 
   return (
@@ -68,7 +68,7 @@ const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
         className="dao-card-img"
         style={{
           height: !isMobile
-            ? (deskopWidth - PAGE_PADDING * 2) / heightRatio
+            ? (desktopWidth - PAGE_PADDING * 2) / heightRatio
             : (width - PAGE_PADDING) / heightRatio,
         }}
       >
