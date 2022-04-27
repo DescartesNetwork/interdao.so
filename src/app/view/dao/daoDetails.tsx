@@ -105,7 +105,10 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
           </Row>
         </Col>
         <Col span={24}>
-          <Typography.Paragraph type="secondary">
+          <Typography.Paragraph
+            type="secondary"
+            ellipsis={{ rows: 3, expandable: true, symbol: 'View more' }}
+          >
             {metaData?.description}
           </Typography.Paragraph>
         </Col>

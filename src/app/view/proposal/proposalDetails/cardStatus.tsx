@@ -1,18 +1,15 @@
-import { useCallback, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { DaoData } from '@interdao/core'
+import { useCallback, useMemo, useState } from 'react'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import ProposalStatus from 'app/components/proposalStatus'
-import { MintSymbol } from 'shared/antd/mint'
 
 import { ProposalChildCardProps } from './index'
 import useProposal from 'app/hooks/useProposal'
-import { AppState } from 'app/model'
 import configs from 'app/configs'
-import { explorer } from 'shared/util'
+import { explorer, shortenAddress } from 'shared/util'
 import useProposalStatus from 'app/hooks/useProposalStatus'
+import useProposalMetaData from 'app/hooks/useProposalMetaData'
 
 const {
   sol: { interDao },
@@ -23,14 +20,17 @@ const CardStatus = ({
   daoAddress,
 }: ProposalChildCardProps) => {
   const [loading, setLoading] = useState(false)
-  const {
-    dao: { daoData },
-  } = useSelector((state: AppState) => state)
+
   const { accountsLen } = useProposal(proposalAddress, daoAddress)
   const { status } = useProposalStatus(proposalAddress)
-  const { mint } = daoData[daoAddress] || ({} as DaoData)
+  const metaData = useProposalMetaData(proposalAddress)
 
-  const onExcute = useCallback(async () => {
+  const disabled = useMemo(() => {
+    if (status === 'Succeeded') return false
+    return true
+  }, [status])
+
+  const execute = useCallback(async () => {
     setLoading(true)
     try {
       const { txId } = await interDao.executeProposal(proposalAddress)
@@ -56,7 +56,9 @@ const CardStatus = ({
           <Space direction="vertical">
             <Space>
               <Typography.Title level={3}>
-                Donate to <MintSymbol mintAddress={mint?.toBase58()} />
+                {metaData?.title
+                  ? metaData.title
+                  : shortenAddress(proposalAddress)}
               </Typography.Title>
               <ProposalStatus status={status} />
             </Space>
@@ -70,19 +72,20 @@ const CardStatus = ({
           <Button
             size="large"
             type="primary"
-            onClick={onExcute}
+            onClick={execute}
             loading={loading}
+            disabled={disabled}
           >
-            Excute
+            Execute
           </Button>
         </Col>
         <Col span={24}>
-          <Typography.Text type="secondary">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type... View more
-          </Typography.Text>
+          <Typography.Paragraph
+            type="secondary"
+            ellipsis={{ rows: 3, expandable: true, symbol: 'View more' }}
+          >
+            {metaData?.description}
+          </Typography.Paragraph>
         </Col>
       </Row>
     </Card>

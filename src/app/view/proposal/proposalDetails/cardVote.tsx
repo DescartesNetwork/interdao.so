@@ -15,6 +15,8 @@ import { ProposalChildCardProps } from './index'
 import { explorer, numeric } from 'shared/util'
 import configs from 'app/configs'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
+import IonIcon from 'shared/antd/ionicon'
+import { MintSymbol } from 'shared/antd/mint'
 
 const {
   sol: { interDao },
@@ -135,8 +137,13 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
         </Col>
         <Col span={24}>
           <Card
-            style={{ boxShadow: 'unset', borderRadius: 8 }}
-            bodyStyle={{ padding: 8 }}
+            style={{
+              boxShadow: 'unset',
+              borderRadius: 4,
+              background: '#1A1311',
+            }}
+            bodyStyle={{ padding: '8px 12px' }}
+            bordered={false}
           >
             <Row gutter={[8, 8]}>
               <Col flex="auto">
@@ -145,7 +152,8 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
               <Col>
                 <Typography.Text>
                   Available: {numeric(balance).format('0,0.[00]')}
-                </Typography.Text>
+                </Typography.Text>{' '}
+                <MintSymbol mintAddress={mint?.toBase58()} />
               </Col>
               <Col span={24}>
                 <NumericInput
@@ -155,13 +163,12 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
                   value={amount}
                   onValue={onChange}
                   suffix={
-                    <Button
-                      size="small"
-                      type="text"
+                    <Typography.Text
+                      style={{ cursor: 'pointer' }}
                       onClick={() => onChange(balance.toString())}
                     >
-                      Max
-                    </Button>
+                      MAX
+                    </Typography.Text>
                   }
                 />
               </Col>
@@ -176,29 +183,32 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
         </Col>
         <Col span={12}>
           <Button
-            onClick={onVoteFor}
+            onClick={onVoteAgainst}
             type="primary"
             disabled={!amount || !account.isAddress(proposalAddress)}
             loading={loadingFor}
             block
+            size="large"
+            icon={<IonIcon name="thumbs-down-outline" />}
           >
-            Vote For
+            Vote No
           </Button>
         </Col>
         <Col span={12}>
           <Button
-            onClick={onVoteAgainst}
+            onClick={onVoteFor}
             type="primary"
             disabled={!amount || !account.isAddress(proposalAddress)}
             loading={loadingAgainst}
             block
+            size="large"
+            icon={<IonIcon name="thumbs-up-outline" />}
           >
-            Vote Against
+            Vote Yes
           </Button>
         </Col>
       </Row>
     </Card>
   )
 }
-
 export default CardVote

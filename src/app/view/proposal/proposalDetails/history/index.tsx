@@ -18,11 +18,11 @@ const History = ({
   daoAddress: string
 }) => {
   const [amount, setAmount] = useState(DEFAULT_AMOUNT_HISTORY)
+
   const { receipts } = useReceipts({ proposalAddress })
 
   const filterReceipts = useMemo(() => {
     const nextReceipts: ReceiptData[] = []
-
     receipts.forEach((receipt) => {
       const { authority, power, action } = receipt
       const actionType = Object.keys(action || {})[0]
@@ -60,9 +60,6 @@ const History = ({
           <Table
             columns={HISTORY_COLUMNS}
             dataSource={filterReceipts.slice(0, amount)}
-            rowClassName={(record, index) =>
-              index % 2 ? 'odd-row' : 'even-row'
-            }
             pagination={false}
             rowKey={(record) =>
               record.index.toNumber() + record.lockedDate.toNumber()
