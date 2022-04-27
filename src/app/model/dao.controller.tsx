@@ -9,7 +9,10 @@ import {
 import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { web3 } from '@project-serum/anchor'
 import BN from 'bn.js'
+import IPFS from 'shared/pdb/ipfs'
 
+import { getCID } from 'app/helpers'
+import { MetaData } from './metadata.controller'
 import configs from 'app/configs'
 
 const {
@@ -35,7 +38,13 @@ export type CreateDaoData = {
   dao?: web3.Keypair
   regime: DaoRegime
 }
-export type DaoDataState = Record<string, DaoData>
+export type ExtraDaoData = {
+  meta_data?: MetaData
+  address: string
+  name: string
+}
+export type DaoMetaData = DaoData & ExtraDaoData
+export type DaoDataState = Record<string, DaoMetaData>
 export type DaoState = {
   daoData: DaoDataState
   createDaoData: CreateDaoData
@@ -54,6 +63,36 @@ const initialState: DaoState = {
 /**
  * Actions
  */
+
+const sortedDaoData = async (daoData: DaoDataState) => {
+  try {
+    if (!daoData) throw new Error('Invalid Dao data!')
+    const ipfs = new IPFS()
+    const results = await Promise.all(
+      Object.keys(daoData).map(async (daoAddr) => {
+        const { metadata: digest } = daoData[daoAddr]
+        const cid = getCID(digest)
+        const data = await ipfs.get(cid)
+        return {
+          [daoAddr]: {
+            ...daoData[daoAddr],
+            meta_data: data,
+            name: data?.daoName,
+          },
+        }
+      }),
+    )
+    const nextDaoData: DaoDataState = {}
+    for (const rs of results) {
+      const daoAddr = Object.keys(rs)[0]
+      nextDaoData[daoAddr] = rs[daoAddr]
+    }
+    if (!nextDaoData) return daoData
+    return nextDaoData
+  } catch (err) {
+    return daoData
+  }
+}
 
 export const getDaos = createAsyncThunk(`${NAME}/getDaos`, async () => {
   const {
@@ -77,9 +116,10 @@ export const getDaos = createAsyncThunk(`${NAME}/getDaos`, async () => {
   value.forEach(({ pubkey, account: { data: buf } }) => {
     const address = pubkey.toBase58()
     const data = interDao.parseDaoData(buf)
-    bulk[address] = data
+    bulk[address] = { ...data, address, name: '' }
   })
-  return { daoData: bulk }
+  const daoData = await sortedDaoData(bulk)
+  return { daoData }
 })
 
 export const getDao = createAsyncThunk<
@@ -95,17 +135,36 @@ export const getDao = createAsyncThunk<
   } = getState()
   if (data && !force) return { [address]: data }
   const raw = await interDao.getDaoData(address)
-  return { daoData: { [address]: raw } }
+  return {
+    daoData: {
+      [address]: {
+        ...raw,
+        address,
+        name: data.meta_data.daoName,
+      },
+    },
+  }
 })
 
 export const upsetDao = createAsyncThunk<
   Partial<DaoState>,
   { address: string; data: DaoData },
   { state: any }
->(`${NAME}/upsetDao`, async ({ address, data }) => {
+>(`${NAME}/upsetDao`, async ({ address, data }, { getState }) => {
   if (!account.isAddress(address)) throw new Error('Invalid address')
   if (!data) throw new Error('Data is empty')
-  return { daoData: { [address]: data } }
+  const {
+    dao: {
+      daoData: {
+        [address]: { meta_data },
+      },
+    },
+  } = getState()
+  return {
+    daoData: {
+      [address]: { ...data, address, name: meta_data.daoName },
+    },
+  }
 })
 
 export const setCreateDaoData = createAsyncThunk(
