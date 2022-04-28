@@ -10,7 +10,7 @@ export type RegimeInputProps = {
   onChange: (value: DaoRegime) => void
 }
 
-const REGIME_LIST = [
+export const REGIME_LIST = [
   DaoRegimes.Dictatorial,
   DaoRegimes.Democratic,
   DaoRegimes.Autonomous,
