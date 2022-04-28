@@ -57,15 +57,15 @@ const CardProgress = ({
             </Typography.Text>
             <Progress
               percent={100}
-              strokeColor="#d3d3d6"
-              success={{ percent: voteResult * 100, strokeColor: '#F9575E' }}
+              strokeColor="#312B29"
+              success={{ percent: voteResult * 100, strokeColor: '#698033' }}
               showInfo={false}
             />
           </Space>
         </Col>
         <Col span={24}>
           <Space className="space-full-width">
-            <Row gutter={[0, 0]}>
+            <Row gutter={[4, 4]}>
               <Col flex="auto">
                 <Typography.Text type="secondary">Yes vote</Typography.Text>
               </Col>
@@ -82,10 +82,10 @@ const CardProgress = ({
               <Col span={24}>
                 <Progress
                   percent={100}
-                  strokeColor="#d3d3d6"
+                  strokeColor="#312B29"
                   success={{
                     percent: percentageVotingFor * 100,
-                    strokeColor: '#F9575E',
+                    strokeColor: '#698033',
                   }}
                   showInfo={false}
                 />
@@ -95,7 +95,7 @@ const CardProgress = ({
         </Col>
         <Col span={24}>
           <Space className="space-full-width">
-            <Row gutter={[0, 0]}>
+            <Row gutter={[4, 4]}>
               <Col flex="auto">
                 <Typography.Text type="secondary">No vote</Typography.Text>
               </Col>
@@ -112,10 +112,10 @@ const CardProgress = ({
               <Col span={24}>
                 <Progress
                   percent={100}
-                  strokeColor="#d3d3d6"
+                  strokeColor="#312B29"
                   success={{
                     percent: percentageVotingAgainst * 100,
-                    strokeColor: '#F9575E',
+                    strokeColor: '#698033',
                   }}
                   showInfo={false}
                 />

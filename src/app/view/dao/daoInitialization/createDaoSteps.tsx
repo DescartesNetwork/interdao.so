@@ -13,7 +13,7 @@ const CreateDaoSteps = ({ step }: { step: number }) => {
   if (step === CreateSteps.stepOne) return <MetaDataForm />
   if (step === CreateSteps.stepTwo) return <DaoRule />
   if (step === CreateSteps.stepThree) return <ConfirmCreate />
-  return <ChooseDaoType onSelected={() => {}} />
+  return <ChooseDaoType />
 }
 
 export default CreateDaoSteps

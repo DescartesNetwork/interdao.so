@@ -6,6 +6,7 @@ import metadata from 'app/model/metadata.controller'
 import proposal from 'app/model/proposal.controller'
 import receipt from 'app/model/receipt.controller'
 import voteBid from 'app/model/voteBid.controller'
+import template from 'app/model/template.controller'
 
 /**
  * Isolated store
@@ -20,6 +21,7 @@ const model = configureStore({
     proposal,
     receipt,
     voteBid,
+    template,
   },
 })
 

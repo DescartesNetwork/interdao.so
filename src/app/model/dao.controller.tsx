@@ -31,6 +31,8 @@ export const DEFAULT_CREATE_DAO_DATA = {
   regime: DaoRegimes.Dictatorial,
 }
 
+export type DaoType = 'flexible-dao' | 'multisig-dao'
+
 export type CreateDaoData = {
   mintAddress: string
   supply: BN
@@ -48,6 +50,7 @@ export type DaoDataState = Record<string, DaoMetaData>
 export type DaoState = {
   daoData: DaoDataState
   createDaoData: CreateDaoData
+  daoType: DaoType
 }
 
 /**
@@ -58,6 +61,7 @@ const NAME = 'dao'
 const initialState: DaoState = {
   daoData: {},
   createDaoData: DEFAULT_CREATE_DAO_DATA,
+  daoType: 'flexible-dao',
 }
 
 /**
@@ -174,6 +178,12 @@ export const setCreateDaoData = createAsyncThunk(
     return { createDaoData }
   },
 )
+export const setCreateDaoType = createAsyncThunk(
+  `${NAME}/setCreateDaoType`,
+  async (type: string) => {
+    return { daoType: type }
+  },
+)
 
 export const deleteDao = createAsyncThunk(
   `${NAME}/deleteDao`,
@@ -207,6 +217,10 @@ const slice = createSlice({
       )
       .addCase(
         setCreateDaoData.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        setCreateDaoType.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(

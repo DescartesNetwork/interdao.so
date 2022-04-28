@@ -1,7 +1,7 @@
-import { ChangeEvent } from 'react'
+import React, { ChangeEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Col, Input, Row, Space, Typography, Upload } from 'antd'
+import { Card, Col, Image, Input, Row, Space, Typography, Upload } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { UploadChangeParam } from 'antd/lib/upload'
@@ -40,7 +40,6 @@ const MetaDataForm = () => {
         [e.target.name]: e.target.value,
       }),
     )
-
   const onOptionalChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     idx: number,
@@ -78,13 +77,42 @@ const MetaDataForm = () => {
         <Space direction="vertical">
           <Typography.Text>Avatar</Typography.Text>
           <Upload
+            className={`interdao-upload-metadata ${
+              !!createMetaData.image ? 'uploaded' : ''
+            }`}
+            accept="image/png,image/jpg"
             name="avatar"
             listType="picture-card"
             maxCount={1}
-            showUploadList
             onChange={onFileChange}
+            itemRender={(eml, uploadFile, uploadFiles, { remove }) => {
+              return (
+                <Card
+                  className="img-card-preview-upload"
+                  bodyStyle={{ padding: 0, position: 'relative' }}
+                >
+                  <Image src={uploadFile.thumbUrl} preview={false} />
+                  <IonIcon
+                    className="ico-action-upload"
+                    name="trash-outline"
+                    onClick={remove}
+                  />
+                </Card>
+              )
+            }}
+            onRemove={() => {
+              dispatch(setCreateDaoMetaData({ ...createMetaData, image: '' }))
+              return true
+            }}
           >
-            <IonIcon name="add-outline" />
+            <Space direction="vertical" size={0}>
+              <Typography.Text style={{ fontSize: 24 }}>
+                <IonIcon name="cloud-upload-outline" />
+              </Typography.Text>
+              <Typography.Text type="secondary" style={{ fontSize: 10 }}>
+                Support JPG, PNG
+              </Typography.Text>
+            </Space>
           </Upload>
         </Space>
       </Col>
