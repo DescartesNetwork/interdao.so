@@ -1,5 +1,4 @@
-import { web3 } from '@project-serum/anchor'
-import lunr, { Index, Pipeline, Token } from 'lunr'
+import lunr, { Index } from 'lunr'
 
 import { DaoDataState, DaoMetaData } from 'app/model/dao.controller'
 
@@ -11,29 +10,7 @@ class DaoProvider {
   constructor(register: DaoDataState) {
     this.register = register
     this.daoMap = new Map<string, DaoMetaData>()
-    this.engine = undefined
-    // build dao map
-    this._setDaoMap()
-    // Build engine
-    this._init()
-  }
-
-  private _setDaoMap = async (): Promise<[Map<string, DaoMetaData>]> => {
-    Object.keys(this.register).forEach((daoAddress) =>
-      this.daoMap.set(daoAddress, this.register[daoAddress]),
-    )
-    return [this.daoMap]
-  }
-
-  private _init = () => {
-    const register = this.register
-    // Register pipeline function
-    const parsePublicKey = function () {
-      console.log('pipe ;ine')
-    }
-
-    // Build lunr
-    lunr(function () {
+    this.engine = lunr(function () {
       this.ref('address')
       this.field('meta_data:daoName')
       this.field('address')
@@ -44,8 +21,16 @@ class DaoProvider {
         const { meta_data } = doc
         if (meta_data) this.add(doc)
       })
-      this.pipeline.add(parsePublicKey)
     })
+    // build dao map
+    this._setDaoMap()
+  }
+
+  private _setDaoMap = async (): Promise<[Map<string, DaoMetaData>]> => {
+    Object.keys(this.register).forEach((daoAddress) =>
+      this.daoMap.set(daoAddress, this.register[daoAddress]),
+    )
+    return [this.daoMap]
   }
 
   all = async (): Promise<DaoMetaData[]> => {
