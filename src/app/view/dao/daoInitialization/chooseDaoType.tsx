@@ -62,9 +62,9 @@ const ChooseDaoType = () => {
                           </Col>
                           {!state && (
                             <Col>
-                              <Typography.Title level={4}>
+                              <Typography.Text style={{ fontSize: 12 }}>
                                 Coming soon
-                              </Typography.Title>
+                              </Typography.Text>
                             </Col>
                           )}
                         </Row>

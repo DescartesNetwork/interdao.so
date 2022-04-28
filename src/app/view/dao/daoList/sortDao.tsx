@@ -1,16 +1,16 @@
 import { Select } from 'antd'
 import { REGIME_LIST } from '../daoInitialization/daoRule/regimeInput'
 
-type SortDaoProps = { onSort: (value: string) => void }
+type SortDaoProps = { value: string; onSort: (value: string) => void }
 
-const SortDao = ({ onSort }: SortDaoProps) => {
+const SortDao = ({ onSort, value }: SortDaoProps) => {
   return (
     <Select
-      defaultValue="all"
+      value={value}
       style={{ textTransform: 'capitalize' }}
       onChange={onSort}
     >
-      <Select.Option value="all">All regime</Select.Option>
+      <Select.Option value="all-regime">All regime</Select.Option>
       {REGIME_LIST.map((regime, idx) => {
         const value = Object.keys(regime)[0]
         return (

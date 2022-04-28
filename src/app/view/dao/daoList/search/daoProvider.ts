@@ -1,55 +1,58 @@
 import lunr, { Index } from 'lunr'
 
-import { DaoDataState, DaoMetaData } from 'app/model/dao.controller'
+import { DaoData } from '@interdao/core'
+import { MetaData } from 'app/model/metadata.controller'
 
+type SearchDataType = DaoData & MetaData
+type RegisterDaoData = Record<string, SearchDataType>
 class DaoProvider {
-  private daoMap: Map<string, DaoMetaData>
+  private daoMap: Map<string, SearchDataType>
   private engine: Index | undefined
-  register: DaoDataState
+  register: RegisterDaoData
 
-  constructor(register: DaoDataState) {
+  constructor(register: RegisterDaoData) {
     this.register = register
-    this.daoMap = new Map<string, DaoMetaData>()
+    this.daoMap = new Map<string, SearchDataType>()
     this.engine = lunr(function () {
       this.ref('address')
-      this.field('meta_data:daoName')
       this.field('address')
-      this.field('name')
-      this.field('meta_data:description')
+      this.field('daoName')
+      this.field('description')
+      this.field('daoRegime')
       Object.keys(register).forEach((address: string) => {
         const doc = register[address]
-        const { meta_data } = doc
-        if (meta_data) this.add(doc)
+        if (doc) this.add(doc)
       })
     })
     // build dao map
     this._setDaoMap()
   }
 
-  private _setDaoMap = async (): Promise<[Map<string, DaoMetaData>]> => {
+  private _setDaoMap = async (): Promise<[Map<string, SearchDataType>]> => {
     Object.keys(this.register).forEach((daoAddress) =>
       this.daoMap.set(daoAddress, this.register[daoAddress]),
     )
     return [this.daoMap]
   }
 
-  all = async (): Promise<DaoMetaData[]> => {
+  all = async (): Promise<SearchDataType[]> => {
     const [daoMap] = await this._setDaoMap()
     return Array.from(daoMap.values())
   }
 
-  findByAddress = async (addr: string): Promise<DaoMetaData | undefined> => {
+  findByAddress = async (addr: string): Promise<string[] | undefined> => {
     const [daoMap] = await this._setDaoMap()
-    return daoMap.get(addr)
+    if (daoMap.has(addr)) return [addr]
+    return
   }
 
-  find = async (keyword: string, limit = 10): Promise<DaoDataState> => {
+  find = async (keyword: string, limit = 10): Promise<string[] | undefined> => {
     const [daoMap] = await this._setDaoMap()
     const engine = this.engine
-    if (!engine) return {}
+    if (!engine) return
 
-    let daos: DaoMetaData[] = []
-    if (!keyword) return {}
+    let daos: SearchDataType[] = []
+    if (!keyword) return
 
     const fuzzy = keyword + '~1'
     engine.search(fuzzy).forEach(({ ref }) => {
@@ -58,8 +61,10 @@ class DaoProvider {
         if (dao) daos.push(dao)
       }
     })
-    const nextDaos: DaoDataState = {}
-    daos.slice(0, limit).forEach((dao) => (nextDaos[dao.address] = { ...dao }))
+    const nextDaos: string[] = []
+    daos.slice(0, limit).forEach((dao) => {
+      if (dao.address) nextDaos.push(dao.address)
+    })
     return nextDaos
   }
 }

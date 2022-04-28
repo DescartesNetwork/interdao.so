@@ -19,10 +19,12 @@ const getDefaultSocial = () => {
 }
 
 export const DEFAULT_META_DATA = {
+  address: '',
   daoName: '',
   description: '',
   image: '',
   optionals: getDefaultSocial(),
+  daoRegime: '',
 }
 
 export type MetaData = {
@@ -30,6 +32,8 @@ export type MetaData = {
   description: string
   image: string | ArrayBuffer | null
   optionals: string[]
+  address: string
+  daoRegime: string
 }
 export type MetaDataMember = { members: number }
 export type DaoMetaDataState = Record<string, MetaDataMember>
