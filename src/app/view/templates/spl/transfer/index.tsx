@@ -21,6 +21,7 @@ import {
 } from 'app/model/template.controller'
 import configs from 'app/configs'
 import BG_SOLANA from 'app/static/images/templates/bg-spl.png'
+import NumericInput from 'shared/antd/numericInput'
 
 const {
   manifest: { appId },
@@ -125,7 +126,7 @@ const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
     daoAddress,
   ])
 
-  const onClear = useCallback(async () => {
+  const close = useCallback(async () => {
     setValue('')
     setMintAddress('')
     setReceiverAddress('')
@@ -176,11 +177,11 @@ const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
       <Col span={24}>
         <Space direction="vertical" size={4} style={{ width: '100%' }}>
           <Typography.Text type="secondary">Transfer</Typography.Text>
-          <Input
+          <NumericInput
             className="border-less"
             placeholder="Input Amount"
             value={value}
-            onChange={(e) => setValue(e.target.value || '')}
+            onValue={(value) => setValue(value || '')}
             prefix={
               <MintSelection
                 value={mintAddress}
@@ -219,7 +220,7 @@ const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
       <Col span={24} />
       <Col span={24} style={{ textAlign: 'right' }}>
         <Space>
-          <Button type="text" onClick={onClear}>
+          <Button type="text" onClick={close}>
             Close
           </Button>
           <Button type="primary" onClick={confirm} disabled={!valid}>

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import { ConsensusMechanisms, ConsensusQuorums } from '@interdao/core'
 import BN from 'bn.js'
 import { CID } from 'ipfs-core'
@@ -14,7 +15,6 @@ import ProposalPreview from './proposalPreview'
 import configs from 'app/configs'
 import { explorer } from 'shared/util'
 import IPFS from 'shared/pdb/ipfs'
-import { useSelector } from 'react-redux'
 import { AppState } from 'app/model'
 
 const {
