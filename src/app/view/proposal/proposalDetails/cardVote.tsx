@@ -17,7 +17,7 @@ import configs from 'app/configs'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { MintSymbol } from 'shared/antd/mint'
 import useProposalStatus from 'app/hooks/useProposalStatus'
-import { getRemainingTimeUntilMsTimestamp } from './untils/CountDownTimerUtils'
+import { getRemainingTime } from 'app/helpers/countDown'
 
 const {
   sol: { interDao, taxman },
@@ -56,7 +56,7 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
 
   const updateRemainingTime = useCallback(
     (countdown: number, startTime?: number) => {
-      setRemainingTime(getRemainingTimeUntilMsTimestamp(countdown, startTime))
+      setRemainingTime(getRemainingTime(countdown, startTime))
     },
     [],
   )
