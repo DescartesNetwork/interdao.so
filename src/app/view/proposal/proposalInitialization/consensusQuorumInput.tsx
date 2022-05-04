@@ -20,27 +20,26 @@ const ConsensusQuorumInput = ({
       <Col span={24}>
         <Space>
           <Button
-            type={
-              isEqual(value, ConsensusQuorums.OneThird) ? 'primary' : 'default'
+            className={
+              isEqual(value, ConsensusQuorums.OneThird) ? '' : 'btn-unselect'
             }
             onClick={() => onChange(ConsensusQuorums.OneThird)}
-            ghost
           >
             1/3
           </Button>
           <Button
-            type={isEqual(value, ConsensusQuorums.Half) ? 'primary' : 'default'}
+            className={
+              isEqual(value, ConsensusQuorums.Half) ? '' : 'btn-unselect'
+            }
             onClick={() => onChange(ConsensusQuorums.Half)}
-            ghost
           >
             1/2
           </Button>
           <Button
-            type={
-              isEqual(value, ConsensusQuorums.TwoThird) ? 'primary' : 'default'
+            className={
+              isEqual(value, ConsensusQuorums.TwoThird) ? '' : 'btn-unselect'
             }
             onClick={() => onChange(ConsensusQuorums.TwoThird)}
-            ghost
           >
             2/3
           </Button>

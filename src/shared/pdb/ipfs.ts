@@ -1,6 +1,7 @@
 import { create, isIPFS } from 'ipfs-core'
 import { asyncWait } from 'shared/util'
 
+const GET_CID_TIMEOUT = 4000
 class IPFS {
   private _ipfs: any = async () => {
     try {
@@ -23,12 +24,16 @@ class IPFS {
 
   get = async (cid: string) => {
     if (!IPFS.isCID(cid)) throw new Error('Invalid CID')
-    const ipfs = await this._ipfs()
-    const stream = await ipfs.cat(cid)
-    let raw = ''
-    for await (const chunk of stream) raw += Buffer.from(chunk).toString()
-    const data = JSON.parse(raw)
-    return data
+    try {
+      const ipfs = await this._ipfs()
+      const stream = await ipfs.cat(cid, { timeout: GET_CID_TIMEOUT })
+      let raw = ''
+      for await (const chunk of stream) raw += Buffer.from(chunk).toString()
+      const data = JSON.parse(raw)
+      return data
+    } catch (err) {
+      // notthing
+    }
   }
 
   set = async (data: object): Promise<string> => {

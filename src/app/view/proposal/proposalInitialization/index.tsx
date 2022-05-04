@@ -1,23 +1,35 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { ConsensusMechanisms, ConsensusQuorums } from '@interdao/core'
+import { useSelector } from 'react-redux'
+import {
+  ConsensusMechanisms,
+  ConsensusQuorums,
+  FeeOptions,
+} from '@interdao/core'
 import BN from 'bn.js'
+import { CID } from 'ipfs-core'
 
-import { Button, Card, Col, Row, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import { Button, Card, Col, Divider, Input, Row, Space, Typography } from 'antd'
 import ConsensusMechanismInput from './consensusMechanismInput'
 import ConsensusQuorumInput from './consensusQuorumInput'
 import DurationInput from './durationInput'
 import ProposalPreview from './proposalPreview'
-import TemplateInput from './templateInput'
 
 import configs from 'app/configs'
-import { ProposalReturnType } from 'app/view/templates/types'
 import { explorer } from 'shared/util'
+import IPFS from 'shared/pdb/ipfs'
+import { AppState } from 'app/model'
 
 const {
   manifest: { appId },
 } = configs
+
+export type ProposalMetaData = {
+  title: string
+  description: string
+  imageBackground: string
+}
+
 const CURRENT_TIME = Number(new Date())
 const ONE_DAY = 24 * 60 * 60 * 1000
 
@@ -30,24 +42,55 @@ const ProposalInitialization = () => {
     CURRENT_TIME + ONE_DAY,
     CURRENT_TIME + 15 * ONE_DAY,
   ])
-  const [tx, setTx] = useState<ProposalReturnType | undefined>()
   const [loading, setLoading] = useState(false)
-  const history = useHistory()
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
   const { daoAddress } = useParams<{ daoAddress: string }>()
+  const {
+    template: { tx, imageBackground },
+    dao: { daoData },
+  } = useSelector((state: AppState) => state)
+  const history = useHistory()
+
+  const metaData: ProposalMetaData = useMemo(() => {
+    return {
+      title,
+      description,
+      imageBackground,
+    }
+  }, [description, imageBackground, title])
 
   const newProposal = useCallback(async () => {
+    const { authority } = daoData[daoAddress]
     try {
       setLoading(true)
+
+      const ipfs = new IPFS()
+      const cid = await ipfs.set(metaData)
       const {
-        sol: { interDao, fee, taxman },
+        multihash: { digest },
+      } = CID.parse(cid)
+
+      const {
+        sol: { interDao, taxman },
       } = configs
+
+      const feeOption: Partial<FeeOptions> = {
+        revenue: new BN(50000),
+        revenuemanAddress: authority.toBase58(),
+        tax: new BN(50000),
+        taxmanAddress: taxman,
+      }
+
       if (!tx) return
+
       const {
         programId,
         data,
         accounts: { src, dst, payer },
       } = tx
-      const metadata = Buffer.from([]) // Replace the real hash here
+
+      const metadata = Buffer.from(digest)
       const accounts = [src, dst, payer]
       const { txId, proposalAddress } = await interDao.initializeProposal(
         daoAddress,
@@ -59,11 +102,10 @@ const ProposalInitialization = () => {
         accounts.map(({ isMaster }) => isMaster),
         Math.floor(duration[0] / 1000),
         Math.floor(duration[1] / 1000),
-        new BN(fee),
-        taxman,
         metadata,
         consensusMechanism,
         consensusQuorum,
+        feeOption,
       )
       window.notify({
         type: 'success',
@@ -82,21 +124,60 @@ const ProposalInitialization = () => {
     } finally {
       return setLoading(false)
     }
-  }, [daoAddress, consensusMechanism, consensusQuorum, duration, tx, history])
+  }, [
+    daoData,
+    daoAddress,
+    metaData,
+    tx,
+    duration,
+    consensusMechanism,
+    consensusQuorum,
+    history,
+  ])
+
+  useEffect(() => {
+    if (!tx) return history.push(`/app/${appId}/dao/${daoAddress}`)
+  }, [daoAddress, history, tx])
 
   return (
     <Row gutter={[24, 24]} justify="center">
-      <Col xs={24} md={16}>
+      <Col xs={24} md={14}>
         <Card bordered={false}>
           <Row gutter={[24, 24]}>
             <Col span={24}>
-              <Typography.Title level={3}>
-                New Proposal Information
+              <Typography.Title level={1}>
+                Input proposal information
               </Typography.Title>
             </Col>
             <Col span={24} />
             <Col span={24}>
               <ProposalPreview daoAddress={daoAddress} />
+            </Col>
+            <Col span={24}>
+              <Divider style={{ margin: 0, borderTop: 'solid 1px #F9DEB0' }} />
+            </Col>
+            <Col span={24}>
+              <Space direction="vertical" style={{ width: '100%' }}>
+                <Typography.Text>Title</Typography.Text>
+                <Input
+                  value={title}
+                  placeholder="A short summary of your proposal."
+                  className="border-less"
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </Space>
+            </Col>
+            <Col span={24}>
+              <Space direction="vertical" style={{ width: '100%' }}>
+                <Typography.Text>Description</Typography.Text>
+                <Input.TextArea
+                  placeholder="More detail about your proposal..."
+                  name="description"
+                  className="border-less"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </Space>
             </Col>
             <Col span={24}>
               <DurationInput value={duration} onChange={setDuration} />
@@ -113,14 +194,11 @@ const ProposalInitialization = () => {
                 onChange={setConsensusQuorum}
               />
             </Col>
-            <Col span={24}>
-              <TemplateInput daoAddress={daoAddress} onChange={setTx} />
-            </Col>
+
             <Col span={24} />
             <Col flex="auto">
               <Button
                 type="text"
-                icon={<IonIcon name="trash-outline" />}
                 onClick={() => history.push(`/app/${appId}/dao/${daoAddress}`)}
                 size="large"
               >
@@ -133,9 +211,8 @@ const ProposalInitialization = () => {
                 loading={loading}
                 type="primary"
                 size="large"
-                icon={<IonIcon name="add-outline" />}
               >
-                Create the Proposal
+                Add a new Proposal
               </Button>
             </Col>
           </Row>

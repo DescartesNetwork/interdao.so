@@ -26,53 +26,57 @@ const ProposalDetails = () => {
     useParams<{ daoAddress: string; proposalAddress: string }>()
 
   return (
-    <Row gutter={[24, 24]}>
-      <Col span={24}>
-        <Button
-          type="text"
-          icon={<IonIcon name="arrow-back-outline" />}
-          onClick={() => history.push(`/app/${appId}/dao/${daoAddress}`)}
-        >
-          Back
-        </Button>
-      </Col>
-      <Col span={24}>
+    <Row justify="center">
+      <Col xs={24} lg={18}>
         <Row gutter={[24, 24]}>
-          <Col xs={24} md={16}>
-            <Row gutter={[24, 24]}>
-              <Col span={24}>
-                <CardStatus
-                  proposalAddress={proposalAddress}
-                  daoAddress={daoAddress}
-                />
-              </Col>
-              <Col span={24}>
-                <CardVote
-                  proposalAddress={proposalAddress}
-                  daoAddress={daoAddress}
-                />
-              </Col>
-              <Col span={24}>
-                <History
-                  proposalAddress={proposalAddress}
-                  daoAddress={daoAddress}
-                />
-              </Col>
-            </Row>
+          <Col span={24}>
+            <Button
+              type="text"
+              icon={<IonIcon name="arrow-back-outline" />}
+              onClick={() => history.push(`/app/${appId}/dao/${daoAddress}`)}
+            >
+              Back
+            </Button>
           </Col>
-          <Col xs={24} md={8}>
+          <Col span={24}>
             <Row gutter={[24, 24]}>
-              <Col span={24}>
-                <CardInfo
-                  proposalAddress={proposalAddress}
-                  daoAddress={daoAddress}
-                />
+              <Col xs={24} md={16}>
+                <Row gutter={[24, 24]}>
+                  <Col span={24}>
+                    <CardStatus
+                      proposalAddress={proposalAddress}
+                      daoAddress={daoAddress}
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <CardVote
+                      proposalAddress={proposalAddress}
+                      daoAddress={daoAddress}
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <History
+                      proposalAddress={proposalAddress}
+                      daoAddress={daoAddress}
+                    />
+                  </Col>
+                </Row>
               </Col>
-              <Col span={24}>
-                <CardProgress
-                  proposalAddress={proposalAddress}
-                  daoAddress={daoAddress}
-                />
+              <Col xs={24} md={8}>
+                <Row gutter={[24, 24]}>
+                  <Col span={24}>
+                    <CardInfo
+                      proposalAddress={proposalAddress}
+                      daoAddress={daoAddress}
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <CardProgress
+                      proposalAddress={proposalAddress}
+                      daoAddress={daoAddress}
+                    />
+                  </Col>
+                </Row>
               </Col>
             </Row>
           </Col>

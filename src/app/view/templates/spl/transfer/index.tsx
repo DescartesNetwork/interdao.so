@@ -1,19 +1,31 @@
-import { useCallback, useState, Fragment, useEffect, useMemo } from 'react'
-import { useSelector } from 'react-redux'
+import { useCallback, useState, useEffect, useMemo } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { PublicKey } from '@solana/web3.js'
 import { utils } from '@project-serum/anchor'
 import BN from 'bn.js'
 // @ts-ignore
 import * as soproxABI from 'soprox-abi'
+import { account } from '@senswap/sen-js'
 
-import { Button, Card, Col, Input, Modal, Row, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
-import { MintSelection, MintSymbol } from 'shared/antd/mint'
+import { Button, Col, Input, Row, Space, Typography } from 'antd'
+import { MintSelection } from 'shared/antd/mint'
 
 import { ProposalReturnType } from 'app/view/templates/types'
-import { AppState } from 'app/model'
-import { account } from '@senswap/sen-js'
+import { AppDispatch, AppState } from 'app/model'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
+import {
+  setImgBackground,
+  setTx,
+  setVisible,
+} from 'app/model/template.controller'
+import configs from 'app/configs'
+import BG_SOLANA from 'app/static/images/templates/bg-spl.png'
+import NumericInput from 'shared/antd/numericInput'
+
+const {
+  manifest: { appId },
+} = configs
 
 export const NAME = 'spl/transfer'
 
@@ -63,219 +75,160 @@ export const buildTransferSplvalue = (
   return value
 }
 
-export type TransferSplPluginProps = {
+type TransferSplPluginProps = {
   daoAddress: string
-  selected?: string
-  onChange?: (value: ProposalReturnType | undefined) => void
-  onClick?: (value: string) => void
 }
 
-const TransferSplPlugin = ({
-  daoAddress = '',
-  selected = '',
-  onChange = () => {},
-  onClick = () => {},
-}: TransferSplPluginProps) => {
-  const [visible, setVisible] = useState(false)
+const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
   const [value, setValue] = useState('')
   const [mintAddress, setMintAddress] = useState('')
   const [receiverAddress, setReceiverAddress] = useState('')
   const [srcAddress, setSrcAddress] = useState('')
   const [dstAddress, setDstAddress] = useState('')
   const [amount, setAmount] = useState('')
-  const { dao } = useSelector((state: AppState) => state)
+  const {
+    dao: { daoData },
+  } = useSelector((state: AppState) => state)
   const decimals = useMintDecimals(mintAddress)
-
+  const dispatch = useDispatch<AppDispatch>()
+  const history = useHistory()
   const senderAddress = useMemo(() => {
-    const { master } = dao[daoAddress] || {}
+    const { master } = daoData[daoAddress] || {}
     return master?.toBase58() || ''
-  }, [dao, daoAddress])
+  }, [daoData, daoAddress])
 
-  const _onClick = useCallback(() => {
-    onClick(NAME)
-    return setVisible(true)
-  }, [onClick])
-
-  // Source Address
-  useEffect(() => {
-    ;(async () => {
-      if (account.isAddress(senderAddress) && account.isAddress(mintAddress)) {
-        const pubkey = await utils.token.associatedAddress({
-          owner: new PublicKey(senderAddress),
-          mint: new PublicKey(mintAddress),
-        })
-        setSrcAddress(pubkey.toBase58())
-      } else setSrcAddress('')
-    })()
-  }, [senderAddress, mintAddress])
-  // Destination Address
-  useEffect(() => {
-    ;(async () => {
-      if (
-        account.isAddress(receiverAddress) &&
-        account.isAddress(mintAddress)
-      ) {
-        const pubkey = await utils.token.associatedAddress({
-          owner: new PublicKey(receiverAddress),
-          mint: new PublicKey(mintAddress),
-        })
-        setDstAddress(pubkey.toBase58())
-      } else setDstAddress('')
-    })()
-  }, [receiverAddress, mintAddress])
-  // Amount
-  useEffect(() => {
-    if (Number(value) && decimals)
-      setAmount(String(Number(value) * 10 ** decimals))
-    else setAmount('')
-  }, [value, decimals])
-
-  const ok = useMemo(() => {
+  const valid = useMemo(() => {
     return Boolean(
       amount && account.isAddress(srcAddress) && account.isAddress(dstAddress),
     )
   }, [amount, srcAddress, dstAddress])
 
-  const onOk = useCallback(() => {
-    if (!ok) return onChange(undefined)
+  const confirm = useCallback(async () => {
+    if (!valid) return dispatch(setTx(undefined))
     const re = buildTransferSplvalue(
       amount,
       srcAddress,
       dstAddress,
       senderAddress,
     )
-    setVisible(false)
-    return onChange(re)
-  }, [ok, amount, srcAddress, dstAddress, senderAddress, onChange])
+    await dispatch(setTx(re))
+    await dispatch(setImgBackground(BG_SOLANA))
+    await dispatch(setVisible(false))
+    return history.push(`/app/${appId}/dao/${daoAddress}/new-proposal`)
+  }, [
+    valid,
+    dispatch,
+    amount,
+    srcAddress,
+    dstAddress,
+    senderAddress,
+    history,
+    daoAddress,
+  ])
 
-  const onClear = useCallback(() => {
+  const close = useCallback(async () => {
     setValue('')
     setMintAddress('')
     setReceiverAddress('')
-    setVisible(false)
-    return onChange(undefined)
-  }, [onChange])
+    await dispatch(setTx(undefined))
+    return dispatch(setVisible(false))
+  }, [dispatch])
+
+  const setSourceAddress = useCallback(async () => {
+    if (account.isAddress(senderAddress) && account.isAddress(mintAddress)) {
+      const pubkey = await utils.token.associatedAddress({
+        owner: new PublicKey(senderAddress),
+        mint: new PublicKey(mintAddress),
+      })
+      setSrcAddress(pubkey.toBase58())
+    } else setSrcAddress('')
+  }, [mintAddress, senderAddress])
+
+  const setDestinationAddress = useCallback(async () => {
+    if (account.isAddress(receiverAddress) && account.isAddress(mintAddress)) {
+      const pubkey = await utils.token.associatedAddress({
+        owner: new PublicKey(receiverAddress),
+        mint: new PublicKey(mintAddress),
+      })
+      setDstAddress(pubkey.toBase58())
+    } else setDstAddress('')
+  }, [mintAddress, receiverAddress])
+
+  const getAmount = useCallback(() => {
+    if (Number(value) && decimals)
+      setAmount(String(Number(value) * 10 ** decimals))
+    else setAmount('')
+  }, [decimals, value])
+
+  useEffect(() => {
+    setSourceAddress()
+  }, [setSourceAddress])
+
+  useEffect(() => {
+    setDestinationAddress()
+  }, [setDestinationAddress])
+
+  useEffect(() => {
+    getAmount()
+  }, [getAmount])
 
   return (
-    <Fragment>
-      <Card
-        onClick={_onClick}
-        style={{ cursor: 'pointer' }}
-        bordered={selected === NAME}
-      >
-        <Row gutter={[16, 16]}>
-          <Col span={24}>
-            <Typography.Title level={5} type="secondary">
-              SPL/Transfer
-            </Typography.Title>
-          </Col>
-          {ok ? (
-            <Col span={24}>
-              <Typography.Text type="secondary">Send </Typography.Text>
-              <Typography.Text>
-                {value} <MintSymbol mintAddress={mintAddress} />
-              </Typography.Text>
-              <Typography.Text type="secondary"> to </Typography.Text>
-              <Typography.Text>{receiverAddress}.</Typography.Text>
-            </Col>
-          ) : (
-            <Col span={24}>
-              <Typography.Text type="secondary">
-                Please input the params
-              </Typography.Text>
-            </Col>
-          )}
-        </Row>
-      </Card>
-      <Modal
-        visible={visible}
-        onCancel={() => setVisible(false)}
-        closeIcon={<IonIcon name="close-outline" />}
-        footer={null}
-      >
-        <Row gutter={[16, 16]} justify="end">
-          <Col span={24}>
-            <Typography.Title level={5} type="secondary">
-              SPL/Transfer
-            </Typography.Title>
-          </Col>
-          <Col span={24} />
-          <Col span={24}>
-            <Input
-              placeholder="Input Amount"
-              value={value}
-              onChange={(e) => setValue(e.target.value || '')}
-              prefix={
-                <MintSelection
-                  value={mintAddress}
-                  onChange={setMintAddress}
-                  style={{ marginLeft: -7 }}
-                />
-              }
-            />
-          </Col>
-          <Col span={24}>
-            <Row gutter={[4, 4]}>
-              <Col span={24}>
-                <Typography.Text type="secondary">
-                  Sender's Wallet Address
-                </Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Input
-                  placeholder="Input Sender's Wallet Address"
-                  prefix={
-                    <Button
-                      type="text"
-                      style={{ marginLeft: -7 }}
-                      icon={<IonIcon name="log-out-outline" />}
-                    />
-                  }
-                  value={senderAddress}
-                />
-              </Col>
-            </Row>
-          </Col>
-          <Col span={24}>
-            <Row gutter={[4, 4]}>
-              <Col span={24}>
-                <Typography.Text type="secondary">
-                  Receiver's Wallet Address
-                </Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Input
-                  placeholder="Input Receiver's Wallet Address"
-                  prefix={
-                    <Button
-                      type="text"
-                      style={{ marginLeft: -7 }}
-                      icon={<IonIcon name="log-in-outline" />}
-                    />
-                  }
-                  value={receiverAddress}
-                  onChange={(e) => setReceiverAddress(e.target.value || '')}
-                />
-              </Col>
-            </Row>
-          </Col>
-          <Col>
-            <Button
-              type="text"
-              onClick={onClear}
-              icon={<IonIcon name="trash-outline" />}
-            >
-              Clear
-            </Button>
-          </Col>
-          <Col>
-            <Button type="primary" onClick={onOk} disabled={!ok}>
-              OK
-            </Button>
-          </Col>
-        </Row>
-      </Modal>
-    </Fragment>
+    <Row gutter={[24, 24]}>
+      <Col span={24}>
+        <Space direction="vertical" size={4} style={{ width: '100%' }}>
+          <Typography.Text type="secondary">Transfer</Typography.Text>
+          <NumericInput
+            className="border-less"
+            placeholder="Input Amount"
+            value={value}
+            onValue={(value) => setValue(value || '')}
+            prefix={
+              <MintSelection
+                value={mintAddress}
+                onChange={setMintAddress}
+                style={{ marginLeft: -7 }}
+              />
+            }
+          />
+        </Space>
+      </Col>
+      <Col span={24}>
+        <Space direction="vertical" size={4} style={{ width: '100%' }}>
+          <Typography.Text type="secondary">
+            Sender's Wallet Address
+          </Typography.Text>
+          <Input
+            className="border-less"
+            placeholder="Input Sender's Wallet Address"
+            value={senderAddress}
+          />
+        </Space>
+      </Col>
+      <Col span={24}>
+        <Space direction="vertical" size={4} style={{ width: '100%' }}>
+          <Typography.Text type="secondary">
+            Receiver's Wallet Address
+          </Typography.Text>
+          <Input
+            className="border-less"
+            placeholder="Input Receiver's Wallet Address"
+            value={receiverAddress}
+            onChange={(e) => setReceiverAddress(e.target.value || '')}
+          />
+        </Space>
+      </Col>
+      <Col span={24} />
+      <Col span={24} style={{ textAlign: 'right' }}>
+        <Space>
+          <Button type="text" onClick={close}>
+            Close
+          </Button>
+          <Button type="primary" onClick={confirm} disabled={!valid}>
+            Continue
+          </Button>
+        </Space>
+      </Col>
+    </Row>
   )
 }
 

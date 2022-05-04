@@ -25,12 +25,12 @@ const View = () => {
   const { setBackground } = useUI()
 
   useEffect(() => {
-    setBackground({ light: undefined, dark: BG })
+    setBackground({ light: BG, dark: BG })
   }, [setBackground])
 
   return (
     <Row gutter={[24, 24]} justify="center">
-      <Col xs={24} lg={18}>
+      <Col span={24}>
         <Switch>
           <Route exact path={`/app/${appId}/dao`} component={Dao} />
           <Route

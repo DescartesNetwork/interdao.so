@@ -55,24 +55,22 @@ const ConsensusMechanismInput = ({
       <Col span={24}>
         <Space>
           <Button
-            type={
+            className={
               isEqual(value, ConsensusMechanisms.StakedTokenCounter)
-                ? 'primary'
-                : 'default'
+                ? ''
+                : 'btn-unselect'
             }
             onClick={() => onChange(ConsensusMechanisms.StakedTokenCounter)}
-            ghost
           >
             Staked Counter
           </Button>
           <Button
-            type={
+            className={
               isEqual(value, ConsensusMechanisms.LockedTokenCounter)
-                ? 'primary'
-                : 'default'
+                ? ''
+                : 'btn-unselect'
             }
             onClick={() => onChange(ConsensusMechanisms.LockedTokenCounter)}
-            ghost
           >
             Locked Counter
           </Button>

@@ -1,11 +1,11 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode, useMemo, useState } from 'react'
 import moment from 'moment'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { Card, Col, Row, Space, Typography, Tooltip } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-
 import { ProposalChildCardProps } from './index'
+
 import useProposal from 'app/hooks/useProposal'
 import { asyncWait, explorer, shortenAddress } from 'shared/util'
 
@@ -35,11 +35,26 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     setCopied(false)
   }
 
+  const quorum = useMemo(() => {
+    if (!consensusQuorum) return '-'
+    const mechanismQuorum = Object.keys(consensusQuorum)[0]
+    if (mechanismQuorum === 'half') return '1/2'
+    if (mechanismQuorum === 'oneThird') return '1/3'
+    if (mechanismQuorum === 'twoThird') return '2/3'
+  }, [consensusQuorum])
+
+  const consensus = useMemo(() => {
+    if (!consensusMechanism) return '-'
+    const _consensusMechanism = Object.keys(consensusMechanism)[0]
+    if (_consensusMechanism === 'stakedTokenCounter') return 'Staked counter'
+    if (_consensusMechanism === 'lockedTokenCounter') return 'Locked counter'
+  }, [consensusMechanism])
+
   return (
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Typography.Title level={5}>Infomation</Typography.Title>
+          <Typography.Title level={5}>Information</Typography.Title>
         </Col>
         <Col span={24}>
           <Space style={{ width: '100%' }} direction="vertical">
@@ -83,16 +98,8 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
                 </Space>
               }
             />
-            <RowSpaceBetween
-              label="Quorum"
-              value={consensusQuorum ? Object.keys(consensusQuorum)[0] : '1/2'}
-            />
-            <RowSpaceBetween
-              label="Vote method"
-              value={
-                consensusMechanism ? Object.keys(consensusMechanism)[0] : ''
-              }
-            />
+            <RowSpaceBetween label="Quorum" value={quorum} />
+            <RowSpaceBetween label="Vote method" value={consensus} />
           </Space>
         </Col>
       </Row>

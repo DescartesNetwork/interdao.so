@@ -17,11 +17,11 @@
 @error-color: @ERROR;
 @popover-background: @CARD_BG;
 @body-background: @ACCENT;
-@component-background: @CARD_BG;
+@component-background: @ACCENT;
 @disabled-bg: @PRIMARY20;
 
 // Typography
-@font-family: 'Nunito', sans-serif;
+@font-family: 'Helvetica Neue';
 @text-color: @PRIMARY;
 @text-color-secondary: @SECONDARY;
 @heading-color: @PRIMARY;
@@ -30,7 +30,7 @@
 @typography-title-margin-bottom: 0px;
 
 // Border
-@border-radius-base: 8px;
+@border-radius-base: 4px;
 @border-color-base: @PRIMARY;
 @border-width-base: 1px;
 @border-color-split: @border-color-base;
@@ -63,9 +63,12 @@
 @btn-disable-color: @PRIMARY60;
 @btn-disable-border: @PRIMARY20;
 @btn-disable-bg: @TRANSPARENT;
+@btn-border-radius-base: 4px;
+@btn-border-radius-sm: 4px;
 
 // Input
 @input-placeholder-color: @SECONDARY;
+@input-bg: @ACCENT;
 
 // Divider
 @divider-color: @NEUTRAL90;
@@ -74,14 +77,10 @@
 // Checkbox
 @checkbox-border-radius: @border-radius-base - 4;
 
+// Progress
+@progress-default-color: @PRIMARY;
+
 // Patch
 .@{ant-prefix}-layout {
   background: unset;
-}
-.@{ant-prefix}-card {
-  box-shadow: @DARK_SHADOW1;
-  &.glass {
-    background-color: color(~`('@{card-background}aa') `);
-    backdrop-filter: blur(16px);
-  }
 }

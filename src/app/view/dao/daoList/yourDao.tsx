@@ -20,17 +20,19 @@ const YourDaos = () => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const { dao } = useSelector((state: AppState) => state)
+  const {
+    dao: { daoData },
+  } = useSelector((state: AppState) => state)
   const history = useHistory()
 
   const filteredDaos = useMemo(
     () =>
-      Object.keys(dao).filter((daoAddr) => {
-        const { authority } = dao[daoAddr] || ({} as DaoData)
+      Object.keys(daoData).filter((daoAddr) => {
+        const { authority } = daoData[daoAddr] || ({} as DaoData)
         const authAddress = authority.toBase58()
         return account.isAddress(authAddress) && authAddress === walletAddress
       }),
-    [dao, walletAddress],
+    [daoData, walletAddress],
   )
 
   if (!!filteredDaos.length)

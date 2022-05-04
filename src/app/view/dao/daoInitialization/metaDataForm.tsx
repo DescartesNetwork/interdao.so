@@ -1,29 +1,30 @@
-import { ChangeEvent } from 'react'
+import React, { ChangeEvent } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { Col, Input, Row, Space, Typography, Upload } from 'antd'
+import { Card, Col, Image, Input, Row, Space, Typography, Upload } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { UploadChangeParam } from 'antd/lib/upload'
 import { fileToBase64 } from 'app/helpers'
+import {
+  MetaData,
+  setCreateDaoMetaData,
+  SOCIAL_MEDIA,
+} from 'app/model/metadata.controller'
+import { AppDispatch, AppState } from 'app/model'
 
-export type MetaData = {
-  daoName: string
-  description: string
-  image: string | ArrayBuffer | null
-}
+const MetaDataForm = () => {
+  const {
+    metadata: { createMetaData },
+  } = useSelector((state: AppState) => state)
+  const dispatch = useDispatch<AppDispatch>()
 
-type MetaDataFormProps = {
-  metaData: MetaData
-  setMetaData: (data: MetaData) => void
-}
-
-const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
   const formatMetaData = async (imgBase64: string | ArrayBuffer | null) => {
     const nextMetaData: MetaData = {
-      ...metaData,
+      ...createMetaData,
       image: imgBase64,
     }
-    setMetaData(nextMetaData)
+    return dispatch(setCreateDaoMetaData(nextMetaData))
   }
 
   const onFileChange = (file: UploadChangeParam) => {
@@ -32,54 +33,104 @@ const MetaDataForm = ({ metaData, setMetaData }: MetaDataFormProps) => {
     fileToBase64(originFile, formatMetaData)
   }
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setMetaData({ ...metaData, [e.target.name]: e.target.value })
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    dispatch(
+      setCreateDaoMetaData({
+        ...createMetaData,
+        [e.target.name]: e.target.value,
+      }),
+    )
+  const onOptionalChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    idx: number,
+  ) => {
+    const nextMetaData: MetaData = JSON.parse(JSON.stringify(createMetaData))
+    nextMetaData.optionals.splice(idx, 1, e.target.value)
+    dispatch(setCreateDaoMetaData(nextMetaData))
   }
 
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Space direction="vertical">
-          <Typography.Text>Avatar</Typography.Text>
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            maxCount={1}
-            showUploadList
-            onChange={onFileChange}
-          >
-            <IonIcon name="add-outline" />
-          </Upload>
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Typography.Text>Dao name</Typography.Text>
+          <Input
+            value={createMetaData.daoName}
+            onChange={onChange}
+            name="daoName"
+            className="border-less"
+          />
         </Space>
       </Col>
       <Col span={24}>
-        <Row gutter={[8, 8]}>
-          <Col span={24}>
-            <Typography.Text>Dao name</Typography.Text>
-          </Col>
-          <Col span={24}>
-            <Input
-              value={metaData.daoName}
-              onChange={onChange}
-              name="daoName"
-            />
-          </Col>
-        </Row>
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Typography.Text>Dao description</Typography.Text>
+          <Input.TextArea
+            value={createMetaData.description}
+            name="description"
+            onChange={onChange}
+            className="border-less"
+          />
+        </Space>
       </Col>
       <Col span={24}>
-        <Row gutter={[8, 8]}>
-          <Col span={24}>
-            <Typography.Text>Dao description</Typography.Text>
-          </Col>
-          <Col span={24}>
-            <Input
-              value={metaData.description}
-              name="description"
-              onChange={onChange}
-            />
-          </Col>
-        </Row>
+        <Space direction="vertical">
+          <Typography.Text>Avatar</Typography.Text>
+          <Upload
+            className={`interdao-upload-metadata ${
+              !!createMetaData.image ? 'uploaded' : ''
+            }`}
+            accept="image/png,image/jpg"
+            name="avatar"
+            listType="picture-card"
+            maxCount={1}
+            onChange={onFileChange}
+            itemRender={(eml, uploadFile, uploadFiles, { remove }) => {
+              return (
+                <Card
+                  className="img-card-preview-upload"
+                  bodyStyle={{ padding: 0, position: 'relative' }}
+                >
+                  <Image src={uploadFile.thumbUrl} preview={false} />
+                  <IonIcon
+                    className="ico-action-upload"
+                    name="trash-outline"
+                    onClick={remove}
+                  />
+                </Card>
+              )
+            }}
+            onRemove={() => {
+              dispatch(setCreateDaoMetaData({ ...createMetaData, image: '' }))
+              return true
+            }}
+          >
+            <Space direction="vertical" size={0}>
+              <Typography.Text style={{ fontSize: 24 }}>
+                <IonIcon name="cloud-upload-outline" />
+              </Typography.Text>
+              <Typography.Text type="secondary" style={{ fontSize: 10 }}>
+                Support JPG, PNG
+              </Typography.Text>
+            </Space>
+          </Upload>
+        </Space>
       </Col>
+      {SOCIAL_MEDIA.map((social, idx) => (
+        <Col span={24} key={idx}>
+          <Space direction="vertical" style={{ width: '100%' }}>
+            <Typography.Text style={{ textTransform: 'capitalize' }}>
+              {social}
+            </Typography.Text>
+            <Input
+              value={createMetaData.optionals[idx]}
+              onChange={(e) => onOptionalChange(e, idx)}
+              name="optionals"
+              className="border-less"
+            />
+          </Space>
+        </Col>
+      ))}
     </Row>
   )
 }

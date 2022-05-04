@@ -1,12 +1,12 @@
-import { Fragment, useCallback, useState } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
-import moment from 'moment'
-import { DaoData } from '@interdao/core'
+import { DaoData, FeeOptions } from '@interdao/core'
 import { BN } from 'bn.js'
 
 import { Button, Card, Col, Row, Typography, Space } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
+import IonIcon from 'shared/antd/ionicon'
 
 import useProposal from 'app/hooks/useProposal'
 import { AppState } from 'app/model'
@@ -15,30 +15,59 @@ import { ProposalChildCardProps } from './index'
 import { explorer, numeric } from 'shared/util'
 import configs from 'app/configs'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
+import { MintSymbol } from 'shared/antd/mint'
+import useProposalStatus from 'app/hooks/useProposalStatus'
+import { getRemainingTimeUntilMsTimestamp } from './untils/CountDownTimerUtils'
 
 const {
-  sol: { interDao },
+  sol: { interDao, taxman },
 } = configs
+
+const defaultRemainingTime = {
+  minutes: '00',
+  hours: '00',
+  days: '00',
+  seconds: '00',
+}
 
 type LockedVotingProps = {
   proposalAddress: string
   daoAddress: string
 }
 const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
+  const [remainingTime, setRemainingTime] = useState(defaultRemainingTime)
+  const { status } = useProposalStatus(proposalAddress)
   const {
     voteBid: { amount: voteAmount },
   } = useSelector((state: AppState) => state)
-  const { consensusMechanism, endDate } = useProposal(
+  const { consensusMechanism, endDate, startDate } = useProposal(
     proposalAddress,
     daoAddress,
   )
 
   const voteNow = new Date().getTime()
   const endTime = Number(endDate) * 1000
+  const startTime = Number(startDate) * 1000
+
   const isLockedVote =
     Object.keys(consensusMechanism || [])?.[0] === 'lockedTokenCounter'
   const remaining = voteNow < endTime ? endTime - voteNow : 0
   const votePower = (Number(voteAmount) * remaining) / 1000
+
+  const updateRemainingTime = useCallback(
+    (countdown: number, startTime?: number) => {
+      setRemainingTime(getRemainingTimeUntilMsTimestamp(countdown, startTime))
+    },
+    [],
+  )
+
+  useEffect(() => {
+    if (status === 'Preparing') return updateRemainingTime(endTime, startTime)
+    const intervalId = setInterval(() => {
+      updateRemainingTime(endTime)
+    }, 1000)
+    return () => clearInterval(intervalId)
+  }, [endTime, startTime, status, updateRemainingTime])
 
   if (!isLockedVote) return <Fragment />
 
@@ -48,7 +77,8 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
         <Space direction="vertical">
           <Typography.Text>Time remaining</Typography.Text>
           <Typography.Title level={5}>
-            {moment(endTime).endOf('day').fromNow()}
+            {remainingTime.days}days : {remainingTime.hours}h :{' '}
+            {remainingTime.minutes}m :{remainingTime.seconds}s
           </Typography.Title>
         </Space>
       </Col>
@@ -68,12 +98,43 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
   const [loadingFor, setLoadingFor] = useState(false)
   const [loadingAgainst, setLoadingAgainst] = useState(false)
   const {
-    dao,
+    dao: { daoData },
     voteBid: { amount },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch()
-  const { mint } = dao[daoAddress] || ({} as DaoData)
+  const { mint, regime, authority } = daoData[daoAddress] || ({} as DaoData)
   const { balance, decimals } = useAccountBalanceByMintAddress(mint?.toBase58())
+  const { status } = useProposalStatus(proposalAddress)
+
+  const disabled = useMemo(() => {
+    return status !== 'Voting' || !amount || !account.isAddress(proposalAddress)
+  }, [amount, proposalAddress, status])
+
+  const parseRegime = useMemo(() => {
+    if (!regime) return ''
+    return Object.keys(regime)[0]
+  }, [regime])
+
+  const fee = useMemo(() => {
+    if (!parseRegime || !authority) return
+
+    const feeOption: FeeOptions = {
+      tax: new BN(50000),
+      taxmanAddress: taxman,
+      revenue: new BN(50000),
+      revenuemanAddress: authority.toBase58(),
+    }
+
+    if (parseRegime === 'democratic')
+      return {
+        tax: new BN(0),
+        taxmanAddress: taxman,
+        revenue: new BN(0),
+        revenuemanAddress: authority.toBase58(),
+      }
+
+    return feeOption
+  }, [authority, parseRegime])
 
   const onChange = useCallback(
     (value: string) => {
@@ -89,7 +150,7 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
       if (!amount || !account.isAddress(proposalAddress)) return
       const voteAmount = utils.decimalize(amount, decimals)
       const nextAmount = new BN(voteAmount.toString())
-      const { txId } = await interDao.voteFor(proposalAddress, nextAmount)
+      const { txId } = await interDao.voteFor(proposalAddress, nextAmount, fee)
       window.notify({
         type: 'success',
         description: 'Voted successfully. Click to view details!',
@@ -103,7 +164,7 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     } finally {
       setLoadingFor(false)
     }
-  }, [amount, decimals, proposalAddress])
+  }, [amount, decimals, fee, proposalAddress])
 
   const onVoteAgainst = useCallback(async () => {
     setLoadingAgainst(true)
@@ -111,7 +172,11 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
       if (!amount || !account.isAddress(proposalAddress)) return
       const voteAmount = utils.decimalize(amount, decimals)
       const nextAmount = new BN(voteAmount.toString())
-      const { txId } = await interDao.voteAgainst(proposalAddress, nextAmount)
+      const { txId } = await interDao.voteAgainst(
+        proposalAddress,
+        nextAmount,
+        fee,
+      )
       window.notify({
         type: 'success',
         description: 'Voted successfully. Click to view details!',
@@ -125,7 +190,7 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     } finally {
       setLoadingAgainst(false)
     }
-  }, [amount, decimals, proposalAddress])
+  }, [amount, decimals, fee, proposalAddress])
 
   return (
     <Card bordered={false}>
@@ -135,8 +200,13 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
         </Col>
         <Col span={24}>
           <Card
-            style={{ boxShadow: 'unset', borderRadius: 8 }}
-            bodyStyle={{ padding: 8 }}
+            style={{
+              boxShadow: 'unset',
+              borderRadius: 4,
+              background: '#1A1311',
+            }}
+            bodyStyle={{ padding: '8px 12px' }}
+            bordered={false}
           >
             <Row gutter={[8, 8]}>
               <Col flex="auto">
@@ -145,7 +215,8 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
               <Col>
                 <Typography.Text>
                   Available: {numeric(balance).format('0,0.[00]')}
-                </Typography.Text>
+                </Typography.Text>{' '}
+                <MintSymbol mintAddress={mint?.toBase58()} />
               </Col>
               <Col span={24}>
                 <NumericInput
@@ -155,13 +226,12 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
                   value={amount}
                   onValue={onChange}
                   suffix={
-                    <Button
-                      size="small"
-                      type="text"
+                    <Typography.Text
+                      style={{ cursor: 'pointer' }}
                       onClick={() => onChange(balance.toString())}
                     >
-                      Max
-                    </Button>
+                      MAX
+                    </Typography.Text>
                   }
                 />
               </Col>
@@ -176,29 +246,32 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
         </Col>
         <Col span={12}>
           <Button
-            onClick={onVoteFor}
+            onClick={onVoteAgainst}
             type="primary"
-            disabled={!amount || !account.isAddress(proposalAddress)}
-            loading={loadingFor}
+            disabled={disabled}
+            loading={loadingAgainst}
             block
+            size="large"
+            icon={<IonIcon name="thumbs-down-outline" />}
           >
-            Vote For
+            Vote No
           </Button>
         </Col>
         <Col span={12}>
           <Button
-            onClick={onVoteAgainst}
+            onClick={onVoteFor}
             type="primary"
-            disabled={!amount || !account.isAddress(proposalAddress)}
-            loading={loadingAgainst}
+            disabled={disabled}
+            loading={loadingFor}
             block
+            size="large"
+            icon={<IonIcon name="thumbs-up-outline" />}
           >
-            Vote Against
+            Vote Yes
           </Button>
         </Col>
       </Row>
     </Card>
   )
 }
-
 export default CardVote

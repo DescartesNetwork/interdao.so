@@ -2,7 +2,7 @@
  * Available vars: https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
  */
 
-@import '~antd/dist/antd.less';
+@import '~antd/dist/antd.dark.less';
 @import './common/vars.less';
 @import './common/polyfill.less';
 @import './common/typography.less';
@@ -15,69 +15,72 @@
 @success-color: @SUCCESS;
 @warning-color: @WARNING;
 @error-color: @ERROR;
-@popover-background: @NEUTRAL100;
-@body-background: @NEUTRAL05;
-@component-background: @NEUTRAL05;
-@disabled-bg: @NEUTRAL10;
+@popover-background: @CARD_BG;
+@body-background: @ACCENT;
+@component-background: @ACCENT;
+@disabled-bg: @PRIMARY20;
 
 // Typography
-@font-family: 'Nunito', sans-serif;
-@text-color: @NEUTRAL100;
-@text-color-secondary: @NEUTRAL60;
-@heading-color: @NEUTRAL100;
-@disabled-color: @NEUTRAL40;
+@font-family: 'Helvetica Neue';
+@text-color: @PRIMARY;
+@text-color-secondary: @SECONDARY;
+@heading-color: @PRIMARY;
+@disabled-color: @PRIMARY20;
 @typography-title-margin-top: 0px;
 @typography-title-margin-bottom: 0px;
 
 // Border
-@border-radius-base: 8px;
-@border-color-base: @NEUTRAL20;
+@border-radius-base: 4px;
+@border-color-base: @PRIMARY;
 @border-width-base: 1px;
-@popover-customize-border-color: @border-color-base;
 @border-color-split: @border-color-base;
+@popover-customize-border-color: @border-color-base;
 
 // Card
 @card-radius: @border-radius-base * 2;
-@card-actions-background: @NEUTRAL05;
-@card-background: @NEUTRAL05;
-@card-shadow: @LIGHT_SHADOW2;
+@card-actions-background: @CARD_BG;
+@card-background: @CARD_BG;
+@card-shadow: @DARK_SHADOW2;
 
 // Modal
-@modal-header-bg: @NEUTRAL05;
-@modal-content-bg: @NEUTRAL05;
-@modal-footer-bg: @NEUTRAL05;
+@modal-header-bg: @NEUTRAL100;
+@modal-content-bg: @NEUTRAL100;
+@modal-footer-bg: @NEUTRAL100;
 @modal-footer-padding-horizontal: 24px;
 
 // Drawer
-@drawer-bg: @NEUTRAL05;
+@drawer-bg: @NEUTRAL100;
 
 // Button
 @btn-font-weight: 700;
 @btn-shadow: unset;
 @btn-primary-shadow: unset;
 @btn-text-shadow: unset;
-@btn-default-border: @NEUTRAL20;
-@btn-default-ghost-color: @NEUTRAL100;
-@btn-default-ghost-border: @NEUTRAL100;
+@btn-primary-color: @ACCENT;
+@btn-default-border: @PRIMARY;
+@btn-default-ghost-color: @ACCENT;
+@btn-default-ghost-border: @PRIMARY;
+@btn-disable-color: @PRIMARY60;
+@btn-disable-border: @PRIMARY20;
+@btn-disable-bg: @TRANSPARENT;
+@btn-border-radius-base: 4px;
+@btn-border-radius-sm: 4px;
 
 // Input
-@input-placeholder-color: @NEUTRAL60;
+@input-placeholder-color: @SECONDARY;
+@input-bg: @ACCENT;
 
 // Divider
-@divider-color: @NEUTRAL10;
+@divider-color: @NEUTRAL90;
 @divider-orientation-margin: 0;
 
 // Checkbox
 @checkbox-border-radius: @border-radius-base - 4;
 
+// Progress
+@progress-default-color: @PRIMARY;
+
 // Patch
 .@{ant-prefix}-layout {
   background: unset;
-}
-.@{ant-prefix}-card {
-  box-shadow: @LIGHT_SHADOW1;
-  &.glass {
-    background-color: color(~`('@{card-background}aa') `);
-    backdrop-filter: blur(16px);
-  }
 }

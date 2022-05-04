@@ -1,11 +1,11 @@
-import { BN } from '@project-serum/anchor'
 import { PublicKey } from '@solana/web3.js'
 import { ReceiptData } from '@interdao/core'
 
 import { Typography } from 'antd'
 import ColumnType from './columnType'
+import ColumnPower from './columnPower'
 
-import { numeric, shortenAddress } from 'shared/util'
+import { shortenAddress } from 'shared/util'
 
 export const HISTORY_COLUMNS = [
   {
@@ -18,13 +18,11 @@ export const HISTORY_COLUMNS = [
   {
     title: 'TYPE',
     dataIndex: 'authority',
-    render: (_: any, record: ReceiptData) => <ColumnType record={record} />,
+    render: (_: any, receipt: ReceiptData) => <ColumnType record={receipt} />,
   },
   {
     title: 'POWER',
     dataIndex: 'power',
-    render: (power: BN) => (
-      <Typography>{numeric(power.toNumber()).format('0,0.[0000]a')}</Typography>
-    ),
+    render: (_: any, receipt: ReceiptData) => <ColumnPower receipt={receipt} />,
   },
 ]
