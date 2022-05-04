@@ -1,11 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { ConsensusMechanisms, ConsensusQuorums } from '@interdao/core'
+import { useSelector } from 'react-redux'
+import {
+  ConsensusMechanisms,
+  ConsensusQuorums,
+  FeeOptions,
+} from '@interdao/core'
 import BN from 'bn.js'
 import { CID } from 'ipfs-core'
 
 import { Button, Card, Col, Divider, Input, Row, Space, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
 import ConsensusMechanismInput from './consensusMechanismInput'
 import ConsensusQuorumInput from './consensusQuorumInput'
 import DurationInput from './durationInput'
@@ -14,7 +18,6 @@ import ProposalPreview from './proposalPreview'
 import configs from 'app/configs'
 import { explorer } from 'shared/util'
 import IPFS from 'shared/pdb/ipfs'
-import { useSelector } from 'react-redux'
 import { AppState } from 'app/model'
 
 const {
@@ -45,6 +48,7 @@ const ProposalInitialization = () => {
   const { daoAddress } = useParams<{ daoAddress: string }>()
   const {
     template: { tx, imageBackground },
+    dao: { daoData },
   } = useSelector((state: AppState) => state)
   const history = useHistory()
 
@@ -57,6 +61,7 @@ const ProposalInitialization = () => {
   }, [description, imageBackground, title])
 
   const newProposal = useCallback(async () => {
+    const { authority } = daoData[daoAddress]
     try {
       setLoading(true)
 
@@ -67,8 +72,15 @@ const ProposalInitialization = () => {
       } = CID.parse(cid)
 
       const {
-        sol: { interDao, fee, taxman },
+        sol: { interDao, taxman },
       } = configs
+
+      const feeOption: Partial<FeeOptions> = {
+        revenue: new BN(50000),
+        revenuemanAddress: authority.toBase58(),
+        tax: new BN(50000),
+        taxmanAddress: taxman,
+      }
 
       if (!tx) return
 
@@ -78,7 +90,7 @@ const ProposalInitialization = () => {
         accounts: { src, dst, payer },
       } = tx
 
-      const metadata = Buffer.from(digest) // Replace the real hash here
+      const metadata = Buffer.from(digest)
       const accounts = [src, dst, payer]
       const { txId, proposalAddress } = await interDao.initializeProposal(
         daoAddress,
@@ -90,11 +102,10 @@ const ProposalInitialization = () => {
         accounts.map(({ isMaster }) => isMaster),
         Math.floor(duration[0] / 1000),
         Math.floor(duration[1] / 1000),
-        new BN(fee),
-        taxman,
         metadata,
         consensusMechanism,
         consensusQuorum,
+        feeOption,
       )
       window.notify({
         type: 'success',
@@ -114,9 +125,10 @@ const ProposalInitialization = () => {
       return setLoading(false)
     }
   }, [
+    daoData,
+    daoAddress,
     metaData,
     tx,
-    daoAddress,
     duration,
     consensusMechanism,
     consensusQuorum,
@@ -199,9 +211,8 @@ const ProposalInitialization = () => {
                 loading={loading}
                 type="primary"
                 size="large"
-                icon={<IonIcon name="add-outline" />}
               >
-                Create the Proposal
+                Add a new Proposal
               </Button>
             </Col>
           </Row>

@@ -34,13 +34,13 @@ const CardStatus = ({
     setLoading(true)
     try {
       const { txId } = await interDao.executeProposal(proposalAddress)
-      window.notify({
+      return window.notify({
         type: 'success',
         description: 'Execute successfully',
         onClick: () => window.open(explorer(txId), '_blank'),
       })
     } catch (error: any) {
-      window.notify({
+      return window.notify({
         type: 'error',
         description: error.message,
       })
