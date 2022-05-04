@@ -28,6 +28,8 @@ export const DEFAULT_CREATE_DAO_DATA = {
   regime: DaoRegimes.Dictatorial,
 }
 
+export type DaoType = 'flexible-dao' | 'multisig-dao'
+
 export type CreateDaoData = {
   mintAddress: string
   supply: BN
@@ -35,10 +37,12 @@ export type CreateDaoData = {
   dao?: web3.Keypair
   regime: DaoRegime
 }
+
 export type DaoDataState = Record<string, DaoData>
 export type DaoState = {
   daoData: DaoDataState
   createDaoData: CreateDaoData
+  daoType: DaoType
 }
 
 /**
@@ -49,6 +53,7 @@ const NAME = 'dao'
 const initialState: DaoState = {
   daoData: {},
   createDaoData: DEFAULT_CREATE_DAO_DATA,
+  daoType: 'flexible-dao',
 }
 
 /**
@@ -77,7 +82,7 @@ export const getDaos = createAsyncThunk(`${NAME}/getDaos`, async () => {
   value.forEach(({ pubkey, account: { data: buf } }) => {
     const address = pubkey.toBase58()
     const data = interDao.parseDaoData(buf)
-    bulk[address] = data
+    bulk[address] = { ...data }
   })
   return { daoData: bulk }
 })
@@ -95,7 +100,13 @@ export const getDao = createAsyncThunk<
   } = getState()
   if (data && !force) return { [address]: data }
   const raw = await interDao.getDaoData(address)
-  return { daoData: { [address]: raw } }
+  return {
+    daoData: {
+      [address]: {
+        ...raw,
+      },
+    },
+  }
 })
 
 export const upsetDao = createAsyncThunk<
@@ -105,7 +116,11 @@ export const upsetDao = createAsyncThunk<
 >(`${NAME}/upsetDao`, async ({ address, data }) => {
   if (!account.isAddress(address)) throw new Error('Invalid address')
   if (!data) throw new Error('Data is empty')
-  return { daoData: { [address]: data } }
+  return {
+    daoData: {
+      [address]: { ...data },
+    },
+  }
 })
 
 export const setCreateDaoData = createAsyncThunk(
@@ -113,6 +128,12 @@ export const setCreateDaoData = createAsyncThunk(
   async (createDaoData?: CreateDaoData) => {
     if (!createDaoData) return { createDaoData: DEFAULT_CREATE_DAO_DATA }
     return { createDaoData }
+  },
+)
+export const setCreateDaoType = createAsyncThunk(
+  `${NAME}/setCreateDaoType`,
+  async (type: string) => {
+    return { daoType: type }
   },
 )
 
@@ -148,6 +169,10 @@ const slice = createSlice({
       )
       .addCase(
         setCreateDaoData.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        setCreateDaoType.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(

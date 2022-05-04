@@ -18,11 +18,13 @@ const getDefaultSocial = () => {
   return SOCIAL_MEDIA.map(() => '')
 }
 
-const DEFAULT_CREATE_METADATA = {
+export const DEFAULT_META_DATA = {
+  address: '',
   daoName: '',
   description: '',
   image: '',
   optionals: getDefaultSocial(),
+  daoRegime: '',
 }
 
 export type MetaData = {
@@ -30,6 +32,8 @@ export type MetaData = {
   description: string
   image: string | ArrayBuffer | null
   optionals: string[]
+  address: string
+  daoRegime: string
 }
 export type MetaDataMember = { members: number }
 export type DaoMetaDataState = Record<string, MetaDataMember>
@@ -45,7 +49,7 @@ export type MetaDataState = {
 const NAME = 'metadata'
 const initialState: MetaDataState = {
   daoMetaData: {},
-  createMetaData: DEFAULT_CREATE_METADATA,
+  createMetaData: DEFAULT_META_DATA,
 }
 
 /**
@@ -89,7 +93,7 @@ export const getMember = createAsyncThunk<
 export const setCreateDaoMetaData = createAsyncThunk(
   `${NAME}/setCreateDaoMetaData`,
   async (metaData?: MetaData) => {
-    if (!metaData) return { createMetaData: DEFAULT_CREATE_METADATA }
+    if (!metaData) return { createMetaData: DEFAULT_META_DATA }
     return { createMetaData: metaData }
   },
 )

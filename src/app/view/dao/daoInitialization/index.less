@@ -1,17 +1,8 @@
-.choose-dao-wrapper {
-  .active {
-    border: 1px solid;
-  }
-}
 .dao-logo-img {
   .interdao-image {
-    max-width: 200px;
-    max-height: 200px;
     border-radius: 8px;
     overflow: hidden;
     img {
-      width: 100%;
-      height: 100%;
       object-fit: cover;
     }
   }
@@ -20,5 +11,61 @@
   .interdao-progress-steps-item {
     width: 40px !important;
     border-radius: 2px;
+  }
+}
+.btn-radio-card {
+  .interdao-radio-button-wrapper {
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+  }
+}
+.flexible-dao {
+  background-image: url('../../../static/images/system/flexible-dao.png') !important;
+}
+
+.multisig-dao {
+  background-image: url('../../../static/images/system/multisig-dao.png') !important;
+}
+.group-btn-card {
+  min-height: 180px;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: cover !important;
+}
+.img-card-preview-upload {
+  cursor: pointer;
+  overflow: hidden;
+  .ico-action-upload {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    font-size: 18px;
+    font-weight: 700;
+    ion-icon {
+      display: none;
+    }
+  }
+  &:hover {
+    .ico-action-upload {
+      backdrop-filter: brightness(60%);
+      ion-icon {
+        display: block;
+      }
+    }
+  }
+}
+.interdao-upload-metadata {
+  &.uploaded {
+    .interdao-upload-select {
+      position: relative;
+      opacity: 0;
+      z-index: -1;
+    }
   }
 }
