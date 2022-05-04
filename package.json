@@ -4,7 +4,7 @@
   "dependencies": {
     "@dnd-kit/core": "^4.0.1",
     "@dnd-kit/sortable": "^5.0.0",
-    "@interdao/core": "^1.2.0",
+    "@interdao/core": "^1.2.1",
     "@project-serum/sol-wallet-adapter": "^0.2.6",
     "@reduxjs/toolkit": "^1.8.0",
     "@senswap/react-lazyload": "^3.2.2",
@@ -13,6 +13,7 @@
     "antd": "^4.19.5",
     "bn.js": "^5.2.0",
     "bs58": "^4.0.1",
+    "dayjs": "^1.11.1",
     "iconsax-react": "^0.0.7",
     "ipfs-core": "^0.14.2",
     "js-file-download": "^0.4.12",

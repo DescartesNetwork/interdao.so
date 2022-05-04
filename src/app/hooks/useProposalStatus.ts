@@ -16,18 +16,29 @@ const useProposalStatus = (proposalAddress: string) => {
     votingAgainstPower,
     votingForPower,
     consensusQuorum,
+    consensusMechanism,
   } = proposal[proposalAddress] || {}
+
+  const actualSupply = useMemo(() => {
+    if (!supply) return 0
+    const mechanism = consensusMechanism
+      ? Object.keys(consensusMechanism)[0]
+      : ''
+    if (mechanism === 'StakedTokenCounter') return supply.toNumber()
+    return Number(supply) * (Number(endDate) - Number(startDate))
+  }, [consensusMechanism, endDate, startDate, supply])
 
   const isSuccess = useMemo(() => {
     const quorum = consensusQuorum ? Object.keys(consensusQuorum)[0] : ''
+
     const votingPower = Number(votingForPower) - Number(votingAgainstPower)
-    const numSupply = supply?.toNumber() || 0
     if (votingPower <= 0) return false
-    if (quorum === 'half' && votingPower >= numSupply / 2) return true
-    if (quorum === 'oneThird' && votingPower >= numSupply / 3) return true
-    if (quorum === 'twoThird' && votingPower >= (numSupply * 2) / 3) return true
+    if (quorum === 'half' && votingPower > actualSupply / 2) return true
+    if (quorum === 'oneThird' && votingPower > actualSupply / 3) return true
+    if (quorum === 'twoThird' && votingPower > (actualSupply * 2) / 3)
+      return true
     return false
-  }, [consensusQuorum, supply, votingAgainstPower, votingForPower])
+  }, [actualSupply, consensusQuorum, votingAgainstPower, votingForPower])
 
   const status: ProposalStatusType = useMemo(() => {
     if (currentDate < Number(startDate)) return 'Preparing'
@@ -37,7 +48,7 @@ const useProposalStatus = (proposalAddress: string) => {
     return 'Failed'
   }, [endDate, executed, isSuccess, startDate])
 
-  return { status, isSuccess }
+  return { status, isSuccess, actualSupply }
 }
 
 export default useProposalStatus

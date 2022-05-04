@@ -99,7 +99,7 @@ const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
                     >
                       <Typography.Title level={4}>
                         {metaData?.daoName
-                          ? shortenAddress(metaData.daoName, 5)
+                          ? metaData.daoName
                           : shortenAddress(daoAddress)}
                       </Typography.Title>
                     </Tooltip>
