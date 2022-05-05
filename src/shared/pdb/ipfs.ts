@@ -1,7 +1,7 @@
 import { create, isIPFS } from 'ipfs-core'
 import { asyncWait } from 'shared/util'
 
-const GET_CID_TIMEOUT = 4000
+const GET_CID_TIMEOUT = 15000
 class IPFS {
   private _ipfs: any = async () => {
     try {
