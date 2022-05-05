@@ -10,7 +10,7 @@ const SortDao = ({ onSort, value }: SortDaoProps) => {
       style={{ textTransform: 'capitalize' }}
       onChange={onSort}
     >
-      <Select.Option value="all-regime">All regime</Select.Option>
+      <Select.Option value="all-regime">All mechanisms</Select.Option>
       {REGIME_LIST.map((regime, idx) => {
         const value = Object.keys(regime)[0]
         return (
