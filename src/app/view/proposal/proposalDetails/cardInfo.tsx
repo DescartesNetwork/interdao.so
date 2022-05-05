@@ -1,13 +1,15 @@
-import { ReactNode, useMemo, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import moment from 'moment'
 import CopyToClipboard from 'react-copy-to-clipboard'
+// @ts-ignore
+import * as soproxABI from 'soprox-abi'
 
-import { Card, Col, Row, Space, Typography, Tooltip } from 'antd'
+import { Card, Col, Row, Space, Typography, Tooltip, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import { ProposalChildCardProps } from './index'
 
 import useProposal from 'app/hooks/useProposal'
 import { asyncWait, explorer, shortenAddress } from 'shared/util'
+import { ProposalChildCardProps } from './index'
 
 type RowSpaceBetweenProps = {
   label?: string
@@ -25,8 +27,15 @@ const RowSpaceBetween = ({ label = '', value = '' }: RowSpaceBetweenProps) => {
 
 const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
   const [copied, setCopied] = useState(false)
-  const { consensusQuorum, startDate, endDate, consensusMechanism, creator } =
-    useProposal(proposalAddress, daoAddress)
+  const {
+    consensusQuorum,
+    startDate,
+    endDate,
+    consensusMechanism,
+    creator,
+    data,
+    accounts,
+  } = useProposal(proposalAddress, daoAddress)
   const authProposalAddress = creator?.toBase58() || ''
 
   const onCopy = async () => {
@@ -34,6 +43,23 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     await asyncWait(1500)
     setCopied(false)
   }
+
+  const fetchInfoTemplate = useCallback(() => {
+    if (!data) return
+    const schema = [
+      { key: 'code', type: 'u8' },
+      { key: 'amount', type: 'u64' },
+    ]
+    const buf = new soproxABI.struct(schema)
+    const amount = buf.fromBuffer(Buffer.from(data as any))
+    console.log(amount)
+  }, [data])
+
+  console.log(accounts)
+
+  useEffect(() => {
+    fetchInfoTemplate()
+  }, [fetchInfoTemplate])
 
   const quorum = useMemo(() => {
     if (!consensusQuorum) return '-'
@@ -54,7 +80,17 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Typography.Title level={5}>Information</Typography.Title>
+          <Row align="middle">
+            <Col flex="auto">
+              <Typography.Title level={5}>Information</Typography.Title>
+            </Col>
+            <Col>
+              <Button
+                type="text"
+                icon={<IonIcon name="information-circle-outline" />}
+              />
+            </Col>
+          </Row>
         </Col>
         <Col span={24}>
           <Space style={{ width: '100%' }} direction="vertical">

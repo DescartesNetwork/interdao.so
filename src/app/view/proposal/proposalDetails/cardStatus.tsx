@@ -54,14 +54,18 @@ const CardStatus = ({
       <Row gutter={[16, 16]}>
         <Col flex="auto">
           <Space direction="vertical">
-            <Space>
-              <Typography.Title level={3}>
-                {metaData?.title
-                  ? metaData.title
-                  : shortenAddress(proposalAddress)}
-              </Typography.Title>
-              <ProposalStatus status={status} />
-            </Space>
+            <Row gutter={[8, 8]} align="middle">
+              <Col>
+                <Typography.Title level={3}>
+                  {metaData?.title
+                    ? metaData.title
+                    : shortenAddress(proposalAddress)}
+                </Typography.Title>
+              </Col>
+              <Col>
+                <ProposalStatus status={status} />
+              </Col>
+            </Row>
             <Space>
               <IonIcon name="people-outline" />
               <Typography.Text>Member: {accountsLen}</Typography.Text>

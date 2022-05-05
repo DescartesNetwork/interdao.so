@@ -18,7 +18,7 @@ const Template = ({ daoAddress }: { daoAddress: string }) => {
       visible={visible}
       footer={false}
       closeIcon={<IonIcon name="close-outline" />}
-      className="template-modal"
+      className="template-card template-modal"
       onCancel={() => dispatch(setVisible(false))}
     >
       <Row>

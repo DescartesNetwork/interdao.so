@@ -4,7 +4,7 @@ import { account, utils } from '@senswap/sen-js'
 import { DaoData, FeeOptions } from '@interdao/core'
 import { BN } from 'bn.js'
 
-import { Button, Card, Col, Row, Typography, Space } from 'antd'
+import { Button, Card, Col, Row, Typography, Space, Tooltip } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
 import IonIcon from 'shared/antd/ionicon'
 
@@ -78,13 +78,22 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
           <Typography.Text>Time remaining</Typography.Text>
           <Typography.Title level={5}>
             {remainingTime.days}days : {remainingTime.hours}h :{' '}
-            {remainingTime.minutes}m :{remainingTime.seconds}s
+            {remainingTime.minutes}m : {remainingTime.seconds}s
           </Typography.Title>
         </Space>
       </Col>
       <Col>
         <Space direction="vertical">
-          <Typography.Text>Power of your vote</Typography.Text>
+          <Space>
+            <Tooltip title="Your power will be equal to the token amount multiplied by the remaining time (by seconds)">
+              <IonIcon
+                style={{ cursor: 'pointer' }}
+                name="information-circle-outline"
+              />
+            </Tooltip>
+            <Typography.Text>Power of your vote</Typography.Text>
+          </Space>
+
           <Typography.Title level={5} style={{ textAlign: 'right' }}>
             {numeric(votePower).format('0,0.[0000]')}
           </Typography.Title>

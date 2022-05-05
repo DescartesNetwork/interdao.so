@@ -29,6 +29,16 @@ const Hero = () => {
     return Object.keys(proposal).length
   }, [daoData, proposal])
 
+  const executeProposal = useMemo(() => {
+    let total = 0
+    for (const proposalAddr in proposal) {
+      const { executed } = proposal[proposalAddr]
+      if (executed) total++
+      continue
+    }
+    return total
+  }, [proposal])
+
   useEffect(() => {
     const daoAddresses = Object.keys(daoData)
     for (const daoAddress of daoAddresses) {
@@ -43,32 +53,25 @@ const Hero = () => {
           <Col span={24}>
             <Banner />
           </Col>
-          <Col xs={24} sm={12} lg={6}>
-            <InfoCard
-              icon={<IonIcon name="cash-outline" />}
-              title="Total Value Locked"
-              value={`$${numeric(900989.09).format('0,0.00')}`}
-            />
-          </Col>
-          <Col xs={24} sm={12} lg={6}>
+          <Col xs={24} sm={12} lg={8}>
             <InfoCard
               icon={<IonIcon name="earth-outline" />}
               title="Total DAOs"
               value={numeric(totalDao).format('0,0')}
             />
           </Col>
-          <Col xs={24} sm={12} lg={6}>
+          <Col xs={24} sm={12} lg={8}>
             <InfoCard
               icon={<IonIcon name="pencil-outline" />}
               title="Total Proposals"
               value={numeric(totalProposal).format('0,0')}
             />
           </Col>
-          <Col xs={24} sm={12} lg={6}>
+          <Col xs={24} sm={12} lg={8}>
             <InfoCard
-              icon={<IonIcon name="people-outline" />}
-              title="Total Members"
-              value={numeric(8401).format('0,0')}
+              icon={<IonIcon name="thumbs-up-outline" />}
+              title="Total executed proposals"
+              value={numeric(executeProposal).format('0,0')}
             />
           </Col>
         </Row>

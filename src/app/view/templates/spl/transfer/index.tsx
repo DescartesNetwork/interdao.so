@@ -85,6 +85,7 @@ const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
   const [receiverAddress, setReceiverAddress] = useState('')
   const [srcAddress, setSrcAddress] = useState('')
   const [dstAddress, setDstAddress] = useState('')
+
   const [amount, setAmount] = useState('')
   const {
     dao: { daoData },
@@ -228,6 +229,7 @@ const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
           </Button>
         </Space>
       </Col>
+      {/* <TemplateInfo content="" /> */}
     </Row>
   )
 }
