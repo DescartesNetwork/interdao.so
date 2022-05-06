@@ -88,7 +88,6 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
       const mechanism = consensusMechanism
         ? Object.keys(consensusMechanism)[0]
         : ''
-
       const actualSupply =
         mechanism === 'StakedTokenCounter' ? stakeSupply : lockSupply
 
