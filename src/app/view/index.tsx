@@ -12,10 +12,12 @@ import DaoWatcher from './watcher/dao.watcher'
 import ProposalWatcher from './watcher/proposal.watcher'
 import ReceiptWatcher from './watcher/receipt.watcher'
 
+import BG from 'app/static/images/system/bg-dark.png'
+import BG_LIGHT from 'app/static/images/system/bg-light.png'
+import configs from 'app/configs'
+
 import 'app/static/styles/dark.less'
 import 'app/static/styles/light.less'
-import configs from 'app/configs'
-import BG from 'app/static/images/system/bg-dark.png'
 
 const {
   manifest: { appId },
@@ -25,7 +27,7 @@ const View = () => {
   const { setBackground } = useUI()
 
   useEffect(() => {
-    setBackground({ light: BG, dark: BG })
+    setBackground({ light: BG_LIGHT, dark: BG })
   }, [setBackground])
 
   return (

@@ -4,7 +4,7 @@ import isEqual from 'react-fast-compare'
 
 import { Tag } from 'antd'
 
-import { randomColor } from 'shared/util'
+// import { randomColor } from 'shared/util'
 
 export type RegimeTagProps = { regime: DaoRegime; special?: boolean }
 
@@ -16,14 +16,10 @@ const RegimeTag = ({ regime, special }: RegimeTagProps) => {
     return 'DAO Regime'
   }, [regime])
 
-  const className = special ? 'regime-tag' : ''
+  const className = special ? 'regime-tag dao-tag' : 'dao-tag'
 
   return (
-    <Tag
-      className={className}
-      style={{ color: randomColor(tag), margin: 0 }}
-      color={randomColor(tag, 0.2)}
-    >
+    <Tag className={className} style={{ margin: 0 }}>
       {tag}
     </Tag>
   )
