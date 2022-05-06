@@ -1,8 +1,6 @@
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
+import { ReactNode, useMemo, useState } from 'react'
 import moment from 'moment'
 import CopyToClipboard from 'react-copy-to-clipboard'
-// @ts-ignore
-import * as soproxABI from 'soprox-abi'
 
 import { Card, Col, Row, Space, Typography, Tooltip, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -27,15 +25,8 @@ const RowSpaceBetween = ({ label = '', value = '' }: RowSpaceBetweenProps) => {
 
 const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
   const [copied, setCopied] = useState(false)
-  const {
-    consensusQuorum,
-    startDate,
-    endDate,
-    consensusMechanism,
-    creator,
-    data,
-    accounts,
-  } = useProposal(proposalAddress, daoAddress)
+  const { consensusQuorum, startDate, endDate, consensusMechanism, creator } =
+    useProposal(proposalAddress, daoAddress)
   const authProposalAddress = creator?.toBase58() || ''
 
   const onCopy = async () => {
@@ -43,23 +34,6 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     await asyncWait(1500)
     setCopied(false)
   }
-
-  const fetchInfoTemplate = useCallback(() => {
-    if (!data) return
-    const schema = [
-      { key: 'code', type: 'u8' },
-      { key: 'amount', type: 'u64' },
-    ]
-    const buf = new soproxABI.struct(schema)
-    const amount = buf.fromBuffer(Buffer.from(data as any))
-    console.log(amount)
-  }, [data])
-
-  console.log(accounts)
-
-  useEffect(() => {
-    fetchInfoTemplate()
-  }, [fetchInfoTemplate])
 
   const quorum = useMemo(() => {
     if (!consensusQuorum) return '-'
