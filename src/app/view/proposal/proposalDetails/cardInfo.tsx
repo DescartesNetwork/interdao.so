@@ -2,12 +2,12 @@ import { ReactNode, useMemo, useState } from 'react'
 import moment from 'moment'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
-import { Card, Col, Row, Space, Typography, Tooltip } from 'antd'
+import { Card, Col, Row, Space, Typography, Tooltip, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import { ProposalChildCardProps } from './index'
 
 import useProposal from 'app/hooks/useProposal'
 import { asyncWait, explorer, shortenAddress } from 'shared/util'
+import { ProposalChildCardProps } from './index'
 
 type RowSpaceBetweenProps = {
   label?: string
@@ -54,7 +54,17 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Typography.Title level={5}>Information</Typography.Title>
+          <Row align="middle">
+            <Col flex="auto">
+              <Typography.Title level={5}>Information</Typography.Title>
+            </Col>
+            <Col>
+              <Button
+                type="text"
+                icon={<IonIcon name="information-circle-outline" />}
+              />
+            </Col>
+          </Row>
         </Col>
         <Col span={24}>
           <Space style={{ width: '100%' }} direction="vertical">
