@@ -77,12 +77,20 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
         supply,
         votingForPower,
         consensusQuorum,
+        consensusMechanism,
         votingAgainstPower,
       } = proposal[address] || {}
 
       const quorum = consensusQuorum ? Object.keys(consensusQuorum)[0] : ''
       const votingPower = Number(votingForPower) - Number(votingAgainstPower)
-      const numSupply = supply?.toNumber() || 0
+      const stakeSupply = supply?.toNumber() || 0
+      const lockSupply = Number(supply) * (Number(endDate) - Number(startDate))
+      const mechanism = consensusMechanism
+        ? Object.keys(consensusMechanism)[0]
+        : ''
+
+      const actualSupply =
+        mechanism === 'StakedTokenCounter' ? stakeSupply : lockSupply
 
       switch (status) {
         case 'preparing':
@@ -97,13 +105,13 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
           break
         case 'succeeded':
           valid =
-            isSuccess(quorum, votingPower, numSupply) &&
+            isSuccess(quorum, votingPower, actualSupply) &&
             !executed &&
             currentDate > Number(endDate)
           break
         case 'failed':
           valid =
-            !isSuccess(quorum, votingPower, numSupply) &&
+            !isSuccess(quorum, votingPower, actualSupply) &&
             currentDate > Number(endDate)
           break
         default:
