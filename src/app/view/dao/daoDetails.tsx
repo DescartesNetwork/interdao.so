@@ -82,7 +82,7 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
               <Divider type="vertical" style={{ height: '100%' }} />
             </Col>
             <Col span={mobileScreen ? 24 : undefined} flex="auto">
-              <Row gutter={[36, 36]}>
+              <Row gutter={[36, 16]}>
                 <Col xs={12} sm={4}>
                   <StatisticCard
                     title="Token"

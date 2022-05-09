@@ -33,7 +33,7 @@ const CardOption = ({ label, description, icon }: CardOptionProps) => {
 const SPL = ({ daoAddress }: { daoAddress: string }) => {
   return (
     <Row>
-      <Col span={16} style={{ background: ' #2b2523' }}>
+      <Col xs={24} md={16} className="wrap-spl-info">
         <Row gutter={[16, 16]} className="spl-info">
           <Col span={24}>
             <Space size={24}>
@@ -49,14 +49,17 @@ const SPL = ({ daoAddress }: { daoAddress: string }) => {
             </Space>
           </Col>
           <Col span={24}>
-            <Typography.Text type="secondary">
+            <Typography.Paragraph
+              type="secondary"
+              ellipsis={{ rows: 3, expandable: true, symbol: 'View more' }}
+            >
               The Solana Program Library (SPL) is a collection of on-chain
               programs targeting the Sealevel parallel runtime. These programs
               are tested against Solana's implementation of Sealevel,
               solana-runtime, and deployed to its mainnet. As others implement
               Sealevel, we will graciously accept patches to ensure the programs
               here are portable across all implementations.
-            </Typography.Text>
+            </Typography.Paragraph>
           </Col>
           <Col span={24}>
             <Space direction="vertical" style={{ width: '100%' }}>
@@ -91,7 +94,7 @@ const SPL = ({ daoAddress }: { daoAddress: string }) => {
           </Col>
         </Row>
       </Col>
-      <Col span={8} className="spl-option-transfer">
+      <Col xs={24} md={8} className="spl-option-transfer">
         <TransferSplPlugin daoAddress={daoAddress} />
       </Col>
     </Row>
