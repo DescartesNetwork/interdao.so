@@ -21,6 +21,7 @@ import IPFS from 'shared/pdb/ipfs'
 import { AppState } from 'app/model'
 
 const {
+  sol: { interDao, taxman },
   manifest: { appId },
 } = configs
 
@@ -70,10 +71,6 @@ const ProposalInitialization = () => {
       const {
         multihash: { digest },
       } = CID.parse(cid)
-
-      const {
-        sol: { interDao, taxman },
-      } = configs
 
       const feeOption: Partial<FeeOptions> = {
         revenue: new BN(50000),
