@@ -1,5 +1,6 @@
 import { ConsensusMechanism, ConsensusMechanisms } from '@interdao/core'
 import isEqual from 'react-fast-compare'
+import { useUI } from '@senhub/providers'
 
 import { Button, Row, Col, Space, Typography, Popover } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -13,6 +14,12 @@ const ConsensusMechanismInput = ({
   value = ConsensusMechanisms.StakedTokenCounter,
   onChange = () => {},
 }: ConsensusMechanismInputProps) => {
+  const {
+    ui: { infix },
+  } = useUI()
+  const mobileScreen = infix === 'xs'
+  const mobileSpan = mobileScreen ? 12 : undefined
+
   return (
     <Row gutter={[8, 8]}>
       <Col span={24}>
@@ -52,29 +59,31 @@ const ConsensusMechanismInput = ({
           </Popover>
         </Space>
       </Col>
-      <Col span={24}>
-        <Space>
-          <Button
-            className={
-              isEqual(value, ConsensusMechanisms.StakedTokenCounter)
-                ? ''
-                : 'btn-unselect'
-            }
-            onClick={() => onChange(ConsensusMechanisms.StakedTokenCounter)}
-          >
-            Staked Counter
-          </Button>
-          <Button
-            className={
-              isEqual(value, ConsensusMechanisms.LockedTokenCounter)
-                ? ''
-                : 'btn-unselect'
-            }
-            onClick={() => onChange(ConsensusMechanisms.LockedTokenCounter)}
-          >
-            Locked Counter
-          </Button>
-        </Space>
+      <Col span={mobileSpan}>
+        <Button
+          className={
+            isEqual(value, ConsensusMechanisms.StakedTokenCounter)
+              ? ''
+              : 'btn-unselect'
+          }
+          onClick={() => onChange(ConsensusMechanisms.StakedTokenCounter)}
+          block
+        >
+          Staked Counter
+        </Button>
+      </Col>
+      <Col span={mobileSpan}>
+        <Button
+          className={
+            isEqual(value, ConsensusMechanisms.LockedTokenCounter)
+              ? ''
+              : 'btn-unselect'
+          }
+          onClick={() => onChange(ConsensusMechanisms.LockedTokenCounter)}
+          block
+        >
+          Locked Counter
+        </Button>
       </Col>
     </Row>
   )

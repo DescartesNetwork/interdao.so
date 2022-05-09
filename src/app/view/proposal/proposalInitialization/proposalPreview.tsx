@@ -33,7 +33,7 @@ const ProposalPreview = ({ daoAddress }: ProposalPreviewProps) => {
       <Col xs={12} md={5}>
         <StatisticCard title="DAO Address" value={shortenAddress(daoAddress)} />
       </Col>
-      <Col xs={12} span={5}>
+      <Col xs={12} md={5}>
         <StatisticCard
           title="Token"
           value={
@@ -44,10 +44,10 @@ const ProposalPreview = ({ daoAddress }: ProposalPreviewProps) => {
           }
         />
       </Col>
-      <Col xs={12} span={5}>
+      <Col xs={12} md={5}>
         <StatisticCard title="Members" value={numeric(members).format('0,0')} />
       </Col>
-      <Col xs={12} span={5}>
+      <Col xs={12} md={5}>
         <StatisticCard title="Regime" value={<RegimeTag regime={regime} />} />
       </Col>
     </Row>
