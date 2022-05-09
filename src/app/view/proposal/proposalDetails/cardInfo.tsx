@@ -17,7 +17,9 @@ type RowSpaceBetweenProps = {
 const RowSpaceBetween = ({ label = '', value = '' }: RowSpaceBetweenProps) => {
   return (
     <Row gutter={[24, 24]}>
-      <Col flex="auto">{label}</Col>
+      <Col flex="auto">
+        <Typography.Text type="secondary">{label}</Typography.Text>
+      </Col>
       <Col>{value}</Col>
     </Row>
   )
@@ -62,6 +64,7 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
               <Button
                 type="text"
                 icon={<IonIcon name="information-circle-outline" />}
+                style={{ marginRight: -10 }}
               />
             </Col>
           </Row>

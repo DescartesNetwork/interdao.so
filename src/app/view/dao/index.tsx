@@ -34,7 +34,7 @@ const Dao = () => {
                   onClick={() => history.push(`/app/${appId}/dao/new-dao`)}
                   icon={<IonIcon name="add-outline" />}
                 >
-                  New DAO
+                  Create a DAO
                 </Button>
               }
             >

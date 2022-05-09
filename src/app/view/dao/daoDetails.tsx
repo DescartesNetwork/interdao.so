@@ -78,8 +78,12 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
                 </Space>
               </Space>
             </Col>
-            <Col style={mobileScreen ? { display: 'none' } : {}}>
-              <Divider type="vertical" style={{ height: '100%' }} />
+            <Col>
+              <Divider
+                className="dao-detail-divide"
+                type="vertical"
+                style={mobileScreen ? { display: 'none' } : {}}
+              />
             </Col>
             <Col span={mobileScreen ? 24 : undefined} flex="auto">
               <Row gutter={[36, 16]}>
