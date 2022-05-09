@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 import { DaoData } from '@interdao/core'
 
-import { Col, Row } from 'antd'
+import { Col, Empty, Row } from 'antd'
 import DaoCard from './daoCard'
 import SearchDao from './search'
 import SortDao from './sortDao'
@@ -23,14 +23,17 @@ const DaoList = () => {
   const {
     ui: { infix },
   } = useUI()
-  const sortDaoRegime = useSearchDao(sortKey)
+  const { searchData: sortDaoRegime } = useSearchDao(sortKey)
   const filterDaoData = useMemo(() => {
     if (!sortDaoRegime) return
     const data: Record<string, DaoData> = {}
     sortDaoRegime.forEach((daoAddr) => (data[daoAddr] = daoData[daoAddr]))
     return data
   }, [daoData, sortDaoRegime])
-  const searchDao = useSearchDao(searchKey, filterDaoData)
+  const { searchData: searchDao, loading } = useSearchDao(
+    searchKey,
+    filterDaoData,
+  )
 
   const searchData =
     !searchKey || searchKey.length < 3 ? sortDaoRegime : searchDao
@@ -45,18 +48,24 @@ const DaoList = () => {
             <SortDao onSort={setSortKey} value={sortKey} />
           </Col>
           <Col span={spanMobile} flex="auto">
-            <SearchDao onSearch={setSearchKey} />
+            <SearchDao onSearch={setSearchKey} loading={loading} />
           </Col>
         </Row>
       </Col>
       <Col span={24} />
-      {(searchData || Object.keys(daoData)).map((daoAddress) => (
-        <Col key={daoAddress} xs={24} md={12}>
-          <LazyLoad height={350.88}>
-            <DaoCard daoAddress={daoAddress} special />
-          </LazyLoad>
+      {searchKey.length >= 3 && (!searchDao || !searchDao.length) ? (
+        <Col span={24} style={{ textAlign: 'center' }}>
+          <Empty />
         </Col>
-      ))}
+      ) : (
+        (searchData || Object.keys(daoData)).map((daoAddress) => (
+          <Col key={daoAddress} xs={24} md={12}>
+            <LazyLoad height={479.75}>
+              <DaoCard daoAddress={daoAddress} special />
+            </LazyLoad>
+          </Col>
+        ))
+      )}
     </Row>
   )
 }
