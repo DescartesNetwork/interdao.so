@@ -7,7 +7,6 @@ import { Net } from 'shared/runtime'
  * Contructor
  */
 type Conf = {
-  rpc: string
   interDao: InterDAO
   fee: string
   taxman: string
@@ -18,9 +17,8 @@ const conf: Record<Net, Conf> = {
    * Development configurations
    */
   devnet: {
-    rpc: 'https://api.devnet.solana.com',
-    interDao: new InterDAO(new SafeWallet()),
-    fee: '1000000', // 0.001 SOL
+    interDao: new InterDAO(new SafeWallet(), 'https://api.devnet.solana.com'),
+    fee: '50000', // 0.000005 SOL
     taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',
   },
 
@@ -28,9 +26,8 @@ const conf: Record<Net, Conf> = {
    * Staging configurations
    */
   testnet: {
-    rpc: 'https://api.testnet.solana.com',
-    interDao: new InterDAO(new SafeWallet()),
-    fee: '1000000', // 0.001 SOL
+    interDao: new InterDAO(new SafeWallet(), 'https://api.testnet.solana.com'),
+    fee: '50000', // 0.000005 SOL
     taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',
   },
 
@@ -38,9 +35,8 @@ const conf: Record<Net, Conf> = {
    * Production configurations
    */
   mainnet: {
-    rpc: 'https://ssc-dao.genesysgo.net',
-    interDao: new InterDAO(new SafeWallet()),
-    fee: '100000000', // 0.01 SOL
+    interDao: new InterDAO(new SafeWallet(), 'https://ssc-dao.genesysgo.net/'),
+    fee: '50000', // 0.000005 SOL
     taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',
   },
 }

@@ -67,7 +67,11 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
               </Space>
             </Col>
             <Col>
-              <Divider type="vertical" style={{ height: '100%' }} />
+              <Divider
+                className="dao-detail-divide"
+                type="vertical"
+                style={{ height: '100%' }}
+              />
             </Col>
             <Col flex="auto">
               <Row gutter={[36, 36]} wrap={false}>

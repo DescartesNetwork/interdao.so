@@ -73,8 +73,10 @@ const CardProgress = ({
           <Space size={0} style={{ width: '100%' }} direction="vertical">
             <Typography.Text type="secondary">Quorum</Typography.Text>
             <Typography.Text>
-              {utils.undecimalize(BigInt(powerRequire), mintDecimal)} more Yes
-              votes required
+              {numeric(
+                utils.undecimalize(BigInt(powerRequire), mintDecimal),
+              ).format('0,0')}{' '}
+              more Yes votes required
             </Typography.Text>
             <Progress
               percent={100}
