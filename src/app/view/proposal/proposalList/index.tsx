@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
-import { useWallet } from '@senhub/providers'
+import { useUI, useWallet } from '@senhub/providers'
 import { DaoRegimes } from '@interdao/core'
 import isEqual from 'react-fast-compare'
 import { SystemProgram } from '@solana/web3.js'
 
-import { Button, Col, Empty, Row, Select, Space, Typography } from 'antd'
+import { Button, Col, Empty, Row, Select, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import ProposalCard from './proposalCard'
 
@@ -29,11 +29,15 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
+  const {
+    ui: { width },
+  } = useUI()
 
   const { regime, authority } = daoData[daoAddress] || {
     regime: DaoRegimes.Dictatorial,
     authority: SystemProgram.programId,
   }
+  const mobileScreen = width < 768
 
   const isSuccess = useCallback(
     (quorum: string, votingPower: number, numSupply: number) => {
@@ -129,34 +133,38 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>
-        <Row gutter={[16, 16]} wrap={false} align="bottom">
-          <Col flex="auto">
+        <Row gutter={[16, 16]} align="bottom">
+          <Col
+            span={mobileScreen ? 24 : undefined}
+            flex={mobileScreen ? undefined : 'auto'}
+          >
             <Typography.Title level={4}>Proposals</Typography.Title>
           </Col>
-          <Col>
-            <Space>
-              <Select
-                className="select-filter-proposal"
-                defaultValue="all-status"
-                onChange={setStatus}
-                style={{ width: 150 }}
-              >
-                <Select.Option value="all-status">All status</Select.Option>
-                <Select.Option value="preparing">Preparing</Select.Option>
-                <Select.Option value="voting">Voting</Select.Option>
-                <Select.Option value="succeeded">Succeeded</Select.Option>
-                <Select.Option value="executed">Executed</Select.Option>
-                <Select.Option value="failed">Failed</Select.Option>
-              </Select>
-              <Button
-                type="primary"
-                icon={<IonIcon name="add-outline" />}
-                onClick={() => dispatch(setVisible(true))}
-                disabled={!authorized}
-              >
-                New Proposal
-              </Button>
-            </Space>
+          <Col span={mobileScreen ? 12 : undefined}>
+            <Select
+              className="select-filter-proposal"
+              defaultValue="all-status"
+              onChange={setStatus}
+              style={{ width: '100%', minWidth: 150 }}
+            >
+              <Select.Option value="all-status">All status</Select.Option>
+              <Select.Option value="preparing">Preparing</Select.Option>
+              <Select.Option value="voting">Voting</Select.Option>
+              <Select.Option value="succeeded">Succeeded</Select.Option>
+              <Select.Option value="executed">Executed</Select.Option>
+              <Select.Option value="failed">Failed</Select.Option>
+            </Select>
+          </Col>
+          <Col span={mobileScreen ? 12 : undefined}>
+            <Button
+              type="primary"
+              icon={<IonIcon name="add-outline" />}
+              onClick={() => dispatch(setVisible(true))}
+              disabled={!authorized}
+              block
+            >
+              New Proposal
+            </Button>
           </Col>
         </Row>
       </Col>
