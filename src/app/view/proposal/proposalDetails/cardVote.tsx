@@ -209,11 +209,7 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
         </Col>
         <Col span={24}>
           <Card
-            style={{
-              boxShadow: 'unset',
-              borderRadius: 4,
-              background: '#1A1311',
-            }}
+            className="numric-ip-card"
             bodyStyle={{ padding: '8px 12px' }}
             bordered={false}
           >
@@ -224,7 +220,7 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
               <Col>
                 <Typography.Text>
                   Available: {numeric(balance).format('0,0.[00]')}
-                </Typography.Text>{' '}
+                </Typography.Text>
                 <MintSymbol mintAddress={mint?.toBase58()} />
               </Col>
               <Col span={24}>

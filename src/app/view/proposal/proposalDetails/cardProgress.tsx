@@ -11,6 +11,12 @@ import useProposal from 'app/hooks/useProposal'
 import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
 import useProposalStatus from 'app/hooks/useProposalStatus'
+import { useUI } from '@senhub/providers'
+
+const STROKE_COLOR = {
+  dark: { default: '#312B29', success: '#698033' },
+  light: { default: '#F2EFE9', success: '#F9DEB0' },
+}
 
 const CardProgress = ({
   proposalAddress,
@@ -26,6 +32,9 @@ const CardProgress = ({
   const { mint } = daoData[daoAddress] || ({} as DaoData)
   const mintDecimal = useMintDecimals(mint?.toBase58()) || 0
   const { actualSupply } = useProposalStatus(proposalAddress)
+  const {
+    ui: { theme },
+  } = useUI()
 
   const noVote = Number(votingAgainstPower) || 0
   const yesVote = Number(votingForPower) || 0
@@ -78,10 +87,10 @@ const CardProgress = ({
             </Typography.Text>
             <Progress
               percent={100}
-              strokeColor="#312B29"
+              strokeColor={STROKE_COLOR[theme].default}
               success={{
                 percent: currentPower,
-                strokeColor: '#698033',
+                strokeColor: STROKE_COLOR[theme].success,
               }}
               showInfo={false}
             />
@@ -109,10 +118,10 @@ const CardProgress = ({
                 <Progress
                   style={{ width: '100%' }}
                   percent={100}
-                  strokeColor="#312B29"
+                  strokeColor={STROKE_COLOR[theme].default}
                   success={{
                     percent: percentYes,
-                    strokeColor: '#698033',
+                    strokeColor: STROKE_COLOR[theme].success,
                   }}
                   showInfo={false}
                 />
@@ -141,10 +150,10 @@ const CardProgress = ({
               <Col span={24}>
                 <Progress
                   percent={100}
-                  strokeColor="#312B29"
+                  strokeColor={STROKE_COLOR[theme].default}
                   success={{
                     percent: percentNo,
-                    strokeColor: '#698033',
+                    strokeColor: STROKE_COLOR[theme].success,
                   }}
                   showInfo={false}
                 />
