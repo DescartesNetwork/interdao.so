@@ -112,6 +112,7 @@ const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
       dstAddress,
       senderAddress,
     )
+
     await dispatch(setTx(re))
     await dispatch(setImgBackground(BG_SOLANA))
     await dispatch(setVisible(false))

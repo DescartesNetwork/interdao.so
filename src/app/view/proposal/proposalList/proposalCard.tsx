@@ -41,6 +41,7 @@ const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
       }
       className="proposal-card"
       style={{ background: `url(${metaData?.imageBackground})` }}
+      bodyStyle={{ padding: '24px 0' }}
       hoverable
     >
       <Row gutter={[8, 8]}>

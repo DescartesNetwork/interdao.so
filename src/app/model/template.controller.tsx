@@ -41,6 +41,10 @@ export const setTx = createAsyncThunk(
   },
 )
 
+export const clearTx = createAsyncThunk(`${NAME}/clearTx`, async () => {
+  return { tx: undefined }
+})
+
 export const setImgBackground = createAsyncThunk(
   `${NAME}/setImgBackground`,
   async (image: string) => {
@@ -68,6 +72,10 @@ const slice = createSlice({
       )
       .addCase(
         setImgBackground.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        clearTx.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })
