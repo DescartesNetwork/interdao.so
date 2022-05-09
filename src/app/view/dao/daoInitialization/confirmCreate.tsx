@@ -6,6 +6,7 @@ import CardRegmie from './daoRule/cardRegmie'
 
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import { AppState } from 'app/model'
+import { numeric } from 'shared/util'
 
 const MAX_WIDTH_RATIO = 24 / 16
 const PAGE_SPACING = 24
@@ -66,7 +67,9 @@ const ConfirmCreate = () => {
       <Col span={24}>
         <Space direction="vertical">
           <Typography.Text type="secondary">Total power</Typography.Text>
-          <Typography.Title level={1}>{supply?.toNumber()}</Typography.Title>
+          <Typography.Title level={1}>
+            {numeric(supply?.toNumber()).format('0,0.[00]')}
+          </Typography.Title>
         </Space>
       </Col>
       <Col span={24}>

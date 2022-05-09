@@ -53,9 +53,10 @@ const MetaDataForm = () => {
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Typography.Text>Dao name</Typography.Text>
+          <Typography.Text>DAO name</Typography.Text>
           <Input
             value={createMetaData.daoName}
+            placeholder="Input DAO name"
             onChange={onChange}
             name="daoName"
             className="border-less"
@@ -64,9 +65,10 @@ const MetaDataForm = () => {
       </Col>
       <Col span={24}>
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Typography.Text>Dao description</Typography.Text>
+          <Typography.Text>DAO description</Typography.Text>
           <Input.TextArea
             value={createMetaData.description}
+            placeholder="Input DAO description"
             name="description"
             onChange={onChange}
             className="border-less"

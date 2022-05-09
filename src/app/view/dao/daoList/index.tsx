@@ -10,6 +10,7 @@ import SortDao from './sortDao'
 
 import { AppState } from 'app/model'
 import useSearchDao from 'app/hooks/useSearchDao'
+import { useUI } from '@senhub/providers'
 
 import './index.less'
 
@@ -19,6 +20,9 @@ const DaoList = () => {
   const {
     dao: { daoData },
   } = useSelector((state: AppState) => state)
+  const {
+    ui: { infix },
+  } = useUI()
   const sortDaoRegime = useSearchDao(sortKey)
   const filterDaoData = useMemo(() => {
     if (!sortDaoRegime) return
@@ -31,14 +35,16 @@ const DaoList = () => {
   const searchData =
     !searchKey || searchKey.length < 3 ? sortDaoRegime : searchDao
 
+  const spanMobile = infix === 'xs' ? 12 : undefined
+
   return (
     <Row gutter={[24, 16]}>
       <Col xs={24} md={12}>
         <Row gutter={[24, 24]}>
-          <Col>
+          <Col span={spanMobile}>
             <SortDao onSort={setSortKey} value={sortKey} />
           </Col>
-          <Col flex="auto">
+          <Col span={spanMobile} flex="auto">
             <SearchDao onSearch={setSearchKey} />
           </Col>
         </Row>
