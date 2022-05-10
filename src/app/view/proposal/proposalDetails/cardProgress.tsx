@@ -112,7 +112,7 @@ const CardProgress = ({
                   <Typography.Title level={5}>
                     {numeric(
                       utils.undecimalize(BigInt(yesVote), mintDecimal),
-                    ).format('0,0.[000]')}
+                    ).format('0,0.[0000]')}
                   </Typography.Title>
                 </Space>
               </Col>
@@ -145,7 +145,7 @@ const CardProgress = ({
                   <Typography.Title level={5}>
                     {numeric(
                       utils.undecimalize(BigInt(noVote), mintDecimal),
-                    ).format('0,0.[000]')}
+                    ).format('0,0.[0000]')}
                   </Typography.Title>
                 </Space>
               </Col>

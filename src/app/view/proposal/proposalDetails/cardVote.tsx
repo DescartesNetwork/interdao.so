@@ -77,7 +77,7 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
         <Space direction="vertical">
           <Typography.Text>Time remaining</Typography.Text>
           <Typography.Title level={5}>
-            {remainingTime.days}days : {remainingTime.hours}h :{' '}
+            {remainingTime.days}d : {remainingTime.hours}h :{' '}
             {remainingTime.minutes}m : {remainingTime.seconds}s
           </Typography.Title>
         </Space>
