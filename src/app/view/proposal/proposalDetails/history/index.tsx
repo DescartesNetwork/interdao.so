@@ -1,27 +1,24 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { ReceiptData } from '@interdao/core'
 
 import { Card, Col, Row, Typography, Table, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { HISTORY_COLUMNS } from './column'
-import useReceipts from 'app/hooks/useReceipts'
+import { getReceipts } from 'app/hooks/useReceipts'
+
 import './index.less'
 
 const DEFAULT_AMOUNT_HISTORY = 5
 
-const History = ({
-  proposalAddress,
-  daoAddress,
-}: {
-  proposalAddress: string
-  daoAddress: string
-}) => {
+const History = ({ proposalAddress }: { proposalAddress: string }) => {
   const [amount, setAmount] = useState(DEFAULT_AMOUNT_HISTORY)
+  const [loading, setLoading] = useState(false)
+  const [listReceipt, setListReceipt] = useState<ReceiptData[]>([])
 
-  const { receipts } = useReceipts({ proposalAddress })
-
-  const filterReceipts = useMemo(() => {
+  const fetchReceipts = useCallback(async () => {
+    setLoading(true)
+    const receipts = await getReceipts(proposalAddress)
     const nextReceipts: ReceiptData[] = []
     receipts.forEach((receipt) => {
       const { authority, power, action } = receipt
@@ -47,20 +44,33 @@ const History = ({
           power: oldPower.add(power),
         })
     })
-    return nextReceipts
-  }, [receipts])
+    setLoading(false)
+    return setListReceipt(nextReceipts)
+  }, [proposalAddress])
+
+  useEffect(() => {
+    fetchReceipts()
+  }, [fetchReceipts])
 
   return (
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Typography.Title level={5}> Votes</Typography.Title>
+          <Row>
+            <Col flex="auto">
+              <Typography.Title level={5}> Votes</Typography.Title>
+            </Col>
+            <Col>
+              <Button onClick={fetchReceipts}>Refresh</Button>
+            </Col>
+          </Row>
         </Col>
         <Col span={24}>
           <Table
             columns={HISTORY_COLUMNS}
-            dataSource={filterReceipts.slice(0, amount)}
+            dataSource={listReceipt.slice(0, amount)}
             pagination={false}
+            loading={loading}
             rowKey={(record) =>
               record.index.toNumber() + record.lockedDate.toNumber()
             }
@@ -68,7 +78,7 @@ const History = ({
         </Col>
         <Col span={24} style={{ textAlign: 'center' }}>
           <Button
-            disabled={filterReceipts.length <= amount}
+            disabled={listReceipt.length <= amount}
             onClick={() => setAmount(amount + DEFAULT_AMOUNT_HISTORY)}
             icon={<IonIcon name="chevron-down-outline" />}
           >
