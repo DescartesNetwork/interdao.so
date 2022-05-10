@@ -14,8 +14,8 @@ const ColumnPower = ({ receipt }: { receipt: ReceiptData }) => {
     dao: { daoData },
     proposal,
   } = useSelector((state: AppState) => state)
-  const { dao: daoAddress } = proposal[proposalAddress.toBase58()]
-  const { mint } = daoData[daoAddress.toBase58()] || ({} as DaoData)
+  const { dao: daoAddress } = proposal[proposalAddress.toBase58()] || {}
+  const { mint } = daoData[daoAddress?.toBase58() || ''] || ({} as DaoData)
   const mintDecimal = useMintDecimals(mint?.toBase58()) || 0
 
   return (

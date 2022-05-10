@@ -45,6 +45,8 @@ const CardRegmie = ({
           padding: 4,
           backdropFilter: 'blur(4px)',
           color: '#fff',
+          textTransform: 'capitalize',
+          fontWeight: 400,
         }}
       >
         {Object.keys(regmie)[0]}

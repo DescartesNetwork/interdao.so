@@ -10,43 +10,43 @@
 @import './index.less';
 
 // Colors
-@primary-color: @PRIMARY;
+@primary-color: @ACCENT;
 @info-color: @INFO;
 @success-color: @SUCCESS;
 @warning-color: @WARNING;
 @error-color: @ERROR;
-@popover-background: @CARD_BG;
-@body-background: @ACCENT;
-@component-background: @ACCENT;
-@disabled-bg: @ACCENT90;
+@popover-background: @CARD_BG_LIGHT;
+@body-background: @BODY_LIGHT;
+@component-background: @CARD_BG_LIGHT;
+@disabled-bg: @ACCENT20;
 
 // Typography
 @font-family: 'Helvetica Neue';
-@text-color: @PRIMARY;
-@text-color-secondary: @SECONDARY;
-@heading-color: @PRIMARY;
-@disabled-color: @ACCENT60;
+@text-color: @ACCENT;
+@text-color-secondary: @ACCENT60;
+@heading-color: @ACCENT;
+@disabled-color: @ACCENT40;
 @typography-title-margin-top: 0px;
 @typography-title-margin-bottom: 0px;
 
 // Border
 @border-radius-base: 4px;
-@border-color-base: @PRIMARY20;
+@border-color-base: @ACCENT20;
 @border-width-base: 1px;
 @border-color-split: @border-color-base;
 @popover-customize-border-color: @border-color-base;
 
 // Card
 @card-radius: @border-radius-base * 2;
-@card-actions-background: @CARD_BG;
-@card-background: @CARD_BG;
+@card-actions-background: @CARD_BG_LIGHT;
+@card-background: @CARD_BG_LIGHT;
 @card-shadow: @DARK_SHADOW2;
 @card-skeleton-bg: @PRIMARY;
 
 // Modal
-@modal-header-bg: @NEUTRAL100;
-@modal-content-bg: @NEUTRAL100;
-@modal-footer-bg: @NEUTRAL100;
+@modal-header-bg: @CARD_BG_LIGHT;
+@modal-content-bg: @CARD_BG_LIGHT;
+@modal-footer-bg: @CARD_BG_LIGHT;
 @modal-footer-padding-horizontal: 24px;
 
 // Drawer
@@ -57,18 +57,18 @@
 @btn-shadow: unset;
 @btn-primary-shadow: unset;
 @btn-text-shadow: unset;
-@btn-primary-color: @ACCENT;
-@btn-default-border: @PRIMARY;
+@btn-primary-color: @PRIMARY;
+@btn-default-border: @ACCENT;
 @btn-default-ghost-color: @ACCENT;
-@btn-default-ghost-border: @PRIMARY;
-@btn-disable-color: @ACCENT60;
-@btn-disable-border: @ACCENT80;
+@btn-default-ghost-border: @ACCENT;
+@btn-disable-color: @ACCENT40;
+@btn-disable-border: @ACCENT20;
 @btn-border-radius-base: 4px;
 @btn-border-radius-sm: 4px;
 
 // Input
-@input-placeholder-color: @SECONDARY;
-@input-bg: @ACCENT;
+@input-placeholder-color: @ACCENT20;
+@input-bg: #f2efe9;
 
 // Divider
 @divider-color: @NEUTRAL90;
@@ -78,7 +78,8 @@
 @checkbox-border-radius: @border-radius-base - 4;
 
 // Progress
-@progress-default-color: @PRIMARY;
+@progress-default-color: @ACCENT;
+@progress-steps-item-bg: @ACCENT20;
 
 // Patch
 .@{ant-prefix}-layout {

@@ -14,6 +14,7 @@ const useSearchDao = (keyword?: string, data?: DaoDataState) => {
     Record<string, DaoData & MetaData> | undefined
   >()
   const [searchData, setSearchData] = useState<string[]>()
+  const [loading, setLoading] = useState(false)
   const {
     dao: { daoData },
   } = useSelector((state: AppState) => state)
@@ -55,14 +56,16 @@ const useSearchDao = (keyword?: string, data?: DaoDataState) => {
   }, [onParseDaoData])
 
   useEffect(() => {
-    const delayToSearch = setTimeout(() => {
+    if (keyword && keyword.length >= 3) setLoading(true)
+    const delayToSearch = setTimeout(async () => {
       //  delay to waiting keyboard typing
-      onSearch()
+      await onSearch()
+      setLoading(false)
     }, 500)
     return () => clearTimeout(delayToSearch)
-  }, [onSearch])
+  }, [keyword, onSearch])
 
-  return searchData
+  return { searchData, loading }
 }
 
 export default useSearchDao

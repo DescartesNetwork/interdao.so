@@ -1,7 +1,7 @@
 .interdao-table-thead {
   & > tr > th {
     border-bottom: none !important;
-    background-color: #1a1311 !important;
+    background-color: #fff4e0 !important;
     &::before {
       display: none;
     }
@@ -17,7 +17,8 @@
 
 .interdao-table-tbody {
   & > tr > td {
-    background: #2b2523 !important;
+    background: #fffaf2 !important;
+    border-color: #d1cfcf;
     .action-icon {
       font-size: 24px;
     }
@@ -29,14 +30,15 @@
 
 #dark {
   .interdao-table-thead > tr > th {
-    background-color: #242838 !important;
+    background-color: #38302e !important;
   }
   .interdao-table-tbody {
-    .even-row {
-      background-color: #212433 !important;
+    & > tr > td {
+      background: #2b2523 !important;
+      border-color: #473c31;
     }
-    .odd-row {
-      background-color: #242838 !important;
+    & > tr.interdao-table-row-level-0:hover > td {
+      background-color: unset !important;
     }
   }
 }

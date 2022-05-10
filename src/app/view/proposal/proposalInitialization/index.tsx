@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   ConsensusMechanisms,
   ConsensusQuorums,
@@ -19,8 +19,10 @@ import configs from 'app/configs'
 import { explorer } from 'shared/util'
 import IPFS from 'shared/pdb/ipfs'
 import { AppState } from 'app/model'
+import { clearTx } from 'app/model/template.controller'
 
 const {
+  sol: { interDao, taxman, fee },
   manifest: { appId },
 } = configs
 
@@ -51,6 +53,9 @@ const ProposalInitialization = () => {
     dao: { daoData },
   } = useSelector((state: AppState) => state)
   const history = useHistory()
+  const dispatch = useDispatch()
+
+  const disabled = !title || !description
 
   const metaData: ProposalMetaData = useMemo(() => {
     return {
@@ -62,6 +67,8 @@ const ProposalInitialization = () => {
 
   const newProposal = useCallback(async () => {
     const { authority } = daoData[daoAddress]
+    if (!tx) return
+
     try {
       setLoading(true)
 
@@ -71,35 +78,25 @@ const ProposalInitialization = () => {
         multihash: { digest },
       } = CID.parse(cid)
 
-      const {
-        sol: { interDao, taxman },
-      } = configs
-
       const feeOption: Partial<FeeOptions> = {
-        revenue: new BN(50000),
+        revenue: new BN(fee),
         revenuemanAddress: authority.toBase58(),
-        tax: new BN(50000),
+        tax: new BN(fee),
         taxmanAddress: taxman,
       }
 
-      if (!tx) return
-
-      const {
-        programId,
-        data,
-        accounts: { src, dst, payer },
-      } = tx
+      const { programId, data, accounts } = tx
 
       const metadata = Buffer.from(digest)
-      const accounts = [src, dst, payer]
+      const valueAccounts = Object.values(accounts)
       const { txId, proposalAddress } = await interDao.initializeProposal(
         daoAddress,
         programId.toBase58(),
         data,
-        accounts.map(({ pubkey }) => pubkey),
-        accounts.map(({ isSigner }) => isSigner),
-        accounts.map(({ isWritable }) => isWritable),
-        accounts.map(({ isMaster }) => isMaster),
+        valueAccounts.map(({ pubkey }) => pubkey),
+        valueAccounts.map(({ isSigner }) => isSigner),
+        valueAccounts.map(({ isWritable }) => isWritable),
+        valueAccounts.map(({ isMaster }) => isMaster),
         Math.floor(duration[0] / 1000),
         Math.floor(duration[1] / 1000),
         metadata,
@@ -113,6 +110,10 @@ const ProposalInitialization = () => {
           'Create a new proposal successfully. Click here to view details.',
         onClick: () => window.open(explorer(txId), '_blank'),
       })
+
+      //Clear tx in redux
+      dispatch(clearTx())
+
       return history.push(
         `/app/${appId}/dao/${daoAddress}/proposal/${proposalAddress}`,
       )
@@ -132,6 +133,7 @@ const ProposalInitialization = () => {
     duration,
     consensusMechanism,
     consensusQuorum,
+    dispatch,
     history,
   ])
 
@@ -211,6 +213,7 @@ const ProposalInitialization = () => {
                 loading={loading}
                 type="primary"
                 size="large"
+                disabled={disabled}
               >
                 Add a new Proposal
               </Button>

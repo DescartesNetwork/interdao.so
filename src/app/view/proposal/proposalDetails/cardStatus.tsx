@@ -52,36 +52,43 @@ const CardStatus = ({
   return (
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
-        <Col flex="auto">
-          <Space direction="vertical">
-            <Row gutter={[8, 8]} align="middle">
-              <Col>
-                <Typography.Title level={3}>
-                  {metaData?.title
-                    ? metaData.title
-                    : shortenAddress(proposalAddress)}
-                </Typography.Title>
-              </Col>
-              <Col>
-                <ProposalStatus status={status} />
-              </Col>
-            </Row>
-            <Space>
-              <IonIcon name="people-outline" />
-              <Typography.Text>Member: {accountsLen}</Typography.Text>
-            </Space>
-          </Space>
-        </Col>
-        <Col>
-          <Button
-            size="large"
-            type="primary"
-            onClick={execute}
-            loading={loading}
-            disabled={disabled}
-          >
-            Execute
-          </Button>
+        <Col span={24}>
+          <Row gutter={[24, 24]} wrap={false}>
+            <Col flex="auto">
+              <Space direction="vertical">
+                <Row gutter={[8, 8]} align="middle">
+                  <Col>
+                    <Typography.Title
+                      level={3}
+                      style={{ wordBreak: 'break-all' }}
+                    >
+                      {metaData?.title
+                        ? metaData.title
+                        : shortenAddress(proposalAddress)}
+                    </Typography.Title>
+                  </Col>
+                  <Col>
+                    <ProposalStatus status={status} />
+                  </Col>
+                </Row>
+                <Space>
+                  <IonIcon name="people-outline" />
+                  <Typography.Text>Member: {accountsLen}</Typography.Text>
+                </Space>
+              </Space>
+            </Col>
+            <Col>
+              <Button
+                size="large"
+                type="primary"
+                onClick={execute}
+                loading={loading}
+                disabled={disabled}
+              >
+                Execute
+              </Button>
+            </Col>
+          </Row>
         </Col>
         <Col span={24}>
           <Typography.Paragraph

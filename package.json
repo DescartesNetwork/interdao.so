@@ -4,7 +4,7 @@
   "dependencies": {
     "@dnd-kit/core": "^4.0.1",
     "@dnd-kit/sortable": "^5.0.0",
-    "@interdao/core": "^1.2.1",
+    "@interdao/core": "^1.2.2",
     "@project-serum/sol-wallet-adapter": "^0.2.6",
     "@reduxjs/toolkit": "^1.8.0",
     "@senswap/react-lazyload": "^3.2.2",
@@ -33,6 +33,7 @@
     "react-router-dom": "^5.3.0",
     "react-scripts": "^5.0.1",
     "remarkable": "^2.0.1",
+    "sen-idl-parser": "^1.0.3",
     "swiper": "^7.2.0",
     "tweetnacl": "^1.0.3",
     "web-vitals": "^2.1.1"

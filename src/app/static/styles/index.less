@@ -39,34 +39,25 @@
 .regime-tag {
   position: relative;
   border-radius: unset !important;
-  padding: 1px 8px 1px 30px;
+  padding: 4px 8px 4px 30px;
   min-width: 110px;
   text-align: center;
+  border: none;
+  font-weight: 400;
   &::before {
     content: '';
     position: absolute;
     width: 0;
     height: 0;
-    left: -0.8px;
-    top: -1px;
-    border-top: 12px solid transparent;
-    border-bottom: 12px solid transparent;
-    border-left: 12px solid #2b2523;
+    left: 0;
+    top: 0;
+    border-top: 14px solid transparent;
+    border-bottom: 14px solid transparent;
+    border-left: 12px solid;
   }
 }
+
 .border-less {
   border: none !important;
   padding: 8px 12px !important;
-}
-
-#light {
-  .dummy {
-    color: black;
-  }
-}
-
-#dark {
-  .dummy {
-    color: white;
-  }
 }

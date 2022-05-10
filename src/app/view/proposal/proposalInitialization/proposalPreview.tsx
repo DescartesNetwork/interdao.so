@@ -29,11 +29,11 @@ const ProposalPreview = ({ daoAddress }: ProposalPreviewProps) => {
   const members = useMembers(daoAddress)
 
   return (
-    <Row gutter={[36, 36]}>
-      <Col span={5}>
+    <Row gutter={[36, 16]}>
+      <Col xs={12} md={5}>
         <StatisticCard title="DAO Address" value={shortenAddress(daoAddress)} />
       </Col>
-      <Col span={5}>
+      <Col xs={12} md={5}>
         <StatisticCard
           title="Token"
           value={
@@ -44,10 +44,10 @@ const ProposalPreview = ({ daoAddress }: ProposalPreviewProps) => {
           }
         />
       </Col>
-      <Col span={5}>
+      <Col xs={12} md={5}>
         <StatisticCard title="Members" value={numeric(members).format('0,0')} />
       </Col>
-      <Col span={5}>
+      <Col xs={12} md={5}>
         <StatisticCard title="Regime" value={<RegimeTag regime={regime} />} />
       </Col>
     </Row>

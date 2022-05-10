@@ -7,13 +7,13 @@ const Banner = () => {
         <Space direction="vertical" size={0}>
           <Typography.Title
             level={1}
-            style={{ fontSize: 56, textAlign: 'center' }}
+            style={{ fontSize: 72, textAlign: 'center' }}
           >
             Let's build
           </Typography.Title>
           <Typography.Title
             level={1}
-            style={{ fontSize: 56, textAlign: 'center' }}
+            style={{ fontSize: 72, textAlign: 'center' }}
             className="spec-title"
           >
             Your own DAO.

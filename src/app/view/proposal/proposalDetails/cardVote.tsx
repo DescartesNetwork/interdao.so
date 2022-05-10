@@ -77,7 +77,7 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
         <Space direction="vertical">
           <Typography.Text>Time remaining</Typography.Text>
           <Typography.Title level={5}>
-            {remainingTime.days}days : {remainingTime.hours}h :{' '}
+            {remainingTime.days}d : {remainingTime.hours}h :{' '}
             {remainingTime.minutes}m : {remainingTime.seconds}s
           </Typography.Title>
         </Space>
@@ -91,7 +91,7 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
                 name="information-circle-outline"
               />
             </Tooltip>
-            <Typography.Text>Power of your vote</Typography.Text>
+            <Typography.Text>Power of your votes</Typography.Text>
           </Space>
 
           <Typography.Title level={5} style={{ textAlign: 'right' }}>
@@ -205,21 +205,17 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Typography.Title level={5}>Cast your vote</Typography.Title>
+          <Typography.Title level={5}>Cast your votes</Typography.Title>
         </Col>
         <Col span={24}>
           <Card
-            style={{
-              boxShadow: 'unset',
-              borderRadius: 4,
-              background: '#1A1311',
-            }}
+            className="numric-ip-card"
             bodyStyle={{ padding: '8px 12px' }}
             bordered={false}
           >
             <Row gutter={[8, 8]}>
               <Col flex="auto">
-                <Typography.Text>Amount vote</Typography.Text>
+                <Typography.Text>Amount votes</Typography.Text>
               </Col>
               <Col>
                 <Typography.Text>
@@ -263,7 +259,7 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
             size="large"
             icon={<IonIcon name="thumbs-down-outline" />}
           >
-            Vote No
+            Disagree
           </Button>
         </Col>
         <Col span={12}>
@@ -276,7 +272,7 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
             size="large"
             icon={<IonIcon name="thumbs-up-outline" />}
           >
-            Vote Yes
+            Agree
           </Button>
         </Col>
       </Row>

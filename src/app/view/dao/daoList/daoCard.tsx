@@ -92,12 +92,12 @@ const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
                     <Avatar shape="square" size={56} src={metaData?.image} />
                   )}
                 </Col>
-                <Col flex="auto">
+                <Col flex="auto" style={{ maxWidth: 'calc(100% - 160px)' }}>
                   <Space direction="vertical" size={0}>
                     <Tooltip
                       title={metaData?.daoName ? metaData.daoName : daoAddress}
                     >
-                      <Typography.Title level={4}>
+                      <Typography.Title level={4} ellipsis={{ rows: 2 }}>
                         {metaData?.daoName
                           ? metaData.daoName
                           : shortenAddress(daoAddress)}
