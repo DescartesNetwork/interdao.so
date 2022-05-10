@@ -22,7 +22,7 @@ const TemplateTransfer = ({
 }: {
   transferInfo?: TransferType
 }) => {
-  const [copied, setCopied] = useState('')
+  const [copied, setCopied] = useState('address')
   const {
     mint = '',
     source = '',
@@ -34,7 +34,7 @@ const TemplateTransfer = ({
   const onCopy = async (address: string) => {
     setCopied(address)
     await asyncWait(1500)
-    setCopied('')
+    setCopied('address')
   }
 
   return (
