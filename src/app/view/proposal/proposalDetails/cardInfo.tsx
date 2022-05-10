@@ -4,12 +4,12 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { Card, Col, Row, Space, Typography, Tooltip, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
+import TemplateInfo from './templateInfo'
+import RowSpaceBetween from 'app/components/rowSpaceBetween'
 
 import useProposal from 'app/hooks/useProposal'
 import { asyncWait, explorer, shortenAddress } from 'shared/util'
 import { ProposalChildCardProps } from './index'
-import TemplateInfo from './templateInfo'
-import RowSpaceBetween from 'app/components/rowSpaceBetween'
 
 const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
   const [copied, setCopied] = useState(false)
