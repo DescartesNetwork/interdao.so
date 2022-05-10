@@ -24,7 +24,104 @@
   background-size: cover !important;
 }
 
+.template {
+  &-card {
+    border-radius: 8px !important;
+    padding: 0 !important;
+    .interdao-modal-body {
+      padding: 0px !important;
+      border-radius: 8px !important;
+    }
+    .interdao-modal-close {
+      padding: 0px !important;
+      top: -10px !important;
+      right: -6px !important;
+    }
+    .interdao-modal-content {
+      border-radius: 8px !important;
+    }
+  }
+
+  &-modal {
+    width: 930px !important;
+  }
+
+  &-info {
+    width: 453px !important;
+    &-header {
+      text-align: left !important;
+      padding: 8px 24px !important;
+      border-radius: 8px 8px 0 0;
+      background: #e8e7e7 !important;
+    }
+    &-body {
+      padding: 24px !important;
+    }
+  }
+
+  &-header {
+    text-align: center !important;
+    background: #484241 !important;
+    padding: 8px 0 !important;
+    border-radius: 8px 8px 0 0;
+  }
+  &-body {
+    background: #38312e !important;
+    border-radius: 0 0 8px 8px;
+    .interdao-tabs-nav {
+      padding: 0 24px !important;
+      margin: 0 !important;
+      &::before {
+        border: none !important;
+      }
+    }
+  }
+}
+
+.spl-info {
+  padding: 24px;
+  .select-spl-option {
+    border: none;
+    .interdao-radio-button-wrapper {
+      width: 100% !important;
+      height: 100% !important;
+      min-height: 112px !important;
+      padding: 16px !important;
+      border: solid 1px #473c31 !important ;
+      background: transparent !important;
+      &-checked {
+        background-color: rgba(249, 222, 176, 0.1) !important ;
+        border: solid 1px #f9deb0 !important ;
+        :focus-within {
+          box-shadow: unset !important;
+        }
+      }
+      &-disabled {
+        opacity: 0.5;
+      }
+      &:focus-within {
+        box-shadow: unset !important ;
+      }
+    }
+  }
+}
+
+.spl-option-transfer {
+  padding: 24px !important;
+  border-top: solid 2px #2b2523 !important ;
+}
+
 .btn-unselect {
   color: #a08d70 !important;
   border: 1px solid #473c31 !important;
+}
+
+#dark {
+  .template {
+    &-info {
+      &-header {
+        background: #473c31 !important;
+      }
+    }
+  }
 }

@@ -220,7 +220,7 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
               <Col>
                 <Typography.Text>
                   Available: {numeric(balance).format('0,0.[00]')}
-                </Typography.Text>
+                </Typography.Text>{' '}
                 <MintSymbol mintAddress={mint?.toBase58()} />
               </Col>
               <Col span={24}>

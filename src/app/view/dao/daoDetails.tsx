@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux'
 import { SystemProgram } from '@solana/web3.js'
 import BN from 'bn.js'
+import { useUI } from '@senhub/providers'
 
 import {
   Avatar,
@@ -23,7 +24,6 @@ import { numeric, shortenAddress } from 'shared/util'
 import useMembers from 'app/hooks/useMembers'
 import useMetaData from 'app/hooks/useMetaData'
 import { SOCIAL_MEDIA } from 'app/model/metadata.controller'
-import { useUI } from '@senhub/providers'
 
 export type DaoDetailsProps = { daoAddress: string }
 
