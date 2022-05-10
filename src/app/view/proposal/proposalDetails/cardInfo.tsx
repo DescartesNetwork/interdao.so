@@ -1,4 +1,4 @@
-import { ReactNode, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import moment from 'moment'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
@@ -8,25 +8,13 @@ import IonIcon from 'shared/antd/ionicon'
 import useProposal from 'app/hooks/useProposal'
 import { asyncWait, explorer, shortenAddress } from 'shared/util'
 import { ProposalChildCardProps } from './index'
-
-type RowSpaceBetweenProps = {
-  label?: string
-  value?: string | ReactNode
-}
-
-const RowSpaceBetween = ({ label = '', value = '' }: RowSpaceBetweenProps) => {
-  return (
-    <Row gutter={[24, 24]}>
-      <Col flex="auto">
-        <Typography.Text type="secondary">{label}</Typography.Text>
-      </Col>
-      <Col>{value}</Col>
-    </Row>
-  )
-}
+import TemplateInfo from './templateInfo'
+import RowSpaceBetween from 'app/components/rowSpaceBetween'
 
 const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
   const [copied, setCopied] = useState(false)
+  const [visible, setVisible] = useState(false)
+
   const { consensusQuorum, startDate, endDate, consensusMechanism, creator } =
     useProposal(proposalAddress, daoAddress)
   const authProposalAddress = creator?.toBase58() || ''
@@ -65,6 +53,7 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
                 type="text"
                 icon={<IonIcon name="information-circle-outline" />}
                 style={{ marginRight: -10 }}
+                onClick={() => setVisible(true)}
               />
             </Col>
           </Row>
@@ -116,6 +105,12 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
           </Space>
         </Col>
       </Row>
+      <TemplateInfo
+        setVisible={setVisible}
+        visible={visible}
+        proposalAddress={proposalAddress}
+        daoAddress={daoAddress}
+      />
     </Card>
   )
 }
