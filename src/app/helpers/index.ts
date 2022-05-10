@@ -4,6 +4,13 @@ import IPFS from 'shared/pdb/ipfs'
 
 import { DaoDataState } from 'app/model/dao.controller'
 import { MetaData } from 'app/model/metadata.controller'
+import PDB from 'shared/pdb'
+import configs from 'app/configs'
+import isEqual from 'react-fast-compare'
+
+const {
+  manifest: { appId },
+} = configs
 
 export const fileToBase64 = (
   file: File,
@@ -30,21 +37,10 @@ export const parseDaoData = async (
 ): Promise<Record<string, DaoData & MetaData> | undefined> => {
   try {
     if (!daoData) throw new Error('Invalid Dao data!')
-    const ipfs = new IPFS()
     const results = await Promise.all(
       Object.keys(daoData).map(async (daoAddr) => {
-        const { metadata: digest, regime } = daoData[daoAddr]
-        const cid = getCID(digest)
-        const data = await ipfs.get(cid)
-        const daoRegime = Object.keys(regime)[0]
-        return {
-          [daoAddr]: {
-            ...daoData[daoAddr],
-            ...data,
-            address: daoAddr,
-            daoRegime,
-          },
-        }
+        const data = await cacheDaoData(daoAddr, daoData[daoAddr])
+        return { [daoAddr]: data }
       }),
     )
     const nextDaoData: Record<string, DaoData & MetaData> = {}
@@ -57,4 +53,27 @@ export const parseDaoData = async (
   } catch (err) {
     return
   }
+}
+
+const cacheDaoData = async (daoAddress: string, daoData: DaoData) => {
+  const wallet = window.sentre.wallet
+  if (!wallet) throw new Error('Please connect wallet!')
+
+  const ipfs = new IPFS()
+  const { metadata: digest } = daoData
+  const walletAddress = await wallet.getAddress()
+  const db = new PDB(walletAddress).createInstance(appId)
+  const dbDaoData = (await db.getItem(`interdao:${daoAddress}`)) as DaoData
+  const { metadata } = dbDaoData || ({} as DaoData)
+
+  if (!dbDaoData || (!!metadata && !isEqual(metadata, digest))) {
+    const { metadata, regime } = daoData
+    const cid = getCID(metadata)
+    const data = await ipfs.get(cid)
+    const daoRegime = Object.keys(regime)[0]
+    const dbData = { ...daoData, ...data, daoRegime, address: daoAddress }
+    await db.setItem(`interdao:${daoAddress}`, dbData)
+    return dbData
+  }
+  return dbDaoData
 }

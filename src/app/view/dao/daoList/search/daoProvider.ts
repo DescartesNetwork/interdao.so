@@ -56,7 +56,7 @@ class DaoProvider {
 
     const fuzzy = keyword + '~2'
     engine.search(fuzzy).forEach(({ ref }) => {
-      if (daos.findIndex(({ mint }) => mint.toBase58() === ref) < 0) {
+      if (daos.findIndex(({ mint }) => mint.toString() === ref) < 0) {
         const dao = daoMap.get(ref)
         if (dao) daos.push(dao)
       }

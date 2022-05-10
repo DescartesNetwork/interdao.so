@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import IPFS from 'shared/pdb/ipfs'
@@ -25,6 +25,7 @@ const {
 
 const DaoInitialization = () => {
   const [step, setStep] = useState(0)
+  const [loading, setLoading] = useState(false)
   const {
     dao: { createDaoData },
     metadata: { createMetaData },
@@ -46,8 +47,22 @@ const DaoInitialization = () => {
     }
   }, [createDaoData, createMetaData, step])
 
+  const disabled = useMemo(
+    () =>
+      (step === CreateSteps.stepOne &&
+        (!createMetaData.daoName ||
+          !createMetaData.image ||
+          !createMetaData.description)) ||
+      (step === CreateSteps.stepTwo &&
+        (!createDaoData.mintAddress ||
+          !createDaoData.regime ||
+          !Number(createDaoData.supply))),
+    [createDaoData, createMetaData, step],
+  )
+
   const onCreateDao = useCallback(async () => {
     try {
+      setLoading(true)
       const ipfs = new IPFS()
       const cid = await ipfs.set(createMetaData)
       const {
@@ -72,6 +87,8 @@ const DaoInitialization = () => {
       return history.push(`/app/${appId}/dao/${daoAddress}`)
     } catch (err: any) {
       window.notify({ type: 'error', description: err.message })
+    } finally {
+      setLoading(false)
     }
   }, [createMetaData, decimals, history, mintAddress, regime, supply])
 
@@ -95,6 +112,8 @@ const DaoInitialization = () => {
                 step={step}
                 onHandleStep={onNextStep}
                 onConfirm={onCreateDao}
+                loading={loading}
+                disabled={disabled}
               />
             </Col>
           </Row>

@@ -4,6 +4,8 @@ export type CreateDaoTitleProps = {
   step: number
   onHandleStep?: () => void
   onConfirm?: () => void
+  loading?: boolean
+  disabled?: boolean
 }
 
 const DEFAULT_PERCENT = 25

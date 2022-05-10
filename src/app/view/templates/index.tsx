@@ -7,6 +7,8 @@ import { AppDispatch, AppState } from 'app/model'
 import { setVisible } from 'app/model/template.controller'
 import IonIcon from 'shared/antd/ionicon'
 
+import './index.less'
+
 const Template = ({ daoAddress }: { daoAddress: string }) => {
   const {
     template: { visible },
