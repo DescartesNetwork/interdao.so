@@ -10,6 +10,10 @@ import configs from 'app/configs'
 import { explorer, shortenAddress } from 'shared/util'
 import useProposalStatus from 'app/hooks/useProposalStatus'
 import useProposalMetaData from 'app/hooks/useProposalMetaData'
+import MultisigWallet from 'app/helpers/mutisigWallet'
+import { account } from '@senswap/sen-js'
+import { useWallet } from '@senhub/providers'
+// import { createMultisigWallet } from 'app/helpers/mutisigWallet'
 
 const {
   sol: { interDao },
@@ -24,6 +28,10 @@ const CardStatus = ({
   const { accountsLen } = useProposal(proposalAddress, daoAddress)
   const { status } = useProposalStatus(proposalAddress)
   const metaData = useProposalMetaData(proposalAddress)
+
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
 
   const disabled = useMemo(() => {
     if (status === 'Succeeded') return false
@@ -49,8 +57,23 @@ const CardStatus = ({
     }
   }, [proposalAddress])
 
+  const test = async () => {
+    try {
+      const multiSigWallet = new MultisigWallet()
+      await multiSigWallet.createNewToken()
+      await multiSigWallet.mintToAccount(account.fromAddress(walletAddress))
+      window.notify({
+        type: 'success',
+        description: 'Create multisig wallet successfully.',
+      })
+    } catch (err: any) {
+      window.notify({ type: 'error', description: err.message })
+    }
+  }
+
   return (
     <Card bordered={false}>
+      <Button onClick={test}>Test</Button>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Row gutter={[24, 24]} wrap={false}>
