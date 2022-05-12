@@ -24,7 +24,7 @@ const useProposalStatus = (proposalAddress: string) => {
     const mechanism = consensusMechanism
       ? Object.keys(consensusMechanism)[0]
       : ''
-    if (mechanism === 'StakedTokenCounter') return supply.toNumber()
+    if (mechanism === 'stakedTokenCounter') return supply.toNumber()
     return Number(supply) * (Number(endDate) - Number(startDate))
   }, [consensusMechanism, endDate, startDate, supply])
 

@@ -3,21 +3,13 @@ import { SystemProgram } from '@solana/web3.js'
 import BN from 'bn.js'
 import { useUI } from '@senhub/providers'
 
-import {
-  Avatar,
-  Button,
-  Card,
-  Col,
-  Divider,
-  Row,
-  Space,
-  Typography,
-} from 'antd'
+import { Avatar, Button, Card, Col, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import StatisticCard from 'app/components/statisticCard'
 import RegimeTag from 'app/components/regimeTag'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import GradientAvatar from 'app/components/gradientAvatar'
+import DaoOwnerAssets from './daoOwnerAssets'
 
 import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
@@ -44,52 +36,49 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
   const mobileScreen = width < 768
 
   return (
-    <Card bordered={false}>
-      <Row gutter={[24, 24]}>
-        <Col span={24}>
+    <Row gutter={[24, 24]}>
+      <Col xs={24} md={16}>
+        <Card bordered={false}>
           <Row gutter={[16, 16]}>
-            <Col>
-              {!metaData?.image ? (
-                <GradientAvatar
-                  seed={daoAddress}
-                  avatarProps={{ shape: 'square', size: 56 }}
-                />
-              ) : (
-                <Avatar shape="square" size={56} src={metaData?.image} />
-              )}
-            </Col>
-            <Col flex={mobileScreen ? 'auto' : undefined}>
-              <Space direction="vertical" size={0}>
-                <Typography.Title level={4}>
-                  {metaData?.daoName
-                    ? metaData.daoName
-                    : shortenAddress(daoAddress)}
-                </Typography.Title>
-                <Space size={0} style={{ marginLeft: -8 }}>
-                  {metaData?.optionals.map((url, idx) => (
-                    <Button
-                      size="small"
-                      type="text"
-                      onClick={() => window.open(url, '_blank')}
-                      icon={<IonIcon name={`logo-${SOCIAL_MEDIA[idx]}`} />}
-                      key={idx}
+            <Col span={24}>
+              <Row gutter={[16, 16]}>
+                <Col>
+                  {!metaData?.image ? (
+                    <GradientAvatar
+                      seed={daoAddress}
+                      avatarProps={{ shape: 'square', size: 56 }}
                     />
-                  ))}
-                </Space>
-              </Space>
+                  ) : (
+                    <Avatar shape="square" size={56} src={metaData?.image} />
+                  )}
+                </Col>
+                <Col flex={mobileScreen ? 'auto' : undefined}>
+                  <Space direction="vertical" size={0}>
+                    <Typography.Title level={4}>
+                      {metaData?.daoName
+                        ? metaData.daoName
+                        : shortenAddress(daoAddress)}
+                    </Typography.Title>
+                    <Space size={0} style={{ marginLeft: -8 }}>
+                      {metaData?.optionals.map((url, idx) => (
+                        <Button
+                          size="small"
+                          type="text"
+                          onClick={() => window.open(url, '_blank')}
+                          icon={<IonIcon name={`logo-${SOCIAL_MEDIA[idx]}`} />}
+                          key={idx}
+                        />
+                      ))}
+                    </Space>
+                  </Space>
+                </Col>
+              </Row>
             </Col>
-            <Col>
-              <Divider
-                className="dao-detail-divide"
-                type="vertical"
-                style={mobileScreen ? { display: 'none' } : {}}
-              />
-            </Col>
-            <Col span={mobileScreen ? 24 : undefined} flex="auto">
+            <Col span={24}>
               <Row gutter={[36, 16]}>
                 <Col xs={12} sm={4}>
                   <StatisticCard
-                    title="Token"
+                    title="Vote by"
                     value={
                       <Space>
                         <MintAvatar mintAddress={mint.toBase58()} />
@@ -118,18 +107,22 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
                 </Col>
               </Row>
             </Col>
+            <Col span={24} className="scrollbar" style={{ height: 61 }}>
+              <Typography.Paragraph
+                type="secondary"
+                ellipsis={{ rows: 3, expandable: true, symbol: 'View more' }}
+                style={{ margin: 0 }}
+              >
+                {metaData?.description}
+              </Typography.Paragraph>
+            </Col>
           </Row>
-        </Col>
-        <Col span={24}>
-          <Typography.Paragraph
-            type="secondary"
-            ellipsis={{ rows: 3, expandable: true, symbol: 'View more' }}
-          >
-            {metaData?.description}
-          </Typography.Paragraph>
-        </Col>
-      </Row>
-    </Card>
+        </Card>
+      </Col>
+      <Col xs={24} md={8}>
+        <DaoOwnerAssets daoAddress={daoAddress} />
+      </Col>
+    </Row>
   )
 }
 
