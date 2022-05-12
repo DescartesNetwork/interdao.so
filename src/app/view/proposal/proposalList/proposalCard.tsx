@@ -73,7 +73,11 @@ const ProposalCard = ({
         </Col>
 
         <Col span={24}>
-          <Typography.Paragraph type="secondary" ellipsis={{ rows: 2 }}>
+          <Typography.Paragraph
+            style={{ margin: 0 }}
+            type="secondary"
+            ellipsis={{ rows: 2 }}
+          >
             {metaData?.description}
           </Typography.Paragraph>
         </Col>
