@@ -28,6 +28,7 @@ import useMetaData from 'app/hooks/useMetaData'
 import autonomous from 'app/static/images/system/bg-autonomous.png'
 import democratic from 'app/static/images/system/bg-democratic.png'
 import dictatorial from 'app/static/images/system/bg-dictatorial.png'
+import { useMemo } from 'react'
 
 export type DaoCardProps = { daoAddress: string; special?: boolean }
 export type DaoCardBackground = 'autonomous' | 'democratic' | 'dictatorial'
@@ -49,13 +50,18 @@ const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
     ui: { width },
   } = useUI()
 
+  const heightRatio = useMemo(() => {
+    if (width < 768) return HEIGHT_RATIO
+    if (width < 1200) return HEIGHT_RATIO * 2
+    return HEIGHT_RATIO * 3
+  }, [width])
+
   const { regime, nonce, mint } = daoData?.[daoAddress] || ({} as DaoData)
   const members = useMembers(daoAddress)
   const metaData = useMetaData(daoAddress)
   const parseRegime = Object.keys(regime)?.[0]
   const isMobile = width < 768
   const desktopWidth = width > 992 ? width / MAX_WIDTH_RATE : width
-  const heightRatio = isMobile ? HEIGHT_RATIO : HEIGHT_RATIO * 2
 
   return (
     <Row
@@ -77,27 +83,34 @@ const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
           src={DAO_CARD_BG[parseRegime as DaoCardBackground]}
         />
       </Col>
+      <Col className="regime-tag-wrapper">
+        <RegimeTag regime={regime} special />
+      </Col>
       <Col span={24}>
         <Card bordered={false}>
           <Row gutter={[20, 20]}>
-            <Col span={24}>
-              <Row gutter={[16, 16]} wrap={false}>
+            <Col span={24} style={{ minHeight: 88 }}>
+              <Row gutter={[16, 16]} wrap={false} align="top">
                 <Col>
                   {!metaData?.image ? (
                     <GradientAvatar
                       seed={daoAddress}
-                      avatarProps={{ shape: 'square', size: 56 }}
+                      avatarProps={{ shape: 'square', size: 68 }}
                     />
                   ) : (
-                    <Avatar shape="square" size={56} src={metaData?.image} />
+                    <Avatar shape="square" size={68} src={metaData?.image} />
                   )}
                 </Col>
-                <Col flex="auto" style={{ maxWidth: 'calc(100% - 160px)' }}>
+                <Col flex="auto">
                   <Space direction="vertical" size={0}>
                     <Tooltip
                       title={metaData?.daoName ? metaData.daoName : daoAddress}
                     >
-                      <Typography.Title level={4} ellipsis={{ rows: 2 }}>
+                      <Typography.Title
+                        style={{ marginTop: -6 }}
+                        level={4}
+                        ellipsis={{ rows: 2 }}
+                      >
                         {metaData?.daoName
                           ? metaData.daoName
                           : shortenAddress(daoAddress)}
@@ -108,14 +121,7 @@ const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
                         type="text"
                         icon={<IonIcon name="logo-discord" />}
                       />
-                      <Button
-                        type="text"
-                        icon={<IonIcon name="logo-twitter" />}
-                      />
-                      <Button
-                        type="text"
-                        icon={<IonIcon name="logo-telegram" />}
-                      />
+                      <Button type="text" icon={<IonIcon name="globe" />} />
                     </Space>
                   </Space>
                 </Col>
@@ -148,17 +154,14 @@ const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
                 </Col>
               </Row>
             </Col>
-            <Col span={24} style={{ minHeight: 66 }}>
+            <Col span={24} style={{ minHeight: 44 }}>
               <Typography.Paragraph
                 style={{ margin: 0 }}
                 type="secondary"
-                ellipsis={{ rows: 3 }}
+                ellipsis={{ rows: 2 }}
               >
                 {metaData?.description}
               </Typography.Paragraph>
-            </Col>
-            <Col className="regmie-tag-wrapper">
-              <RegimeTag regime={regime} special />
             </Col>
           </Row>
         </Card>

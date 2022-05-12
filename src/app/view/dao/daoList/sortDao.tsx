@@ -7,7 +7,7 @@ const SortDao = ({ onSort, value }: SortDaoProps) => {
   return (
     <Select
       value={value}
-      style={{ textTransform: 'capitalize', width: '100%' }}
+      style={{ textTransform: 'capitalize', width: "100%" }}
       onChange={onSort}
     >
       <Select.Option value="all-regime">All mechanisms</Select.Option>

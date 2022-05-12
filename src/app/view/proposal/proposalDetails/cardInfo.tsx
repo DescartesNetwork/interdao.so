@@ -4,7 +4,7 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { Card, Col, Row, Space, Typography, Tooltip, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import TemplateInfo from './templateInfo'
+import ModalTemplateInfo from '../modalTemplateInfo'
 import RowSpaceBetween from 'app/components/rowSpaceBetween'
 
 import useProposal from 'app/hooks/useProposal'
@@ -105,7 +105,7 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
           </Space>
         </Col>
       </Row>
-      <TemplateInfo
+      <ModalTemplateInfo
         setVisible={setVisible}
         visible={visible}
         proposalAddress={proposalAddress}

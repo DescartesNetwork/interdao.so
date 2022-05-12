@@ -1,15 +1,24 @@
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { AccountMeta } from '@solana/web3.js'
-import BN from 'bn.js'
 import { decodeSplInstruction } from 'sen-idl-parser'
+import BN from 'bn.js'
 
-import { Col, Modal, Row, Typography } from 'antd'
-import TemplateTransfer, { TransferType } from './transferInfo'
+import TemplateTransfer, { TransferType } from '../transferInfo'
 
 import useProposal from 'app/hooks/useProposal'
-import { ProposalChildCardProps } from '../index'
+import { ProposalChildCardProps } from '../../proposalDetails/index'
 
-const Template = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
+type TemplateInfoProps = {
+  isProposalDetail?: boolean
+  endTime?: number
+} & ProposalChildCardProps
+
+const TemplateInfo = ({
+  proposalAddress,
+  daoAddress,
+  isProposalDetail = true,
+  endTime,
+}: TemplateInfoProps) => {
   const [transferInfo, setTransferInfo] = useState<TransferType>()
   const [templateName, setTemplateName] = useState('')
 
@@ -53,40 +62,14 @@ const Template = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
   }, [fetchProposalInfo])
 
   if (templateName === 'transfer')
-    return <TemplateTransfer transferInfo={transferInfo} />
+    return (
+      <TemplateTransfer
+        isProposalDetail={isProposalDetail}
+        transferInfo={transferInfo}
+        endTime={endTime}
+      />
+    )
   return <Fragment />
-}
-
-const TemplateInfo = ({
-  proposalAddress,
-  daoAddress,
-  visible,
-  setVisible,
-}: ProposalChildCardProps & {
-  visible: boolean
-  setVisible: (visible: boolean) => void
-}) => {
-  return (
-    <Modal
-      className="template-card template-info"
-      visible={visible}
-      footer={false}
-      onCancel={() => setVisible(false)}
-    >
-      <Row>
-        <Col
-          className="template-info-header"
-          span={24}
-          style={{ textAlign: 'left' }}
-        >
-          <Typography.Title level={4}>Template information</Typography.Title>
-        </Col>
-        <Col span={24} className="template-info-body">
-          <Template proposalAddress={proposalAddress} daoAddress={daoAddress} />
-        </Col>
-      </Row>
-    </Modal>
-  )
 }
 
 export default TemplateInfo

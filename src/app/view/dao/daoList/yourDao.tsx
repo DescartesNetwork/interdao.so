@@ -39,7 +39,7 @@ const YourDaos = () => {
     return (
       <Row gutter={[24, 24]}>
         {filteredDaos.map((daoAddress) => (
-          <Col span={12} key={daoAddress}>
+          <Col xs={24} md={12} xl={8} key={daoAddress}>
             <LazyLoad height={191.5}>
               <DaoCard daoAddress={daoAddress} />
             </LazyLoad>

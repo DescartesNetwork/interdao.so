@@ -174,7 +174,10 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
             filterProposalAddresses.map((proposalAddress) => (
               <Col key={proposalAddress} span={24}>
                 <LazyLoad height={176}>
-                  <ProposalCard proposalAddress={proposalAddress} />
+                  <ProposalCard
+                    daoAddress={daoAddress}
+                    proposalAddress={proposalAddress}
+                  />
                 </LazyLoad>
               </Col>
             ))
