@@ -7,10 +7,10 @@ import { Col, Empty, Row } from 'antd'
 import DaoCard from './daoCard'
 import SearchDao from './search'
 import SortDao from './sortDao'
+import TypeOfDAO from './typeOfDao'
 
 import { AppState } from 'app/model'
 import useSearchDao from 'app/hooks/useSearchDao'
-import { useUI } from '@senhub/providers'
 
 import './index.less'
 
@@ -20,9 +20,7 @@ const DaoList = () => {
   const {
     dao: { daoData },
   } = useSelector((state: AppState) => state)
-  const {
-    ui: { infix },
-  } = useUI()
+
   const { searchData: sortDaoRegime } = useSearchDao(sortKey)
   const filterDaoData = useMemo(() => {
     if (!sortDaoRegime) return
@@ -38,16 +36,17 @@ const DaoList = () => {
   const searchData =
     !searchKey || searchKey.length < 3 ? sortDaoRegime : searchDao
 
-  const spanMobile = infix === 'xs' ? 12 : undefined
-
   return (
     <Row gutter={[24, 16]}>
-      <Col xs={24} md={12}>
-        <Row gutter={[24, 24]}>
-          <Col span={spanMobile}>
+      <Col xs={24} md={16}>
+        <Row gutter={[12, 12]}>
+          <Col xs={12} md={6}>
+            <TypeOfDAO />
+          </Col>
+          <Col xs={12} md={6}>
             <SortDao onSort={setSortKey} value={sortKey} />
           </Col>
-          <Col span={spanMobile} flex="auto">
+          <Col xs={24} md={12}>
             <SearchDao onSearch={setSearchKey} loading={loading} />
           </Col>
         </Row>
@@ -59,7 +58,7 @@ const DaoList = () => {
         </Col>
       ) : (
         (searchData || Object.keys(daoData)).map((daoAddress) => (
-          <Col key={daoAddress} xs={24} md={12}>
+          <Col key={daoAddress} xs={24} md={12} xl={8}>
             <LazyLoad height={479.75}>
               <DaoCard daoAddress={daoAddress} special />
             </LazyLoad>

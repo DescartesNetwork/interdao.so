@@ -1,17 +1,18 @@
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { SystemProgram } from '@solana/web3.js'
-import moment from 'moment'
 import BN from 'bn.js'
 
-import { Card, Col, Row, Space, Typography } from 'antd'
+import { Card, Col, Row, Typography } from 'antd'
 import ProposalStatus from 'app/components/proposalStatus'
+import TemplateInfo from '../modalTemplateInfo/component/templateInfo'
 
 import { shortenAddress } from 'shared/util'
 import { AppState } from 'app/model'
 import configs from 'app/configs'
 import useProposalStatus from 'app/hooks/useProposalStatus'
 import useProposalMetaData from 'app/hooks/useProposalMetaData'
+import { ProposalChildCardProps } from '../proposalDetails'
 
 const {
   manifest: { appId },
@@ -21,7 +22,10 @@ export type ProposalCardProps = { proposalAddress: string }
 
 const currentDate = Math.floor(Number(new Date()) / 1000)
 
-const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
+const ProposalCard = ({
+  proposalAddress,
+  daoAddress,
+}: ProposalChildCardProps) => {
   const { proposal } = useSelector((state: AppState) => state)
   const { dao, endDate } = proposal[proposalAddress] || {
     dao: SystemProgram.programId,
@@ -30,7 +34,7 @@ const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
   const { status } = useProposalStatus(proposalAddress)
   const history = useHistory()
   const metaData = useProposalMetaData(proposalAddress)
-
+  const endTime = Number(endDate) * 1000
   return (
     <Card
       bordered={false}
@@ -59,18 +63,21 @@ const ProposalCard = ({ proposalAddress }: ProposalCardProps) => {
             </Col>
           </Row>
         </Col>
-        <Col span={24}>
-          <Space>
-            <Typography.Text className="caption" type="secondary">
-              End Date:
-            </Typography.Text>
-            <Typography.Text className="caption">
-              {moment(Number(endDate) * 1000).format('hh:mm A, MMM Do, YYYY')}
-            </Typography.Text>
-          </Space>
+        <Col xs={24} md={20} lg={16}>
+          <TemplateInfo
+            isProposalDetail={false}
+            proposalAddress={proposalAddress}
+            daoAddress={daoAddress}
+            endTime={endTime}
+          />
         </Col>
+
         <Col span={24}>
-          <Typography.Paragraph type="secondary" ellipsis={{ rows: 2 }}>
+          <Typography.Paragraph
+            style={{ margin: 0 }}
+            type="secondary"
+            ellipsis={{ rows: 2 }}
+          >
             {metaData?.description}
           </Typography.Paragraph>
         </Col>

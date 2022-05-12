@@ -1,9 +1,11 @@
 import { useSelector } from 'react-redux'
-import { useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { DaoData } from '@interdao/core'
 import { utils } from '@senswap/sen-js'
+import { useUI } from '@senhub/providers'
 
 import { Card, Col, Row, Space, Typography, Progress } from 'antd'
+import RowSpaceVertical from 'app/components/rowSpaceVertical'
 
 import { ProposalChildCardProps } from './index'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
@@ -11,17 +13,18 @@ import useProposal from 'app/hooks/useProposal'
 import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
 import useProposalStatus from 'app/hooks/useProposalStatus'
-import { useUI } from '@senhub/providers'
 
 const STROKE_COLOR = {
-  dark: { default: '#312B29', success: '#698033' },
-  light: { default: '#F2EFE9', success: '#F9DEB0' },
+  dark: { default: '#312B29', agree: '#698033', disagree: '#F9575E' },
+  light: { default: '#F2EFE9', agree: '#F9DEB0', disagree: '#F9575E' },
 }
 
 const CardProgress = ({
   proposalAddress,
   daoAddress,
 }: ProposalChildCardProps) => {
+  const [backGroundColor, setBackGroundColor] = useState('')
+  const [successColor, setSuccessColor] = useState('')
   const {
     dao: { daoData },
   } = useSelector((state: AppState) => state)
@@ -72,6 +75,28 @@ const CardProgress = ({
     return 0
   }, [actualSupply, consensusQuorum, currentPower, noVote, yesVote])
 
+  const percentSuccess = useMemo(() => {
+    if (percentYes) return percentYes
+    if (percentNo) return 100 - percentNo
+    return 0
+  }, [percentNo, percentYes])
+
+  const getColors = useCallback(() => {
+    if (!percentNo && !percentYes)
+      return setBackGroundColor(STROKE_COLOR[theme].default)
+    if (!percentNo && percentYes)
+      return setSuccessColor(STROKE_COLOR[theme].agree)
+    if (percentNo && !percentYes)
+      return setBackGroundColor(STROKE_COLOR[theme].disagree)
+
+    setBackGroundColor(STROKE_COLOR[theme].disagree)
+    return setSuccessColor(STROKE_COLOR[theme].agree)
+  }, [percentNo, percentYes, theme])
+
+  useEffect(() => {
+    getColors()
+  }, [getColors])
+
   return (
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
@@ -92,76 +117,68 @@ const CardProgress = ({
               strokeColor={STROKE_COLOR[theme].default}
               success={{
                 percent: currentPower,
-                strokeColor: STROKE_COLOR[theme].success,
+                strokeColor: STROKE_COLOR[theme].agree,
               }}
               showInfo={false}
             />
           </Space>
         </Col>
         <Col span={24}>
-          <Space className="space-full-width">
-            <Row gutter={[4, 4]}>
-              <Col flex="auto">
-                <Typography.Text type="secondary">Yes vote</Typography.Text>
-              </Col>
-              <Col>
-                <Space>
-                  <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                    {numeric(percentYes).format('0,0.[00]')}%
-                  </Typography.Text>
-                  <Typography.Title level={5}>
+          <Row gutter={[4, 4]}>
+            <Col flex="auto">
+              <RowSpaceVertical
+                label="Agree"
+                size={0}
+                value={
+                  <Typography.Title level={4}>
                     {numeric(
                       utils.undecimalize(BigInt(yesVote), mintDecimal),
                     ).format('0,0.[0000]')}
                   </Typography.Title>
-                </Space>
-              </Col>
-              <Col span={24}>
-                <Progress
-                  style={{ width: '100%' }}
-                  percent={100}
-                  strokeColor={STROKE_COLOR[theme].default}
-                  success={{
-                    percent: percentYes,
-                    strokeColor: STROKE_COLOR[theme].success,
-                  }}
-                  showInfo={false}
-                />
-              </Col>
-            </Row>
-          </Space>
-        </Col>
-        <Col span={24}>
-          <Space className="space-full-width">
-            <Row gutter={[4, 4]}>
-              <Col flex="auto">
-                <Typography.Text type="secondary">No vote</Typography.Text>
-              </Col>
-              <Col>
-                <Space>
-                  <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                    {numeric(percentNo).format('0,0.[00]')}%
-                  </Typography.Text>
-                  <Typography.Title level={5}>
+                }
+              />
+            </Col>
+            <Col>
+              <RowSpaceVertical
+                label="Disagree"
+                size={0}
+                align="end"
+                value={
+                  <Typography.Title level={4}>
                     {numeric(
                       utils.undecimalize(BigInt(noVote), mintDecimal),
                     ).format('0,0.[0000]')}
                   </Typography.Title>
-                </Space>
-              </Col>
-              <Col span={24}>
-                <Progress
-                  percent={100}
-                  strokeColor={STROKE_COLOR[theme].default}
-                  success={{
-                    percent: percentNo,
-                    strokeColor: STROKE_COLOR[theme].success,
-                  }}
-                  showInfo={false}
-                />
-              </Col>
-            </Row>
-          </Space>
+                }
+              />
+            </Col>
+            <Col span={24}>
+              <Progress
+                style={{ width: '100%' }}
+                percent={100}
+                strokeColor={backGroundColor}
+                success={{
+                  percent: percentSuccess,
+                  strokeColor: successColor,
+                }}
+                showInfo={false}
+              />
+            </Col>
+            <Col span={24}>
+              <Row>
+                <Col flex="auto">
+                  <Typography.Text type="secondary">
+                    {numeric(percentYes).format('0,0.[00]')}%
+                  </Typography.Text>
+                </Col>
+                <Col>
+                  <Typography.Text type="secondary">
+                    {numeric(percentNo).format('0,0.[00]')}%
+                  </Typography.Text>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
         </Col>
       </Row>
     </Card>
