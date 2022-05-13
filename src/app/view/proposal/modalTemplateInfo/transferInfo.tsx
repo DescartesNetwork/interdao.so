@@ -125,31 +125,39 @@ const InfoTransferInDaoDetail = ({
   return (
     <Row gutter={[12, 12]}>
       <Col xs={12} md={6}>
-        <RowSpaceVertical label="Template" value="SPL/Transfer" />
-      </Col>
-      <Col xs={12} md={6}>
         <RowSpaceVertical
-          label="Token to be transferred"
+          label="Template"
           value={
-            <Space>
-              <MintAvatar mintAddress={mint} />
-              <MintSymbol mintAddress={mint} />
-            </Space>
+            <Typography.Text className="t-16">SPL/Transfer</Typography.Text>
           }
         />
       </Col>
       <Col xs={12} md={6}>
         <RowSpaceVertical
+          label="Token to be transferred"
+          value={
+            <Typography.Text className="t-16">
+              <Space>
+                <MintAvatar mintAddress={mint} />
+                <MintSymbol mintAddress={mint} />
+              </Space>
+            </Typography.Text>
+          }
+        />
+      </Col>
+      <Col xs={12} md={6}>
+        <RowSpaceVertical
+          className="t-16"
           label="Transfer amount"
           value={!mint ? '--' : utils.undecimalize(BigInt(amount), decimals)}
         />
       </Col>
       <Col xs={12} md={6}>
         <RowSpaceVertical
-          label="End Date"
+          label="End time"
           value={
             endTime && (
-              <Typography.Text className="caption">
+              <Typography.Text className="t-16">
                 {moment(endTime).format('hh:mm A, MMM Do, YYYY')}
               </Typography.Text>
             )

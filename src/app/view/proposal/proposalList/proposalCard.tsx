@@ -63,7 +63,7 @@ const ProposalCard = ({
             </Col>
           </Row>
         </Col>
-        <Col xs={24} md={20} lg={16}>
+        <Col xs={24} md={20}>
           <TemplateInfo
             isProposalDetail={false}
             proposalAddress={proposalAddress}

@@ -156,7 +156,7 @@ const ProposalInitialization = () => {
               <ProposalPreview daoAddress={daoAddress} />
             </Col>
             <Col span={24}>
-              <Divider style={{ margin: 0, borderTop: 'solid 1px #F9DEB0' }} />
+              <Divider className="proposal-initialize" />
             </Col>
             <Col span={24}>
               <Space direction="vertical" style={{ width: '100%' }}>

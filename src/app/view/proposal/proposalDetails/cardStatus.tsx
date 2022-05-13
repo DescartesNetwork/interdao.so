@@ -5,11 +5,11 @@ import IonIcon from 'shared/antd/ionicon'
 import ProposalStatus from 'app/components/proposalStatus'
 
 import { ProposalChildCardProps } from './index'
-import useProposal from 'app/hooks/useProposal'
 import configs from 'app/configs'
 import { explorer, shortenAddress } from 'shared/util'
 import useProposalStatus from 'app/hooks/useProposalStatus'
 import useProposalMetaData from 'app/hooks/useProposalMetaData'
+import useReceipts from 'app/hooks/useReceipts'
 
 const {
   sol: { interDao },
@@ -21,9 +21,22 @@ const CardStatus = ({
 }: ProposalChildCardProps) => {
   const [loading, setLoading] = useState(false)
 
-  const { accountsLen } = useProposal(proposalAddress, daoAddress)
   const { status } = useProposalStatus(proposalAddress)
   const metaData = useProposalMetaData(proposalAddress)
+  const { receipts } = useReceipts({ proposalAddress })
+
+  const members = useMemo(() => {
+    if (!receipts.length) return 0
+    const authorities: string[] = []
+
+    for (const receipt of receipts) {
+      const { authority } = receipt
+      if (authorities.includes(authority.toBase58())) continue
+      authorities.push(authority.toBase58())
+    }
+
+    return authorities.length
+  }, [receipts])
 
   const disabled = useMemo(() => {
     if (status === 'Succeeded') return false
@@ -73,7 +86,7 @@ const CardStatus = ({
                 </Row>
                 <Space>
                   <IonIcon name="people-outline" />
-                  <Typography.Text>Member: {accountsLen}</Typography.Text>
+                  <Typography.Text>Member: {members}</Typography.Text>
                 </Space>
               </Space>
             </Col>
