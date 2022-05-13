@@ -14,25 +14,25 @@ const DAO_CARD_BG = {
   dictatorial,
 }
 
-const CardRegmie = ({
+const CardRegime = ({
   value,
-  regmie,
+  regime,
   onChange = () => {},
 }: {
   value?: DaoRegime
-  regmie: DaoRegime
-  onChange?: (regmie: DaoRegime) => void
+  regime: DaoRegime
+  onChange?: (regime: DaoRegime) => void
 }) => {
   return (
     <Card
       bordered={false}
       style={{ overflow: 'hidden', cursor: 'pointer' }}
       bodyStyle={{ padding: 0 }}
-      onClick={() => onChange(regmie)}
-      className={`card-regime ${isEqual(value, regmie) ? 'active' : ''}`}
+      onClick={() => onChange(regime)}
+      className={`card-regime ${isEqual(value, regime) ? 'active' : ''}`}
     >
       <Image
-        src={DAO_CARD_BG[Object.keys(regmie)[0] as DaoCardBackground]}
+        src={DAO_CARD_BG[Object.keys(regime)[0] as DaoCardBackground]}
         preview={false}
       />
       <Typography.Text
@@ -49,10 +49,10 @@ const CardRegmie = ({
           fontWeight: 400,
         }}
       >
-        {Object.keys(regmie)[0]}
+        {Object.keys(regime)[0]}
       </Typography.Text>
     </Card>
   )
 }
 
-export default CardRegmie
+export default CardRegime

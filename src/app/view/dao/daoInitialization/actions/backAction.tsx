@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom'
 
 import { Button } from 'antd'
-import { CreateDaoTitleProps } from '../createDaoProgress'
+import { CreateDaoTitleProps } from '../initDAOHeader'
 
 import configs from 'app/configs'
 

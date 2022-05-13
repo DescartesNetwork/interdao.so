@@ -5,11 +5,11 @@ import IonIcon from 'shared/antd/ionicon'
 import ProposalStatus from 'app/components/proposalStatus'
 
 import { ProposalChildCardProps } from './index'
-import configs from 'app/configs'
 import { explorer, shortenAddress } from 'shared/util'
 import useProposalStatus from 'app/hooks/useProposalStatus'
 import useProposalMetaData from 'app/hooks/useProposalMetaData'
 import useReceipts from 'app/hooks/useReceipts'
+import configs from 'app/configs'
 
 const {
   sol: { interDao },
