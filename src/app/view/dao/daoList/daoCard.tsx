@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { DaoData } from '@interdao/core'
@@ -28,7 +29,7 @@ import useMetaData from 'app/hooks/useMetaData'
 import autonomous from 'app/static/images/system/bg-autonomous.png'
 import democratic from 'app/static/images/system/bg-democratic.png'
 import dictatorial from 'app/static/images/system/bg-dictatorial.png'
-import { useMemo } from 'react'
+import { SOCIAL_MEDIA } from 'app/model/metadata.controller'
 
 export type DaoCardProps = { daoAddress: string; special?: boolean }
 export type DaoCardBackground = 'autonomous' | 'democratic' | 'dictatorial'
@@ -117,11 +118,20 @@ const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
                       </Typography.Title>
                     </Tooltip>
                     <Space size={2} style={{ marginLeft: -8 }}>
-                      <Button
-                        type="text"
-                        icon={<IonIcon name="logo-discord" />}
-                      />
-                      <Button type="text" icon={<IonIcon name="globe" />} />
+                      {metaData?.optionals.map(
+                        (url, idx) =>
+                          url && (
+                            <Button
+                              size="small"
+                              type="text"
+                              onClick={() => window.open(url, '_blank')}
+                              icon={
+                                <IonIcon name={`logo-${SOCIAL_MEDIA[idx]}`} />
+                              }
+                              key={idx}
+                            />
+                          ),
+                      )}
                     </Space>
                   </Space>
                 </Col>

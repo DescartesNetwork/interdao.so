@@ -119,10 +119,10 @@ const MetaDataForm = () => {
         </Space>
       </Col>
       {SOCIAL_MEDIA.map((social, idx) => (
-        <Col span={24} key={idx}>
+        <Col xs={24} md={12} key={idx}>
           <Space direction="vertical" style={{ width: '100%' }}>
             <Typography.Text style={{ textTransform: 'capitalize' }}>
-              {social}
+              {social} (Optional)
             </Typography.Text>
             <Input
               value={createMetaData.optionals[idx]}

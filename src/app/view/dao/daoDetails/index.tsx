@@ -60,15 +60,20 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
                         : shortenAddress(daoAddress)}
                     </Typography.Title>
                     <Space size={0} style={{ marginLeft: -8 }}>
-                      {metaData?.optionals.map((url, idx) => (
-                        <Button
-                          size="small"
-                          type="text"
-                          onClick={() => window.open(url, '_blank')}
-                          icon={<IonIcon name={`logo-${SOCIAL_MEDIA[idx]}`} />}
-                          key={idx}
-                        />
-                      ))}
+                      {metaData?.optionals.map(
+                        (url, idx) =>
+                          url && (
+                            <Button
+                              size="small"
+                              type="text"
+                              onClick={() => window.open(url, '_blank')}
+                              icon={
+                                <IonIcon name={`logo-${SOCIAL_MEDIA[idx]}`} />
+                              }
+                              key={idx}
+                            />
+                          ),
+                      )}
                     </Space>
                   </Space>
                 </Col>
@@ -107,7 +112,7 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
                 </Col>
               </Row>
             </Col>
-            <Col span={24} className="scrollbar" style={{ height: 61 }}>
+            <Col span={24} className="scrollbar" style={{ height: 66 }}>
               <Typography.Paragraph
                 type="secondary"
                 ellipsis={{ rows: 3, expandable: true, symbol: 'View more' }}
