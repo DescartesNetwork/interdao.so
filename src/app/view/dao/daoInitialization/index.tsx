@@ -26,7 +26,7 @@ const DaoInitialization = () => {
   const [step, setStep] = useState(0)
   const [loading, setLoading] = useState(false)
   const {
-    dao: { createDaoData },
+    dao: { createDaoData, daoType },
     metadata: { createMetaData },
   } = useSelector((state: AppState) => state)
   const history = useHistory()
@@ -53,10 +53,11 @@ const DaoInitialization = () => {
           !createMetaData.image ||
           !createMetaData.description)) ||
       (step === CreateSteps.stepTwo &&
+        daoType === 'flexible-dao' &&
         (!createDaoData.mintAddress ||
           !createDaoData.regime ||
           !Number(createDaoData.supply))),
-    [createDaoData, createMetaData, step],
+    [createDaoData, createMetaData, step, daoType],
   )
 
   const onCreateDao = useCallback(async () => {

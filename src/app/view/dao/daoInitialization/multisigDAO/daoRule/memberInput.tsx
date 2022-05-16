@@ -8,9 +8,10 @@ export type DAOMember = {
 }
 
 type MemberInputProps = {
-  onChange: (e: ChangeEvent<HTMLInputElement>, index: number) => void
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void
   disabledBtn?: boolean
   disabledWalletInput?: boolean
+  remove?: () => void
 } & DAOMember
 
 const MemberInput = ({
@@ -19,13 +20,14 @@ const MemberInput = ({
   onChange,
   disabledBtn = false,
   disabledWalletInput = false,
+  remove = () => {},
 }: MemberInputProps) => {
   return (
     <Row gutter={[12, 12]}>
       <Col span={4}>
         <Input
           className="border-less"
-          onChange={() => onChange}
+          onChange={onChange}
           value={name}
           placeholder="Name"
           name="name"
@@ -36,9 +38,9 @@ const MemberInput = ({
           className="border-less"
           value={walletAddress}
           placeholder="Input wallet address"
-          onChange={(e) => onChange}
           disabled={disabledWalletInput}
           name="walletAddress"
+          onChange={onChange}
         />
       </Col>
       <Col span={2}>
@@ -46,6 +48,7 @@ const MemberInput = ({
           disabled={disabledBtn}
           type="text"
           icon={<IonIcon name="trash-outline" />}
+          onClick={remove}
         />
       </Col>
     </Row>

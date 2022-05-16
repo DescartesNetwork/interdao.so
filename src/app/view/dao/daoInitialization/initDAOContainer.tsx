@@ -1,7 +1,9 @@
 import { AppState } from 'app/model'
 import { useSelector } from 'react-redux'
+
 import ChooseDaoType from './chooseDaoType'
 import ReviewAndCreateFlexibleDAO from './flexibleDAO/reviewAndCreate'
+import ReviewAndCreateMultisigDAO from './multisigDAO/reviewAndCreate'
 import FlexibleDAORule from './flexibleDAO/daoRule'
 import MultiSigDAORule from './multisigDAO/daoRule'
 import MetaDataForm from './metaDataForm'
@@ -26,7 +28,7 @@ const InitDAOContainer = ({ step }: { step: number }) => {
   if (step === CreateSteps.stepThree && daoType === 'flexible-dao')
     return <ReviewAndCreateFlexibleDAO />
   if (step === CreateSteps.stepThree && daoType === 'multisig-dao')
-    return <ReviewAndCreateFlexibleDAO />
+    return <ReviewAndCreateMultisigDAO />
 
   return <ChooseDaoType />
 }
