@@ -6,16 +6,15 @@ import { CID } from 'ipfs-core'
 import { BN } from 'bn.js'
 
 import { Row, Col, Card } from 'antd'
-import CreateDaoSteps, { CreateSteps } from './createDaoSteps'
-import CreateDaoProgress from './createDaoProgress'
-import BackAction from './actions/backAction'
-import ContinuesAction from './actions/continuesAction'
+import InitDAOContainer, { CreateSteps } from './initDAOContainer'
+import InitDAOHeader from './initDAOHeader'
+import ActionButton from './actions'
 
 import { AppState } from 'app/model'
 import { explorer } from 'shared/util'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
-
 import configs from 'app/configs'
+
 import './index.less'
 
 const {
@@ -27,7 +26,7 @@ const DaoInitialization = () => {
   const [step, setStep] = useState(0)
   const [loading, setLoading] = useState(false)
   const {
-    dao: { createDaoData },
+    dao: { createDaoData, daoType },
     metadata: { createMetaData },
   } = useSelector((state: AppState) => state)
   const history = useHistory()
@@ -54,10 +53,11 @@ const DaoInitialization = () => {
           !createMetaData.image ||
           !createMetaData.description)) ||
       (step === CreateSteps.stepTwo &&
+        daoType === 'flexible-dao' &&
         (!createDaoData.mintAddress ||
           !createDaoData.regime ||
           !Number(createDaoData.supply))),
-    [createDaoData, createMetaData, step],
+    [createDaoData, createMetaData, step, daoType],
   )
 
   const onCreateDao = useCallback(async () => {
@@ -98,22 +98,19 @@ const DaoInitialization = () => {
         <Card bordered={false}>
           <Row gutter={[24, 32]}>
             <Col span={24}>
-              <CreateDaoProgress step={step} />
+              <InitDAOHeader step={step} />
             </Col>
             <Col span={24}>
-              <CreateDaoSteps step={step} />
+              <InitDAOContainer step={step} />
             </Col>
-            <Col span={24} />
-            <Col flex="auto">
-              <BackAction step={step} onHandleStep={() => setStep(step - 1)} />
-            </Col>
-            <Col>
-              <ContinuesAction
+            <Col span={24}>
+              <ActionButton
                 step={step}
                 onHandleStep={onNextStep}
                 onConfirm={onCreateDao}
                 loading={loading}
                 disabled={disabled}
+                setStep={() => setStep(step - 1)}
               />
             </Col>
           </Row>

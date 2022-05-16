@@ -11,7 +11,7 @@ import { CID } from 'ipfs-core'
 
 import { Button, Card, Col, Divider, Input, Row, Space, Typography } from 'antd'
 import ConsensusMechanismInput from './consensusMechanismInput'
-import ConsensusQuorumInput from './consensusQuorumInput'
+import ConsensusQuorumInput from '../../../components/consensusQuorumInput'
 import DurationInput from './durationInput'
 import ProposalPreview from './proposalPreview'
 
@@ -156,7 +156,7 @@ const ProposalInitialization = () => {
               <ProposalPreview daoAddress={daoAddress} />
             </Col>
             <Col span={24}>
-              <Divider style={{ margin: 0, borderTop: 'solid 1px #F9DEB0' }} />
+              <Divider className="proposal-initialize" />
             </Col>
             <Col span={24}>
               <Space direction="vertical" style={{ width: '100%' }}>

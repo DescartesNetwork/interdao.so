@@ -1,5 +1,5 @@
 import { Select } from 'antd'
-import { REGIME_LIST } from '../daoInitialization/daoRule/regimeInput'
+import { REGIME_LIST } from '../daoInitialization/flexibleDAO/daoRule/regimeInput'
 
 type SortDaoProps = { value: string; onSort: (value: string) => void }
 

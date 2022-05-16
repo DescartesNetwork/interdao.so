@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import { useUI } from '@senhub/providers'
 
 import { Col, Image, Row, Space, Typography } from 'antd'
-import CardRegmie from './daoRule/cardRegmie'
+import CardRegime from '../components/cardRegime'
 
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import { AppState } from 'app/model'
@@ -12,7 +12,7 @@ const MAX_WIDTH_RATIO = 24 / 16
 const PAGE_SPACING = 24
 const HEIGHT_RATIO = 1.777777
 
-const ConfirmCreate = () => {
+const ReviewAndCreate = () => {
   const {
     dao: { createDaoData },
     metadata: { createMetaData },
@@ -38,8 +38,8 @@ const ConfirmCreate = () => {
             <Typography.Title level={1}>{daoName}</Typography.Title>
           </Space>
           <Space direction="vertical" style={{ width: '100%' }}>
-            <Typography.Text>DAO Regmie</Typography.Text>
-            <CardRegmie regmie={regime} />
+            <Typography.Text>DAO Regime</Typography.Text>
+            <CardRegime regime={regime} />
           </Space>
         </Space>
       </Col>
@@ -82,4 +82,4 @@ const ConfirmCreate = () => {
   )
 }
 
-export default ConfirmCreate
+export default ReviewAndCreate
