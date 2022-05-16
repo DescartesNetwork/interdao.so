@@ -3,7 +3,7 @@ import { DaoRegime, DaoRegimes } from '@interdao/core'
 import { Button, Row, Col, Space, Typography, Popover } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
-import CardRegmie from './cardRegmie'
+import CardRegime from '../../components/cardRegime'
 
 export type RegimeInputProps = {
   value: DaoRegime
@@ -62,9 +62,9 @@ const RegimeInput = ({
           </Popover>
         </Space>
       </Col>
-      {REGIME_LIST.map((regmie, idx) => (
+      {REGIME_LIST.map((regime, idx) => (
         <Col xs={24} md={8} key={idx}>
-          <CardRegmie value={value} regmie={regmie} onChange={onChange} />
+          <CardRegime value={value} regime={regime} onChange={onChange} />
         </Col>
       ))}
     </Row>

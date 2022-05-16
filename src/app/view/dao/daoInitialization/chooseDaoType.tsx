@@ -42,11 +42,7 @@ const ChooseDaoType = () => {
           <Row gutter={[24, 24]}>
             {DAO_TYPE.map(({ key, label, description, state }) => (
               <Col xs={24} md={12} key={key}>
-                <Radio.Button
-                  value={key}
-                  style={{ border: 'none' }}
-                  disabled={!state}
-                >
+                <Radio.Button value={key} style={{ border: 'none' }}>
                   <Card
                     style={{ ...cardBorder(key) }}
                     className={`group-btn-card ${key} ${
@@ -58,21 +54,14 @@ const ChooseDaoType = () => {
                       <Col span={24}>
                         <Row>
                           <Col flex="auto">
-                            <Typography.Title level={4} disabled={!state}>
+                            <Typography.Title level={4}>
                               {label}
                             </Typography.Title>
                           </Col>
-                          {!state && (
-                            <Col>
-                              <Typography.Text style={{ fontSize: 12 }}>
-                                Coming soon
-                              </Typography.Text>
-                            </Col>
-                          )}
                         </Row>
                       </Col>
                       <Col span={24}>
-                        <Typography.Text type="secondary" disabled={!state}>
+                        <Typography.Text type="secondary">
                           {description}
                         </Typography.Text>
                       </Col>

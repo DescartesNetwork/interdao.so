@@ -1,6 +1,6 @@
 import { Button } from 'antd'
-import { CreateDaoTitleProps } from '../createDaoProgress'
-import { CreateSteps } from '../createDaoSteps'
+import { CreateDaoTitleProps } from '../initDAOHeader'
+import { CreateSteps } from '../initDAOContainer'
 
 const ContinuesAction = ({
   step,

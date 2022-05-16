@@ -11,7 +11,7 @@ import { CID } from 'ipfs-core'
 
 import { Button, Card, Col, Divider, Input, Row, Space, Typography } from 'antd'
 import ConsensusMechanismInput from './consensusMechanismInput'
-import ConsensusQuorumInput from './consensusQuorumInput'
+import ConsensusQuorumInput from '../../../components/consensusQuorumInput'
 import DurationInput from './durationInput'
 import ProposalPreview from './proposalPreview'
 

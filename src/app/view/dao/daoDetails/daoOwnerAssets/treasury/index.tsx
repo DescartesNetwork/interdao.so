@@ -60,7 +60,7 @@ const Treasury = ({ daoAddress }: { daoAddress: string }) => {
         </Row>
       </Col>
       <Col span={24}>
-        <Row gutter={[24, 24]} className="scrollbar" style={{ height: 134 }}>
+        <Row gutter={[24, 24]} className="scrollbar" style={{ height: 124 }}>
           {listAccount &&
             listAccount.map((account) => (
               <Col span={24} key={account.mint}>

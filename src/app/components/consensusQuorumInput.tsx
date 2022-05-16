@@ -20,7 +20,7 @@ const ConsensusQuorumInput = ({
   const mobileSpan = mobileScreen ? 8 : undefined
 
   return (
-    <Row gutter={[8, 8]}>
+    <Row gutter={[12, 12]}>
       <Col span={24}>
         <Typography.Text>Consensus Quorum</Typography.Text>
       </Col>
