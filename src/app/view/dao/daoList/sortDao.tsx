@@ -1,5 +1,5 @@
 import { Select } from 'antd'
-import { REGIME_LIST } from '../daoInitialization/daoRule/regimeInput'
+import { REGIME_LIST } from '../daoInitialization/flexibleDAO/daoRule/regimeInput'
 
 type SortDaoProps = { value: string; onSort: (value: string) => void }
 
@@ -7,7 +7,7 @@ const SortDao = ({ onSort, value }: SortDaoProps) => {
   return (
     <Select
       value={value}
-      style={{ textTransform: 'capitalize', width: "100%" }}
+      style={{ textTransform: 'capitalize', width: '100%' }}
       onChange={onSort}
     >
       <Select.Option value="all-regime">All mechanisms</Select.Option>
