@@ -87,7 +87,7 @@ export const getMember = createAsyncThunk<
       ],
     },
   )
-  return { daoMetaData: { [daoAddress]: { members: accounts.length } } }
+  return { [daoAddress]: { members: accounts.length } }
 })
 
 export const setCreateDaoMetaData = createAsyncThunk(
@@ -110,7 +110,7 @@ const slice = createSlice({
     void builder
       .addCase(
         getMember.fulfilled,
-        (state, { payload }) => void Object.assign(state, payload),
+        (state, { payload }) => void Object.assign(state.daoMetaData, payload),
       )
       .addCase(
         setCreateDaoMetaData.fulfilled,

@@ -8,7 +8,6 @@ import {
 } from '@senhub/providers'
 
 import View from 'app/view'
-
 import model from 'app/model'
 import configs from 'app/configs'
 
