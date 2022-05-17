@@ -55,7 +55,7 @@ export const parseDaoData = async (
   }
 }
 
-const cacheDaoData = async (daoAddress: string, daoData: DaoData) => {
+export const cacheDaoData = async (daoAddress: string, daoData: DaoData) => {
   const wallet = window.sentre.wallet
   if (!wallet) throw new Error('Please connect wallet!')
 
