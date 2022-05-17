@@ -1,5 +1,3 @@
-import { account } from '@senswap/sen-js'
-import { useWallet } from '@senhub/providers'
 import { useCallback, useMemo, useState } from 'react'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
@@ -10,7 +8,6 @@ import { ProposalChildCardProps } from './index'
 import { explorer, shortenAddress } from 'shared/util'
 import useProposalStatus from 'app/hooks/useProposalStatus'
 import useProposalMetaData from 'app/hooks/useProposalMetaData'
-import MultisigWallet from 'app/helpers/mutisigWallet'
 import useReceipts from 'app/hooks/useReceipts'
 import configs from 'app/configs'
 
@@ -41,10 +38,6 @@ const CardStatus = ({
     return authorities.length
   }, [receipts])
 
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
-
   const disabled = useMemo(() => {
     if (status === 'Succeeded') return false
     return true
@@ -69,23 +62,8 @@ const CardStatus = ({
     }
   }, [proposalAddress])
 
-  const test = async () => {
-    try {
-      const multiSigWallet = new MultisigWallet()
-      await multiSigWallet.createNewToken()
-      await multiSigWallet.mintToAccount(account.fromAddress(walletAddress))
-      window.notify({
-        type: 'success',
-        description: 'Create multisig wallet successfully.',
-      })
-    } catch (err: any) {
-      window.notify({ type: 'error', description: err.message })
-    }
-  }
-
   return (
     <Card bordered={false}>
-      <Button onClick={test}>Test</Button>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Row gutter={[24, 24]} wrap={false}>

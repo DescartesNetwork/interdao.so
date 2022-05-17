@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 import IPFS from 'shared/pdb/ipfs'
 import { CID } from 'ipfs-core'
 import { BN } from 'bn.js'
+import { account } from '@senswap/sen-js'
 
 import { Row, Col, Card } from 'antd'
 import InitDAOContainer, { CreateSteps } from './initDAOContainer'
@@ -13,6 +14,7 @@ import ActionButton from './actions'
 import { AppState } from 'app/model'
 import { explorer } from 'shared/util'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
+import MultisigWallet from 'app/helpers/mutisigWallet'
 import configs from 'app/configs'
 
 import './index.less'
@@ -30,8 +32,8 @@ const DaoInitialization = () => {
     metadata: { createMetaData },
   } = useSelector((state: AppState) => state)
   const history = useHistory()
-
   const { mintAddress, supply, regime } = createDaoData
+  const { members } = createMetaData
   const decimals = useMintDecimals(mintAddress) || 0
 
   const onNextStep = useCallback(async () => {
@@ -46,19 +48,50 @@ const DaoInitialization = () => {
     }
   }, [createDaoData, createMetaData, step])
 
-  const disabled = useMemo(
-    () =>
-      (step === CreateSteps.stepOne &&
-        (!createMetaData.daoName ||
-          !createMetaData.image ||
-          !createMetaData.description)) ||
-      (step === CreateSteps.stepTwo &&
-        daoType === 'flexible-dao' &&
-        (!createDaoData.mintAddress ||
-          !createDaoData.regime ||
-          !Number(createDaoData.supply))),
-    [createDaoData, createMetaData, step, daoType],
-  )
+  const disabled = useMemo(() => {
+    if (step === CreateSteps.stepOne)
+      return (
+        !createMetaData.daoName ||
+        !createMetaData.image ||
+        !createMetaData.description
+      )
+
+    if (step === CreateSteps.stepTwo && daoType === 'flexible-dao')
+      return (
+        !createDaoData.mintAddress ||
+        !createDaoData.regime ||
+        !Number(createDaoData.supply)
+      )
+
+    if (step === CreateSteps.stepTwo && daoType === 'multisig-dao' && members) {
+      let valid = false
+      for (const member of members) {
+        const { name, walletAddress } = member
+        if (!name || !account.isAddress(walletAddress)) {
+          valid = true
+          break
+        }
+      }
+      return valid
+    }
+  }, [createDaoData, createMetaData, step, daoType, members])
+
+  const getMintAddr = useCallback(async () => {
+    if (mintAddress || !members) return mintAddress
+    try {
+      const multiSigWallet = new MultisigWallet()
+      await multiSigWallet.createNewToken()
+
+      for (const { walletAddress } of members) {
+        await multiSigWallet.mintToAccount(account.fromAddress(walletAddress))
+      }
+
+      return multiSigWallet.getMintAddress()
+    } catch (err: any) {
+      window.notify({ type: 'error', description: err.message })
+      return ''
+    }
+  }, [members, mintAddress])
 
   const onCreateDao = useCallback(async () => {
     try {
@@ -69,8 +102,13 @@ const DaoInitialization = () => {
         multihash: { digest },
       } = CID.parse(cid)
       const metadata = Buffer.from(digest)
+      console.log(1)
+      const totalSupply =
+        daoType === 'flexible-dao'
+          ? supply.mul(new BN(10).pow(new BN(decimals)))
+          : new BN(1)
 
-      const totalSupply = supply.mul(new BN(10).pow(new BN(decimals)))
+      const mintAddress = await getMintAddr()
 
       const { txId, daoAddress } = await interDao.initializeDao(
         mintAddress,
@@ -90,7 +128,7 @@ const DaoInitialization = () => {
     } finally {
       setLoading(false)
     }
-  }, [createMetaData, decimals, history, mintAddress, regime, supply])
+  }, [createMetaData, daoType, supply, decimals, getMintAddr, regime, history])
 
   return (
     <Row gutter={[24, 24]} justify="center">

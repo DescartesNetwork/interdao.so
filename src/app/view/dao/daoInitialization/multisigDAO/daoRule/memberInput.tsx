@@ -1,11 +1,9 @@
-import { Button, Col, Input, Row } from 'antd'
 import { ChangeEvent } from 'react'
+
+import { Button, Col, Input, Row } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
-export type DAOMember = {
-  name: string
-  walletAddress: string
-}
+import { DAOMember } from 'app/model/metadata.controller'
 
 type MemberInputProps = {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void

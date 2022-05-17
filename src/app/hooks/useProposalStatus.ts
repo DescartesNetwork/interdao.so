@@ -1,8 +1,11 @@
 import { useMemo } from 'react'
-import { useSelector } from 'react-redux'
+import { ProposalData } from '@interdao/core'
+import BN from 'bn.js'
 
-import { AppState } from 'app/model'
 import { ProposalStatusType } from 'app/components/proposalStatus'
+
+import { useSelector } from 'react-redux'
+import { AppState } from 'app/model'
 
 const currentDate = Math.floor(Number(new Date()) / 1000)
 
@@ -17,25 +20,34 @@ const useProposalStatus = (proposalAddress: string) => {
     votingForPower,
     consensusQuorum,
     consensusMechanism,
-  } = proposal[proposalAddress] || {}
+  } = proposal[proposalAddress] || ({} as ProposalData)
 
   const actualSupply = useMemo(() => {
-    if (!supply) return 0
+    if (!supply) return new BN(0)
     const mechanism = consensusMechanism
       ? Object.keys(consensusMechanism)[0]
       : ''
-    if (mechanism === 'stakedTokenCounter') return supply.toNumber()
-    return Number(supply) * (Number(endDate) - Number(startDate))
+    if (mechanism === 'stakedTokenCounter') return supply
+    return supply.mul(endDate.sub(startDate))
   }, [consensusMechanism, endDate, startDate, supply])
 
   const isSuccess = useMemo(() => {
     const quorum = consensusQuorum ? Object.keys(consensusQuorum)[0] : ''
+    if (!votingAgainstPower || !votingAgainstPower) return false
+    const votingPower = votingForPower.sub(votingAgainstPower)
 
-    const votingPower = Number(votingForPower) - Number(votingAgainstPower)
-    if (votingPower <= 0) return false
-    if (quorum === 'half' && votingPower > actualSupply / 2) return true
-    if (quorum === 'oneThird' && votingPower > actualSupply / 3) return true
-    if (quorum === 'twoThird' && votingPower > (actualSupply * 2) / 3)
+    if (votingPower.lte(new BN(0))) return false
+    if (quorum === 'half' && votingPower.cmp(actualSupply.div(new BN(2))) === 1)
+      return true
+    if (
+      quorum === 'oneThird' &&
+      votingPower.cmp(actualSupply.div(new BN(3))) === 1
+    )
+      return true
+    if (
+      quorum === 'twoThird' &&
+      votingPower.cmp(actualSupply.mul(new BN(2)).div(new BN(3))) === 1
+    )
       return true
     return false
   }, [actualSupply, consensusQuorum, votingAgainstPower, votingForPower])
