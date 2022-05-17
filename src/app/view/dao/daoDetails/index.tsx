@@ -60,7 +60,7 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
                         : shortenAddress(daoAddress)}
                     </Typography.Title>
                     <Space size={0} style={{ marginLeft: -8 }}>
-                      {metaData?.optionals.map(
+                      {(metaData?.optionals || []).map(
                         (url, idx) =>
                           url && (
                             <Button
