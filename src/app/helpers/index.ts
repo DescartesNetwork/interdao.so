@@ -55,19 +55,18 @@ export const parseDaoData = async (
   }
 }
 
-const cacheDaoData = async (daoAddress: string, daoData: DaoData) => {
+export const cacheDaoData = async (daoAddress: string, daoData: DaoData) => {
   const wallet = window.sentre.wallet
   if (!wallet) throw new Error('Please connect wallet!')
 
   const ipfs = new IPFS()
-  const { metadata: digest } = daoData
+  const { metadata, regime } = daoData || ({} as DaoData)
   const walletAddress = await wallet.getAddress()
   const db = new PDB(walletAddress).createInstance(appId)
   const dbDaoData = (await db.getItem(`interdao:${daoAddress}`)) as DaoData
-  const { metadata } = dbDaoData || ({} as DaoData)
+  const { metadata: digest } = dbDaoData || ({} as DaoData)
 
   if (!dbDaoData || (!!metadata && !isEqual(metadata, digest))) {
-    const { metadata, regime } = daoData
     const cid = getCID(metadata)
     const data = await ipfs.get(cid)
     const daoRegime = Object.keys(regime)[0]

@@ -118,7 +118,7 @@ const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
                       </Typography.Title>
                     </Tooltip>
                     <Space size={2} style={{ marginLeft: -8 }}>
-                      {metaData?.optionals.map(
+                      {metaData?.optionals?.map(
                         (url, idx) =>
                           url && (
                             <Button

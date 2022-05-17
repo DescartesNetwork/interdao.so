@@ -21,9 +21,8 @@ const useMembers = (daoAddress: string) => {
   }, [daoData])
 
   useEffect(() => {
-    if (isExistDao && account.isAddress(daoAddress)) {
+    if (isExistDao && account.isAddress(daoAddress))
       dispatch(getMember({ daoAddress }))
-    }
   }, [dispatch, daoAddress, isExistDao])
 
   return members || 0
