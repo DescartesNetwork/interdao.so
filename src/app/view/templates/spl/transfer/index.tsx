@@ -22,6 +22,7 @@ import {
 import configs from 'app/configs'
 import BG_SOLANA from 'app/static/images/templates/bg-spl.png'
 import NumericInput from 'shared/antd/numericInput'
+import useMetaData from 'app/hooks/useMetaData'
 
 const {
   manifest: { appId },
@@ -93,6 +94,8 @@ const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
   const decimals = useMintDecimals(mintAddress)
   const dispatch = useDispatch<AppDispatch>()
   const history = useHistory()
+  const daoMetaData = useMetaData(daoAddress)
+
   const senderAddress = useMemo(() => {
     const { master } = daoData[daoAddress] || {}
     return master?.toBase58() || ''
@@ -203,6 +206,7 @@ const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
             className="border-less"
             placeholder="Input Sender's Wallet Address"
             value={senderAddress}
+            disabled={daoMetaData?.daoType === 'multisig-dao'}
           />
         </Space>
       </Col>

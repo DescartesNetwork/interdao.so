@@ -4,17 +4,29 @@ import { ReceiptData } from '@interdao/core'
 import { Card, Col, Row, Typography, Table, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
-import { HISTORY_COLUMNS } from './column'
+import { HISTORY_COLUMNS_MULTISIG, HISTORY_COLUMNS_FLEXIBLE } from './column'
 import { getReceipts } from 'app/hooks/useReceipts'
 
 import './index.less'
+import useMetaData from 'app/hooks/useMetaData'
 
 const DEFAULT_AMOUNT_HISTORY = 5
 
-const History = ({ proposalAddress }: { proposalAddress: string }) => {
+const History = ({
+  proposalAddress,
+  daoAddress,
+}: {
+  proposalAddress: string
+  daoAddress: string
+}) => {
   const [amount, setAmount] = useState(DEFAULT_AMOUNT_HISTORY)
   const [loading, setLoading] = useState(false)
   const [listReceipt, setListReceipt] = useState<ReceiptData[]>([])
+  const metaData = useMetaData(daoAddress)
+  const isMultisigDAO = metaData?.daoType === 'multisig-dao'
+  const historyColum = isMultisigDAO
+    ? HISTORY_COLUMNS_MULTISIG
+    : HISTORY_COLUMNS_FLEXIBLE
 
   const fetchReceipts = useCallback(async () => {
     setLoading(true)
@@ -67,12 +79,12 @@ const History = ({ proposalAddress }: { proposalAddress: string }) => {
         </Col>
         <Col span={24}>
           <Table
-            columns={HISTORY_COLUMNS}
+            columns={historyColum}
             dataSource={listReceipt.slice(0, amount)}
             pagination={false}
             loading={loading}
-            rowKey={(record) =>
-              record.index.toNumber() + record.lockedDate.toNumber()
+            rowKey={({ index, lockedDate }) =>
+              index.toNumber() + lockedDate.toNumber()
             }
           />
         </Col>

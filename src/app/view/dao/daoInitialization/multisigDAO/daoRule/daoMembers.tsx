@@ -23,17 +23,13 @@ const DAOMembers = () => {
   const setDefaultValue = useCallback(() => {
     if (members.length) return
     const DEFAULT_MEMBER = [{ name: '', walletAddress: myAddress }]
-    return dispatch(
-      setCreateDaoMetaData({ ...createMetaData, members: DEFAULT_MEMBER }),
-    )
-  }, [createMetaData, dispatch, members.length, myAddress])
+    return dispatch(setCreateDaoMetaData({ members: DEFAULT_MEMBER }))
+  }, [dispatch, members.length, myAddress])
 
   const addMember = () => {
     const nextMembers = [...members]
     nextMembers.push({ name: '', walletAddress: '' })
-    return dispatch(
-      setCreateDaoMetaData({ ...createMetaData, members: nextMembers }),
-    )
+    return dispatch(setCreateDaoMetaData({ members: nextMembers }))
   }
 
   const onChangeMember = (e: ChangeEvent<HTMLInputElement>, index: number) => {
@@ -42,25 +38,19 @@ const DAOMembers = () => {
       ...nextMembers[index],
       [e.target.name]: e.target.value,
     }
-    return dispatch(
-      setCreateDaoMetaData({ ...createMetaData, members: nextMembers }),
-    )
+    return dispatch(setCreateDaoMetaData({ members: nextMembers }))
   }
 
   const onChangeMyName = (e: ChangeEvent<HTMLInputElement>) => {
     const nextMembers = [...members]
     nextMembers[MY_INDEX] = { ...nextMembers[MY_INDEX], name: e.target.value }
-    return dispatch(
-      setCreateDaoMetaData({ ...createMetaData, members: nextMembers }),
-    )
+    return dispatch(setCreateDaoMetaData({ members: nextMembers }))
   }
 
   const remove = (index: number) => {
     const nextMembers = [...members]
     nextMembers.splice(index, 1)
-    return dispatch(
-      setCreateDaoMetaData({ ...createMetaData, members: nextMembers }),
-    )
+    return dispatch(setCreateDaoMetaData({ members: nextMembers }))
   }
 
   useEffect(() => {

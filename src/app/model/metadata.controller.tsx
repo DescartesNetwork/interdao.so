@@ -104,9 +104,9 @@ export const getMember = createAsyncThunk<
 
 export const setCreateDaoMetaData = createAsyncThunk(
   `${NAME}/setCreateDaoMetaData`,
-  async (metaData?: MetaData) => {
-    if (!metaData) return { createMetaData: DEFAULT_META_DATA }
-    return { createMetaData: metaData }
+  async (metaData?: Partial<MetaData>) => {
+    if (!metaData) return DEFAULT_META_DATA
+    return metaData
   },
 )
 
@@ -126,7 +126,8 @@ const slice = createSlice({
       )
       .addCase(
         setCreateDaoMetaData.fulfilled,
-        (state, { payload }) => void Object.assign(state, payload),
+        (state, { payload }) =>
+          void Object.assign(state.createMetaData, payload),
       ),
 })
 

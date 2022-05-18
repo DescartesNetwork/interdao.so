@@ -55,8 +55,10 @@ const ProposalInitialization = () => {
   } = useSelector((state: AppState) => state)
   const history = useHistory()
   const dispatch = useDispatch()
+  const daoMetaData = useMetaData(daoAddress)
 
   const disabled = !title || !description
+  const isMultisigDAO = daoMetaData?.daoType === 'multisig-dao'
 
   const proposalMetaData: ProposalMetaData = useMemo(() => {
     return {
@@ -65,11 +67,11 @@ const ProposalInitialization = () => {
       imageBackground,
     }
   }, [description, imageBackground, title])
-  const daoMetaData = useMetaData(daoAddress)
 
-  const isMultisigDAO = daoMetaData?.daoType === 'multisig-dao'
-
-  console.log(daoMetaData)
+  const setDefaultQuorum = useCallback(() => {
+    if (!isMultisigDAO) return
+    return setConsensusQuorum(daoMetaData.quorum)
+  }, [daoMetaData, isMultisigDAO])
 
   const newProposal = useCallback(async () => {
     const { authority } = daoData[daoAddress]
@@ -146,6 +148,10 @@ const ProposalInitialization = () => {
   useEffect(() => {
     if (!tx) return history.push(`/app/${appId}/dao/${daoAddress}`)
   }, [daoAddress, history, tx])
+
+  useEffect(() => {
+    setDefaultQuorum()
+  }, [setDefaultQuorum])
 
   return (
     <Row gutter={[24, 24]} justify="center">

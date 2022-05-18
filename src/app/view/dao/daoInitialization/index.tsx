@@ -102,11 +102,11 @@ const DaoInitialization = () => {
         multihash: { digest },
       } = CID.parse(cid)
       const metadata = Buffer.from(digest)
-      console.log(1)
+
       const totalSupply =
         daoType === 'flexible-dao'
           ? supply.mul(new BN(10).pow(new BN(decimals)))
-          : new BN(1)
+          : new BN(members.length)
 
       const mintAddress = await getMintAddr()
 
@@ -128,7 +128,16 @@ const DaoInitialization = () => {
     } finally {
       setLoading(false)
     }
-  }, [createMetaData, daoType, supply, decimals, getMintAddr, regime, history])
+  }, [
+    createMetaData,
+    daoType,
+    supply,
+    decimals,
+    members,
+    getMintAddr,
+    regime,
+    history,
+  ])
 
   return (
     <Row gutter={[24, 24]} justify="center">

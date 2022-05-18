@@ -19,7 +19,7 @@ const MultiSigDAORule = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   const onChange = (quorum: ConsensusQuorum) => {
-    return dispatch(setCreateDaoMetaData({ ...createMetaData, quorum }))
+    return dispatch(setCreateDaoMetaData({ quorum }))
   }
 
   return (

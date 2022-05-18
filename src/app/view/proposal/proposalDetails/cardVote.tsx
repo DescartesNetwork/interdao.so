@@ -18,9 +18,10 @@ import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { MintSymbol } from 'shared/antd/mint'
 import useProposalStatus from 'app/hooks/useProposalStatus'
 import { getRemainingTime } from 'app/helpers/countDown'
+import useMetaData from 'app/hooks/useMetaData'
 
 const {
-  sol: { interDao, taxman },
+  sol: { interDao, taxman, fee },
 } = configs
 
 const defaultRemainingTime = {
@@ -114,23 +115,29 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
   const { mint, regime, authority } = daoData[daoAddress] || ({} as DaoData)
   const { balance, decimals } = useAccountBalanceByMintAddress(mint?.toBase58())
   const { status } = useProposalStatus(proposalAddress)
+  const daoMetaData = useMetaData(daoAddress)
+
+  const isMultisigDAO = daoMetaData?.daoType === 'multisig-dao'
 
   const disabled = useMemo(() => {
+    if (isMultisigDAO) {
+      return status !== 'Voting' || balance <= 0
+    }
     return status !== 'Voting' || !amount || !account.isAddress(proposalAddress)
-  }, [amount, proposalAddress, status])
+  }, [amount, balance, isMultisigDAO, proposalAddress, status])
 
   const parseRegime = useMemo(() => {
     if (!regime) return ''
     return Object.keys(regime)[0]
   }, [regime])
 
-  const fee = useMemo(() => {
+  const proposalFee = useMemo(() => {
     if (!parseRegime || !authority) return
 
     const feeOption: FeeOptions = {
-      tax: new BN(50000),
+      tax: new BN(fee),
       taxmanAddress: taxman,
-      revenue: new BN(50000),
+      revenue: new BN(fee),
       revenuemanAddress: authority.toBase58(),
     }
 
@@ -147,19 +154,24 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
 
   const onChange = useCallback(
     (value: string) => {
-      if (!decimals) return
       dispatch(setVoteBidAmount(value))
     },
-    [dispatch, decimals],
+    [dispatch],
   )
 
   const onVoteFor = useCallback(async () => {
     setLoadingFor(true)
     try {
-      if (!amount || !account.isAddress(proposalAddress)) return
-      const voteAmount = utils.decimalize(amount, decimals)
+      if ((!amount || !account.isAddress(proposalAddress)) && !isMultisigDAO)
+        return
+      const actualAmount = isMultisigDAO ? balance : amount
+      const voteAmount = utils.decimalize(actualAmount, decimals)
       const nextAmount = new BN(voteAmount.toString())
-      const { txId } = await interDao.voteFor(proposalAddress, nextAmount, fee)
+      const { txId } = await interDao.voteFor(
+        proposalAddress,
+        nextAmount,
+        proposalFee,
+      )
       window.notify({
         type: 'success',
         description: 'Voted successfully. Click to view details!',
@@ -173,18 +185,20 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     } finally {
       setLoadingFor(false)
     }
-  }, [amount, decimals, fee, proposalAddress])
+  }, [amount, proposalAddress, isMultisigDAO, balance, decimals, proposalFee])
 
   const onVoteAgainst = useCallback(async () => {
     setLoadingAgainst(true)
     try {
-      if (!amount || !account.isAddress(proposalAddress)) return
-      const voteAmount = utils.decimalize(amount, decimals)
+      if ((!amount || !account.isAddress(proposalAddress)) && !isMultisigDAO)
+        return
+      const actualAmount = isMultisigDAO ? balance : amount
+      const voteAmount = utils.decimalize(actualAmount, decimals)
       const nextAmount = new BN(voteAmount.toString())
       const { txId } = await interDao.voteAgainst(
         proposalAddress,
         nextAmount,
-        fee,
+        proposalFee,
       )
       window.notify({
         type: 'success',
@@ -199,7 +213,7 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     } finally {
       setLoadingAgainst(false)
     }
-  }, [amount, decimals, fee, proposalAddress])
+  }, [amount, proposalAddress, isMultisigDAO, balance, decimals, proposalFee])
 
   return (
     <Card bordered={false}>
@@ -207,62 +221,53 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
         <Col span={24}>
           <Typography.Title level={5}>Cast your votes</Typography.Title>
         </Col>
-        <Col span={24}>
-          <Card
-            className="numric-ip-card"
-            bodyStyle={{ padding: '8px 12px' }}
-            bordered={false}
-          >
-            <Row gutter={[8, 8]}>
-              <Col flex="auto">
-                <Typography.Text>Amount votes</Typography.Text>
-              </Col>
-              <Col>
-                <Typography.Text>
-                  Available: {numeric(balance).format('0,0.[00]')}
-                </Typography.Text>{' '}
-                <MintSymbol mintAddress={mint?.toBase58()} />
-              </Col>
-              <Col span={24}>
-                <NumericInput
-                  bordered={false}
-                  style={{ padding: 0 }}
-                  placeholder="0"
-                  value={amount}
-                  onValue={onChange}
-                  suffix={
-                    <Typography.Text
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => onChange(balance.toString())}
-                    >
-                      MAX
-                    </Typography.Text>
-                  }
-                />
-              </Col>
-            </Row>
-          </Card>
-        </Col>
-        <Col span={24}>
-          <LockedVoting
-            proposalAddress={proposalAddress}
-            daoAddress={daoAddress}
-          />
-        </Col>
-        <Col span={12}>
-          <Button
-            onClick={onVoteAgainst}
-            type="primary"
-            disabled={disabled}
-            loading={loadingAgainst}
-            block
-            size="large"
-            icon={<IonIcon name="thumbs-down-outline" />}
-          >
-            Disagree
-          </Button>
-        </Col>
-        <Col span={12}>
+        {!isMultisigDAO && (
+          <Col span={24}>
+            <Card
+              className="numric-ip-card"
+              bodyStyle={{ padding: '8px 12px' }}
+              bordered={false}
+            >
+              <Row gutter={[8, 8]}>
+                <Col flex="auto">
+                  <Typography.Text>Amount votes</Typography.Text>
+                </Col>
+                <Col>
+                  <Typography.Text>
+                    Available: {numeric(balance).format('0,0.[00]')}
+                  </Typography.Text>{' '}
+                  <MintSymbol mintAddress={mint?.toBase58()} />
+                </Col>
+                <Col span={24}>
+                  <NumericInput
+                    bordered={false}
+                    style={{ padding: 0 }}
+                    placeholder="0"
+                    value={amount}
+                    onValue={onChange}
+                    suffix={
+                      <Typography.Text
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => onChange(balance.toString())}
+                      >
+                        MAX
+                      </Typography.Text>
+                    }
+                  />
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+        )}
+        {!isMultisigDAO && (
+          <Col span={24}>
+            <LockedVoting
+              proposalAddress={proposalAddress}
+              daoAddress={daoAddress}
+            />
+          </Col>
+        )}
+        <Col span={isMultisigDAO ? 24 : 12}>
           <Button
             onClick={onVoteFor}
             type="primary"
@@ -273,6 +278,19 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
             icon={<IonIcon name="thumbs-up-outline" />}
           >
             Agree
+          </Button>
+        </Col>
+        <Col span={isMultisigDAO ? 24 : 12}>
+          <Button
+            onClick={onVoteAgainst}
+            type="primary"
+            disabled={disabled}
+            loading={loadingAgainst}
+            block
+            size="large"
+            icon={<IonIcon name="thumbs-down-outline" />}
+          >
+            Disagree
           </Button>
         </Col>
       </Row>
