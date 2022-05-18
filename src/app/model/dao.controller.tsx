@@ -101,10 +101,8 @@ export const getDao = createAsyncThunk<
   if (data && !force) return { [address]: data }
   const raw = await interDao.getDaoData(address)
   return {
-    daoData: {
-      [address]: {
-        ...raw,
-      },
+    [address]: {
+      ...raw,
     },
   }
 })
@@ -117,9 +115,7 @@ export const upsetDao = createAsyncThunk<
   if (!account.isAddress(address)) throw new Error('Invalid address')
   if (!data) throw new Error('Data is empty')
   return {
-    daoData: {
-      [address]: { ...data },
-    },
+    [address]: { ...data },
   }
 })
 
@@ -161,11 +157,11 @@ const slice = createSlice({
       )
       .addCase(
         getDao.fulfilled,
-        (state, { payload }) => void Object.assign(state, payload),
+        (state, { payload }) => void Object.assign(state.daoData, payload),
       )
       .addCase(
         upsetDao.fulfilled,
-        (state, { payload }) => void Object.assign(state, payload),
+        (state, { payload }) => void Object.assign(state.daoData, payload),
       )
       .addCase(
         setCreateDaoData.fulfilled,
