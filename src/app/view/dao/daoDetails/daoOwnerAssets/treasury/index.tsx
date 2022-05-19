@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account, AccountData } from '@senswap/sen-js'
+import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { Col, Row, Space, Tooltip, Typography } from 'antd'
 import MintBalance from './mintBalance'
+import RowSpaceBetween from 'app/components/rowSpaceBetween'
+import IonIcon from 'shared/antd/ionicon'
 
 import { AppState } from 'app/model'
 import useTotalUSD from 'app/hooks/useBalance'
 import { asyncWait, numeric, shortenAddress } from 'shared/util'
-import IonIcon from 'shared/antd/ionicon'
-import RowSpaceBetween from 'app/components/rowSpaceBetween'
-import CopyToClipboard from 'react-copy-to-clipboard'
 
 const InfoDAOMaster = ({ daoAddress }: { daoAddress: string }) => {
   const [copied, setCopied] = useState(false)
