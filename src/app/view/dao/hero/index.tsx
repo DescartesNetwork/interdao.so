@@ -26,8 +26,12 @@ const Hero = () => {
 
   const totalProposal = useMemo(() => {
     if (!daoData) return 0
-    return Object.keys(proposal).length
-  }, [daoData, proposal])
+    let count = 0
+    for (const { nonce } of Object.values(daoData)) {
+      count += nonce.toNumber()
+    }
+    return count
+  }, [daoData])
 
   const executeProposal = useMemo(() => {
     let total = 0

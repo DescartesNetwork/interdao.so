@@ -32,7 +32,7 @@ const History = ({
     setLoading(true)
     const receipts = await getReceipts(proposalAddress)
     const nextReceipts: ReceiptData[] = []
-    receipts.forEach((receipt) => {
+    Object.values(receipts).forEach((receipt) => {
       const { authority, power, action } = receipt
       const actionType = Object.keys(action || {})[0]
       const owner = authority.toBase58()

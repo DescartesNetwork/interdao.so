@@ -9,7 +9,7 @@ import { ProposalReturnType } from 'app/view/templates/types'
 export type TemplateState = {
   visible: boolean
   tx?: ProposalReturnType
-  imageBackground: string
+  templateName: string
 }
 
 /**
@@ -20,7 +20,7 @@ const NAME = 'template'
 const initialState: TemplateState = {
   visible: false,
   tx: undefined,
-  imageBackground: '',
+  templateName: '',
 }
 
 /**
@@ -45,10 +45,10 @@ export const clearTx = createAsyncThunk(`${NAME}/clearTx`, async () => {
   return { tx: undefined }
 })
 
-export const setImgBackground = createAsyncThunk(
-  `${NAME}/setImgBackground`,
-  async (image: string) => {
-    return { imageBackground: image }
+export const setTemplateName = createAsyncThunk(
+  `${NAME}/setTemplateName`,
+  async (name: string) => {
+    return { templateName: name }
   },
 )
 
@@ -71,7 +71,7 @@ const slice = createSlice({
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        setImgBackground.fulfilled,
+        setTemplateName.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(

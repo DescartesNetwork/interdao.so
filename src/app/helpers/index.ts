@@ -12,6 +12,14 @@ const {
   manifest: { appId },
 } = configs
 
+const SOCIALS_MEDIA: Record<string, string> = {
+  t: 'logo-telegram',
+  twitter: 'logo-twitter',
+  facebook: 'logo-facebook',
+  discord: 'logo-discord',
+  global: 'globe',
+  medium: 'logo-medium',
+}
 export const fileToBase64 = (
   file: File,
   callBack: (result: string | ArrayBuffer | null) => void,
@@ -75,4 +83,31 @@ export const cacheDaoData = async (daoAddress: string, daoData: DaoData) => {
     return dbData
   }
   return dbDaoData
+}
+
+export const validURL = (url: string) => {
+  var pattern = new RegExp(
+    '^(https?:\\/\\/)?' + // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$',
+    'i',
+  ) // fragment locator
+  return !!pattern.test(url)
+}
+
+export const getIcon = (url: string) => {
+  if (!validURL) return ''
+  let socialName = ''
+  const domain = new URL(url)
+  const host = domain.hostname.replace('www.', '')
+  for (const char of host) {
+    if (char === '.') break
+    socialName += char
+  }
+  const iconName = SOCIALS_MEDIA[socialName]
+  if (!iconName) return SOCIALS_MEDIA['global']
+  return iconName
 }

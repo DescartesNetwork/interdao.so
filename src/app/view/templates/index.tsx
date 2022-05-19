@@ -9,6 +9,10 @@ import IonIcon from 'shared/antd/ionicon'
 
 import './index.less'
 
+export enum Templates {
+  SPL_TRANSFER = 'spl_transfer',
+}
+
 const Template = ({ daoAddress }: { daoAddress: string }) => {
   const {
     template: { visible },

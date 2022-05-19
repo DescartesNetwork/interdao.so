@@ -17,8 +17,7 @@ const ReviewAndCreate = () => {
     metadata: { createMetaData },
   } = useSelector((state: AppState) => state)
   const { regime } = createDaoData
-  const { image, description, daoName, members, quorum } = createMetaData
-  const parseQuorum = Object.keys(quorum)[0] || ''
+  const { image, description, daoName, members } = createMetaData
 
   const {
     ui: { width },
@@ -38,20 +37,6 @@ const ReviewAndCreate = () => {
             <RowSpaceVertical
               label="Name of DAO"
               value={<Typography.Title level={1}>{daoName}</Typography.Title>}
-            />
-          </Col>
-          <Col>
-            <RowSpaceVertical
-              label="Consensus Quorum"
-              value={
-                <Typography.Title level={1}>{parseQuorum}</Typography.Title>
-              }
-            />
-          </Col>
-          <Col>
-            <RowSpaceVertical
-              label="DAO privacy"
-              value={<Typography.Title level={1}>Public</Typography.Title>}
             />
           </Col>
         </Row>

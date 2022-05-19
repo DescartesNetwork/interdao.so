@@ -29,7 +29,7 @@ const CardStatus = ({
     if (!receipts.length) return 0
     const authorities: string[] = []
 
-    for (const receipt of receipts) {
+    for (const receipt of Object.values(receipts)) {
       const { authority } = receipt
       if (authorities.includes(authority.toBase58())) continue
       authorities.push(authority.toBase58())

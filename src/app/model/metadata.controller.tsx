@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { account } from '@senswap/sen-js'
 import { utils } from '@project-serum/anchor'
-import { ConsensusQuorum, ConsensusQuorums } from '@interdao/core'
+import { ConsensusQuorums } from '@interdao/core'
 
 import configs from 'app/configs'
 
@@ -13,12 +13,6 @@ const {
  * Interface & Utility
  */
 
-export const SOCIAL_MEDIA = ['twitter', 'discord']
-
-const getDefaultSocial = () => {
-  return SOCIAL_MEDIA.map(() => '')
-}
-
 export type DAOMember = {
   name: string
   walletAddress: string
@@ -29,7 +23,7 @@ export const DEFAULT_META_DATA = {
   daoName: '',
   description: '',
   image: '',
-  optionals: getDefaultSocial(),
+  optionals: [],
   daoRegime: '',
   daoType: '',
   members: [],
@@ -45,7 +39,6 @@ export type MetaData = {
   daoRegime: string
   daoType: string
   members: DAOMember[]
-  quorum: ConsensusQuorum
 }
 export type MetaDataMember = { members: number }
 export type DaoMetaDataState = Record<string, MetaDataMember>

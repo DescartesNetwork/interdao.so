@@ -15,14 +15,14 @@ import { ProposalReturnType } from 'app/view/templates/types'
 import { AppDispatch, AppState } from 'app/model'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import {
-  setImgBackground,
+  setTemplateName,
   setTx,
   setVisible,
 } from 'app/model/template.controller'
 import configs from 'app/configs'
-import BG_SOLANA from 'app/static/images/templates/bg-spl.png'
 import NumericInput from 'shared/antd/numericInput'
 import useMetaData from 'app/hooks/useMetaData'
+import { Templates } from '../..'
 
 const {
   manifest: { appId },
@@ -117,7 +117,7 @@ const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
     )
 
     await dispatch(setTx(re))
-    await dispatch(setImgBackground(BG_SOLANA))
+    await dispatch(setTemplateName(Templates.SPL_TRANSFER))
     await dispatch(setVisible(false))
     return history.push(`/app/${appId}/dao/${daoAddress}/new-proposal`)
   }, [

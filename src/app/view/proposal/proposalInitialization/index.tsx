@@ -30,7 +30,7 @@ const {
 export type ProposalMetaData = {
   title: string
   description: string
-  imageBackground: string
+  templateName: string
 }
 
 const CURRENT_TIME = Number(new Date())
@@ -50,7 +50,7 @@ const ProposalInitialization = () => {
   const [description, setDescription] = useState('')
   const { daoAddress } = useParams<{ daoAddress: string }>()
   const {
-    template: { tx, imageBackground },
+    template: { tx, templateName },
     dao: { daoData },
   } = useSelector((state: AppState) => state)
   const history = useHistory()
@@ -64,14 +64,9 @@ const ProposalInitialization = () => {
     return {
       title,
       description,
-      imageBackground,
+      templateName,
     }
-  }, [description, imageBackground, title])
-
-  const setDefaultQuorum = useCallback(() => {
-    if (!isMultisigDAO) return
-    return setConsensusQuorum(daoMetaData.quorum)
-  }, [daoMetaData, isMultisigDAO])
+  }, [description, templateName, title])
 
   const newProposal = useCallback(async () => {
     const { authority } = daoData[daoAddress]
@@ -149,10 +144,6 @@ const ProposalInitialization = () => {
     if (!tx) return history.push(`/app/${appId}/dao/${daoAddress}`)
   }, [daoAddress, history, tx])
 
-  useEffect(() => {
-    setDefaultQuorum()
-  }, [setDefaultQuorum])
-
   return (
     <Row gutter={[24, 24]} justify="center">
       <Col xs={24} md={14}>
@@ -204,15 +195,12 @@ const ProposalInitialization = () => {
                 />
               </Col>
             )}
-            {!isMultisigDAO && (
-              <Col span={24}>
-                <ConsensusQuorumInput
-                  value={consensusQuorum}
-                  onChange={setConsensusQuorum}
-                />
-              </Col>
-            )}
-
+            <Col span={24}>
+              <ConsensusQuorumInput
+                value={consensusQuorum}
+                onChange={setConsensusQuorum}
+              />
+            </Col>
             <Col span={24} />
             <Col flex="auto">
               <Button

@@ -25,11 +25,11 @@ import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
 import useMembers from 'app/hooks/useMembers'
 import useMetaData from 'app/hooks/useMetaData'
+import { getIcon, validURL } from 'app/helpers'
 
 import autonomous from 'app/static/images/system/bg-autonomous.png'
 import democratic from 'app/static/images/system/bg-democratic.png'
 import dictatorial from 'app/static/images/system/bg-dictatorial.png'
-import { SOCIAL_MEDIA } from 'app/model/metadata.controller'
 
 export type DaoCardProps = { daoAddress: string; special?: boolean }
 export type DaoCardBackground = 'autonomous' | 'democratic' | 'dictatorial'
@@ -117,17 +117,15 @@ const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
                           : shortenAddress(daoAddress)}
                       </Typography.Title>
                     </Tooltip>
-                    <Space size={2} style={{ marginLeft: -8 }}>
+                    <Space size={2} style={{ marginLeft: -3 }}>
                       {metaData?.optionals?.map(
                         (url, idx) =>
-                          url && (
+                          validURL(url) && (
                             <Button
                               size="small"
                               type="text"
                               onClick={() => window.open(url, '_blank')}
-                              icon={
-                                <IonIcon name={`logo-${SOCIAL_MEDIA[idx]}`} />
-                              }
+                              icon={<IonIcon name={getIcon(url)} />}
                               key={idx}
                             />
                           ),

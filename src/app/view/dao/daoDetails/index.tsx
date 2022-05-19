@@ -15,8 +15,7 @@ import AmountMembers from './members'
 import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
 import useMetaData from 'app/hooks/useMetaData'
-import useParseQuorumText from 'app/hooks/useParseQuorumText'
-import { SOCIAL_MEDIA } from 'app/model/metadata.controller'
+import { getIcon, validURL } from 'app/helpers'
 
 import './index.less'
 
@@ -35,9 +34,7 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
     mint: SystemProgram.programId,
   }
   const metaData = useMetaData(daoAddress)
-  const quorum = useParseQuorumText(metaData?.quorum)
   const mobileScreen = width < 768
-  const isMultisigDAO = metaData?.daoType === 'multisig-dao'
 
   return (
     <Row gutter={[24, 24]}>
@@ -63,17 +60,15 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
                         ? metaData.daoName
                         : shortenAddress(daoAddress)}
                     </Typography.Title>
-                    <Space size={0} style={{ marginLeft: -8 }}>
+                    <Space size={0} style={{ marginLeft: -3 }}>
                       {(metaData?.optionals || []).map(
                         (url, idx) =>
-                          url && (
+                          validURL(url) && (
                             <Button
                               size="small"
                               type="text"
                               onClick={() => window.open(url, '_blank')}
-                              icon={
-                                <IonIcon name={`logo-${SOCIAL_MEDIA[idx]}`} />
-                              }
+                              icon={<IonIcon name={getIcon(url)} />}
                               key={idx}
                             />
                           ),
@@ -95,19 +90,15 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
                   <AmountMembers daoAddress={daoAddress} />
                 </Col>
                 <Col xs={12} sm={6}>
-                  {isMultisigDAO ? (
-                    <StatisticCard title="Consensus Quorum" value={quorum} />
-                  ) : (
-                    <StatisticCard
-                      title="Vote by"
-                      value={
-                        <Space>
-                          <MintAvatar mintAddress={mint.toBase58()} />
-                          <MintSymbol mintAddress={mint.toBase58()} />
-                        </Space>
-                      }
-                    />
-                  )}
+                  <StatisticCard
+                    title="Vote by"
+                    value={
+                      <Space>
+                        <MintAvatar mintAddress={mint.toBase58()} />
+                        <MintSymbol mintAddress={mint.toBase58()} />
+                      </Space>
+                    }
+                  />
                 </Col>
                 <Col xs={12} sm={6}>
                   <StatisticCard

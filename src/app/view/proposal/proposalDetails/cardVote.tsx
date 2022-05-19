@@ -7,6 +7,7 @@ import { BN } from 'bn.js'
 import { Button, Card, Col, Row, Typography, Space, Tooltip } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
 import IonIcon from 'shared/antd/ionicon'
+import Withdraw from './withdraw'
 
 import useProposal from 'app/hooks/useProposal'
 import { AppState } from 'app/model'
@@ -167,11 +168,12 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
       const actualAmount = isMultisigDAO ? balance : amount
       const voteAmount = utils.decimalize(actualAmount, decimals)
       const nextAmount = new BN(voteAmount.toString())
-      const { txId } = await interDao.voteFor(
+      const { txId, receiptAddress } = await interDao.voteFor(
         proposalAddress,
         nextAmount,
         proposalFee,
       )
+      console.log(receiptAddress)
       window.notify({
         type: 'success',
         description: 'Voted successfully. Click to view details!',
@@ -219,7 +221,17 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Typography.Title level={5}>Cast your votes</Typography.Title>
+          <Row>
+            <Col flex="auto">
+              <Typography.Title level={5}>Cast your votes</Typography.Title>
+            </Col>
+            <Col>
+              <Withdraw
+                daoAddress={daoAddress}
+                proposalAddress={proposalAddress}
+              />
+            </Col>
+          </Row>
         </Col>
         {!isMultisigDAO && (
           <Col span={24}>

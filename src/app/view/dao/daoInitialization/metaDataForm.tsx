@@ -1,16 +1,22 @@
 import React, { ChangeEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Card, Col, Image, Input, Row, Space, Typography, Upload } from 'antd'
+import {
+  Button,
+  Card,
+  Col,
+  Image,
+  Input,
+  Row,
+  Space,
+  Typography,
+  Upload,
+} from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { UploadChangeParam } from 'antd/lib/upload'
 import { fileToBase64 } from 'app/helpers'
-import {
-  MetaData,
-  setCreateDaoMetaData,
-  SOCIAL_MEDIA,
-} from 'app/model/metadata.controller'
+import { MetaData, setCreateDaoMetaData } from 'app/model/metadata.controller'
 import { AppDispatch, AppState } from 'app/model'
 
 const MetaDataForm = () => {
@@ -35,15 +41,25 @@ const MetaDataForm = () => {
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     dispatch(setCreateDaoMetaData({ [e.target.name]: e.target.value }))
-  const onOptionalChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    idx: number,
-  ) => {
-    const nextMetaData: MetaData = JSON.parse(JSON.stringify(createMetaData))
-    nextMetaData.optionals.splice(idx, 1, e.target.value)
-    dispatch(setCreateDaoMetaData(nextMetaData))
+
+  const onOptionalChange = (e: ChangeEvent<HTMLInputElement>, idx: number) => {
+    console.log(e.target.value)
+    const socials: string[] = [...createMetaData.optionals]
+    socials[idx] = e.target.value
+    dispatch(setCreateDaoMetaData({ optionals: socials }))
   }
 
+  const addLink = () => {
+    const socials: string[] = [...createMetaData.optionals]
+    socials.push('')
+    return dispatch(setCreateDaoMetaData({ optionals: socials }))
+  }
+
+  const remove = (index: number) => {
+    const socials: string[] = [...createMetaData.optionals]
+    socials.splice(index, 1)
+    return dispatch(setCreateDaoMetaData({ optionals: socials }))
+  }
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -113,21 +129,45 @@ const MetaDataForm = () => {
           </Upload>
         </Space>
       </Col>
-      {SOCIAL_MEDIA.map((social, idx) => (
-        <Col xs={24} md={12} key={idx}>
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <Typography.Text style={{ textTransform: 'capitalize' }}>
-              {social} (Optional)
-            </Typography.Text>
-            <Input
-              value={createMetaData.optionals[idx]}
-              onChange={(e) => onOptionalChange(e, idx)}
-              name="optionals"
-              className="border-less"
-            />
-          </Space>
-        </Col>
-      ))}
+      <Col span={24}>
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Typography.Text>Social media (Optional)</Typography.Text>
+          <Row gutter={[8, 8]}>
+            {createMetaData.optionals.map((social, index) => (
+              <Col span={24} key={index}>
+                <Row gutter={[12, 12]}>
+                  <Col span={22}>
+                    <Input
+                      value={social}
+                      placeholder="Input link"
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        onOptionalChange(e, index)
+                      }
+                      className="border-less"
+                    />
+                  </Col>
+                  <Col span={2}>
+                    <Button
+                      type="text"
+                      icon={<IonIcon name="trash-outline" />}
+                      onClick={() => remove(index)}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+            ))}
+            <Col span={24}>
+              <Button
+                type="dashed"
+                icon={<IonIcon name="add-outline" />}
+                onClick={addLink}
+              >
+                Add
+              </Button>
+            </Col>
+          </Row>
+        </Space>
+      </Col>
     </Row>
   )
 }

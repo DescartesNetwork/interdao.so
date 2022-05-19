@@ -11,7 +11,7 @@ const {
 
 export const getReceipts = async (
   proposalAddress: string,
-): Promise<ReceiptData[]> => {
+): Promise<Record<string, ReceiptData>> => {
   if (!account.isAddress(proposalAddress)) throw new Error('Invalid address')
   const {
     provider: { connection },
@@ -30,20 +30,20 @@ export const getReceipts = async (
         },
       ],
     })
-  let bulk: ReceiptData[] = []
+  let bulk: Record<string, ReceiptData> = {}
 
-  value.forEach(({ account: { data: buf } }) => {
+  value.forEach(({ pubkey, account: { data: buf } }) => {
     const data = interDao.parseReceiptData(buf)
-    bulk.push(data)
+    bulk[pubkey.toBase58()] = data
   })
   return bulk
 }
 
 const useReceipts = ({ proposalAddress }: { proposalAddress: string }) => {
-  const [receipts, setReceipts] = useState<ReceiptData[]>([])
+  const [receipts, setReceipts] = useState<Record<string, ReceiptData>>({})
 
   const fetchReceipts = useCallback(async () => {
-    if (!account.isAddress(proposalAddress)) return setReceipts([])
+    if (!account.isAddress(proposalAddress)) return setReceipts({})
     const listReceipt = await getReceipts(proposalAddress)
     return setReceipts(listReceipt)
   }, [proposalAddress])
