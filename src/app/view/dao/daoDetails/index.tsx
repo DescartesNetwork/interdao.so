@@ -15,10 +15,10 @@ import AmountMembers from './members'
 import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
 import useMetaData from 'app/hooks/useMetaData'
+import useParseQuorumText from 'app/hooks/useParseQuorumText'
 import { SOCIAL_MEDIA } from 'app/model/metadata.controller'
 
 import './index.less'
-import useParseQuorumText from 'app/hooks/useParseQuorumText'
 
 export type DaoDetailsProps = { daoAddress: string }
 

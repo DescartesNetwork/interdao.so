@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
+import { useSelector } from 'react-redux'
 import { ProposalData } from '@interdao/core'
 import BN from 'bn.js'
 
 import { ProposalStatusType } from 'app/components/proposalStatus'
 
-import { useSelector } from 'react-redux'
 import { AppState } from 'app/model'
 
 const currentDate = Math.floor(Number(new Date()) / 1000)

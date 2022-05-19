@@ -122,10 +122,10 @@ const CardProgress = ({
             <Typography.Text>
               {numeric(
                 utils.undecimalize(
-                  BigInt(powerRequire.toNumber()),
+                  BigInt(powerRequire.toString()),
                   mintDecimal,
                 ),
-              ).format('0,0')}{' '}
+              ).format('0,0.[0000]')}{' '}
               more Yes votes required
             </Typography.Text>
             <Progress
