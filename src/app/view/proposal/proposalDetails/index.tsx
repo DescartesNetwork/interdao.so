@@ -55,7 +55,10 @@ const ProposalDetails = () => {
                     />
                   </Col>
                   <Col span={24}>
-                    <History proposalAddress={proposalAddress} />
+                    <History
+                      proposalAddress={proposalAddress}
+                      daoAddress={daoAddress}
+                    />
                   </Col>
                 </Row>
               </Col>

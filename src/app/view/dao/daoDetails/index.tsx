@@ -10,12 +10,15 @@ import RegimeTag from 'app/components/regimeTag'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import GradientAvatar from 'app/components/gradientAvatar'
 import DaoOwnerAssets from './daoOwnerAssets'
+import AmountMembers from './members'
 
 import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
-import useMembers from 'app/hooks/useMembers'
 import useMetaData from 'app/hooks/useMetaData'
 import { SOCIAL_MEDIA } from 'app/model/metadata.controller'
+
+import './index.less'
+import useParseQuorumText from 'app/hooks/useParseQuorumText'
 
 export type DaoDetailsProps = { daoAddress: string }
 
@@ -31,9 +34,10 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
     nonce: new BN(0),
     mint: SystemProgram.programId,
   }
-  const members = useMembers(daoAddress)
   const metaData = useMetaData(daoAddress)
+  const quorum = useParseQuorumText(metaData?.quorum)
   const mobileScreen = width < 768
+  const isMultisigDAO = metaData?.daoType === 'multisig-dao'
 
   return (
     <Row gutter={[24, 24]}>
@@ -81,30 +85,31 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
             </Col>
             <Col span={24}>
               <Row gutter={[36, 16]}>
-                <Col xs={12} sm={4}>
-                  <StatisticCard
-                    title="Vote by"
-                    value={
-                      <Space>
-                        <MintAvatar mintAddress={mint.toBase58()} />
-                        <MintSymbol mintAddress={mint.toBase58()} />
-                      </Space>
-                    }
-                  />
-                </Col>
-                <Col xs={12} sm={4}>
+                <Col xs={12} sm={6}>
                   <StatisticCard
                     title="Proposals"
                     value={numeric(Number(nonce)).format('0,0')}
                   />
                 </Col>
-                <Col xs={12} sm={4}>
-                  <StatisticCard
-                    title="Members"
-                    value={numeric(members).format('0,0')}
-                  />
+                <Col xs={12} sm={6}>
+                  <AmountMembers daoAddress={daoAddress} />
                 </Col>
-                <Col xs={12} sm={4}>
+                <Col xs={12} sm={6}>
+                  {isMultisigDAO ? (
+                    <StatisticCard title="Consensus Quorum" value={quorum} />
+                  ) : (
+                    <StatisticCard
+                      title="Vote by"
+                      value={
+                        <Space>
+                          <MintAvatar mintAddress={mint.toBase58()} />
+                          <MintSymbol mintAddress={mint.toBase58()} />
+                        </Space>
+                      }
+                    />
+                  )}
+                </Col>
+                <Col xs={12} sm={6}>
                   <StatisticCard
                     title="Regime"
                     value={<RegimeTag regime={regime} />}

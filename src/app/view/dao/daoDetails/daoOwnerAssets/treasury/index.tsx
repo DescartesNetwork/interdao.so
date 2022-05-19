@@ -2,12 +2,45 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account, AccountData } from '@senswap/sen-js'
 
-import { Col, Row, Typography } from 'antd'
+import { Col, Row, Space, Tooltip, Typography } from 'antd'
 import MintBalance from './mintBalance'
 
 import { AppState } from 'app/model'
 import useTotalUSD from 'app/hooks/useBalance'
-import { numeric } from 'shared/util'
+import { asyncWait, numeric, shortenAddress } from 'shared/util'
+import IonIcon from 'shared/antd/ionicon'
+import RowSpaceBetween from 'app/components/rowSpaceBetween'
+import CopyToClipboard from 'react-copy-to-clipboard'
+
+const InfoDAOMaster = ({ daoAddress }: { daoAddress: string }) => {
+  const [copied, setCopied] = useState(false)
+
+  const onCopy = async () => {
+    setCopied(true)
+    await asyncWait(1500)
+    setCopied(false)
+  }
+
+  return (
+    <RowSpaceBetween
+      label="Treasury Address"
+      value={
+        <Space>
+          <Typography.Text className="t-16">
+            {shortenAddress(daoAddress)}
+          </Typography.Text>
+          <Tooltip title="Copied" visible={copied}>
+            <CopyToClipboard text={daoAddress} onCopy={onCopy}>
+              <Typography.Text style={{ cursor: 'pointer' }} className="t-16">
+                <IonIcon name="copy-outline" />
+              </Typography.Text>
+            </CopyToClipboard>
+          </Tooltip>
+        </Space>
+      }
+    />
+  )
+}
 
 const Treasury = ({ daoAddress }: { daoAddress: string }) => {
   const [listAccount, setListAccount] = useState<AccountData[]>([])
@@ -50,7 +83,21 @@ const Treasury = ({ daoAddress }: { daoAddress: string }) => {
       <Col span={24}>
         <Row align="middle">
           <Col flex="auto">
-            <Typography.Text type="secondary">Treasury Balance</Typography.Text>
+            <Space align="baseline">
+              <Typography.Text type="secondary">
+                Treasury Balance
+              </Typography.Text>
+              <Tooltip
+                placement="bottomLeft"
+                overlayClassName="info-member treasury-addr"
+                title={<InfoDAOMaster daoAddress={daoMasterAddress} />}
+              >
+                <IonIcon
+                  style={{ cursor: 'pointer' }}
+                  name="information-circle-outline"
+                />
+              </Tooltip>
+            </Space>
           </Col>
           <Col>
             <Typography.Title level={4}>

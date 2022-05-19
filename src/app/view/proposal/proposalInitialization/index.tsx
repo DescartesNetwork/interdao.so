@@ -20,6 +20,7 @@ import { explorer } from 'shared/util'
 import IPFS from 'shared/pdb/ipfs'
 import { AppState } from 'app/model'
 import { clearTx } from 'app/model/template.controller'
+import useMetaData from 'app/hooks/useMetaData'
 
 const {
   sol: { interDao, taxman, fee },
@@ -54,16 +55,23 @@ const ProposalInitialization = () => {
   } = useSelector((state: AppState) => state)
   const history = useHistory()
   const dispatch = useDispatch()
+  const daoMetaData = useMetaData(daoAddress)
 
   const disabled = !title || !description
+  const isMultisigDAO = daoMetaData?.daoType === 'multisig-dao'
 
-  const metaData: ProposalMetaData = useMemo(() => {
+  const proposalMetaData: ProposalMetaData = useMemo(() => {
     return {
       title,
       description,
       imageBackground,
     }
   }, [description, imageBackground, title])
+
+  const setDefaultQuorum = useCallback(() => {
+    if (!isMultisigDAO) return
+    return setConsensusQuorum(daoMetaData.quorum)
+  }, [daoMetaData, isMultisigDAO])
 
   const newProposal = useCallback(async () => {
     const { authority } = daoData[daoAddress]
@@ -73,7 +81,7 @@ const ProposalInitialization = () => {
       setLoading(true)
 
       const ipfs = new IPFS()
-      const cid = await ipfs.set(metaData)
+      const cid = await ipfs.set(proposalMetaData)
       const {
         multihash: { digest },
       } = CID.parse(cid)
@@ -128,7 +136,7 @@ const ProposalInitialization = () => {
   }, [
     daoData,
     daoAddress,
-    metaData,
+    proposalMetaData,
     tx,
     duration,
     consensusMechanism,
@@ -140,6 +148,10 @@ const ProposalInitialization = () => {
   useEffect(() => {
     if (!tx) return history.push(`/app/${appId}/dao/${daoAddress}`)
   }, [daoAddress, history, tx])
+
+  useEffect(() => {
+    setDefaultQuorum()
+  }, [setDefaultQuorum])
 
   return (
     <Row gutter={[24, 24]} justify="center">
@@ -184,18 +196,22 @@ const ProposalInitialization = () => {
             <Col span={24}>
               <DurationInput value={duration} onChange={setDuration} />
             </Col>
-            <Col span={24}>
-              <ConsensusMechanismInput
-                value={consensusMechanism}
-                onChange={setConsensusMechanism}
-              />
-            </Col>
-            <Col span={24}>
-              <ConsensusQuorumInput
-                value={consensusQuorum}
-                onChange={setConsensusQuorum}
-              />
-            </Col>
+            {!isMultisigDAO && (
+              <Col span={24}>
+                <ConsensusMechanismInput
+                  value={consensusMechanism}
+                  onChange={setConsensusMechanism}
+                />
+              </Col>
+            )}
+            {!isMultisigDAO && (
+              <Col span={24}>
+                <ConsensusQuorumInput
+                  value={consensusQuorum}
+                  onChange={setConsensusQuorum}
+                />
+              </Col>
+            )}
 
             <Col span={24} />
             <Col flex="auto">

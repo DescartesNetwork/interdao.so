@@ -34,12 +34,7 @@ const MetaDataForm = () => {
   }
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    dispatch(
-      setCreateDaoMetaData({
-        ...createMetaData,
-        [e.target.name]: e.target.value,
-      }),
-    )
+    dispatch(setCreateDaoMetaData({ [e.target.name]: e.target.value }))
   const onOptionalChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     idx: number,
@@ -82,7 +77,7 @@ const MetaDataForm = () => {
             className={`interdao-upload-metadata ${
               !!createMetaData.image ? 'uploaded' : ''
             }`}
-            accept="image/png,image/jpg"
+            accept="image/png,image/jpg,image/webp"
             name="avatar"
             listType="picture-card"
             maxCount={1}
@@ -103,7 +98,7 @@ const MetaDataForm = () => {
               )
             }}
             onRemove={() => {
-              dispatch(setCreateDaoMetaData({ ...createMetaData, image: '' }))
+              dispatch(setCreateDaoMetaData({ image: '' }))
               return true
             }}
           >
