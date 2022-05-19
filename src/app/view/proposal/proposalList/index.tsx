@@ -87,7 +87,7 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
 
       const quorum = consensusQuorum ? Object.keys(consensusQuorum)[0] : ''
       const votingPower = Number(votingForPower) - Number(votingAgainstPower)
-      const stakeSupply = supply?.toNumber() || 0
+      const stakeSupply = Number(supply) || 0
       const lockSupply = Number(supply) * (Number(endDate) - Number(startDate))
       const mechanism = consensusMechanism
         ? Object.keys(consensusMechanism)[0]

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { DaoData } from '@interdao/core'
 import { utils } from '@senswap/sen-js'
 import { useUI } from '@senhub/providers'
+import BN from 'bn.js'
 
 import { Card, Col, Row, Space, Typography, Progress } from 'antd'
 import RowSpaceVertical from 'app/components/rowSpaceVertical'
@@ -46,34 +47,46 @@ const CardProgress = ({
   const percentNo = (noVote / totalVote) * 100
 
   const currentPower = useMemo(() => {
-    if (!consensusQuorum) return 0
-    const actualYesVote = yesVote - noVote
+    if (!consensusQuorum) return new BN(0)
+    const actualYesVote = votingForPower.sub(votingAgainstPower)
+
     const mechanismQuorum = Object.keys(consensusQuorum)[0]
 
     if (mechanismQuorum === 'half')
-      return ((2 * actualYesVote) / actualSupply) * 100
+      return actualYesVote.mul(new BN(200)).div(actualSupply)
 
     if (mechanismQuorum === 'oneThird')
-      return ((3 * actualYesVote) / actualSupply) * 100
+      return actualYesVote.mul(new BN(300)).div(actualSupply)
 
     if (mechanismQuorum === 'twoThird')
-      return ((3 * actualYesVote) / (2 * actualSupply)) * 100
-    return 0
-  }, [actualSupply, consensusQuorum, noVote, yesVote])
+      return actualYesVote.mul(new BN(300)).div(actualSupply.mul(new BN(2)))
+
+    return new BN(0)
+  }, [actualSupply, consensusQuorum, votingAgainstPower, votingForPower])
 
   const powerRequire = useMemo(() => {
-    if (!consensusQuorum || !actualSupply || currentPower >= 100) return 0
-    const actualYesVote = yesVote - noVote
+    if (!consensusQuorum || !actualSupply || currentPower.gte(new BN(100)))
+      return new BN(0)
+    const actualYesVote = votingForPower.sub(votingAgainstPower)
+
     const mechanismQuorum = Object.keys(consensusQuorum)[0]
 
-    if (mechanismQuorum === 'half') return actualSupply / 2 - actualYesVote
+    if (mechanismQuorum === 'half')
+      return actualSupply.div(new BN(2)).sub(actualYesVote)
 
-    if (mechanismQuorum === 'oneThird') return actualSupply / 3 - actualYesVote
+    if (mechanismQuorum === 'oneThird')
+      return actualSupply.div(new BN(3)).sub(actualYesVote)
 
     if (mechanismQuorum === 'twoThird')
-      return (2 * actualSupply) / 3 - actualYesVote
-    return 0
-  }, [actualSupply, consensusQuorum, currentPower, noVote, yesVote])
+      return actualSupply.mul(new BN(2)).div(new BN(3)).sub(actualYesVote)
+    return new BN(0)
+  }, [
+    actualSupply,
+    consensusQuorum,
+    currentPower,
+    votingAgainstPower,
+    votingForPower,
+  ])
 
   const percentSuccess = useMemo(() => {
     if (percentYes) return percentYes
@@ -108,7 +121,10 @@ const CardProgress = ({
             <Typography.Text type="secondary">Quorum</Typography.Text>
             <Typography.Text>
               {numeric(
-                utils.undecimalize(BigInt(powerRequire), mintDecimal),
+                utils.undecimalize(
+                  BigInt(powerRequire.toNumber()),
+                  mintDecimal,
+                ),
               ).format('0,0')}{' '}
               more Yes votes required
             </Typography.Text>
@@ -116,7 +132,7 @@ const CardProgress = ({
               percent={100}
               strokeColor={STROKE_COLOR[theme].default}
               success={{
-                percent: currentPower,
+                percent: currentPower.toNumber(),
                 strokeColor: STROKE_COLOR[theme].agree,
               }}
               showInfo={false}

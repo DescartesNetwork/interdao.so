@@ -10,28 +10,21 @@ import RowSpaceBetween from 'app/components/rowSpaceBetween'
 import useProposal from 'app/hooks/useProposal'
 import { asyncWait, explorer, shortenAddress } from 'shared/util'
 import { ProposalChildCardProps } from './index'
+import useParseQuorumText from 'app/hooks/useParseQuorumText'
 
 const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
   const [copied, setCopied] = useState(false)
   const [visible, setVisible] = useState(false)
-
   const { consensusQuorum, startDate, endDate, consensusMechanism, creator } =
     useProposal(proposalAddress, daoAddress)
   const authProposalAddress = creator?.toBase58() || ''
+  const quorum = useParseQuorumText(consensusQuorum)
 
   const onCopy = async () => {
     setCopied(true)
     await asyncWait(1500)
     setCopied(false)
   }
-
-  const quorum = useMemo(() => {
-    if (!consensusQuorum) return '-'
-    const mechanismQuorum = Object.keys(consensusQuorum)[0]
-    if (mechanismQuorum === 'half') return '1/2'
-    if (mechanismQuorum === 'oneThird') return '1/3'
-    if (mechanismQuorum === 'twoThird') return '2/3'
-  }, [consensusQuorum])
 
   const consensus = useMemo(() => {
     if (!consensusMechanism) return '-'
