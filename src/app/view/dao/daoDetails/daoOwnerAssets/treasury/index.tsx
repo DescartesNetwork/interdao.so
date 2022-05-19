@@ -23,7 +23,7 @@ const InfoDAOMaster = ({ daoAddress }: { daoAddress: string }) => {
 
   return (
     <RowSpaceBetween
-      label="TreasuryAddress"
+      label="Treasury Address"
       value={
         <Space>
           <Typography.Text className="t-16">
@@ -89,7 +89,7 @@ const Treasury = ({ daoAddress }: { daoAddress: string }) => {
               </Typography.Text>
               <Tooltip
                 placement="bottomLeft"
-                overlayClassName="info-member"
+                overlayClassName="info-member treasury-addr"
                 title={<InfoDAOMaster daoAddress={daoMasterAddress} />}
               >
                 <IonIcon
