@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react'
+import { ChangeEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
@@ -43,7 +43,6 @@ const MetaDataForm = () => {
     dispatch(setCreateDaoMetaData({ [e.target.name]: e.target.value }))
 
   const onOptionalChange = (e: ChangeEvent<HTMLInputElement>, idx: number) => {
-    console.log(e.target.value)
     const socials: string[] = [...createMetaData.optionals]
     socials[idx] = e.target.value
     dispatch(setCreateDaoMetaData({ optionals: socials }))
@@ -89,44 +88,46 @@ const MetaDataForm = () => {
       <Col span={24}>
         <Space direction="vertical">
           <Typography.Text>Avatar</Typography.Text>
-          <Upload
-            className={`interdao-upload-metadata ${
-              !!createMetaData.image ? 'uploaded' : ''
-            }`}
-            accept="image/png,image/jpg,image/webp"
-            name="avatar"
-            listType="picture-card"
-            maxCount={1}
-            onChange={onFileChange}
-            itemRender={(eml, uploadFile, uploadFiles, { remove }) => {
-              return (
-                <Card
-                  className="img-card-preview-upload"
-                  bodyStyle={{ padding: 0, position: 'relative' }}
-                >
-                  <Image src={uploadFile.thumbUrl} preview={false} />
-                  <IonIcon
-                    className="ico-action-upload"
-                    name="trash-outline"
-                    onClick={remove}
-                  />
-                </Card>
-              )
-            }}
-            onRemove={() => {
-              dispatch(setCreateDaoMetaData({ image: '' }))
-              return true
-            }}
-          >
-            <Space direction="vertical" size={0}>
-              <Typography.Text style={{ fontSize: 24 }}>
-                <IonIcon name="cloud-upload-outline" />
-              </Typography.Text>
-              <Typography.Text type="secondary" style={{ fontSize: 10 }}>
-                Support JPG, PNG
-              </Typography.Text>
-            </Space>
-          </Upload>
+          {createMetaData.image ? (
+            <Card
+              className="img-card-preview-upload"
+              bodyStyle={{ padding: 0, position: 'relative', height: '100%' }}
+            >
+              <Image
+                src={createMetaData.image?.toString() || ''}
+                preview={false}
+              />
+              <IonIcon
+                className="ico-action-upload"
+                name="trash-outline"
+                onClick={() => dispatch(setCreateDaoMetaData({ image: '' }))}
+              />
+            </Card>
+          ) : (
+            <Upload
+              className={`interdao-upload-metadata ${
+                !!createMetaData.image ? 'uploaded' : ''
+              }`}
+              accept="image/png,image/jpg,image/webp"
+              name="avatar"
+              listType="picture-card"
+              maxCount={1}
+              onChange={onFileChange}
+              onRemove={() => {
+                dispatch(setCreateDaoMetaData({ image: '' }))
+                return true
+              }}
+            >
+              <Space direction="vertical" size={0}>
+                <Typography.Text style={{ fontSize: 24 }}>
+                  <IonIcon name="cloud-upload-outline" />
+                </Typography.Text>
+                <Typography.Text type="secondary" style={{ fontSize: 10 }}>
+                  Support JPG, PNG
+                </Typography.Text>
+              </Space>
+            </Upload>
+          )}
         </Space>
       </Col>
       <Col span={24}>

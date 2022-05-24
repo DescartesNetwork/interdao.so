@@ -123,8 +123,8 @@ const DaoInitialization = () => {
         onClick: () => window.open(explorer(txId), '_blank'),
       })
       return history.push(`/app/${appId}/dao/${daoAddress}`)
-    } catch (err: any) {
-      window.notify({ type: 'error', description: err.message })
+    } catch (er: any) {
+      window.notify({ type: 'error', description: er.message })
     } finally {
       setLoading(false)
     }

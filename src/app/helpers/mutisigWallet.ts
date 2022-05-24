@@ -1,4 +1,8 @@
-import { DEFAULT_EMPTY_ADDRESS, WalletInterface } from '@senswap/sen-js'
+import {
+  account,
+  DEFAULT_EMPTY_ADDRESS,
+  WalletInterface,
+} from '@senswap/sen-js'
 import {
   Spl,
   AnchorProvider,
@@ -10,7 +14,13 @@ import {
 import { PublicKey } from '@solana/web3.js'
 
 class MultisigWallet {
-  private _mint: PublicKey = new PublicKey(DEFAULT_EMPTY_ADDRESS)
+  private _mint: PublicKey
+
+  constructor(mintAddress?: string) {
+    if (!account.isAddress(mintAddress) || !mintAddress)
+      this._mint = new PublicKey(DEFAULT_EMPTY_ADDRESS)
+    this._mint = new PublicKey(mintAddress || '')
+  }
 
   getAnchorProvider = async (
     node: string,

@@ -32,6 +32,8 @@ const defaultRemainingTime = {
   seconds: '00',
 }
 
+const DEFAULT_VALUE_VOTE_MULTISIG = 1
+
 type LockedVotingProps = {
   proposalAddress: string
   daoAddress: string
@@ -165,15 +167,14 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     try {
       if ((!amount || !account.isAddress(proposalAddress)) && !isMultisigDAO)
         return
-      const actualAmount = isMultisigDAO ? balance : amount
+      const actualAmount = isMultisigDAO ? DEFAULT_VALUE_VOTE_MULTISIG : amount
       const voteAmount = utils.decimalize(actualAmount, decimals)
       const nextAmount = new BN(voteAmount.toString())
-      const { txId, receiptAddress } = await interDao.voteFor(
+      const { txId } = await interDao.voteFor(
         proposalAddress,
         nextAmount,
         proposalFee,
       )
-      console.log(receiptAddress)
       window.notify({
         type: 'success',
         description: 'Voted successfully. Click to view details!',
@@ -187,14 +188,14 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     } finally {
       setLoadingFor(false)
     }
-  }, [amount, proposalAddress, isMultisigDAO, balance, decimals, proposalFee])
+  }, [amount, proposalAddress, isMultisigDAO, decimals, proposalFee])
 
   const onVoteAgainst = useCallback(async () => {
     setLoadingAgainst(true)
     try {
       if ((!amount || !account.isAddress(proposalAddress)) && !isMultisigDAO)
         return
-      const actualAmount = isMultisigDAO ? balance : amount
+      const actualAmount = isMultisigDAO ? DEFAULT_VALUE_VOTE_MULTISIG : amount
       const voteAmount = utils.decimalize(actualAmount, decimals)
       const nextAmount = new BN(voteAmount.toString())
       const { txId } = await interDao.voteAgainst(
@@ -215,7 +216,7 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     } finally {
       setLoadingAgainst(false)
     }
-  }, [amount, proposalAddress, isMultisigDAO, balance, decimals, proposalFee])
+  }, [amount, proposalAddress, isMultisigDAO, decimals, proposalFee])
 
   return (
     <Card bordered={false}>

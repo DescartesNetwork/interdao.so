@@ -8,6 +8,7 @@ import Proposal from './proposal'
 import ProposalInitialization from './proposal/proposalInitialization'
 import DaoInitialization from './dao/daoInitialization'
 import ProposalDetails from './proposal/proposalDetails'
+import EditDAO from './dao/editDao'
 import DaoWatcher from './watcher/dao.watcher'
 import ProposalWatcher from './watcher/proposal.watcher'
 import ReceiptWatcher from './watcher/receipt.watcher'
@@ -44,6 +45,11 @@ const View = () => {
             exact
             path={`/app/${appId}/dao/:daoAddress`}
             component={Proposal}
+          />
+          <Route
+            exact
+            path={`/app/${appId}/dao/:daoAddress/edit`}
+            component={EditDAO}
           />
           <Route
             exact
