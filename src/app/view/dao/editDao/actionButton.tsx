@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
-import { Row, Button, Col } from 'antd'
+import { Row, Button, Col, ButtonProps } from 'antd'
 
 import configs from 'app/configs'
 import { AppDispatch } from 'app/model'
@@ -14,11 +14,10 @@ const {
 
 type ActionButtonProps = {
   daoAddress: string
-  loading: boolean
   onSave: () => void
-}
+} & ButtonProps
 
-const ActionButton = ({ daoAddress, onSave, loading }: ActionButtonProps) => {
+const ActionButton = ({ daoAddress, onSave, ...rest }: ActionButtonProps) => {
   const history = useHistory()
   const dispatch = useDispatch<AppDispatch>()
 
@@ -36,7 +35,7 @@ const ActionButton = ({ daoAddress, onSave, loading }: ActionButtonProps) => {
         </Button>
       </Col>
       <Col>
-        <Button loading={loading} onClick={onSave} type="primary">
+        <Button {...rest} onClick={onSave} type="primary">
           Save
         </Button>
       </Col>

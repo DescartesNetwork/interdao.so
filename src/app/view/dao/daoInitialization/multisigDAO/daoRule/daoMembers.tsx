@@ -95,7 +95,7 @@ const DAOMembers = () => {
             })}
           <Col span={4}>
             <Button
-              style={{ width: '100%' }}
+              block
               type="dashed"
               icon={<IonIcon name="add-outline" />}
               onClick={addMember}

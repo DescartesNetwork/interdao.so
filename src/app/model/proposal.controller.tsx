@@ -32,6 +32,7 @@ export const getProposals = createAsyncThunk(
     const {
       provider: { connection },
       programId,
+      // account,
     } = interDao.program
     const value: Array<{ pubkey: PublicKey; account: AccountInfo<Buffer> }> =
       await connection.getProgramAccounts(programId, {
@@ -50,6 +51,12 @@ export const getProposals = createAsyncThunk(
       const data = interDao.parseProposalData(buf)
       bulk[address] = data
     })
+    // const proposals = await account.proposal.all()
+    // let bulk: ProposalState = {}
+    // for (const proposal of proposals) {
+    //   const proposalData: ProposalData = proposal.account as any
+    //   bulk[proposal.publicKey.toBase58()] = proposalData
+    // }
     return bulk
   },
 )

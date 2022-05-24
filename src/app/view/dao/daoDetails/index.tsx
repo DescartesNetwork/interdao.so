@@ -108,15 +108,11 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
                     disabled={
                       authority && walletAddress !== authority.toBase58()
                     }
-                    icon={
-                      <IonIcon
-                        style={{
-                          marginRight: -30,
-                          marginTop: -17,
-                        }}
-                        name="open-outline"
-                      />
-                    }
+                    style={{
+                      marginRight: -10,
+                      marginTop: -20,
+                    }}
+                    icon={<IonIcon name="open-outline" />}
                   />
                 </Col>
               </Row>
