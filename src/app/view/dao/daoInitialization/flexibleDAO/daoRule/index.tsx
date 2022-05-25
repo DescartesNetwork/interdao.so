@@ -6,33 +6,31 @@ import RegimeInput from './regimeInput'
 import CirculatingSupplyInput from './circulatingSupplyInput'
 import TokenAddressInput from './tokenAddressInput'
 import { AppDispatch, AppState } from 'app/model'
-import { setCreateDaoData } from 'app/model/dao.controller'
+import { setInitDao } from 'app/model/dao.controller'
 
 import './index.less'
 
 const DaoRule = () => {
   const {
-    dao: { createDaoData },
+    dao: { initDao },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch<AppDispatch>()
 
-  const { mintAddress, supply, regime } = createDaoData
+  const { mintAddress, supply, regime } = initDao
 
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>
         <RegimeInput
           value={regime}
-          onChange={(regime) =>
-            dispatch(setCreateDaoData({ ...createDaoData, regime }))
-          }
+          onChange={(regime) => dispatch(setInitDao({ ...initDao, regime }))}
         />
       </Col>
       <Col span={24}>
         <TokenAddressInput
           value={mintAddress}
           onChange={(mintAddress) =>
-            dispatch(setCreateDaoData({ ...createDaoData, mintAddress }))
+            dispatch(setInitDao({ ...initDao, mintAddress }))
           }
         />
       </Col>
@@ -41,9 +39,7 @@ const DaoRule = () => {
           mintAddress={mintAddress}
           value={supply?.toString()}
           onChange={(supply) =>
-            dispatch(
-              setCreateDaoData({ ...createDaoData, supply: new BN(supply) }),
-            )
+            dispatch(setInitDao({ ...initDao, supply: new BN(supply) }))
           }
         />
       </Col>

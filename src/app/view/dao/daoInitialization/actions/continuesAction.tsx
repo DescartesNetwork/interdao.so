@@ -1,5 +1,5 @@
 import { Button } from 'antd'
-import { CreateDaoTitleProps } from '../initDAOHeader'
+import { InitDAOHeaderProps } from '../initDAOHeader'
 import { CreateSteps } from '../initDAOContainer'
 
 const ContinuesAction = ({
@@ -8,7 +8,7 @@ const ContinuesAction = ({
   onConfirm,
   disabled = false,
   loading = false,
-}: CreateDaoTitleProps) => {
+}: InitDAOHeaderProps) => {
   if (step === CreateSteps.stepThree)
     return (
       <Button onClick={onConfirm} type="primary" size="large" loading={loading}>

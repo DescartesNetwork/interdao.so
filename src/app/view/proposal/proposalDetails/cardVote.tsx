@@ -9,7 +9,6 @@ import NumericInput from 'shared/antd/numericInput'
 import IonIcon from 'shared/antd/ionicon'
 import Withdraw from './withdraw'
 
-import useProposal from 'app/hooks/useProposal'
 import { AppState } from 'app/model'
 import { setVoteBidAmount } from 'app/model/voteBid.controller'
 import { ProposalChildCardProps } from './index'
@@ -20,6 +19,7 @@ import { MintSymbol } from 'shared/antd/mint'
 import useProposalStatus from 'app/hooks/useProposalStatus'
 import { getRemainingTime } from 'app/helpers/countDown'
 import useMetaData from 'app/hooks/useMetaData'
+import useProposal from 'app/hooks/useProposal'
 
 const {
   sol: { interDao, taxman, fee },
@@ -32,6 +32,8 @@ const defaultRemainingTime = {
   seconds: '00',
 }
 
+const DEFAULT_VALUE_VOTE_MULTISIG = 1
+
 type LockedVotingProps = {
   proposalAddress: string
   daoAddress: string
@@ -39,9 +41,7 @@ type LockedVotingProps = {
 const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
   const [remainingTime, setRemainingTime] = useState(defaultRemainingTime)
   const { status } = useProposalStatus(proposalAddress)
-  const {
-    voteBid: { amount: voteAmount },
-  } = useSelector((state: AppState) => state)
+  const voteAmount = useSelector((state: AppState) => state.voteBid.amount)
   const { consensusMechanism, endDate, startDate } = useProposal(
     proposalAddress,
     daoAddress,
@@ -109,11 +109,11 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
   const [loadingFor, setLoadingFor] = useState(false)
   const [loadingAgainst, setLoadingAgainst] = useState(false)
   const {
-    dao: { daoData },
+    dao: { daos },
     voteBid: { amount },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch()
-  const { mint, regime, authority } = daoData[daoAddress] || ({} as DaoData)
+  const { mint, regime, authority } = daos[daoAddress] || ({} as DaoData)
   const { balance, decimals } = useAccountBalanceByMintAddress(mint?.toBase58())
   const { status } = useProposalStatus(proposalAddress)
   const daoMetaData = useMetaData(daoAddress)
@@ -165,15 +165,14 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     try {
       if ((!amount || !account.isAddress(proposalAddress)) && !isMultisigDAO)
         return
-      const actualAmount = isMultisigDAO ? balance : amount
+      const actualAmount = isMultisigDAO ? DEFAULT_VALUE_VOTE_MULTISIG : amount
       const voteAmount = utils.decimalize(actualAmount, decimals)
       const nextAmount = new BN(voteAmount.toString())
-      const { txId, receiptAddress } = await interDao.voteFor(
+      const { txId } = await interDao.voteFor(
         proposalAddress,
         nextAmount,
         proposalFee,
       )
-      console.log(receiptAddress)
       window.notify({
         type: 'success',
         description: 'Voted successfully. Click to view details!',
@@ -187,14 +186,14 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     } finally {
       setLoadingFor(false)
     }
-  }, [amount, proposalAddress, isMultisigDAO, balance, decimals, proposalFee])
+  }, [amount, proposalAddress, isMultisigDAO, decimals, proposalFee])
 
   const onVoteAgainst = useCallback(async () => {
     setLoadingAgainst(true)
     try {
       if ((!amount || !account.isAddress(proposalAddress)) && !isMultisigDAO)
         return
-      const actualAmount = isMultisigDAO ? balance : amount
+      const actualAmount = isMultisigDAO ? DEFAULT_VALUE_VOTE_MULTISIG : amount
       const voteAmount = utils.decimalize(actualAmount, decimals)
       const nextAmount = new BN(voteAmount.toString())
       const { txId } = await interDao.voteAgainst(
@@ -215,7 +214,7 @@ const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
     } finally {
       setLoadingAgainst(false)
     }
-  }, [amount, proposalAddress, isMultisigDAO, balance, decimals, proposalFee])
+  }, [amount, proposalAddress, isMultisigDAO, decimals, proposalFee])
 
   return (
     <Card bordered={false}>

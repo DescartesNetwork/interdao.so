@@ -10,10 +10,10 @@ import RowSpaceVertical from 'app/components/rowSpaceVertical'
 
 import { ProposalChildCardProps } from './index'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
-import useProposal from 'app/hooks/useProposal'
 import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
 import useProposalStatus from 'app/hooks/useProposalStatus'
+import useProposal from 'app/hooks/useProposal'
 
 const STROKE_COLOR = {
   dark: { default: '#312B29', agree: '#698033', disagree: '#F9575E' },
@@ -26,14 +26,13 @@ const CardProgress = ({
 }: ProposalChildCardProps) => {
   const [backGroundColor, setBackGroundColor] = useState('')
   const [successColor, setSuccessColor] = useState('')
-  const {
-    dao: { daoData },
-  } = useSelector((state: AppState) => state)
+  const daos = useSelector((state: AppState) => state.dao.daos)
+
   const { votingAgainstPower, votingForPower, consensusQuorum } = useProposal(
     proposalAddress,
     daoAddress,
   )
-  const { mint } = daoData[daoAddress] || ({} as DaoData)
+  const { mint } = daos[daoAddress] || ({} as DaoData)
   const mintDecimal = useMintDecimals(mint?.toBase58()) || 0
   const { actualSupply } = useProposalStatus(proposalAddress)
   const {

@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom'
 
 import { Button } from 'antd'
-import { CreateDaoTitleProps } from '../initDAOHeader'
+import { InitDAOHeaderProps } from '../initDAOHeader'
 
 import configs from 'app/configs'
 
@@ -9,7 +9,7 @@ const {
   manifest: { appId },
 } = configs
 
-const BackAction = ({ step, onHandleStep = () => {} }: CreateDaoTitleProps) => {
+const BackAction = ({ step, onHandleStep = () => {} }: InitDAOHeaderProps) => {
   const history = useHistory()
 
   if (step > 0)

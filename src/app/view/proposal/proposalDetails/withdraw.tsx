@@ -1,6 +1,8 @@
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { useWallet } from '@senhub/providers'
 import { ReceiptData } from '@interdao/core'
+import BN from 'bn.js'
+import moment from 'moment'
 
 import { Button, Col, Modal, Row, Space, Typography, Table } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -9,8 +11,6 @@ import ColumnPower from './history/columnPower'
 
 import { ProposalChildCardProps } from './index'
 import useReceipts from 'app/hooks/useReceipts'
-import BN from 'bn.js'
-import moment from 'moment'
 import configs from 'app/configs'
 import { explorer } from 'shared/util'
 

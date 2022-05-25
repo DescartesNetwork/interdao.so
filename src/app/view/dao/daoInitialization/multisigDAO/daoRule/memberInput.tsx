@@ -9,6 +9,7 @@ type MemberInputProps = {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
   disabledBtn?: boolean
   disabledWalletInput?: boolean
+  disabledName?: boolean
   remove?: () => void
 } & DAOMember
 
@@ -18,6 +19,7 @@ const MemberInput = ({
   onChange,
   disabledBtn = false,
   disabledWalletInput = false,
+  disabledName = false,
   remove = () => {},
 }: MemberInputProps) => {
   return (
@@ -29,6 +31,7 @@ const MemberInput = ({
           value={name}
           placeholder="Name"
           name="name"
+          disabled={disabledName}
         />
       </Col>
       <Col span={18}>
