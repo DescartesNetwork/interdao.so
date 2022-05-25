@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import IPFS from 'shared/pdb/ipfs'
 import { CID } from 'ipfs-core'
 import { BN } from 'bn.js'
-import { account } from '@senswap/sen-js'
+import { account, DEFAULT_EMPTY_ADDRESS } from '@senswap/sen-js'
 
 import { Row, Col, Card } from 'antd'
 import InitDAOContainer, { CreateSteps } from './initDAOContainer'
@@ -75,7 +75,7 @@ const DaoInitialization = () => {
   const getMintAddr = useCallback(async () => {
     if (mintAddress || !members) return mintAddress
     try {
-      const multiSigWallet = new MultisigWallet()
+      const multiSigWallet = new MultisigWallet(DEFAULT_EMPTY_ADDRESS)
       await multiSigWallet.createNewToken()
 
       for (const { walletAddress } of members) {
