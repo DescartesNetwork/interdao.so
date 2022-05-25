@@ -1,6 +1,7 @@
 import { ChangeEvent, useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useWallet } from '@senhub/providers'
+import isEqual from 'react-fast-compare'
 
 import { Button, Col, Row, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -34,6 +35,13 @@ const DAOMembers = () => {
 
   const onChangeMember = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const nextMembers = [...members]
+    for (const { walletAddress } of members) {
+      if (isEqual(walletAddress, e.target.value))
+        return window.notify({
+          type: 'warning',
+          description: 'This wallet address already exists',
+        })
+    }
     nextMembers[index] = {
       ...nextMembers[index],
       [e.target.name]: e.target.value,

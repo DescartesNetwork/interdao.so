@@ -9,18 +9,23 @@ import usePDB from 'app/hooks/usePDB'
 
 const ipfs = new IPFS()
 
+export type LocalMetadata = {
+  cid: string
+} & MetaData
+
 const MetadataWatcher = () => {
   const daos = useSelector((state: AppState) => state.dao.daos)
   const pdb = usePDB()
 
   const loadAllMetaData = useCallback(async () => {
-    const keys = await pdb.keys()
     Object.keys(daos).map(async (daoAddress) => {
-      if (keys.includes(daoAddress)) return
-      let metadataId = daos[daoAddress].metadata
-      const cid = getCID(metadataId)
+      const metadata = (await pdb.getItem(daoAddress)) as LocalMetadata
+      const { metadata: digest } = daos[daoAddress]
+      const cid = getCID(digest)
+      if (metadata && metadata.cid === cid) return
       const data: MetaData = await ipfs.get(cid)
-      await pdb.setItem(daoAddress, data)
+      const localMetadata = { ...data, cid }
+      await pdb.setItem(daoAddress, localMetadata)
     })
   }, [daos, pdb])
 

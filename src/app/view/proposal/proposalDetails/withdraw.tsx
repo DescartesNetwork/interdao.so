@@ -53,15 +53,16 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
   } = useWallet()
 
   const filterReceipts = useCallback(() => {
-    const listRecept = Object.keys(receipts).map((address) => {
-      return { address, ...receipts[address] }
-    })
+    const listRecept = Object.keys(receipts).map((address) => ({
+      address,
+      ...receipts[address],
+    }))
 
-    setListReceipt(
-      listRecept.filter(
-        (receipt) => receipt.authority.toBase58() === walletAddress,
-      ),
+    const myRecept: Receipt[] = listRecept.filter(
+      (receipt) => receipt.authority.toBase58() === walletAddress,
     )
+
+    return setListReceipt(myRecept)
   }, [receipts, walletAddress])
 
   const onSelect = (_: React.Key[], receipts: Receipt[]) => {
@@ -74,8 +75,6 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
 
   const onConfirm = useCallback(async () => {
     if (!receiptAddress.length) return
-    const nextReceiptAddress = [...listReceipt]
-
     setLoading(true)
     try {
       for (const address of receiptAddress) {
@@ -86,10 +85,9 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
           onClick: () => window.open(explorer(txId), '_blank'),
         })
       }
-
       //for real time
       setListReceipt(
-        nextReceiptAddress.filter(
+        [...listReceipt].filter(
           (receipt) => !receiptAddress.includes(receipt.address),
         ),
       )

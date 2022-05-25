@@ -90,7 +90,7 @@ export const getDao = createAsyncThunk<
   if (!account.isAddress(address)) throw new Error('Invalid address')
   const {
     dao: {
-      daoData: { [address]: data },
+      daos: { [address]: data },
     },
   } = getState()
   if (data && !force) return { [address]: data }

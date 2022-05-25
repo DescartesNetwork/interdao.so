@@ -12,6 +12,7 @@ import configs from 'app/configs'
 import { AppDispatch, AppState } from 'app/model'
 import useMetaData from 'app/hooks/useMetaData'
 import { setInitMetadata } from 'app/model/metadata.controller'
+import usePDB from 'app/hooks/usePDB'
 
 const {
   sol: { interDao },
@@ -24,10 +25,7 @@ const Information = ({ daoAddress }: { daoAddress: string }) => {
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch<AppDispatch>()
   const metaData = useMetaData(daoAddress)
-
-  useEffect(() => {
-    dispatch(setInitMetadata(metaData))
-  }, [dispatch, metaData])
+  const pdb = usePDB()
 
   const updateMetaData = async () => {
     setLoading(true)
@@ -39,18 +37,26 @@ const Information = ({ daoAddress }: { daoAddress: string }) => {
       } = CID.parse(cid)
       const daoMetaData = Buffer.from(digest)
       const { txId } = await interDao.updateDaoMetadata(daoMetaData, daoAddress)
-      return window.notify({
+      window.notify({
         type: 'success',
         description:
           'Update information successfully. Click here to view details',
         onClick: () => window.open(explorer(txId), '_blank'),
       })
+
+      const localMetadata = { ...initMetadata, cid } //update metadata for realtime
+      return pdb.setItem(daoAddress, localMetadata)
     } catch (er: any) {
       return window.notify({ type: 'error', description: er.message })
     } finally {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    dispatch(setInitMetadata(metaData))
+  }, [dispatch, metaData])
+
   return (
     <Row gutter={[32, 32]}>
       <Col span={24}>
