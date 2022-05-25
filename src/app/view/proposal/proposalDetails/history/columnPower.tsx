@@ -9,13 +9,11 @@ import useMintDecimals from 'shared/hooks/useMintDecimals'
 import { numeric } from 'shared/util'
 
 const ColumnPower = ({ receipt }: { receipt: ReceiptData }) => {
-  const { power, proposal: proposalAddress } = receipt
-  const {
-    dao: { daoData },
-    proposal,
-  } = useSelector((state: AppState) => state)
-  const { dao: daoAddress } = proposal[proposalAddress.toBase58()] || {}
-  const { mint } = daoData[daoAddress?.toBase58() || ''] || ({} as DaoData)
+  const daos = useSelector((state: AppState) => state.dao.daos)
+  const proposal = useSelector((state: AppState) => state.proposal)
+  const { power, proposal: proposalPubkey } = receipt
+  const { dao: daoPubkey } = proposal[proposalPubkey.toBase58()] || {}
+  const { mint } = daos[daoPubkey?.toBase58() || ''] || ({} as DaoData)
   const mintDecimal = useMintDecimals(mint?.toBase58()) || 0
 
   return (

@@ -14,15 +14,15 @@ const HEIGHT_RATIO = 1.777777
 
 const ReviewAndCreate = () => {
   const {
-    dao: { createDaoData },
-    metadata: { createMetaData },
+    dao: { initDao },
+    metadata: { initMetadata },
   } = useSelector((state: AppState) => state)
   const {
     ui: { width },
   } = useUI()
 
-  const { regime, mintAddress, supply } = createDaoData
-  const { daoName, description, image } = createMetaData
+  const { regime, mintAddress, supply } = initDao
+  const { daoName, description, image } = initMetadata
   const isMobile = width < 768
   const desktopWidth = width > 992 ? width / MAX_WIDTH_RATIO : width
   const logoSize = isMobile

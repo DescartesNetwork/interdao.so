@@ -25,11 +25,11 @@ import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
 import useMembers from 'app/hooks/useMembers'
 import useMetaData from 'app/hooks/useMetaData'
+import { getIcon, validURL } from 'app/helpers'
 
 import autonomous from 'app/static/images/system/bg-autonomous.png'
 import democratic from 'app/static/images/system/bg-democratic.png'
 import dictatorial from 'app/static/images/system/bg-dictatorial.png'
-import { SOCIAL_MEDIA } from 'app/model/metadata.controller'
 
 export type DaoCardProps = { daoAddress: string; special?: boolean }
 export type DaoCardBackground = 'autonomous' | 'democratic' | 'dictatorial'
@@ -43,9 +43,7 @@ const HEIGHT_RATIO = 1.777777
 const MAX_WIDTH_RATE = 24 / 18 // full screen is 24 col, max width is 18 col
 
 const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
-  const {
-    dao: { daoData },
-  } = useSelector((state: AppState) => state)
+  const daos = useSelector((state: AppState) => state.dao.daos)
   const history = useHistory()
   const {
     ui: { width },
@@ -57,7 +55,7 @@ const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
     return HEIGHT_RATIO * 3
   }, [width])
 
-  const { regime, nonce, mint } = daoData?.[daoAddress] || ({} as DaoData)
+  const { regime, nonce, mint } = daos?.[daoAddress] || ({} as DaoData)
   const members = useMembers(daoAddress)
   const metaData = useMetaData(daoAddress)
   const parseRegime = Object.keys(regime)?.[0]
@@ -117,17 +115,15 @@ const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
                           : shortenAddress(daoAddress)}
                       </Typography.Title>
                     </Tooltip>
-                    <Space size={2} style={{ marginLeft: -8 }}>
+                    <Space size={2} style={{ marginLeft: -3 }}>
                       {metaData?.optionals?.map(
                         (url, idx) =>
-                          url && (
+                          validURL(url) && (
                             <Button
                               size="small"
                               type="text"
                               onClick={() => window.open(url, '_blank')}
-                              icon={
-                                <IonIcon name={`logo-${SOCIAL_MEDIA[idx]}`} />
-                              }
+                              icon={<IonIcon name={getIcon(url)} />}
                               key={idx}
                             />
                           ),

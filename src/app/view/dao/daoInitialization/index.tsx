@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import IPFS from 'shared/pdb/ipfs'
 import { CID } from 'ipfs-core'
 import { BN } from 'bn.js'
-import { account } from '@senswap/sen-js'
+import { account, DEFAULT_EMPTY_ADDRESS } from '@senswap/sen-js'
 
 import { Row, Col, Card } from 'antd'
 import InitDAOContainer, { CreateSteps } from './initDAOContainer'
@@ -28,40 +28,36 @@ const DaoInitialization = () => {
   const [step, setStep] = useState(0)
   const [loading, setLoading] = useState(false)
   const {
-    dao: { createDaoData, daoType },
-    metadata: { createMetaData },
+    dao: { initDao },
+    metadata: { initMetadata },
   } = useSelector((state: AppState) => state)
   const history = useHistory()
-  const { mintAddress, supply, regime } = createDaoData
-  const { members } = createMetaData
+  const { mintAddress, supply, regime } = initDao
+  const { members, daoType } = initMetadata
   const decimals = useMintDecimals(mintAddress) || 0
 
   const onNextStep = useCallback(async () => {
     try {
-      if (step === CreateSteps.stepOne && !createMetaData)
+      if (step === CreateSteps.stepOne && !initMetadata)
         throw new Error('Invalid Metadata')
-      if (step === CreateSteps.stepTwo && !createDaoData)
+      if (step === CreateSteps.stepTwo && !initDao)
         throw new Error('Invalid DAO data')
       return setStep(step + 1)
     } catch (err: any) {
       window.notify({ type: 'error', description: err.message })
     }
-  }, [createDaoData, createMetaData, step])
+  }, [initDao, initMetadata, step])
 
   const disabled = useMemo(() => {
     if (step === CreateSteps.stepOne)
       return (
-        !createMetaData.daoName ||
-        !createMetaData.image ||
-        !createMetaData.description
+        !initMetadata.daoName ||
+        !initMetadata.image ||
+        !initMetadata.description
       )
 
     if (step === CreateSteps.stepTwo && daoType === 'flexible-dao')
-      return (
-        !createDaoData.mintAddress ||
-        !createDaoData.regime ||
-        !Number(createDaoData.supply)
-      )
+      return !initDao.mintAddress || !initDao.regime || !Number(initDao.supply)
 
     if (step === CreateSteps.stepTwo && daoType === 'multisig-dao' && members) {
       let valid = false
@@ -74,12 +70,12 @@ const DaoInitialization = () => {
       }
       return valid
     }
-  }, [createDaoData, createMetaData, step, daoType, members])
+  }, [initDao, initMetadata, step, daoType, members])
 
   const getMintAddr = useCallback(async () => {
     if (mintAddress || !members) return mintAddress
     try {
-      const multiSigWallet = new MultisigWallet()
+      const multiSigWallet = new MultisigWallet(DEFAULT_EMPTY_ADDRESS)
       await multiSigWallet.createNewToken()
 
       for (const { walletAddress } of members) {
@@ -97,7 +93,7 @@ const DaoInitialization = () => {
     try {
       setLoading(true)
       const ipfs = new IPFS()
-      const cid = await ipfs.set(createMetaData)
+      const cid = await ipfs.set(initMetadata)
       const {
         multihash: { digest },
       } = CID.parse(cid)
@@ -123,13 +119,13 @@ const DaoInitialization = () => {
         onClick: () => window.open(explorer(txId), '_blank'),
       })
       return history.push(`/app/${appId}/dao/${daoAddress}`)
-    } catch (err: any) {
-      window.notify({ type: 'error', description: err.message })
+    } catch (er: any) {
+      window.notify({ type: 'error', description: er.message })
     } finally {
       setLoading(false)
     }
   }, [
-    createMetaData,
+    initMetadata,
     daoType,
     supply,
     decimals,

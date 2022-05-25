@@ -10,7 +10,11 @@ import {
 import { PublicKey } from '@solana/web3.js'
 
 class MultisigWallet {
-  private _mint: PublicKey = new PublicKey(DEFAULT_EMPTY_ADDRESS)
+  private _mint: PublicKey
+
+  constructor(mintAddress: string) {
+    this._mint = new PublicKey(mintAddress)
+  }
 
   getAnchorProvider = async (
     node: string,

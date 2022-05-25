@@ -1,12 +1,12 @@
 import { Col, Row } from 'antd'
 import React from 'react'
-import { CreateDaoTitleProps } from '../initDAOHeader'
+import { InitDAOHeaderProps } from '../initDAOHeader'
 import BackAction from './backAction'
 import ContinuesAction from './continuesAction'
 
 type ActionButtonProps = {
   setStep: () => void
-} & CreateDaoTitleProps
+} & InitDAOHeaderProps
 
 const ActionButton = ({
   step,

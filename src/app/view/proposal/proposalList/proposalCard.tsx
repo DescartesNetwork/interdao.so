@@ -14,11 +14,17 @@ import useProposalStatus from 'app/hooks/useProposalStatus'
 import useProposalMetaData from 'app/hooks/useProposalMetaData'
 import { ProposalChildCardProps } from '../proposalDetails'
 
+import BG_SOLANA from 'app/static/images/templates/bg-spl.png'
+
 const {
   manifest: { appId },
 } = configs
 
 export type ProposalCardProps = { proposalAddress: string }
+
+const BG_PROPOSAL: Record<string, string> = {
+  spl_transfer: BG_SOLANA,
+}
 
 const currentDate = Math.floor(Number(new Date()) / 1000)
 
@@ -35,6 +41,7 @@ const ProposalCard = ({
   const history = useHistory()
   const metaData = useProposalMetaData(proposalAddress)
   const endTime = Number(endDate) * 1000
+
   return (
     <Card
       bordered={false}
@@ -44,7 +51,11 @@ const ProposalCard = ({
         )
       }
       className="proposal-card"
-      style={{ background: `url(${metaData?.imageBackground})` }}
+      style={{
+        background: !metaData
+          ? 'unset'
+          : `url(${BG_PROPOSAL[metaData.templateName]})`,
+      }}
       bodyStyle={{ padding: '24px 0' }}
       hoverable
     >

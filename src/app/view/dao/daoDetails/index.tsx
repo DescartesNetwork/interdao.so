@@ -1,7 +1,8 @@
 import { useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { SystemProgram } from '@solana/web3.js'
 import BN from 'bn.js'
-import { useUI } from '@senhub/providers'
+import { useUI, useWallet } from '@senhub/providers'
 
 import { Avatar, Button, Card, Col, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -15,29 +16,39 @@ import AmountMembers from './members'
 import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
 import useMetaData from 'app/hooks/useMetaData'
-import useParseQuorumText from 'app/hooks/useParseQuorumText'
-import { SOCIAL_MEDIA } from 'app/model/metadata.controller'
+import { getIcon, validURL } from 'app/helpers'
+import configs from 'app/configs'
 
 import './index.less'
 
 export type DaoDetailsProps = { daoAddress: string }
 
+const {
+  manifest: { appId },
+} = configs
+
 const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
-  const {
-    dao: { daoData },
-  } = useSelector((state: AppState) => state)
+  const daos = useSelector((state: AppState) => state.dao.daos)
   const {
     ui: { width },
   } = useUI()
-  const { regime, nonce, mint } = daoData?.[daoAddress] || {
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
+  const metaData = useMetaData(daoAddress)
+  const history = useHistory()
+
+  const { regime, nonce, mint, authority } = daos?.[daoAddress] || {
     regime: {},
     nonce: new BN(0),
     mint: SystemProgram.programId,
   }
-  const metaData = useMetaData(daoAddress)
-  const quorum = useParseQuorumText(metaData?.quorum)
+
+  const editDAO = () => {
+    return history.push(`/app/${appId}/dao/${daoAddress}/edit`)
+  }
+
   const mobileScreen = width < 768
-  const isMultisigDAO = metaData?.daoType === 'multisig-dao'
 
   return (
     <Row gutter={[24, 24]}>
@@ -45,41 +56,62 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
         <Card bordered={false}>
           <Row gutter={[16, 16]}>
             <Col span={24}>
-              <Row gutter={[16, 16]}>
-                <Col>
-                  {!metaData?.image ? (
-                    <GradientAvatar
-                      seed={daoAddress}
-                      avatarProps={{ shape: 'square', size: 56 }}
-                    />
-                  ) : (
-                    <Avatar shape="square" size={56} src={metaData?.image} />
-                  )}
-                </Col>
-                <Col flex={mobileScreen ? 'auto' : undefined}>
-                  <Space direction="vertical" size={0}>
-                    <Typography.Title level={4}>
-                      {metaData?.daoName
-                        ? metaData.daoName
-                        : shortenAddress(daoAddress)}
-                    </Typography.Title>
-                    <Space size={0} style={{ marginLeft: -8 }}>
-                      {(metaData?.optionals || []).map(
-                        (url, idx) =>
-                          url && (
-                            <Button
-                              size="small"
-                              type="text"
-                              onClick={() => window.open(url, '_blank')}
-                              icon={
-                                <IonIcon name={`logo-${SOCIAL_MEDIA[idx]}`} />
-                              }
-                              key={idx}
-                            />
-                          ),
+              <Row>
+                <Col flex="auto">
+                  <Row gutter={[16, 16]}>
+                    <Col>
+                      {!metaData?.image ? (
+                        <GradientAvatar
+                          seed={daoAddress}
+                          avatarProps={{ shape: 'square', size: 56 }}
+                        />
+                      ) : (
+                        <Avatar
+                          shape="square"
+                          size={56}
+                          src={metaData?.image}
+                        />
                       )}
-                    </Space>
-                  </Space>
+                    </Col>
+                    <Col flex={mobileScreen ? 'auto' : undefined}>
+                      <Space direction="vertical" size={0}>
+                        <Typography.Title level={4}>
+                          {metaData?.daoName
+                            ? metaData.daoName
+                            : shortenAddress(daoAddress)}
+                        </Typography.Title>
+                        <Space size={0} style={{ marginLeft: -3 }}>
+                          {(metaData?.optionals || []).map(
+                            (url, idx) =>
+                              validURL(url) && (
+                                <Button
+                                  size="small"
+                                  type="text"
+                                  onClick={() => window.open(url, '_blank')}
+                                  icon={<IonIcon name={getIcon(url)} />}
+                                  key={idx}
+                                />
+                              ),
+                          )}
+                        </Space>
+                      </Space>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col>
+                  <Button
+                    type="text"
+                    size="large"
+                    onClick={editDAO}
+                    disabled={
+                      authority && walletAddress !== authority.toBase58()
+                    }
+                    style={{
+                      marginRight: -10,
+                      marginTop: -20,
+                    }}
+                    icon={<IonIcon name="open-outline" />}
+                  />
                 </Col>
               </Row>
             </Col>
@@ -95,19 +127,15 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
                   <AmountMembers daoAddress={daoAddress} />
                 </Col>
                 <Col xs={12} sm={6}>
-                  {isMultisigDAO ? (
-                    <StatisticCard title="Consensus Quorum" value={quorum} />
-                  ) : (
-                    <StatisticCard
-                      title="Vote by"
-                      value={
-                        <Space>
-                          <MintAvatar mintAddress={mint.toBase58()} />
-                          <MintSymbol mintAddress={mint.toBase58()} />
-                        </Space>
-                      }
-                    />
-                  )}
+                  <StatisticCard
+                    title="Vote by"
+                    value={
+                      <Space>
+                        <MintAvatar mintAddress={mint.toBase58()} />
+                        <MintSymbol mintAddress={mint.toBase58()} />
+                      </Space>
+                    }
+                  />
                 </Col>
                 <Col xs={12} sm={6}>
                   <StatisticCard

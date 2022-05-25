@@ -1,5 +1,5 @@
-import { useEffect, useMemo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useMemo } from 'react'
+import { useSelector } from 'react-redux'
 
 import { Col, Row } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -7,27 +7,29 @@ import Banner from './banner'
 import InfoCard from './infoCard'
 
 import { numeric } from 'shared/util'
-import { AppDispatch, AppState } from 'app/model'
-import { getProposals } from 'app/model/proposal.controller'
+import { AppState } from 'app/model'
 
 import './index.less'
 
 const Hero = () => {
   const {
-    dao: { daoData },
+    dao: { daos },
     proposal,
   } = useSelector((state: AppState) => state)
-  const dispatch = useDispatch<AppDispatch>()
 
   const totalDao = useMemo(() => {
-    if (!daoData) return 0
-    return Object.keys(daoData).length
-  }, [daoData])
+    if (!daos) return 0
+    return Object.keys(daos).length
+  }, [daos])
 
   const totalProposal = useMemo(() => {
-    if (!daoData) return 0
-    return Object.keys(proposal).length
-  }, [daoData, proposal])
+    if (!daos) return 0
+    let count = 0
+    for (const { nonce } of Object.values(daos)) {
+      count += nonce.toNumber()
+    }
+    return count
+  }, [daos])
 
   const executeProposal = useMemo(() => {
     let total = 0
@@ -38,13 +40,6 @@ const Hero = () => {
     }
     return total
   }, [proposal])
-
-  useEffect(() => {
-    const daoAddresses = Object.keys(daoData)
-    for (const daoAddress of daoAddresses) {
-      dispatch(getProposals({ daoAddress }))
-    }
-  }, [daoData, dispatch])
 
   return (
     <Row className="interdao-banner" justify="center">

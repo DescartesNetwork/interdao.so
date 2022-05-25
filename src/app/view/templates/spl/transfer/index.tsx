@@ -15,14 +15,14 @@ import { ProposalReturnType } from 'app/view/templates/types'
 import { AppDispatch, AppState } from 'app/model'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import {
-  setImgBackground,
+  setTemplateName,
   setTx,
   setVisible,
 } from 'app/model/template.controller'
 import configs from 'app/configs'
-import BG_SOLANA from 'app/static/images/templates/bg-spl.png'
 import NumericInput from 'shared/antd/numericInput'
 import useMetaData from 'app/hooks/useMetaData'
+import { Templates } from '../..'
 
 const {
   manifest: { appId },
@@ -88,18 +88,16 @@ const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
   const [dstAddress, setDstAddress] = useState('')
 
   const [amount, setAmount] = useState('')
-  const {
-    dao: { daoData },
-  } = useSelector((state: AppState) => state)
+  const listDAO = useSelector((state: AppState) => state.dao.daos)
   const decimals = useMintDecimals(mintAddress)
   const dispatch = useDispatch<AppDispatch>()
   const history = useHistory()
   const daoMetaData = useMetaData(daoAddress)
 
   const senderAddress = useMemo(() => {
-    const { master } = daoData[daoAddress] || {}
+    const { master } = listDAO[daoAddress] || {}
     return master?.toBase58() || ''
-  }, [daoData, daoAddress])
+  }, [listDAO, daoAddress])
 
   const valid = useMemo(() => {
     return Boolean(
@@ -117,7 +115,7 @@ const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
     )
 
     await dispatch(setTx(re))
-    await dispatch(setImgBackground(BG_SOLANA))
+    await dispatch(setTemplateName(Templates.SPL_TRANSFER))
     await dispatch(setVisible(false))
     return history.push(`/app/${appId}/dao/${daoAddress}/new-proposal`)
   }, [
