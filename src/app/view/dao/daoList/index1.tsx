@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
+import { DaoData } from '@interdao/core'
 
 import { Col, Empty, Row } from 'antd'
 import DaoCard from './daoCard'
@@ -9,9 +10,9 @@ import SortDao from './sortDao'
 import TypeOfDAO from './typeOfDao'
 
 import { AppState } from 'app/model'
+import useSearchDao from 'app/hooks/useSearchDao'
 
 import './index.less'
-import useSearchDao from 'app/hooks/useSearchDao copy'
 
 const DaoList = () => {
   const [sortKey, setSortKey] = useState('all-regime')
@@ -20,21 +21,20 @@ const DaoList = () => {
     dao: { daoData },
   } = useSelector((state: AppState) => state)
 
-  const filterDaoAddress = useMemo(() => {
-    const daoAddresses = Object.keys(daoData)
-    if (!daoAddresses.length) return []
-    if (sortKey === 'all-regime') return daoAddresses
+  const { searchData: sortDaoRegime } = useSearchDao(sortKey)
+  const filterDaoData = useMemo(() => {
+    if (!sortDaoRegime) return
+    const data: Record<string, DaoData> = {}
+    sortDaoRegime.forEach((daoAddr) => (data[daoAddr] = daoData[daoAddr]))
+    return data
+  }, [daoData, sortDaoRegime])
+  const { searchData: searchDao, loading } = useSearchDao(
+    searchKey,
+    filterDaoData,
+  )
 
-    const filteredAddress = []
-    for (const daoAddress of daoAddresses) {
-      const { regime } = daoData[daoAddress]
-      const parseRegime = Object.keys(regime)[0]
-      if (sortKey === parseRegime) filteredAddress.push(daoAddress)
-    }
-    return filteredAddress
-  }, [daoData, sortKey])
-
-  const { searchData, loading } = useSearchDao(searchKey, filterDaoAddress)
+  const searchData =
+    !searchKey || searchKey.length < 3 ? sortDaoRegime : searchDao
 
   return (
     <Row gutter={[24, 16]}>
@@ -52,12 +52,12 @@ const DaoList = () => {
         </Row>
       </Col>
       <Col span={24} />
-      {searchKey.length >= 3 ? (
+      {searchKey.length >= 3 && (!searchDao || !searchDao.length) ? (
         <Col span={24} style={{ textAlign: 'center' }}>
           <Empty />
         </Col>
       ) : (
-        (searchData || filterDaoAddress).map((daoAddress) => (
+        (searchData || Object.keys(daoData)).map((daoAddress) => (
           <Col key={daoAddress} xs={24} md={12} xl={8}>
             <LazyLoad height={479.75}>
               <DaoCard daoAddress={daoAddress} special />

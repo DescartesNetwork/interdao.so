@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { account } from '@senswap/sen-js'
 import { utils } from '@project-serum/anchor'
-import { ConsensusQuorums } from '@interdao/core'
 
 import configs from 'app/configs'
 
@@ -18,7 +17,7 @@ export type DAOMember = {
   walletAddress: string
 }
 
-export const DEFAULT_META_DATA = {
+const DEFAULT_META_DATA = {
   address: '',
   daoName: '',
   description: '',
@@ -27,7 +26,6 @@ export const DEFAULT_META_DATA = {
   daoRegime: '',
   daoType: '',
   members: [],
-  quorum: ConsensusQuorums.Haft,
 }
 
 export type MetaData = {
@@ -40,10 +38,9 @@ export type MetaData = {
   daoType: string
   members: DAOMember[]
 }
-export type MetaDataMember = { members: number }
-export type DaoMetaDataState = Record<string, MetaDataMember>
-export type MetaDataState = {
-  daoMetaData: DaoMetaDataState
+type TokenHolderState = Record<string, number>
+type MetaDataState = {
+  tokenHolders: TokenHolderState
   createMetaData: MetaData
 }
 
@@ -53,7 +50,7 @@ export type MetaDataState = {
 
 const NAME = 'metadata'
 const initialState: MetaDataState = {
-  daoMetaData: {},
+  tokenHolders: {},
   createMetaData: DEFAULT_META_DATA,
 }
 
@@ -74,12 +71,13 @@ export const getMember = createAsyncThunk<
       },
     },
     metadata: {
-      daoMetaData: { [daoAddress]: data },
+      tokenHolders: { [daoAddress]: amountHolder },
     },
   } = getState()
+
   const mintAddress = mint.toBase58()
   if (!account.isAddress(mintAddress)) return {}
-  if (data && !force) return { [daoAddress]: data }
+  if (amountHolder && !force) return { [daoAddress]: amountHolder }
   const {
     provider: { connection },
   } = interDao.program
@@ -92,7 +90,7 @@ export const getMember = createAsyncThunk<
       ],
     },
   )
-  return { [daoAddress]: { members: accounts.length } }
+  return { [daoAddress]: accounts.length }
 })
 
 export const setCreateDaoMetaData = createAsyncThunk(
@@ -115,7 +113,7 @@ const slice = createSlice({
     void builder
       .addCase(
         getMember.fulfilled,
-        (state, { payload }) => void Object.assign(state.daoMetaData, payload),
+        (state, { payload }) => void Object.assign(state.tokenHolders, payload),
       )
       .addCase(
         setCreateDaoMetaData.fulfilled,

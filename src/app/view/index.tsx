@@ -12,6 +12,7 @@ import EditDAO from './dao/editDao'
 import DaoWatcher from './watcher/dao.watcher'
 import ProposalWatcher from './watcher/proposal.watcher'
 import ReceiptWatcher from './watcher/receipt.watcher'
+import MetadataWatcher from './watcher/metadata.watcher'
 
 import BG from 'app/static/images/system/bg-dark.png'
 import BG_LIGHT from 'app/static/images/system/bg-light.png'
@@ -68,6 +69,7 @@ const View = () => {
       <DaoWatcher />
       <ProposalWatcher />
       <ReceiptWatcher />
+      <MetadataWatcher />
     </Row>
   )
 }

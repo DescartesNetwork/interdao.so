@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { Row, Col, Button, Tabs } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import Hero from './hero'
-import DaoList from './daoList'
+import DaoList from './daoList/index1'
 import YourDaos from './daoList/yourDao'
 
 import configs from 'app/configs'
