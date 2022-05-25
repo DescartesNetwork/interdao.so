@@ -14,15 +14,15 @@ import useMetaData from 'app/hooks/useMetaData'
 
 const Rule = ({ daoAddress }: { daoAddress: string }) => {
   const {
-    dao: { daos: daoData },
+    dao: { daos },
   } = useSelector((state: AppState) => state)
-  const { mint, regime, supply } = daoData?.[daoAddress] || {
+  const { mint, regime, supply } = daos?.[daoAddress] || {
     regime: {},
     supply: new BN(0),
     mint: SystemProgram.programId,
   }
-  const decimals = useMintDecimals(mint.toBase58()) || 0
   const dispatch = useDispatch<AppDispatch>()
+  const decimals = useMintDecimals(mint.toBase58()) || 0
   const metaData = useMetaData(daoAddress)
 
   const setDefaultValue = useCallback(() => {

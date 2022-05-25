@@ -20,11 +20,13 @@ const useMetaData = (daoAddress: string) => {
     const data = (await pdb.getItem(daoAddress)) as MetaData
     if (data) return setMetaData(data)
 
-    let metadataId = daos[daoAddress].metadata
-    const cid = getCID(metadataId)
+    const digest = daos[daoAddress].metadata
+    const cid = getCID(digest)
     const metadata: MetaData = await ipfs.get(cid)
-    await pdb.setItem(daoAddress, metadata)
-    return setMetaData(data)
+    const localMetadata = { ...metadata, cid }
+    await pdb.setItem(daoAddress, localMetadata)
+
+    return setMetaData(metadata)
   }, [daoAddress, daos, pdb])
 
   useEffect(() => {

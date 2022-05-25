@@ -37,7 +37,7 @@ const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
     if (!regime || isEqual(regime, oldRegime)) return
     try {
       const { txId } = await interDao.updateDaoRegime(regime, daoAddress)
-      window.notify({
+      return window.notify({
         type: 'success',
         description: 'Update regime successfully. Click here to view details',
         onClick: () => window.open(explorer(txId), '_blank'),

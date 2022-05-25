@@ -15,12 +15,8 @@ const {
   sol: { interDao },
 } = configs
 
-const CardStatus = ({
-  proposalAddress,
-  daoAddress,
-}: ProposalChildCardProps) => {
+const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
   const [loading, setLoading] = useState(false)
-
   const { status } = useProposalStatus(proposalAddress)
   const metaData = useProposalMetaData(proposalAddress)
   const { receipts } = useReceipts({ proposalAddress })
@@ -37,11 +33,6 @@ const CardStatus = ({
 
     return authorities.length
   }, [receipts])
-
-  const disabled = useMemo(() => {
-    if (status === 'Succeeded') return false
-    return true
-  }, [status])
 
   const execute = useCallback(async () => {
     setLoading(true)
@@ -69,21 +60,18 @@ const CardStatus = ({
           <Row gutter={[24, 24]} wrap={false}>
             <Col flex="auto">
               <Space direction="vertical">
-                <Row gutter={[8, 8]} align="middle">
-                  <Col>
-                    <Typography.Title
-                      level={3}
-                      style={{ wordBreak: 'break-all' }}
-                    >
-                      {metaData?.title
-                        ? metaData.title
-                        : shortenAddress(proposalAddress)}
-                    </Typography.Title>
-                  </Col>
-                  <Col>
-                    <ProposalStatus status={status} />
-                  </Col>
-                </Row>
+                <Space>
+                  <Typography.Title
+                    level={3}
+                    style={{ wordBreak: 'break-all' }}
+                  >
+                    {metaData?.title
+                      ? metaData.title
+                      : shortenAddress(proposalAddress)}
+                  </Typography.Title>
+
+                  <ProposalStatus status={status} />
+                </Space>
                 <Space>
                   <IonIcon name="people-outline" />
                   <Typography.Text>Member: {members}</Typography.Text>
@@ -96,7 +84,7 @@ const CardStatus = ({
                 type="primary"
                 onClick={execute}
                 loading={loading}
-                disabled={disabled}
+                disabled={status !== 'Succeeded'}
               >
                 Execute
               </Button>

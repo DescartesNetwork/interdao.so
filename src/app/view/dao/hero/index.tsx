@@ -12,24 +12,8 @@ import { AppState } from 'app/model'
 import './index.less'
 
 const Hero = () => {
-  const {
-    dao: { daos },
-    proposal,
-  } = useSelector((state: AppState) => state)
-
-  const totalDao = useMemo(() => {
-    if (!daos) return 0
-    return Object.keys(daos).length
-  }, [daos])
-
-  const totalProposal = useMemo(() => {
-    if (!daos) return 0
-    let count = 0
-    for (const { nonce } of Object.values(daos)) {
-      count += nonce.toNumber()
-    }
-    return count
-  }, [daos])
+  const daos = useSelector((state: AppState) => state.dao.daos)
+  const proposal = useSelector((state: AppState) => state.proposal)
 
   const executeProposal = useMemo(() => {
     let total = 0
@@ -52,14 +36,14 @@ const Hero = () => {
             <InfoCard
               icon={<IonIcon name="earth-outline" />}
               title="Total DAOs"
-              value={numeric(totalDao).format('0,0')}
+              value={numeric(Object.keys(daos).length).format('0,0')}
             />
           </Col>
           <Col xs={24} sm={12} lg={8}>
             <InfoCard
               icon={<IonIcon name="pencil-outline" />}
               title="Total Proposals"
-              value={numeric(totalProposal).format('0,0')}
+              value={numeric(Object.keys(proposal).length).format('0,0')}
             />
           </Col>
           <Col xs={24} sm={12} lg={8}>

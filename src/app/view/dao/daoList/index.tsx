@@ -10,29 +10,31 @@ import TypeOfDAO from './typeOfDao'
 
 import { AppState } from 'app/model'
 import useSearchDao from 'app/hooks/useSearchDao'
+import useDaoType from 'app/hooks/useDaoType'
 
 import './index.less'
 
 const DaoList = () => {
-  const [sortKey, setSortKey] = useState('all-regime')
+  const [mechanisms, setMechanisms] = useState('all-regime')
+  const [type, setType] = useState('all-type')
   const [searchKey, setSearchKey] = useState('')
   const {
     dao: { daos },
   } = useSelector((state: AppState) => state)
+  const listDaoByType = useDaoType(type)
 
   const filterDaoAddress = useMemo(() => {
-    const daoAddresses = Object.keys(daos)
-    if (!daoAddresses.length) return []
-    if (sortKey === 'all-regime') return daoAddresses
+    if (!listDaoByType.length) return []
+    if (mechanisms === 'all-regime') return listDaoByType
 
     const filteredAddress = []
-    for (const daoAddress of daoAddresses) {
+    for (const daoAddress of listDaoByType) {
       const { regime } = daos[daoAddress]
       const parseRegime = Object.keys(regime)[0]
-      if (sortKey === parseRegime) filteredAddress.push(daoAddress)
+      if (mechanisms === parseRegime) filteredAddress.push(daoAddress)
     }
     return filteredAddress
-  }, [daos, sortKey])
+  }, [listDaoByType, daos, mechanisms])
 
   const { searchData, loading } = useSearchDao(searchKey, filterDaoAddress)
 
@@ -41,10 +43,10 @@ const DaoList = () => {
       <Col xs={24} md={16}>
         <Row gutter={[12, 12]}>
           <Col xs={12} md={6}>
-            <TypeOfDAO />
+            <TypeOfDAO value={type} setType={setType} />
           </Col>
           <Col xs={12} md={6}>
-            <SortDao onSort={setSortKey} value={sortKey} />
+            <SortDao onSort={setMechanisms} value={mechanisms} />
           </Col>
           <Col xs={24} md={12}>
             <SearchDao onSearch={setSearchKey} loading={loading} />

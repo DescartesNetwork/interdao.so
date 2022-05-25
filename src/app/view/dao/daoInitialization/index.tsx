@@ -18,6 +18,7 @@ import MultisigWallet from 'app/helpers/mutisigWallet'
 import configs from 'app/configs'
 
 import './index.less'
+import usePDB from 'app/hooks/usePDB'
 
 const {
   sol: { interDao },
@@ -27,14 +28,14 @@ const {
 const DaoInitialization = () => {
   const [step, setStep] = useState(0)
   const [loading, setLoading] = useState(false)
-  const {
-    dao: { initDao },
-    metadata: { initMetadata },
-  } = useSelector((state: AppState) => state)
+  const initMetadata = useSelector(
+    (state: AppState) => state.metadata.initMetadata,
+  )
+  const initDao = useSelector((state: AppState) => state.dao.initDao)
   const history = useHistory()
   const { mintAddress, supply, regime } = initDao
-  const { members, daoType } = initMetadata
   const decimals = useMintDecimals(mintAddress) || 0
+  const pdb = usePDB()
 
   const onNextStep = useCallback(async () => {
     try {
@@ -49,15 +50,11 @@ const DaoInitialization = () => {
   }, [initDao, initMetadata, step])
 
   const disabled = useMemo(() => {
-    if (step === CreateSteps.stepOne)
-      return (
-        !initMetadata.daoName ||
-        !initMetadata.image ||
-        !initMetadata.description
-      )
+    const { daoName, image, daoType, members, description } = initMetadata
+    if (step === CreateSteps.stepOne) return !daoName || !image || !description
 
     if (step === CreateSteps.stepTwo && daoType === 'flexible-dao')
-      return !initDao.mintAddress || !initDao.regime || !Number(initDao.supply)
+      return !mintAddress || !regime || !Number(supply)
 
     if (step === CreateSteps.stepTwo && daoType === 'multisig-dao' && members) {
       let valid = false
@@ -70,9 +67,10 @@ const DaoInitialization = () => {
       }
       return valid
     }
-  }, [initDao, initMetadata, step, daoType, members])
+  }, [initMetadata, mintAddress, regime, step, supply])
 
   const getMintAddr = useCallback(async () => {
+    const { members } = initMetadata
     if (mintAddress || !members) return mintAddress
     try {
       const multiSigWallet = new MultisigWallet(DEFAULT_EMPTY_ADDRESS)
@@ -87,7 +85,7 @@ const DaoInitialization = () => {
       window.notify({ type: 'error', description: err.message })
       return ''
     }
-  }, [members, mintAddress])
+  }, [initMetadata, mintAddress])
 
   const onCreateDao = useCallback(async () => {
     try {
@@ -98,7 +96,7 @@ const DaoInitialization = () => {
         multihash: { digest },
       } = CID.parse(cid)
       const metadata = Buffer.from(digest)
-
+      const { members, daoType } = initMetadata
       const totalSupply =
         daoType === 'flexible-dao'
           ? supply.mul(new BN(10).pow(new BN(decimals)))
@@ -113,6 +111,7 @@ const DaoInitialization = () => {
         undefined, // Optional DAO's keypair
         regime,
       )
+      await pdb.setItem(daoAddress, initMetadata) // to realtime
       window.notify({
         type: 'success',
         description: 'A new DAO is created. Click here to view details.',
@@ -124,16 +123,7 @@ const DaoInitialization = () => {
     } finally {
       setLoading(false)
     }
-  }, [
-    initMetadata,
-    daoType,
-    supply,
-    decimals,
-    members,
-    getMintAddr,
-    regime,
-    history,
-  ])
+  }, [initMetadata, supply, decimals, getMintAddr, regime, pdb, history])
 
   return (
     <Row gutter={[24, 24]} justify="center">
