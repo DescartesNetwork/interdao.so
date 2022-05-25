@@ -16,32 +16,27 @@ export type DAOMember = {
   name: string
   walletAddress: string
 }
-
-const DEFAULT_META_DATA = {
-  address: '',
-  daoName: '',
-  description: '',
-  image: '',
-  optionals: [],
-  daoRegime: '',
-  daoType: '',
-  members: [],
-}
-
 export type MetaData = {
   daoName: string
   description: string
   image: string | ArrayBuffer | null
   optionals: string[]
-  address: string
-  daoRegime: string
-  daoType: string
+  daoType: 'flexible-dao' | 'multisig-dao'
   members: DAOMember[]
 }
-type TokenHolderState = Record<string, number>
+
+const DEFAULT_META_DATA: MetaData = {
+  daoName: '',
+  description: '',
+  image: '',
+  optionals: [],
+  daoType: 'flexible-dao',
+  members: [],
+}
+
 type MetaDataState = {
-  tokenHolders: TokenHolderState
-  createMetaData: MetaData
+  tokenHolders: Record<string, number>
+  initMetadata: MetaData
 }
 
 /**
@@ -51,22 +46,22 @@ type MetaDataState = {
 const NAME = 'metadata'
 const initialState: MetaDataState = {
   tokenHolders: {},
-  createMetaData: DEFAULT_META_DATA,
+  initMetadata: DEFAULT_META_DATA,
 }
 
 /**
  * Actions
  */
 
-export const getMember = createAsyncThunk<
+export const getTokenHolders = createAsyncThunk<
   Partial<MetaDataState>,
   { daoAddress: string; force?: boolean },
   { state: any }
->(`${NAME}/getMember`, async ({ daoAddress, force }, { getState }) => {
+>(`${NAME}/getTokenHolders`, async ({ daoAddress, force }, { getState }) => {
   if (!account.isAddress(daoAddress)) throw new Error('Invalid address')
   const {
     dao: {
-      daoData: {
+      daos: {
         [daoAddress]: { mint },
       },
     },
@@ -93,8 +88,8 @@ export const getMember = createAsyncThunk<
   return { [daoAddress]: accounts.length }
 })
 
-export const setCreateDaoMetaData = createAsyncThunk(
-  `${NAME}/setCreateDaoMetaData`,
+export const setInitMetadata = createAsyncThunk(
+  `${NAME}/setInitMetadata`,
   async (metaData?: Partial<MetaData>) => {
     if (!metaData) return DEFAULT_META_DATA
     return metaData
@@ -112,13 +107,12 @@ const slice = createSlice({
   extraReducers: (builder) =>
     void builder
       .addCase(
-        getMember.fulfilled,
+        getTokenHolders.fulfilled,
         (state, { payload }) => void Object.assign(state.tokenHolders, payload),
       )
       .addCase(
-        setCreateDaoMetaData.fulfilled,
-        (state, { payload }) =>
-          void Object.assign(state.createMetaData, payload),
+        setInitMetadata.fulfilled,
+        (state, { payload }) => void Object.assign(state.initMetadata, payload),
       ),
 })
 

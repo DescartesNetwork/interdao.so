@@ -1,4 +1,3 @@
-import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { ProposalData } from '@interdao/core'
 import { account } from '@senswap/sen-js'
@@ -28,35 +27,15 @@ const initialState: ProposalState = {}
 
 export const getProposals = createAsyncThunk(
   `${NAME}/getProposals`,
-  async ({ daoAddress }: { daoAddress: string }) => {
-    const {
-      provider: { connection },
-      programId,
-      // account,
-    } = interDao.program
-    const value: Array<{ pubkey: PublicKey; account: AccountInfo<Buffer> }> =
-      await connection.getProgramAccounts(programId, {
-        filters: [
-          {
-            memcmp: {
-              offset: 48,
-              bytes: daoAddress,
-            },
-          },
-        ],
-      })
+  async () => {
+    const { account } = interDao.program
     let bulk: ProposalState = {}
-    value.forEach(({ pubkey, account: { data: buf } }) => {
-      const address = pubkey.toBase58()
-      const data = interDao.parseProposalData(buf)
-      bulk[address] = data
-    })
-    // const proposals = await account.proposal.all()
-    // let bulk: ProposalState = {}
-    // for (const proposal of proposals) {
-    //   const proposalData: ProposalData = proposal.account as any
-    //   bulk[proposal.publicKey.toBase58()] = proposalData
-    // }
+
+    const proposals = await account.proposal.all()
+    for (const { publicKey, account: proposalData } of proposals) {
+      const address = publicKey.toBase58()
+      bulk[address] = proposalData as any
+    }
     return bulk
   },
 )

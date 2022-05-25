@@ -8,13 +8,13 @@ import EditMultisigDaoRule from './editMultisigDaoRule'
 import EditFlexibleDaoRule from './editFlexibleDaoRule'
 
 import { AppDispatch, AppState } from 'app/model'
-import { CreateDaoData, setCreateDaoData } from 'app/model/dao.controller'
+import { InitDao, setInitDao } from 'app/model/dao.controller'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import useMetaData from 'app/hooks/useMetaData'
 
 const Rule = ({ daoAddress }: { daoAddress: string }) => {
   const {
-    dao: { daoData },
+    dao: { daos: daoData },
   } = useSelector((state: AppState) => state)
   const { mint, regime, supply } = daoData?.[daoAddress] || {
     regime: {},
@@ -27,12 +27,12 @@ const Rule = ({ daoAddress }: { daoAddress: string }) => {
 
   const setDefaultValue = useCallback(() => {
     if (!account.isAddress(daoAddress)) return
-    const nextData: CreateDaoData = {
+    const nextData: InitDao = {
       mintAddress: mint.toBase58(),
       supply: new BN(utils.undecimalize(BigInt(supply.toNumber()), decimals)),
       regime,
     }
-    return dispatch(setCreateDaoData(nextData))
+    return dispatch(setInitDao(nextData))
   }, [daoAddress, decimals, dispatch, mint, regime, supply])
 
   useEffect(() => {

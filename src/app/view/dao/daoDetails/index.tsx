@@ -28,9 +28,7 @@ const {
 } = configs
 
 const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
-  const {
-    dao: { daoData },
-  } = useSelector((state: AppState) => state)
+  const daos = useSelector((state: AppState) => state.dao.daos)
   const {
     ui: { width },
   } = useUI()
@@ -40,7 +38,7 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
   const metaData = useMetaData(daoAddress)
   const history = useHistory()
 
-  const { regime, nonce, mint, authority } = daoData?.[daoAddress] || {
+  const { regime, nonce, mint, authority } = daos?.[daoAddress] || {
     regime: {},
     nonce: new BN(0),
     mint: SystemProgram.programId,

@@ -23,9 +23,9 @@ const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
   const [oldRegime, setOldRegime] = useState<DaoRegime>()
   const [oldSupply, setOldSupply] = useState<BN>(new BN(0))
   const {
-    dao: { daoData, createDaoData },
+    dao: { daos, initDao },
   } = useSelector((state: AppState) => state)
-  const { mint, regime, supply } = daoData?.[daoAddress] || {
+  const { mint, regime, supply } = daos?.[daoAddress] || {
     regime: {},
     supply: new BN(0),
     mint: SystemProgram.programId,
@@ -33,7 +33,7 @@ const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
   const decimals = useMintDecimals(mint.toBase58()) || 0
 
   const updateRegime = async () => {
-    const { regime } = createDaoData
+    const { regime } = initDao
     if (!regime || isEqual(regime, oldRegime)) return
     try {
       const { txId } = await interDao.updateDaoRegime(regime, daoAddress)
@@ -48,7 +48,7 @@ const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
   }
 
   const updateSupply = async () => {
-    const { supply } = createDaoData
+    const { supply } = initDao
     const supplyDecimal = supply.mul(new BN(10).pow(new BN(decimals)))
     if (!supply || isEqual(supplyDecimal, oldSupply)) return
     try {

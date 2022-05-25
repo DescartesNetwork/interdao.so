@@ -22,7 +22,7 @@ const useProposal = (proposalAddress: string, daoAddress: string) => {
     if (isExistProposal && account.isAddress(proposalAddress)) {
       dispatch(getProposal({ address: proposalAddress }))
     } else {
-      dispatch(getProposals({ daoAddress }))
+      dispatch(getProposals())
     }
   }, [daoAddress, dispatch, isExistProposal, proposalAddress])
 

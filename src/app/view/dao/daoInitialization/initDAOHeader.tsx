@@ -1,6 +1,6 @@
 import { Progress, Space, Typography } from 'antd'
 
-export type CreateDaoTitleProps = {
+export type InitDAOHeaderProps = {
   step: number
   onHandleStep?: () => void
   onConfirm?: () => void
@@ -16,7 +16,7 @@ const DAO_PROGRESS_TITLE = [
   'Review',
 ]
 
-const InitDAOHeader = ({ step }: CreateDaoTitleProps) => {
+const InitDAOHeader = ({ step }: InitDAOHeaderProps) => {
   return (
     <Space direction="vertical" size={12}>
       <Typography.Title level={1}>{DAO_PROGRESS_TITLE[step]}</Typography.Title>

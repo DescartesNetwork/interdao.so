@@ -7,7 +7,7 @@ import IonIcon from 'shared/antd/ionicon'
 import MemberInput from './memberInput'
 
 import { AppDispatch, AppState } from 'app/model'
-import { setCreateDaoMetaData } from 'app/model/metadata.controller'
+import { setInitMetadata } from 'app/model/metadata.controller'
 
 const MY_INDEX = 0
 const DAOMembers = () => {
@@ -15,21 +15,21 @@ const DAOMembers = () => {
     wallet: { address: myAddress },
   } = useWallet()
   const {
-    metadata: { createMetaData },
+    metadata: { initMetadata },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch<AppDispatch>()
-  const { members } = createMetaData
+  const { members } = initMetadata
 
   const setDefaultValue = useCallback(() => {
     if (members.length) return
     const DEFAULT_MEMBER = [{ name: '', walletAddress: myAddress }]
-    return dispatch(setCreateDaoMetaData({ members: DEFAULT_MEMBER }))
+    return dispatch(setInitMetadata({ members: DEFAULT_MEMBER }))
   }, [dispatch, members.length, myAddress])
 
   const addMember = () => {
     const nextMembers = [...members]
     nextMembers.push({ name: '', walletAddress: '' })
-    return dispatch(setCreateDaoMetaData({ members: nextMembers }))
+    return dispatch(setInitMetadata({ members: nextMembers }))
   }
 
   const onChangeMember = (e: ChangeEvent<HTMLInputElement>, index: number) => {
@@ -38,19 +38,19 @@ const DAOMembers = () => {
       ...nextMembers[index],
       [e.target.name]: e.target.value,
     }
-    return dispatch(setCreateDaoMetaData({ members: nextMembers }))
+    return dispatch(setInitMetadata({ members: nextMembers }))
   }
 
   const onChangeMyName = (e: ChangeEvent<HTMLInputElement>) => {
     const nextMembers = [...members]
     nextMembers[MY_INDEX] = { ...nextMembers[MY_INDEX], name: e.target.value }
-    return dispatch(setCreateDaoMetaData({ members: nextMembers }))
+    return dispatch(setInitMetadata({ members: nextMembers }))
   }
 
   const remove = (index: number) => {
     const nextMembers = [...members]
     nextMembers.splice(index, 1)
-    return dispatch(setCreateDaoMetaData({ members: nextMembers }))
+    return dispatch(setInitMetadata({ members: nextMembers }))
   }
 
   useEffect(() => {

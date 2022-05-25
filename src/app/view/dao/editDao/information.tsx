@@ -11,7 +11,7 @@ import { explorer } from 'shared/util'
 import configs from 'app/configs'
 import { AppDispatch, AppState } from 'app/model'
 import useMetaData from 'app/hooks/useMetaData'
-import { setCreateDaoMetaData } from 'app/model/metadata.controller'
+import { setInitMetadata } from 'app/model/metadata.controller'
 
 const {
   sol: { interDao },
@@ -20,20 +20,20 @@ const {
 const Information = ({ daoAddress }: { daoAddress: string }) => {
   const [loading, setLoading] = useState(false)
   const {
-    metadata: { createMetaData },
+    metadata: { initMetadata },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch<AppDispatch>()
   const metaData = useMetaData(daoAddress)
 
   useEffect(() => {
-    dispatch(setCreateDaoMetaData(metaData))
+    dispatch(setInitMetadata(metaData))
   }, [dispatch, metaData])
 
   const updateMetaData = async () => {
     setLoading(true)
     try {
       const ipfs = new IPFS()
-      const cid = await ipfs.set(createMetaData)
+      const cid = await ipfs.set(initMetadata)
       const {
         multihash: { digest },
       } = CID.parse(cid)

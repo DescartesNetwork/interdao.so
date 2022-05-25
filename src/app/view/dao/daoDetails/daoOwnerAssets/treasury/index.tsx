@@ -47,13 +47,13 @@ const Treasury = ({ daoAddress }: { daoAddress: string }) => {
   const totalUSD = useTotalUSD({ accounts: listAccount })
 
   const {
-    dao: { daoData },
+    dao: { daos },
   } = useSelector((state: AppState) => state)
 
   const daoMasterAddress = useMemo(() => {
-    const { master } = daoData[daoAddress] || {}
+    const { master } = daos[daoAddress] || {}
     return master?.toBase58() || ''
-  }, [daoData, daoAddress])
+  }, [daos, daoAddress])
 
   const fetchAccount = useCallback(async () => {
     if (!daoMasterAddress) return

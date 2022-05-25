@@ -11,7 +11,7 @@ import Regime from '../../daoInitialization/multisigDAO/daoRule/regime'
 import ActionButton from '../actionButton'
 
 import { AppDispatch, AppState } from 'app/model'
-import { setCreateDaoMetaData } from 'app/model/metadata.controller'
+import { setInitMetadata } from 'app/model/metadata.controller'
 import { explorer } from 'shared/util'
 import configs from 'app/configs'
 import IPFS from 'shared/pdb/ipfs'
@@ -24,15 +24,15 @@ const {
 const DAOMembers = () => {
   const [oldMember, setOldMember] = useState<string[]>([])
   const {
-    metadata: { createMetaData },
+    metadata: { initMetadata },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch<AppDispatch>()
-  const { members } = createMetaData
+  const { members } = initMetadata
 
   const addMember = () => {
     const nextMembers = [...members]
     nextMembers.push({ name: '', walletAddress: '' })
-    return dispatch(setCreateDaoMetaData({ members: nextMembers }))
+    return dispatch(setInitMetadata({ members: nextMembers }))
   }
 
   const onChangeMember = (e: ChangeEvent<HTMLInputElement>, index: number) => {
@@ -48,13 +48,13 @@ const DAOMembers = () => {
       ...nextMembers[index],
       [e.target.name]: e.target.value,
     }
-    return dispatch(setCreateDaoMetaData({ members: nextMembers }))
+    return dispatch(setInitMetadata({ members: nextMembers }))
   }
 
   const remove = (index: number) => {
     const nextMembers = [...members]
     nextMembers.splice(index, 1)
-    return dispatch(setCreateDaoMetaData({ members: nextMembers }))
+    return dispatch(setInitMetadata({ members: nextMembers }))
   }
 
   const setDefaultMembers = useCallback(() => {
@@ -116,10 +116,10 @@ const DAOMembers = () => {
 const EditMultisigDaoRule = ({ daoAddress }: { daoAddress: string }) => {
   const [loading, setLoading] = useState(false)
   const {
-    dao: { daoData },
-    metadata: { createMetaData },
+    dao: { daos: daoData },
+    metadata: { initMetadata },
   } = useSelector((state: AppState) => state)
-  const { members } = createMetaData
+  const { members } = initMetadata
 
   const disabled = useMemo(() => {
     for (const { walletAddress } of members) {
@@ -148,7 +148,7 @@ const EditMultisigDaoRule = ({ daoAddress }: { daoAddress: string }) => {
     try {
       setLoading(true)
       const ipfs = new IPFS()
-      const cid = await ipfs.set(createMetaData)
+      const cid = await ipfs.set(initMetadata)
       const {
         multihash: { digest },
       } = CID.parse(cid)

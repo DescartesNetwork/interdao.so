@@ -9,30 +9,30 @@ import SortDao from './sortDao'
 import TypeOfDAO from './typeOfDao'
 
 import { AppState } from 'app/model'
+import useSearchDao from 'app/hooks/useSearchDao'
 
 import './index.less'
-import useSearchDao from 'app/hooks/useSearchDao copy'
 
 const DaoList = () => {
   const [sortKey, setSortKey] = useState('all-regime')
   const [searchKey, setSearchKey] = useState('')
   const {
-    dao: { daoData },
+    dao: { daos },
   } = useSelector((state: AppState) => state)
 
   const filterDaoAddress = useMemo(() => {
-    const daoAddresses = Object.keys(daoData)
+    const daoAddresses = Object.keys(daos)
     if (!daoAddresses.length) return []
     if (sortKey === 'all-regime') return daoAddresses
 
     const filteredAddress = []
     for (const daoAddress of daoAddresses) {
-      const { regime } = daoData[daoAddress]
+      const { regime } = daos[daoAddress]
       const parseRegime = Object.keys(regime)[0]
       if (sortKey === parseRegime) filteredAddress.push(daoAddress)
     }
     return filteredAddress
-  }, [daoData, sortKey])
+  }, [daos, sortKey])
 
   const { searchData, loading } = useSearchDao(searchKey, filterDaoAddress)
 
@@ -52,7 +52,7 @@ const DaoList = () => {
         </Row>
       </Col>
       <Col span={24} />
-      {searchKey.length >= 3 ? (
+      {searchKey.length >= 3 && (!searchData || !searchData.length) ? (
         <Col span={24} style={{ textAlign: 'center' }}>
           <Empty />
         </Col>

@@ -5,8 +5,8 @@ import { Row, Button, Col, ButtonProps } from 'antd'
 
 import configs from 'app/configs'
 import { AppDispatch } from 'app/model'
-import { setCreateDaoData } from 'app/model/dao.controller'
-import { setCreateDaoMetaData } from 'app/model/metadata.controller'
+import { setInitDao } from 'app/model/dao.controller'
+import { setInitMetadata } from 'app/model/metadata.controller'
 
 const {
   manifest: { appId },
@@ -22,8 +22,8 @@ const ActionButton = ({ daoAddress, onSave, ...rest }: ActionButtonProps) => {
   const dispatch = useDispatch<AppDispatch>()
 
   const onCancel = async () => {
-    await dispatch(setCreateDaoData())
-    await dispatch(setCreateDaoMetaData())
+    await dispatch(setInitDao())
+    await dispatch(setInitMetadata())
     return history.push(`/app/${appId}/dao/${daoAddress}`)
   }
 
