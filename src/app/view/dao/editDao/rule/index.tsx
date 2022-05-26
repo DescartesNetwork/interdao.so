@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { account, utils } from '@senswap/sen-js'
+import { account } from '@senswap/sen-js'
 import { SystemProgram } from '@solana/web3.js'
 import { BN } from 'bn.js'
 
@@ -29,7 +29,7 @@ const Rule = ({ daoAddress }: { daoAddress: string }) => {
     if (!account.isAddress(daoAddress)) return
     const nextData: InitDao = {
       mintAddress: mint.toBase58(),
-      supply: new BN(utils.undecimalize(BigInt(supply.toNumber()), decimals)),
+      supply: new BN(supply.div(new BN(10 ** decimals))),
       regime,
     }
     return dispatch(setInitDao(nextData))

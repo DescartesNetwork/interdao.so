@@ -17,6 +17,7 @@ let initializeDAOEventId = 0
 let updateDaoRegimeEventId = 0
 let updateSupplyEventId = 0
 let transferAuthorityEventId = 0
+let updateDaoMetadataEventId = 0
 
 const DaoWatcher = () => {
   const {
@@ -62,6 +63,10 @@ const DaoWatcher = () => {
       'TransferAuthorityEvent',
       reloadDaoData,
     )
+    updateDaoMetadataEventId = await interDao.addListener(
+      'UpdateDaoMetadataEvent',
+      reloadDaoData,
+    )
   }, [reloadDaoData])
 
   useEffect(() => {
@@ -75,6 +80,7 @@ const DaoWatcher = () => {
           await interDao.removeListener(updateDaoRegimeEventId)
           await interDao.removeListener(updateSupplyEventId)
           await interDao.removeListener(transferAuthorityEventId)
+          await interDao.removeListener(updateDaoMetadataEventId)
         } catch (er: any) {
           console.warn(er.message)
         } finally {
@@ -82,6 +88,7 @@ const DaoWatcher = () => {
           updateDaoRegimeEventId = 0
           updateSupplyEventId = 0
           transferAuthorityEventId = 0
+          updateDaoMetadataEventId = 0
         }
       })()
     }
