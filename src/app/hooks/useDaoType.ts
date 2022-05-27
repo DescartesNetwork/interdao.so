@@ -15,8 +15,9 @@ const useDaoType = (type: string) => {
     if (type === 'all-type') return setDaoAddresses(listAddress)
     const addresses = []
     for (const address in daos) {
-      const { daoType } = (await pdb.getItem(address)) as MetaData
-      if (daoType === type) addresses.push(address)
+      const metaData = (await pdb.getItem(address)) as MetaData
+      if (!metaData) continue
+      if (metaData.daoType === type) addresses.push(address)
     }
     return setDaoAddresses(addresses)
   }, [daos, pdb, type])

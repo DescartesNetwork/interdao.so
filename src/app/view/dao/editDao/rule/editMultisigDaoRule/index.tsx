@@ -67,8 +67,7 @@ const EditMultisigDaoRule = ({ daoAddress }: { daoAddress: string }) => {
       for (const { walletAddress } of members) {
         const isValid = await validAccount(walletAddress, mintAddress)
         if (!isValid) continue
-        const walletPubkey = account.fromAddress(walletAddress)
-        await multisigWallet.mintToAccount(walletPubkey)
+        await multisigWallet.mintToAccount(walletAddress, 1)
       }
 
       window.notify({

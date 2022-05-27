@@ -24,6 +24,7 @@ const MetadataWatcher = () => {
       const cid = getCID(digest)
       if (metadata && metadata.cid === cid) return
       const data: MetaData = await ipfs.get(cid)
+      if (!data) return
       const localMetadata = { ...data, cid }
       await pdb.setItem(daoAddress, localMetadata)
     })

@@ -29,7 +29,7 @@ const Rule = ({ daoAddress }: { daoAddress: string }) => {
     if (!account.isAddress(daoAddress)) return
     const nextData: InitDao = {
       mintAddress: mint.toBase58(),
-      supply: new BN(supply.div(new BN(10 ** decimals))),
+      supply: supply.div(new BN(10 ** decimals)),
       regime,
     }
     return dispatch(setInitDao(nextData))

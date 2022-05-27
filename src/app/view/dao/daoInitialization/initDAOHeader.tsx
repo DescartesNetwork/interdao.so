@@ -3,8 +3,6 @@ import { Progress, Space, Typography } from 'antd'
 export type InitDAOHeaderProps = {
   step: number
   onHandleStep?: () => void
-  onConfirm?: () => void
-  loading?: boolean
   disabled?: boolean
 }
 

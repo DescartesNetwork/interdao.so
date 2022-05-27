@@ -37,6 +37,7 @@ const DaoWatcher = () => {
   const fetchData = useCallback(async () => {
     try {
       if (!account.isAddress(walletAddress)) return
+
       await dispatch(getDaos()).unwrap()
     } catch (er) {
       return window.notify({
