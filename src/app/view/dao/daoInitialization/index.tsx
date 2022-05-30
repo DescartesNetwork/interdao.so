@@ -1,9 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
-import IPFS from 'shared/pdb/ipfs'
-import { CID } from 'ipfs-core'
-import { BN } from 'bn.js'
 import { account } from '@senswap/sen-js'
 
 import { Row, Col, Card } from 'antd'
@@ -12,56 +8,36 @@ import InitDAOHeader from './initDAOHeader'
 import ActionButton from './actions'
 
 import { AppState } from 'app/model'
-import { explorer } from 'shared/util'
-import useMintDecimals from 'shared/hooks/useMintDecimals'
-import MultisigWallet from 'app/helpers/mutisigWallet'
-import configs from 'app/configs'
 
 import './index.less'
 
-const {
-  sol: { interDao },
-  manifest: { appId },
-} = configs
-
 const DaoInitialization = () => {
   const [step, setStep] = useState(0)
-  const [loading, setLoading] = useState(false)
-  const {
-    dao: { createDaoData, daoType },
-    metadata: { createMetaData },
-  } = useSelector((state: AppState) => state)
-  const history = useHistory()
-  const { mintAddress, supply, regime, isNFT, isPublic } = createDaoData
-  const { members } = createMetaData
-  const decimals = useMintDecimals(mintAddress) || 0
+
+  const initMetadata = useSelector(
+    (state: AppState) => state.metadata.initMetadata,
+  )
+  const initDao = useSelector((state: AppState) => state.dao.initDao)
+  const { mintAddress, supply, regime } = initDao
 
   const onNextStep = useCallback(async () => {
     try {
-      if (step === CreateSteps.stepOne && !createMetaData)
+      if (step === CreateSteps.stepOne && !initMetadata)
         throw new Error('Invalid Metadata')
-      if (step === CreateSteps.stepTwo && !createDaoData)
+      if (step === CreateSteps.stepTwo && !initDao)
         throw new Error('Invalid DAO data')
       return setStep(step + 1)
     } catch (err: any) {
       window.notify({ type: 'error', description: err.message })
     }
-  }, [createDaoData, createMetaData, step])
+  }, [initDao, initMetadata, step])
 
   const disabled = useMemo(() => {
-    if (step === CreateSteps.stepOne)
-      return (
-        !createMetaData.daoName ||
-        !createMetaData.image ||
-        !createMetaData.description
-      )
+    const { daoName, image, daoType, members, description } = initMetadata
+    if (step === CreateSteps.stepOne) return !daoName || !image || !description
 
     if (step === CreateSteps.stepTwo && daoType === 'flexible-dao')
-      return (
-        !createDaoData.mintAddress ||
-        !createDaoData.regime ||
-        !Number(createDaoData.supply)
-      )
+      return !mintAddress || !regime || !Number(supply)
 
     if (step === CreateSteps.stepTwo && daoType === 'multisig-dao' && members) {
       let valid = false
@@ -74,74 +50,7 @@ const DaoInitialization = () => {
       }
       return valid
     }
-  }, [createDaoData, createMetaData, step, daoType, members])
-
-  const getMintAddr = useCallback(async () => {
-    if (mintAddress || !members) return mintAddress
-    try {
-      const multiSigWallet = new MultisigWallet()
-      await multiSigWallet.createNewToken()
-
-      for (const { walletAddress } of members) {
-        await multiSigWallet.mintToAccount(account.fromAddress(walletAddress))
-      }
-
-      return multiSigWallet.getMintAddress()
-    } catch (err: any) {
-      window.notify({ type: 'error', description: err.message })
-      return ''
-    }
-  }, [members, mintAddress])
-
-  const onCreateDao = useCallback(async () => {
-    try {
-      setLoading(true)
-      const ipfs = new IPFS()
-      const cid = await ipfs.set(createMetaData)
-      const {
-        multihash: { digest },
-      } = CID.parse(cid)
-      const metadata = Buffer.from(digest)
-
-      const totalSupply =
-        daoType === 'flexible-dao'
-          ? supply.mul(new BN(10).pow(new BN(decimals)))
-          : new BN(members.length)
-
-      const mintAddress = await getMintAddr()
-
-      const { txId, daoAddress } = await interDao.initializeDao(
-        mintAddress,
-        totalSupply,
-        metadata,
-        undefined, // Optional DAO's keypair
-        regime,
-        isNFT,
-        isPublic,
-      )
-      window.notify({
-        type: 'success',
-        description: 'A new DAO is created. Click here to view details.',
-        onClick: () => window.open(explorer(txId), '_blank'),
-      })
-      return history.push(`/app/${appId}/dao/${daoAddress}`)
-    } catch (err: any) {
-      window.notify({ type: 'error', description: err.message })
-    } finally {
-      setLoading(false)
-    }
-  }, [
-    createMetaData,
-    daoType,
-    supply,
-    decimals,
-    members.length,
-    getMintAddr,
-    regime,
-    isNFT,
-    isPublic,
-    history,
-  ])
+  }, [initMetadata, mintAddress, regime, step, supply])
 
   return (
     <Row gutter={[24, 24]} justify="center">
@@ -158,8 +67,6 @@ const DaoInitialization = () => {
               <ActionButton
                 step={step}
                 onHandleStep={onNextStep}
-                onConfirm={onCreateDao}
-                loading={loading}
                 disabled={disabled}
                 setStep={() => setStep(step - 1)}
               />

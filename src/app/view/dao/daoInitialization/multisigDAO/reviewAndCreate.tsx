@@ -13,11 +13,11 @@ const MAX_WIDTH_RATIO = 24 / 16
 
 const ReviewAndCreate = () => {
   const {
-    dao: { createDaoData },
-    metadata: { createMetaData },
+    dao: { initDao },
+    metadata: { initMetadata },
   } = useSelector((state: AppState) => state)
-  const { regime } = createDaoData
-  const { image, description, daoName, members } = createMetaData
+  const { regime } = initDao
+  const { image, description, daoName, members } = initMetadata
 
   const {
     ui: { width },

@@ -51,7 +51,7 @@ const ProposalInitialization = () => {
   const { daoAddress } = useParams<{ daoAddress: string }>()
   const {
     template: { tx, templateName },
-    dao: { daoData },
+    dao: { daos },
   } = useSelector((state: AppState) => state)
   const history = useHistory()
   const dispatch = useDispatch()
@@ -69,7 +69,7 @@ const ProposalInitialization = () => {
   }, [description, templateName, title])
 
   const newProposal = useCallback(async () => {
-    const { authority } = daoData[daoAddress]
+    const { authority } = daos[daoAddress]
     if (!tx) return
 
     try {
@@ -130,7 +130,7 @@ const ProposalInitialization = () => {
       return setLoading(false)
     }
   }, [
-    daoData,
+    daos,
     daoAddress,
     proposalMetaData,
     tx,

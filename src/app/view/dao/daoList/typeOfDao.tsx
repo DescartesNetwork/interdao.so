@@ -1,24 +1,20 @@
 import { Select } from 'antd'
 
-const TypeOfDAO = () => {
+type TypeOfDAOProps = {
+  value: string
+  setType: (type: string) => void
+}
+
+const TypeOfDAO = ({ value, setType }: TypeOfDAOProps) => {
   return (
     <Select
-      value="all-type"
+      value={value}
       style={{ textTransform: 'capitalize', width: '100%' }}
+      onChange={setType}
     >
       <Select.Option value="all-type">All type of DAO</Select.Option>
-      <Select.Option
-        value="flexible-dao"
-        style={{ textTransform: 'capitalize' }}
-      >
-        Flexible DAO
-      </Select.Option>
-      <Select.Option
-        value="multisig-dao"
-        style={{ textTransform: 'capitalize' }}
-      >
-        Multisig DAO
-      </Select.Option>
+      <Select.Option value="flexible-dao">Flexible DAO</Select.Option>
+      <Select.Option value="multisig-dao">Multisig DAO</Select.Option>
     </Select>
   )
 }

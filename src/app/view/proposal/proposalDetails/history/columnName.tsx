@@ -12,7 +12,7 @@ type ColumnNameProps = {
 
 const ColumnName = ({ authority, proposalAddress }: ColumnNameProps) => {
   const { proposal } = useSelector((state: AppState) => state)
-  const { dao } = proposal[proposalAddress]
+  const { dao } = proposal?.[proposalAddress]
   const metaData = useMetaData(dao.toBase58())
 
   const name = useMemo(() => {

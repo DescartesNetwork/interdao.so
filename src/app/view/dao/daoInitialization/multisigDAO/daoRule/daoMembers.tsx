@@ -1,13 +1,14 @@
 import { ChangeEvent, useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useWallet } from '@senhub/providers'
+import isEqual from 'react-fast-compare'
 
 import { Button, Col, Row, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import MemberInput from './memberInput'
 
 import { AppDispatch, AppState } from 'app/model'
-import { setCreateDaoMetaData } from 'app/model/metadata.controller'
+import { DAOMember, setInitMetadata } from 'app/model/metadata.controller'
 
 const MY_INDEX = 0
 const DAOMembers = () => {
@@ -15,42 +16,107 @@ const DAOMembers = () => {
     wallet: { address: myAddress },
   } = useWallet()
   const {
-    metadata: { createMetaData },
+    metadata: { initMetadata },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch<AppDispatch>()
-  const { members } = createMetaData
+  const { members } = initMetadata
 
   const setDefaultValue = useCallback(() => {
     if (members.length) return
     const DEFAULT_MEMBER = [{ name: '', walletAddress: myAddress }]
-    return dispatch(setCreateDaoMetaData({ members: DEFAULT_MEMBER }))
+    return dispatch(setInitMetadata({ members: DEFAULT_MEMBER }))
   }, [dispatch, members.length, myAddress])
 
   const addMember = () => {
     const nextMembers = [...members]
     nextMembers.push({ name: '', walletAddress: '' })
-    return dispatch(setCreateDaoMetaData({ members: nextMembers }))
+    return dispatch(setInitMetadata({ members: nextMembers }))
   }
 
   const onChangeMember = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const nextMembers = [...members]
+    for (const { walletAddress } of members) {
+      if (isEqual(walletAddress, e.target.value))
+        return window.notify({
+          type: 'warning',
+          description: 'This wallet address already exists',
+        })
+    }
     nextMembers[index] = {
       ...nextMembers[index],
       [e.target.name]: e.target.value,
     }
-    return dispatch(setCreateDaoMetaData({ members: nextMembers }))
+    return dispatch(setInitMetadata({ members: nextMembers }))
   }
 
   const onChangeMyName = (e: ChangeEvent<HTMLInputElement>) => {
     const nextMembers = [...members]
     nextMembers[MY_INDEX] = { ...nextMembers[MY_INDEX], name: e.target.value }
-    return dispatch(setCreateDaoMetaData({ members: nextMembers }))
+    return dispatch(setInitMetadata({ members: nextMembers }))
   }
 
   const remove = (index: number) => {
     const nextMembers = [...members]
     nextMembers.splice(index, 1)
-    return dispatch(setCreateDaoMetaData({ members: nextMembers }))
+    return dispatch(setInitMetadata({ members: nextMembers }))
+  }
+
+  const test = () => {
+    const members: DAOMember[] = [
+      {
+        name: 'tuan',
+        walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgn',
+      },
+      {
+        name: 'tuan',
+        walletAddress: '6JsMB6PRrgvb847ZDkPMkJaiab826GhyKfCkQxhWzVTd',
+      },
+      // {
+      //   name: 'tuan',
+      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgb',
+      // },
+      // {
+      //   name: 'tuan',
+      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgc',
+      // },
+      // {
+      //   name: 'tuan',
+      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgd',
+      // },
+      // {
+      //   name: 'tuan',
+      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzge',
+      // },
+      // {
+      //   name: 'tuan',
+      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgf',
+      // },
+      // {
+      //   name: 'tuan',
+      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgi',
+      // },
+      // {
+      //   name: 'tuan',
+      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgo',
+      // },
+      // {
+      //   name: 'tuan',
+      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgz',
+      // },
+      // {
+      //   name: 'tuan',
+      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgx',
+      // },
+      // {
+      //   name: 'tuan',
+      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgv',
+      // },
+      // {
+      //   name: 'tuan',
+      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgt',
+      // },
+    ]
+    return dispatch(setInitMetadata({ members }))
   }
 
   useEffect(() => {
@@ -95,7 +161,7 @@ const DAOMembers = () => {
             })}
           <Col span={4}>
             <Button
-              style={{ width: '100%' }}
+              block
               type="dashed"
               icon={<IonIcon name="add-outline" />}
               onClick={addMember}
@@ -103,6 +169,7 @@ const DAOMembers = () => {
               Add
             </Button>
           </Col>
+          <Button onClick={test}>Test</Button>
         </Row>
       </Col>
     </Row>

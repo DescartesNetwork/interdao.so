@@ -4,7 +4,7 @@ import { PublicKey } from '@solana/web3.js'
 
 import { AppDispatch } from 'app/model'
 import configs from 'app/configs'
-import { getProposal } from 'app/model/proposal.controller'
+import { getProposal, getProposals } from 'app/model/proposal.controller'
 
 const {
   sol: { interDao },
@@ -49,6 +49,7 @@ const ProposalWatcher = () => {
 
   useEffect(() => {
     watchData()
+    dispatch(getProposals()) //fetch all proposal
     // Unwatch (cancel socket)
     return () => {
       ;(async () => {
@@ -67,7 +68,7 @@ const ProposalWatcher = () => {
         }
       })()
     }
-  }, [watchData])
+  }, [dispatch, watchData])
 
   return <Fragment />
 }

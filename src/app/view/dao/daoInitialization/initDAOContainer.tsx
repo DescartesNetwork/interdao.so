@@ -15,9 +15,9 @@ export enum CreateSteps {
 }
 
 const InitDAOContainer = ({ step }: { step: number }) => {
-  const {
-    dao: { daoType },
-  } = useSelector((state: AppState) => state)
+  const daoType = useSelector(
+    (state: AppState) => state.metadata.initMetadata.daoType,
+  )
   if (step === CreateSteps.stepOne) return <MetaDataForm />
 
   if (step === CreateSteps.stepTwo && daoType === 'flexible-dao')

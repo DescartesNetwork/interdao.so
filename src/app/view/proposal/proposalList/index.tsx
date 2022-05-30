@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 import { useUI, useWallet } from '@senhub/providers'
@@ -11,7 +11,6 @@ import IonIcon from 'shared/antd/ionicon'
 import ProposalCard from './proposalCard'
 
 import { AppDispatch, AppState } from 'app/model'
-import { getProposals } from 'app/model/proposal.controller'
 import Template from 'app/view/templates'
 import { setVisible } from 'app/model/template.controller'
 
@@ -23,7 +22,7 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
   const [status, setStatus] = useState('all-status')
   const {
     proposal,
-    dao: { daoData },
+    dao: { daos },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch<AppDispatch>()
   const {
@@ -33,7 +32,7 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
     ui: { width },
   } = useUI()
 
-  const { regime, authority } = daoData[daoAddress] || {
+  const { regime, authority } = daos[daoAddress] || {
     regime: DaoRegimes.Dictatorial,
     authority: SystemProgram.programId,
   }
@@ -125,10 +124,6 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
     }
     return filteredAddress
   }, [isSuccess, proposal, proposalAddresses, status])
-
-  useEffect(() => {
-    dispatch(getProposals({ daoAddress }))
-  }, [dispatch, daoAddress])
 
   return (
     <Row gutter={[24, 24]}>

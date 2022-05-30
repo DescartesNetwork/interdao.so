@@ -6,21 +6,19 @@ import { Col, Row, Typography } from 'antd'
 import CardRegime from '../../components/cardRegime'
 
 import { AppDispatch, AppState } from 'app/model'
-import { setCreateDaoData } from 'app/model/dao.controller'
+import { setInitDao } from 'app/model/dao.controller'
 
 const Regime = () => {
   const {
-    dao: { createDaoData },
+    dao: { initDao },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch<AppDispatch>()
-  const { regime } = createDaoData
+  const { regime } = initDao
 
   useEffect(() => {
     if (regime === DaoRegimes.Autonomous) return
-    dispatch(
-      setCreateDaoData({ ...createDaoData, regime: DaoRegimes.Autonomous }),
-    )
-  }, [createDaoData, dispatch, regime])
+    dispatch(setInitDao({ ...initDao, regime: DaoRegimes.Autonomous }))
+  }, [initDao, dispatch, regime])
 
   return (
     <Row gutter={[8, 8]}>

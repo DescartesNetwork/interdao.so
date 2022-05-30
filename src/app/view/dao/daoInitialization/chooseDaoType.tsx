@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Card, Col, Radio, RadioChangeEvent, Row, Typography } from 'antd'
 
 import { AppDispatch, AppState } from 'app/model'
-import { setCreateDaoType } from 'app/model/dao.controller'
-import { setCreateDaoMetaData } from 'app/model/metadata.controller'
+import { setInitMetadata } from 'app/model/metadata.controller'
 
 const DAO_TYPE = [
   {
@@ -25,17 +24,16 @@ const DAO_TYPE = [
 
 const ChooseDaoType = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const {
-    dao: { daoType },
-  } = useSelector((state: AppState) => state)
+  const daoType = useSelector(
+    (state: AppState) => state.metadata.initMetadata.daoType,
+  )
 
   const cardBorder = (key: string) =>
     daoType !== key ? { borderColor: 'transparent' } : {}
 
   const selectDaoType = async (e: RadioChangeEvent) => {
     const daoType = e.target.value
-    await dispatch(setCreateDaoType(daoType))
-    dispatch(setCreateDaoMetaData({ daoType }))
+    dispatch(setInitMetadata({ daoType }))
   }
 
   return (

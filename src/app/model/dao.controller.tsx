@@ -20,7 +20,7 @@ const {
  * Interface & Utility
  */
 
-export const DEFAULT_CREATE_DAO_DATA = {
+export const DEFAULT_DAO_DATA = {
   mintAddress: '',
   supply: new BN(0),
   metadata: undefined,
@@ -30,9 +30,7 @@ export const DEFAULT_CREATE_DAO_DATA = {
   isNFT: false,
 }
 
-export type DaoType = 'flexible-dao' | 'multisig-dao'
-
-export type CreateDaoData = {
+export type InitDao = {
   mintAddress: string
   supply: BN
   metadata?: Buffer
@@ -42,11 +40,9 @@ export type CreateDaoData = {
   isNFT: boolean
 }
 
-export type DaoDataState = Record<string, DaoData>
 export type DaoState = {
-  daoData: DaoDataState
-  createDaoData: CreateDaoData
-  daoType: DaoType
+  daos: Record<string, DaoData>
+  initDao: InitDao
 }
 
 /**
@@ -55,9 +51,8 @@ export type DaoState = {
 
 const NAME = 'dao'
 const initialState: DaoState = {
-  daoData: {},
-  createDaoData: DEFAULT_CREATE_DAO_DATA,
-  daoType: 'flexible-dao',
+  daos: {},
+  initDao: DEFAULT_DAO_DATA,
 }
 
 /**
@@ -82,13 +77,13 @@ export const getDaos = createAsyncThunk(`${NAME}/getDaos`, async () => {
         },
       ],
     })
-  let bulk: DaoDataState = {}
+  let bulk: Record<string, DaoData> = {}
   value.forEach(({ pubkey, account: { data: buf } }) => {
     const address = pubkey.toBase58()
     const data = interDao.parseDaoData(buf)
     bulk[address] = { ...data }
   })
-  return { daoData: bulk }
+  return { daos: bulk }
 })
 
 export const getDao = createAsyncThunk<
@@ -99,7 +94,7 @@ export const getDao = createAsyncThunk<
   if (!account.isAddress(address)) throw new Error('Invalid address')
   const {
     dao: {
-      daoData: { [address]: data },
+      daos: { [address]: data },
     },
   } = getState()
   if (data && !force) return { [address]: data }
@@ -123,25 +118,11 @@ export const upsetDao = createAsyncThunk<
   }
 })
 
-export const setCreateDaoData = createAsyncThunk(
-  `${NAME}/setCreateDaoData`,
-  async (createDaoData?: CreateDaoData) => {
-    if (!createDaoData) return { createDaoData: DEFAULT_CREATE_DAO_DATA }
-    return { createDaoData }
-  },
-)
-export const setCreateDaoType = createAsyncThunk(
-  `${NAME}/setCreateDaoType`,
-  async (type: string) => {
-    return { daoType: type }
-  },
-)
-
-export const deleteDao = createAsyncThunk(
-  `${NAME}/deleteDao`,
-  async ({ address }: { address: string }) => {
-    if (!account.isAddress(address)) throw new Error('Invalid address')
-    return { address }
+export const setInitDao = createAsyncThunk(
+  `${NAME}/setInitDao`,
+  async (initDao?: InitDao) => {
+    if (!initDao) return { initDao: DEFAULT_DAO_DATA }
+    return { initDao }
   },
 )
 
@@ -161,23 +142,15 @@ const slice = createSlice({
       )
       .addCase(
         getDao.fulfilled,
-        (state, { payload }) => void Object.assign(state.daoData, payload),
+        (state, { payload }) => void Object.assign(state.daos, payload),
       )
       .addCase(
         upsetDao.fulfilled,
-        (state, { payload }) => void Object.assign(state.daoData, payload),
+        (state, { payload }) => void Object.assign(state.daos, payload),
       )
       .addCase(
-        setCreateDaoData.fulfilled,
+        setInitDao.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
-      )
-      .addCase(
-        setCreateDaoType.fulfilled,
-        (state, { payload }) => void Object.assign(state, payload),
-      )
-      .addCase(
-        deleteDao.fulfilled,
-        (state, { payload }) => void Object.assign(state.daoData, payload),
       ),
 })
 

@@ -95,9 +95,6 @@ const ProposalDetails = () => {
               </Col>
             </Row>
           </Col>
-          <Col span={24}>
-            <Button>Delete the Proposal</Button>
-          </Col>
         </Row>
       </Col>
     </Row>
