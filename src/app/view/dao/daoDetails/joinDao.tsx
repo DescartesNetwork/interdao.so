@@ -47,7 +47,7 @@ const JoinDao = ({ daoAddress }: DaoDetailsProps) => {
       if (!recipientData) return setVisible(false) // not in list
 
       const receiptData = await distributor.getReceiptData(
-        recipientData,
+        walletAddress,
         distributorAddress,
       )
       if (receiptData) return setVisible(false) // claimed
@@ -70,7 +70,7 @@ const JoinDao = ({ daoAddress }: DaoDetailsProps) => {
       if (!recipientData) return
 
       const txId = await distributor.claimToken(
-        recipientData,
+        walletAddress,
         distributorAddress,
       )
       return window.notify({
