@@ -12,12 +12,14 @@ export type CirculatingSupplyInputProps = {
   mintAddress?: string
   value: string
   onChange: (value: string) => void
+  isNFT: boolean
 }
 
 const CirculatingSupplyInput = ({
   mintAddress = '',
   value,
   onChange,
+  isNFT = false,
 }: CirculatingSupplyInputProps) => {
   const decimals = useMintDecimals(mintAddress) || 0
   const supply = useMintSupply(mintAddress)
@@ -50,7 +52,7 @@ const CirculatingSupplyInput = ({
       <Col>
         <Space>
           <Typography.Text type="secondary">
-            Suggestion (Token Supply):
+            Suggestion ({!isNFT ? 'Token Supply' : 'NFT collection supply'}):
           </Typography.Text>
           <Typography.Text>{numeric(suggestion).format('0,0')}</Typography.Text>
         </Space>

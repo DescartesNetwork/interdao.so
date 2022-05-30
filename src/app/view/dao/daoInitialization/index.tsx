@@ -32,7 +32,7 @@ const DaoInitialization = () => {
     metadata: { createMetaData },
   } = useSelector((state: AppState) => state)
   const history = useHistory()
-  const { mintAddress, supply, regime } = createDaoData
+  const { mintAddress, supply, regime, isNFT, isPublic } = createDaoData
   const { members } = createMetaData
   const decimals = useMintDecimals(mintAddress) || 0
 
@@ -116,6 +116,8 @@ const DaoInitialization = () => {
         metadata,
         undefined, // Optional DAO's keypair
         regime,
+        isNFT,
+        isPublic,
       )
       window.notify({
         type: 'success',
@@ -133,9 +135,11 @@ const DaoInitialization = () => {
     daoType,
     supply,
     decimals,
-    members,
+    members.length,
     getMintAddr,
     regime,
+    isNFT,
+    isPublic,
     history,
   ])
 

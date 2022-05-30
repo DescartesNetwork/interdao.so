@@ -10,6 +10,10 @@ import IonIcon from 'shared/antd/ionicon'
 
 import configs from 'app/configs'
 import './index.less'
+import { useSelector } from 'react-redux'
+import { AppState } from 'app/model'
+import { DaoData } from '@interdao/core'
+import CardVoteByNFT from './cardVoteByNFT'
 
 const {
   manifest: { appId },
@@ -22,8 +26,12 @@ export type ProposalChildCardProps = {
 
 const ProposalDetails = () => {
   const history = useHistory()
+  const {
+    dao: { daoData },
+  } = useSelector((state: AppState) => state)
   const { proposalAddress, daoAddress } =
     useParams<{ daoAddress: string; proposalAddress: string }>()
+  const { isNft } = daoData?.[daoAddress] || ({} as DaoData)
 
   return (
     <Row justify="center">
@@ -49,10 +57,17 @@ const ProposalDetails = () => {
                     />
                   </Col>
                   <Col span={24}>
-                    <CardVote
-                      proposalAddress={proposalAddress}
-                      daoAddress={daoAddress}
-                    />
+                    {isNft ? (
+                      <CardVoteByNFT
+                        proposalAddress={proposalAddress}
+                        daoAddress={daoAddress}
+                      />
+                    ) : (
+                      <CardVote
+                        proposalAddress={proposalAddress}
+                        daoAddress={daoAddress}
+                      />
+                    )}
                   </Col>
                   <Col span={24}>
                     <History

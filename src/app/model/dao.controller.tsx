@@ -26,6 +26,8 @@ export const DEFAULT_CREATE_DAO_DATA = {
   metadata: undefined,
   dao: undefined,
   regime: DaoRegimes.Dictatorial,
+  isPublic: true,
+  isNFT: false,
 }
 
 export type DaoType = 'flexible-dao' | 'multisig-dao'
@@ -36,6 +38,8 @@ export type CreateDaoData = {
   metadata?: Buffer
   dao?: web3.Keypair
   regime: DaoRegime
+  isPublic: boolean
+  isNFT: boolean
 }
 
 export type DaoDataState = Record<string, DaoData>

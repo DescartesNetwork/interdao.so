@@ -28,7 +28,7 @@ const Template = ({ daoAddress }: { daoAddress: string }) => {
       onCancel={() => dispatch(setVisible(false))}
     >
       <Row>
-        <Col span={24} className="template-header">
+        <Col span={24}>
           <Typography.Title level={4}>Choose a template</Typography.Title>
         </Col>
         <Col className="template-body" span={24}>

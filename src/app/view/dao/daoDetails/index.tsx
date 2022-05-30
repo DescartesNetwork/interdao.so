@@ -28,7 +28,7 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
   const {
     ui: { width },
   } = useUI()
-  const { regime, nonce, mint } = daoData?.[daoAddress] || {
+  const { regime, nonce, mint, isNft } = daoData?.[daoAddress] || {
     regime: {},
     nonce: new BN(0),
     mint: SystemProgram.programId,
@@ -93,10 +93,14 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
                   <StatisticCard
                     title="Vote by"
                     value={
-                      <Space>
-                        <MintAvatar mintAddress={mint.toBase58()} />
-                        <MintSymbol mintAddress={mint.toBase58()} />
-                      </Space>
+                      !isNft ? (
+                        <Space>
+                          <MintAvatar mintAddress={mint.toBase58()} />
+                          <MintSymbol mintAddress={mint.toBase58()} />
+                        </Space>
+                      ) : (
+                        'NFT'
+                      )
                     }
                   />
                 </Col>

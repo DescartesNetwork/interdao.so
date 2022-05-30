@@ -92,6 +92,7 @@ const ProposalInitialization = () => {
 
       const metadata = Buffer.from(digest)
       const valueAccounts = Object.values(accounts)
+      console.log('valueAccounts: ', valueAccounts)
       const { txId, proposalAddress } = await interDao.initializeProposal(
         daoAddress,
         programId.toBase58(),
