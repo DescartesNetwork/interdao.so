@@ -6,6 +6,7 @@ import { BN } from 'bn.js'
 
 import { Button, Card, Col, Row, Typography, Space, Tooltip } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
+import ModalVoteNFT from './modalVoteNFT'
 import Withdraw from './withdraw'
 
 import useProposal from 'app/hooks/useProposal'
@@ -15,8 +16,6 @@ import { explorer, numeric } from 'shared/util'
 import configs from 'app/configs'
 import useProposalStatus from 'app/hooks/useProposalStatus'
 import { getRemainingTime } from 'app/helpers/countDown'
-// import useMetaData from 'app/hooks/useMetaData'
-import ModalVoteNFT from './modalVoteNFT'
 
 const {
   sol: { interDao, taxman, fee },
@@ -215,7 +214,6 @@ const CardVoteByNFT = ({
             onClick={onVoteNftAgainst}
             type="primary"
             disabled={disabled}
-            // loading={loadingAgainst}
             block
             size="large"
             icon={<IonIcon name="thumbs-down-outline" />}

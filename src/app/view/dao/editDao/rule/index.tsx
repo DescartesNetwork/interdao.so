@@ -31,7 +31,7 @@ const Rule = ({ daoAddress }: { daoAddress: string }) => {
       mintAddress: mint.toBase58(),
       supply: supply.div(new BN(10 ** decimals)),
       regime,
-      isNFT: isNft,
+      isNft,
       isPublic,
     }
     return dispatch(setInitDao(nextData))

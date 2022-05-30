@@ -16,7 +16,7 @@ const DaoRule = () => {
   const initDao = useSelector((state: AppState) => state.dao.initDao)
   const dispatch = useDispatch<AppDispatch>()
 
-  const { mintAddress, supply, regime, isPublic, isNFT } = initDao
+  const { mintAddress, supply, regime, isPublic, isNft } = initDao
 
   return (
     <Row gutter={[24, 24]}>
@@ -29,12 +29,12 @@ const DaoRule = () => {
       <Col span={24}>
         <TokenAddressInput
           value={mintAddress}
-          isNFT={isNFT}
+          isNFT={isNft}
           onChange={(mintAddress) =>
             dispatch(setInitDao({ ...initDao, mintAddress }))
           }
-          onChangeNFT={(isNFT) => {
-            dispatch(setInitDao({ ...initDao, isNFT }))
+          onChangeNFT={(isNft) => {
+            dispatch(setInitDao({ ...initDao, isNft }))
           }}
         />
       </Col>
@@ -45,7 +45,7 @@ const DaoRule = () => {
           onChange={(supply) =>
             dispatch(setInitDao({ ...initDao, supply: new BN(supply) }))
           }
-          isNFT={isNFT}
+          isNFT={isNft}
         />
       </Col>
       <Col span={24}>

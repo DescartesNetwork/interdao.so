@@ -56,9 +56,6 @@ export const deserializeData = async (dataBuffer: Buffer) => {
 export const fetchNftFromURI = async (URL: string) => {
   try {
     const data = await axios.get(URL)
-    const tmp = await fetch(URL)
-    console.log('data: ', data)
-    console.log('tmp: ', tmp)
     return data.data
   } catch (err) {
     console.log('Failed to fetch metadata', err)

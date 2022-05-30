@@ -22,7 +22,7 @@ const useFlexibleDao = () => {
   const initMetadata = useSelector(
     (state: AppState) => state.metadata.initMetadata,
   )
-  const { mintAddress, supply, regime, isPublic, isNFT } = initDao
+  const { mintAddress } = initDao
   const decimals = useMintDecimals(mintAddress) || 0
   const pdb = usePDB()
   const history = useHistory()
@@ -30,6 +30,7 @@ const useFlexibleDao = () => {
   const createFlexDAO = useCallback(async () => {
     try {
       setLoading(true)
+      const { mintAddress, supply, regime, isPublic, isNft } = initDao
       const ipfs = new IPFS()
       const cid = await ipfs.set(initMetadata)
       const {
@@ -44,7 +45,7 @@ const useFlexibleDao = () => {
         metadata,
         undefined, // Optional DAO's keypair
         regime,
-        isNFT,
+        isNft,
         isPublic,
       )
       const localMetadata = { ...initMetadata, cid }
@@ -60,17 +61,7 @@ const useFlexibleDao = () => {
     } finally {
       setLoading(false)
     }
-  }, [
-    initMetadata,
-    supply,
-    decimals,
-    mintAddress,
-    regime,
-    isNFT,
-    isPublic,
-    pdb,
-    history,
-  ])
+  }, [initDao, initMetadata, decimals, pdb, history])
 
   return { createFlexDAO, loading }
 }

@@ -25,7 +25,6 @@ const useMultisigDao = () => {
   const initMetadata = useSelector(
     (state: AppState) => state.metadata.initMetadata,
   )
-  const { regime, isPublic, isNFT } = initDao
   const pdb = usePDB()
   const history = useHistory()
   const {
@@ -62,6 +61,7 @@ const useMultisigDao = () => {
   const createMultisigDao = useCallback(async () => {
     try {
       setLoading(true)
+      const { regime, isPublic, isNft } = initDao
       const mintAddress = await getMintAddr()
       const distributorAddress = await getDistributorAddress(mintAddress)
       const ipfs = new IPFS()
@@ -79,7 +79,7 @@ const useMultisigDao = () => {
         undefined, // Optional DAO's keypair
         regime,
         isPublic,
-        isNFT,
+        isNft,
       )
 
       await pdb.setItem(daoAddress, {
@@ -98,16 +98,7 @@ const useMultisigDao = () => {
     } finally {
       setLoading(false)
     }
-  }, [
-    getMintAddr,
-    getDistributorAddress,
-    initMetadata,
-    regime,
-    isPublic,
-    isNFT,
-    pdb,
-    history,
-  ])
+  }, [initDao, getMintAddr, getDistributorAddress, initMetadata, pdb, history])
 
   return { createMultisigDao, loading }
 }

@@ -1,6 +1,7 @@
 import { useUI } from '@senhub/providers'
-import { Button, Col, Row, Typography } from 'antd'
 import isEqual from 'react-fast-compare'
+
+import { Button, Col, Row, Typography } from 'antd'
 
 export type PrivacyProps = {
   isPublic: boolean
@@ -13,7 +14,6 @@ const Privacy = ({ isPublic = false, onChange }: PrivacyProps) => {
   } = useUI()
   const mobileScreen = infix === 'xs'
   const mobileSpan = mobileScreen ? 8 : undefined
-  console.log('Is Public Again: ', isPublic)
   return (
     <Row gutter={[12, 12]}>
       <Col span={24}>
