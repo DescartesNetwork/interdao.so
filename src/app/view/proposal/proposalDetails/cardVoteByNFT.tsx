@@ -2,10 +2,9 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { DaoData, FeeOptions } from '@interdao/core'
-import { PublicKey } from '@solana/web3.js'
 import { BN } from 'bn.js'
 
-import { Button, Card, Col, Row, Typography, Space, Tooltip, Modal } from 'antd'
+import { Button, Card, Col, Row, Typography, Space, Tooltip } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import Withdraw from './withdraw'
 
@@ -16,7 +15,7 @@ import { explorer, numeric } from 'shared/util'
 import configs from 'app/configs'
 import useProposalStatus from 'app/hooks/useProposalStatus'
 import { getRemainingTime } from 'app/helpers/countDown'
-import useMetaData from 'app/hooks/useMetaData'
+// import useMetaData from 'app/hooks/useMetaData'
 import ModalVoteNFT from './modalVoteNFT'
 
 const {
@@ -108,13 +107,13 @@ const CardVoteByNFT = ({
   daoAddress,
 }: ProposalChildCardProps) => {
   const [loadingFor, setLoadingFor] = useState(false)
-  const [loadingAgainst, setLoadingAgainst] = useState(false)
+  // const [loadingAgainst, setLoadingAgainst] = useState(false)
   const [visible, setVisible] = useState(false)
   const daoData = useSelector((state: AppState) => state.dao.daos)
 
-  const { mint, regime, authority } = daoData[daoAddress] || ({} as DaoData)
+  const { regime, authority } = daoData[daoAddress] || ({} as DaoData)
   const { status } = useProposalStatus(proposalAddress)
-  const daoMetaData = useMetaData(daoAddress)
+  // const daoMetaData = useMetaData(daoAddress)
 
   const disabled = useMemo(() => {
     return status !== 'Voting' || !account.isAddress(proposalAddress)
@@ -148,29 +147,29 @@ const CardVoteByNFT = ({
 
   const onVoteNftFor = useCallback(async () => {
     setVisible(true)
-    // setLoadingFor(true)
-    // try {
-    //   if (!account.isAddress(proposalAddress)) return
-    //   const nftMintAddress = ''
-    //   const { txId, receiptAddress } = await interDao.voteNftFor(
-    //     proposalAddress,
-    //     nftMintAddress,
-    //     proposalFee,
-    //   )
-    //   console.log(receiptAddress)
-    //   window.notify({
-    //     type: 'success',
-    //     description: 'Voted successfully. Click to view details!',
-    //     onClick: () => window.open(explorer(txId), '_blank'),
-    //   })
-    // } catch (error: any) {
-    //   window.notify({
-    //     type: 'error',
-    //     description: error.message,
-    //   })
-    // } finally {
-    //   setLoadingFor(false)
-    // }
+    setLoadingFor(true)
+    try {
+      if (!account.isAddress(proposalAddress)) return
+      const nftMintAddress = ''
+      const { txId, receiptAddress } = await interDao.voteNftFor(
+        proposalAddress,
+        nftMintAddress,
+        proposalFee,
+      )
+      console.log(receiptAddress)
+      window.notify({
+        type: 'success',
+        description: 'Voted successfully. Click to view details!',
+        onClick: () => window.open(explorer(txId), '_blank'),
+      })
+    } catch (error: any) {
+      window.notify({
+        type: 'error',
+        description: error.message,
+      })
+    } finally {
+      setLoadingFor(false)
+    }
   }, [proposalAddress, proposalFee])
 
   const onVoteNftAgainst = useCallback(async () => {}, [])
@@ -216,7 +215,7 @@ const CardVoteByNFT = ({
             onClick={onVoteNftAgainst}
             type="primary"
             disabled={disabled}
-            loading={loadingAgainst}
+            // loading={loadingAgainst}
             block
             size="large"
             icon={<IonIcon name="thumbs-down-outline" />}
