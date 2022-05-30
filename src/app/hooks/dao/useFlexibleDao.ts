@@ -22,7 +22,7 @@ const useFlexibleDao = () => {
   const initMetadata = useSelector(
     (state: AppState) => state.metadata.initMetadata,
   )
-  const { mintAddress, supply, regime } = initDao
+  const { mintAddress, supply, regime, isPublic, isNFT } = initDao
   const decimals = useMintDecimals(mintAddress) || 0
   const pdb = usePDB()
   const history = useHistory()
@@ -44,6 +44,8 @@ const useFlexibleDao = () => {
         metadata,
         undefined, // Optional DAO's keypair
         regime,
+        isNFT,
+        isPublic,
       )
       const localMetadata = { ...initMetadata, cid }
       await pdb.setItem(daoAddress, localMetadata) // to realtime
@@ -58,7 +60,17 @@ const useFlexibleDao = () => {
     } finally {
       setLoading(false)
     }
-  }, [initMetadata, supply, decimals, mintAddress, regime, pdb, history])
+  }, [
+    initMetadata,
+    supply,
+    decimals,
+    mintAddress,
+    regime,
+    isNFT,
+    isPublic,
+    pdb,
+    history,
+  ])
 
   return { createFlexDAO, loading }
 }

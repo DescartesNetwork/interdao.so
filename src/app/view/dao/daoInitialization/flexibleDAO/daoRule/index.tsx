@@ -6,18 +6,17 @@ import RegimeInput from './regimeInput'
 import CirculatingSupplyInput from './circulatingSupplyInput'
 import TokenAddressInput from './tokenAddressInput'
 import Privacy from './privacy'
+
 import { AppDispatch, AppState } from 'app/model'
 import { setInitDao } from 'app/model/dao.controller'
 
 import './index.less'
 
 const DaoRule = () => {
-  const {
-    dao: { initDao },
-  } = useSelector((state: AppState) => state)
+  const initDao = useSelector((state: AppState) => state.dao.initDao)
   const dispatch = useDispatch<AppDispatch>()
 
-  const { mintAddress, supply, regime, isPublic, isNFT } = createDaoData
+  const { mintAddress, supply, regime, isPublic, isNFT } = initDao
 
   return (
     <Row gutter={[24, 24]}>
@@ -35,7 +34,7 @@ const DaoRule = () => {
             dispatch(setInitDao({ ...initDao, mintAddress }))
           }
           onChangeNFT={(isNFT) => {
-            dispatch(setCreateDaoData({ ...createDaoData, isNFT }))
+            dispatch(setInitDao({ ...initDao, isNFT }))
           }}
         />
       </Col>
@@ -53,8 +52,7 @@ const DaoRule = () => {
         <Privacy
           isPublic={isPublic}
           onChange={(isPublic) => {
-            console.log('isPublic: ', isPublic)
-            dispatch(setCreateDaoData({ ...createDaoData, isPublic }))
+            dispatch(setInitDao({ ...initDao, isPublic }))
           }}
         />
       </Col>

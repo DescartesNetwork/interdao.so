@@ -110,9 +110,7 @@ const CardVoteByNFT = ({
   const [loadingFor, setLoadingFor] = useState(false)
   const [loadingAgainst, setLoadingAgainst] = useState(false)
   const [visible, setVisible] = useState(false)
-  const {
-    dao: { daoData },
-  } = useSelector((state: AppState) => state)
+  const daoData = useSelector((state: AppState) => state.dao.daos)
 
   const { mint, regime, authority } = daoData[daoAddress] || ({} as DaoData)
   const { status } = useProposalStatus(proposalAddress)

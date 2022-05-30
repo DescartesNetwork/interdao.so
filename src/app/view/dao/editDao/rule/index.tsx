@@ -16,7 +16,7 @@ const Rule = ({ daoAddress }: { daoAddress: string }) => {
   const {
     dao: { daos },
   } = useSelector((state: AppState) => state)
-  const { mint, regime, supply } = daos?.[daoAddress] || {
+  const { mint, regime, supply, isNft, isPublic } = daos?.[daoAddress] || {
     regime: {},
     supply: new BN(0),
     mint: SystemProgram.programId,
@@ -31,9 +31,11 @@ const Rule = ({ daoAddress }: { daoAddress: string }) => {
       mintAddress: mint.toBase58(),
       supply: supply.div(new BN(10 ** decimals)),
       regime,
+      isNFT: isNft,
+      isPublic,
     }
     return dispatch(setInitDao(nextData))
-  }, [daoAddress, decimals, dispatch, mint, regime, supply])
+  }, [daoAddress, decimals, dispatch, isNft, isPublic, mint, regime, supply])
 
   useEffect(() => {
     setDefaultValue()

@@ -26,9 +26,7 @@ export type ProposalChildCardProps = {
 
 const ProposalDetails = () => {
   const history = useHistory()
-  const {
-    dao: { daoData },
-  } = useSelector((state: AppState) => state)
+  const daoData = useSelector((state: AppState) => state.dao.daos)
   const { proposalAddress, daoAddress } =
     useParams<{ daoAddress: string; proposalAddress: string }>()
   const { isNft } = daoData?.[daoAddress] || ({} as DaoData)
