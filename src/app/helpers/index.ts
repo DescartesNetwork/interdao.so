@@ -30,7 +30,7 @@ export const getCID = (digest: number[]) => {
 
 export const validURL = (url: string) => {
   var pattern = new RegExp(
-    '^(https?:\\/\\/)?' + // protocol
+    '^(https?:\\/\\/)' + // protocol
       '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
       '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
       '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
@@ -42,7 +42,7 @@ export const validURL = (url: string) => {
 }
 
 export const getIcon = (url: string) => {
-  if (!validURL) return ''
+  if (!validURL(url)) return ''
   let socialName = ''
   const domain = new URL(url)
   const host = domain.hostname.replace('www.', '')

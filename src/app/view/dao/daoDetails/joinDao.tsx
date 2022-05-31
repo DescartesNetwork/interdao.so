@@ -105,7 +105,7 @@ const JoinDao = ({ daoAddress }: DaoDetailsProps) => {
       className="join-dao"
     >
       <Image src={BG_JOIN_DAO} preview={false} className="join-dao-bg" />
-      <Row gutter={[32, 32]}>
+      <Row className="interdao-banner" gutter={[32, 32]}>
         <Col span={24}>
           <Typography.Title level={4}>Join DAO</Typography.Title>
         </Col>
