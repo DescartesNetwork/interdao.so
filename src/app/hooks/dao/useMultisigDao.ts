@@ -78,8 +78,8 @@ const useMultisigDao = () => {
         metadata,
         undefined, // Optional DAO's keypair
         regime,
-        isPublic,
         isNft,
+        isPublic,
       )
 
       await pdb.setItem(daoAddress, {
