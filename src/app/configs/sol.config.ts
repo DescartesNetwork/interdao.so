@@ -19,7 +19,11 @@ const conf: Record<Net, Conf> = {
    * Development configurations
    */
   devnet: {
-    interDao: new InterDAO(new SafeWallet(), 'https://api.devnet.solana.com'),
+    interDao: new InterDAO(
+      new SafeWallet(),
+      'https://api.devnet.solana.com',
+      '8BKoocg1ae6bzEikTSQXZThqgC7GE1bZTSZagaD2QXLm',
+    ),
     utility: new Utility(new SafeWallet(), 'https://api.devnet.solana.com'),
     fee: '50000', // 0.000005 SOL
     taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',

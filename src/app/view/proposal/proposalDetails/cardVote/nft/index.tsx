@@ -1,25 +1,19 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
-import { DaoData, FeeOptions } from '@interdao/core'
-import { BN } from 'bn.js'
+import { DaoData } from '@interdao/core'
 
 import { Button, Card, Col, Row, Typography, Space, Tooltip } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import ModalVoteNFT from './modalVoteNFT'
-import Withdraw from './withdraw'
+import Withdraw from '../../withdraw'
 
 import useProposal from 'app/hooks/useProposal'
 import { AppState } from 'app/model'
-import { ProposalChildCardProps } from './index'
-import { explorer, numeric } from 'shared/util'
-import configs from 'app/configs'
+import { ProposalChildCardProps } from '../../index'
+import { numeric } from 'shared/util'
 import useProposalStatus from 'app/hooks/useProposalStatus'
 import { getRemainingTime } from 'app/helpers/countDown'
-
-const {
-  sol: { interDao, taxman, fee },
-} = configs
 
 const defaultRemainingTime = {
   minutes: '00',
@@ -32,8 +26,15 @@ type LockedVotingProps = {
   proposalAddress: string
   daoAddress: string
 }
+
+export enum VotingType {
+  Agree = 'Agree',
+  Disagree = 'Disagree',
+}
+
 const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
   const [remainingTime, setRemainingTime] = useState(defaultRemainingTime)
+
   const { status } = useProposalStatus(proposalAddress)
   const {
     voteBid: { amount: voteAmount },
@@ -105,73 +106,26 @@ const CardVoteByNFT = ({
   proposalAddress,
   daoAddress,
 }: ProposalChildCardProps) => {
-  const [loadingFor, setLoadingFor] = useState(false)
-  // const [loadingAgainst, setLoadingAgainst] = useState(false)
+  const [votingType, setVotingType] = useState<VotingType>(VotingType.Agree)
   const [visible, setVisible] = useState(false)
   const daoData = useSelector((state: AppState) => state.dao.daos)
 
-  const { regime, authority } = daoData[daoAddress] || ({} as DaoData)
+  const { mint } = daoData[daoAddress] || ({} as DaoData)
   const { status } = useProposalStatus(proposalAddress)
-  // const daoMetaData = useMetaData(daoAddress)
 
   const disabled = useMemo(() => {
     return status !== 'Voting' || !account.isAddress(proposalAddress)
   }, [proposalAddress, status])
 
-  const parseRegime = useMemo(() => {
-    if (!regime) return ''
-    return Object.keys(regime)[0]
-  }, [regime])
-
-  const proposalFee = useMemo(() => {
-    if (!parseRegime || !authority) return
-
-    const feeOption: FeeOptions = {
-      tax: new BN(fee),
-      taxmanAddress: taxman,
-      revenue: new BN(fee),
-      revenuemanAddress: authority.toBase58(),
-    }
-
-    if (parseRegime === 'democratic')
-      return {
-        tax: new BN(0),
-        taxmanAddress: taxman,
-        revenue: new BN(0),
-        revenuemanAddress: authority.toBase58(),
-      }
-
-    return feeOption
-  }, [authority, parseRegime])
-
-  const onVoteNftFor = useCallback(async () => {
+  const onVoteNftFor = () => {
     setVisible(true)
-    setLoadingFor(true)
-    try {
-      if (!account.isAddress(proposalAddress)) return
-      const nftMintAddress = ''
-      const { txId, receiptAddress } = await interDao.voteNftFor(
-        proposalAddress,
-        nftMintAddress,
-        proposalFee,
-      )
-      console.log(receiptAddress)
-      window.notify({
-        type: 'success',
-        description: 'Voted successfully. Click to view details!',
-        onClick: () => window.open(explorer(txId), '_blank'),
-      })
-    } catch (error: any) {
-      window.notify({
-        type: 'error',
-        description: error.message,
-      })
-    } finally {
-      setLoadingFor(false)
-    }
-  }, [proposalAddress, proposalFee])
+    setVotingType(VotingType.Agree)
+  }
 
-  const onVoteNftAgainst = useCallback(async () => {}, [])
+  const onVoteNftAgainst = () => {
+    setVisible(true)
+    setVotingType(VotingType.Disagree)
+  }
 
   return (
     <Card bordered={false}>
@@ -201,7 +155,6 @@ const CardVoteByNFT = ({
             onClick={onVoteNftFor}
             type="primary"
             disabled={disabled}
-            loading={loadingFor}
             block
             size="large"
             icon={<IonIcon name="thumbs-up-outline" />}
@@ -225,7 +178,10 @@ const CardVoteByNFT = ({
       <ModalVoteNFT
         visible={visible}
         setVisible={setVisible}
-        collectionAddress={'HgzRcYdx9GnJcXUBrPEiVxdTMk6LtbZZYHb9hAZ2GnMJ'}
+        collectionAddress={mint.toBase58()}
+        votingType={votingType}
+        proposalAddress={proposalAddress}
+        daoAddress={daoAddress}
       />
     </Card>
   )

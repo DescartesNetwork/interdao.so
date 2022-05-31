@@ -1,6 +1,7 @@
 import { Fragment, useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useWallet } from '@senhub/providers'
-import { ReceiptData } from '@interdao/core'
+import { DaoData, ReceiptData } from '@interdao/core'
 import BN from 'bn.js'
 import moment from 'moment'
 
@@ -13,6 +14,7 @@ import { ProposalChildCardProps } from './index'
 import useReceipts from 'app/hooks/useReceipts'
 import configs from 'app/configs'
 import { explorer } from 'shared/util'
+import { AppState } from 'app/model'
 
 const COLUMNS = [
   {
@@ -48,6 +50,8 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
   const [listReceipt, setListReceipt] = useState<Receipt[]>([])
   const [receiptAddress, setReceiptAddress] = useState<string[]>([])
   const { receipts } = useReceipts({ proposalAddress })
+  const { daos } = useSelector((state: AppState) => state.dao)
+  const { isNft } = daos[daoAddress] || ({} as DaoData)
   const {
     wallet: { address: walletAddress },
   } = useWallet()
@@ -78,11 +82,16 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
     setLoading(true)
     try {
       for (const address of receiptAddress) {
-        const { txId } = await interDao.close(address)
+        let response: { txId: string; receiptAddress: string }
+        if (isNft) {
+          response = await interDao.closeNftVoting(address)
+        } else {
+          response = await interDao.close(address)
+        }
         window.notify({
           type: 'success',
           description: 'Close receipt successfully. Click to view details!',
-          onClick: () => window.open(explorer(txId), '_blank'),
+          onClick: () => window.open(explorer(response.txId), '_blank'),
         })
       }
       //for real time
@@ -99,7 +108,7 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
     } finally {
       setLoading(false)
     }
-  }, [listReceipt, receiptAddress])
+  }, [isNft, listReceipt, receiptAddress])
 
   useEffect(() => {
     filterReceipts()
