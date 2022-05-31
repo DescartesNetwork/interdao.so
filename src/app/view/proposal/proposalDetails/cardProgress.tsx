@@ -27,7 +27,6 @@ const CardProgress = ({
   const [backGroundColor, setBackGroundColor] = useState('')
   const [successColor, setSuccessColor] = useState('')
   const daos = useSelector((state: AppState) => state.dao.daos)
-
   const { votingAgainstPower, votingForPower, consensusQuorum } = useProposal(
     proposalAddress,
     daoAddress,
@@ -121,7 +120,7 @@ const CardProgress = ({
             <Typography.Text>
               {numeric(
                 utils.undecimalize(
-                  BigInt(powerRequire.toString()),
+                  BigInt(powerRequire.add(new BN(1)).toString()),
                   mintDecimal,
                 ),
               ).format('0,0.[0000]')}{' '}

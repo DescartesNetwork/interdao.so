@@ -8,6 +8,7 @@ import InitDAOHeader from './initDAOHeader'
 import ActionButton from './actions'
 
 import { AppState } from 'app/model'
+import { validURL } from 'app/helpers'
 
 import './index.less'
 
@@ -32,9 +33,17 @@ const DaoInitialization = () => {
     }
   }, [initDao, initMetadata, step])
 
+  const validLink = useMemo(() => {
+    const { optionals } = initMetadata
+    if (!optionals.length) return true
+    for (const link of optionals) if (!validURL(link)) return false
+    return true
+  }, [initMetadata])
+
   const disabled = useMemo(() => {
     const { daoName, image, daoType, members, description } = initMetadata
-    if (step === CreateSteps.stepOne) return !daoName || !image || !description
+    if (step === CreateSteps.stepOne)
+      return !daoName || !image || !description || !validLink
 
     if (step === CreateSteps.stepTwo && daoType === 'flexible-dao')
       return !mintAddress || !regime || !Number(supply)
@@ -50,7 +59,7 @@ const DaoInitialization = () => {
       }
       return valid
     }
-  }, [initMetadata, mintAddress, regime, step, supply])
+  }, [initMetadata, validLink, mintAddress, regime, step, supply])
 
   return (
     <Row gutter={[24, 24]} justify="center">

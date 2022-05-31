@@ -116,8 +116,11 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
   return (
     <Fragment>
       <Button
+        type="primary"
         onClick={() => setVisible(true)}
-        icon={<IonIcon name="log-out-outline" />}
+        block
+        size="large"
+        disabled={!listReceipt.length}
       >
         Withdraw
       </Button>
