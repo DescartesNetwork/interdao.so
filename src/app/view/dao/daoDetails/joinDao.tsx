@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccount, useWallet } from '@senhub/providers'
 
-import { Button, Col, Modal, Row, Typography } from 'antd'
+import { Button, Col, Image, Modal, Row, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { DaoDetailsProps } from './index'
 import useMetaData from 'app/hooks/useMetaData'
 import Distributor from 'app/helpers/distributor'
 import { explorer } from 'shared/util'
+
+import BG_JOIN_DAO from 'app/static/images/system/bg-join-dao.png'
 
 const JoinDao = ({ daoAddress }: DaoDetailsProps) => {
   const [visible, setVisible] = useState(false)
@@ -99,7 +101,10 @@ const JoinDao = ({ daoAddress }: DaoDetailsProps) => {
       onCancel={() => setVisible(false)}
       closeIcon={<IonIcon name="close-outline" />}
       footer={null}
+      // bodyStyle={{ background: `url(${BG_JOIN_DAO})` }}
+      className="join-dao"
     >
+      <Image src={BG_JOIN_DAO} preview={false} className="join-dao-bg" />
       <Row gutter={[32, 32]}>
         <Col span={24}>
           <Typography.Title level={4}>Join DAO</Typography.Title>

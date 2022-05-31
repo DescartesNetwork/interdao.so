@@ -39,25 +39,25 @@ const ModalVoteNFT = ({
   const onVoteNftFor = useCallback(async () => {
     setLoading(true)
     try {
-      if (!account.isAddress(proposalAddress)) return
+      if (!account.isAddress(proposalAddress) || !nftVoting) return
 
       const { txId } = await interDao.voteNftFor(
         proposalAddress,
         nftVoting,
         proposalFee,
       )
-      window.notify({
+      return window.notify({
         type: 'success',
         description: 'Voted successfully. Click to view details!',
         onClick: () => window.open(explorer(txId), '_blank'),
       })
-      setVisible(false)
     } catch (error: any) {
-      window.notify({
+      return window.notify({
         type: 'error',
         description: error.message,
       })
     } finally {
+      setVisible(false)
       setLoading(false)
     }
   }, [nftVoting, proposalAddress, proposalFee, setVisible])
@@ -65,43 +65,36 @@ const ModalVoteNFT = ({
   const onVoteNftAgainst = useCallback(async () => {
     setLoading(true)
     try {
-      if (!account.isAddress(proposalAddress)) return
+      if (!account.isAddress(proposalAddress) || !nftVoting) return
 
       const { txId } = await interDao.voteNftAgainst(
         proposalAddress,
         nftVoting,
         proposalFee,
       )
-      window.notify({
+      return window.notify({
         type: 'success',
         description: 'Voted successfully. Click to view details!',
         onClick: () => window.open(explorer(txId), '_blank'),
       })
-      setVisible(false)
     } catch (error: any) {
-      window.notify({
+      return window.notify({
         type: 'error',
         description: error.message,
       })
     } finally {
       setLoading(false)
+      setVisible(false)
     }
   }, [nftVoting, proposalAddress, proposalFee, setVisible])
 
   const onConfirm = () => {
-    if (!nftVoting)
-      return window.notify({
-        type: 'error',
-        description: 'Please select a NFT!',
-      })
     switch (votingType) {
       case VotingType.Agree:
         onVoteNftFor()
         break
       case VotingType.Disagree:
         onVoteNftAgainst()
-        break
-      default:
         break
     }
   }
@@ -139,7 +132,12 @@ const ModalVoteNFT = ({
         <Col span={24} style={{ textAlign: 'right' }}>
           <Space>
             <Button onClick={() => setVisible(false)}>Cancel</Button>
-            <Button type="primary" loading={loading} onClick={onConfirm}>
+            <Button
+              disabled={!nftVoting}
+              type="primary"
+              loading={loading}
+              onClick={onConfirm}
+            >
               Confirm
             </Button>
           </Space>

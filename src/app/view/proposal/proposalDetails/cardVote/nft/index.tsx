@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { DaoData } from '@interdao/core'

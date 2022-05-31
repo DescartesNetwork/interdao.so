@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { MetadataDataType } from 'app/helpers/metaplex'
-import useOwerNFT from './useOwnerNFT'
+import useOwnerNFT from './useOwnerNFT'
 
 const useOwnerNftByCollection = (ownerPublickey: string) => {
-  const { nfts } = useOwerNFT(ownerPublickey)
+  const { nfts } = useOwnerNFT(ownerPublickey)
   const [nftsFiltered, setNftsFiltered] =
     useState<Record<string, MetadataDataType[]>>()
 

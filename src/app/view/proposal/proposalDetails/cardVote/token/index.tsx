@@ -51,12 +51,9 @@ const CardVoteToken = ({
     return status !== 'Voting' || !amount || !account.isAddress(proposalAddress)
   }, [amount, balance, isMultisigDAO, proposalAddress, status])
 
-  const onChange = useCallback(
-    (value: string) => {
-      dispatch(setVoteBidAmount(value))
-    },
-    [dispatch],
-  )
+  const onChange = (value: string) => {
+    dispatch(setVoteBidAmount(value))
+  }
 
   const onVoteFor = useCallback(async () => {
     setLoadingFor(true)
@@ -168,14 +165,12 @@ const CardVoteToken = ({
             </Card>
           </Col>
         )}
-        {!isMultisigDAO && (
-          <Col span={24}>
-            <LockedVoting
-              proposalAddress={proposalAddress}
-              daoAddress={daoAddress}
-            />
-          </Col>
-        )}
+        <Col span={24}>
+          <LockedVoting
+            proposalAddress={proposalAddress}
+            daoAddress={daoAddress}
+          />
+        </Col>
         <Col span={isMultisigDAO ? 24 : 12}>
           <Button
             onClick={onVoteFor}

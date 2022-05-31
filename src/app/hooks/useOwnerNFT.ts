@@ -4,7 +4,7 @@ import { utils, web3, BN } from '@project-serum/anchor'
 
 import { fetchYourOwnerNTFs, MetadataDataType } from 'app/helpers/metaplex'
 
-const useOwerNFT = (ownerPublickey: string) => {
+const useOwnerNFT = (ownerPublickey: string) => {
   const [nfts, setNfts] = useState<MetadataDataType[]>([])
   const [nftsFiltered, setNftFiltered] = useState<MetadataDataType[]>()
   const { accounts } = useAccount()
@@ -43,4 +43,4 @@ const useOwerNFT = (ownerPublickey: string) => {
   return { nfts: nftsFiltered }
 }
 
-export default useOwerNFT
+export default useOwnerNFT
