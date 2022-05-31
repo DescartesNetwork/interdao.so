@@ -13,7 +13,7 @@ import LockedVoting from '../lockedVoting'
 import { AppState } from 'app/model'
 import { ProposalChildCardProps } from '../../index'
 import useProposalStatus from 'app/hooks/proposal/useProposalStatus'
-import { fetchListNTFs, MetadataDataType } from 'app/helpers/metaplex'
+import useOwnerNftByCollection from 'app/hooks/useOwnerNftByCollection'
 
 export enum VotingType {
   Agree = 'Agree',
@@ -24,7 +24,6 @@ const CardVoteByNFT = ({
   proposalAddress,
   daoAddress,
 }: ProposalChildCardProps) => {
-  const [myCollection, setMyCollection] = useState<MetadataDataType[]>([])
   const [votingType, setVotingType] = useState<VotingType>(VotingType.Agree)
   const [visible, setVisible] = useState(false)
   const daoData = useSelector((state: AppState) => state.dao.daos)
@@ -33,6 +32,8 @@ const CardVoteByNFT = ({
   const {
     wallet: { address: walletAddress },
   } = useWallet()
+  const { nfts: collectionNFTs } = useOwnerNftByCollection(walletAddress)
+  const myCollection = collectionNFTs?.[mint.toBase58()] || []
 
   const disabled = useMemo(() => {
     return (
@@ -51,18 +52,6 @@ const CardVoteByNFT = ({
     setVisible(true)
     setVotingType(VotingType.Disagree)
   }
-
-  const fetchMyNft = useCallback(async () => {
-    if (!account.isAddress(walletAddress) || !mint) return
-    const collectionNFTs = await fetchListNTFs(walletAddress)
-    const mintAddress = mint.toBase58()
-    if (collectionNFTs[mintAddress])
-      return setMyCollection(collectionNFTs[mintAddress])
-  }, [mint, walletAddress])
-
-  useEffect(() => {
-    fetchMyNft()
-  }, [walletAddress, fetchMyNft])
 
   return (
     <Card bordered={false}>

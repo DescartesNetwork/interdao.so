@@ -31,6 +31,13 @@ export const fetchListNTFs = async (
   return listNFTs
 }
 
+export const fetchYourOwnerNTFs = async (
+  ownerAddress: string,
+): Promise<MetadataDataType[]> => {
+  const nftsmetadata = await Metadata.findDataByOwner(connection, ownerAddress)
+  return nftsmetadata
+}
+
 export const getNftMetaData = async (
   tokenMint: string,
 ): Promise<MetadataType> => {
