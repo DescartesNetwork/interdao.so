@@ -11,7 +11,7 @@ import ColumnType from './history/columnType'
 import ColumnPower from './history/columnPower'
 
 import { ProposalChildCardProps } from './index'
-import useReceipts from 'app/hooks/useReceipts'
+import useReceipts from 'app/hooks/proposal/useReceipts'
 import configs from 'app/configs'
 import { explorer } from 'shared/util'
 import { AppState } from 'app/model'
@@ -83,11 +83,10 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
     try {
       for (const address of receiptAddress) {
         let response: { txId: string; receiptAddress: string }
-        if (isNft) {
-          response = await interDao.closeNftVoting(address)
-        } else {
-          response = await interDao.close(address)
-        }
+
+        if (isNft) response = await interDao.closeNftVoting(address)
+        else response = await interDao.close(address)
+
         window.notify({
           type: 'success',
           description: 'Close receipt successfully. Click to view details!',
@@ -100,10 +99,10 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
           (receipt) => !receiptAddress.includes(receipt.address),
         ),
       )
-    } catch (error: any) {
+    } catch (er: any) {
       window.notify({
         type: 'error',
-        description: error.message,
+        description: er.message,
       })
     } finally {
       setLoading(false)

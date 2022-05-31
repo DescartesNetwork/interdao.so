@@ -12,8 +12,8 @@ import { ProposalChildCardProps } from './index'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
-import useProposalStatus from 'app/hooks/useProposalStatus'
-import useProposal from 'app/hooks/useProposal'
+import useProposalStatus from 'app/hooks/proposal/useProposalStatus'
+import useProposal from 'app/hooks/proposal/useProposal'
 
 const STROKE_COLOR = {
   dark: { default: '#312B29', agree: '#698033', disagree: '#F9575E' },

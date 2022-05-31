@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
-import { DaoData, FeeOptions } from '@interdao/core'
+import { DaoData } from '@interdao/core'
 import { BN } from 'bn.js'
 
 import { Button, Card, Col, Row, Typography } from 'antd'
@@ -17,11 +17,12 @@ import { explorer, numeric } from 'shared/util'
 import configs from 'app/configs'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { MintSymbol } from 'shared/antd/mint'
-import useProposalStatus from 'app/hooks/useProposalStatus'
+import useProposalStatus from 'app/hooks/proposal/useProposalStatus'
 import useMetaData from 'app/hooks/useMetaData'
+import useProposalFee from 'app/hooks/proposal/useProposalFee'
 
 const {
-  sol: { interDao, taxman, fee },
+  sol: { interDao },
 } = configs
 
 const DEFAULT_VALUE_VOTE_MULTISIG = 1
@@ -37,45 +38,18 @@ const CardVoteToken = ({
     voteBid: { amount },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch()
-  const { mint, regime, authority } = daos[daoAddress] || ({} as DaoData)
+  const { mint } = daos[daoAddress] || ({} as DaoData)
   const { balance, decimals } = useAccountBalanceByMintAddress(mint?.toBase58())
   const { status } = useProposalStatus(proposalAddress)
   const daoMetaData = useMetaData(daoAddress)
-
+  const proposalFee = useProposalFee({ daoAddress })
   const isMultisigDAO = daoMetaData?.daoType === 'multisig-dao'
 
   const disabled = useMemo(() => {
-    if (isMultisigDAO) {
-      return status !== 'Voting' || balance <= 0
-    }
+    if (isMultisigDAO) return status !== 'Voting' || balance <= 0
+
     return status !== 'Voting' || !amount || !account.isAddress(proposalAddress)
   }, [amount, balance, isMultisigDAO, proposalAddress, status])
-
-  const parseRegime = useMemo(() => {
-    if (!regime) return ''
-    return Object.keys(regime)[0]
-  }, [regime])
-
-  const proposalFee = useMemo(() => {
-    if (!parseRegime || !authority) return
-
-    const feeOption: FeeOptions = {
-      tax: new BN(fee),
-      taxmanAddress: taxman,
-      revenue: new BN(fee),
-      revenuemanAddress: authority.toBase58(),
-    }
-
-    if (parseRegime === 'democratic')
-      return {
-        tax: new BN(0),
-        taxmanAddress: taxman,
-        revenue: new BN(0),
-        revenuemanAddress: authority.toBase58(),
-      }
-
-    return feeOption
-  }, [authority, parseRegime])
 
   const onChange = useCallback(
     (value: string) => {

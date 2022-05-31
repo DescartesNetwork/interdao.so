@@ -5,7 +5,7 @@ import BN from 'bn.js'
 
 import TemplateTransfer, { TransferType } from '../transferInfo'
 
-import useProposal from 'app/hooks/useProposal'
+import useProposal from 'app/hooks/proposal/useProposal'
 import { ProposalChildCardProps } from '../../proposalDetails/index'
 
 type TemplateInfoProps = {

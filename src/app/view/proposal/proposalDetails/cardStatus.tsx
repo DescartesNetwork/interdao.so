@@ -6,9 +6,9 @@ import ProposalStatus from 'app/components/proposalStatus'
 
 import { ProposalChildCardProps } from './index'
 import { explorer, shortenAddress } from 'shared/util'
-import useProposalStatus from 'app/hooks/useProposalStatus'
-import useProposalMetaData from 'app/hooks/useProposalMetaData'
-import useReceipts from 'app/hooks/useReceipts'
+import useProposalStatus from 'app/hooks/proposal/useProposalStatus'
+import useProposalMetaData from 'app/hooks/proposal/useProposalMetaData'
+import useReceipts from 'app/hooks/proposal/useReceipts'
 import configs from 'app/configs'
 
 const {

@@ -3,7 +3,7 @@ import { useWallet } from '@senhub/providers'
 import LazyLoad from '@senswap/react-lazyload'
 
 import { Card, Col, Modal, Row, Space, Typography } from 'antd'
-import CardNFT from './cardNFT'
+import CardNFT from 'app/components/cardNFT'
 
 import { fetchListNTFs, MetadataDataType } from 'app/helpers/metaplex'
 

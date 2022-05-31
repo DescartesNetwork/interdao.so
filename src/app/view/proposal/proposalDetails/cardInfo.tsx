@@ -7,10 +7,10 @@ import IonIcon from 'shared/antd/ionicon'
 import ModalTemplateInfo from '../modalTemplateInfo'
 import RowSpaceBetween from 'app/components/rowSpaceBetween'
 
-import useProposal from 'app/hooks/useProposal'
+import useProposal from 'app/hooks/proposal/useProposal'
 import { asyncWait, explorer, shortenAddress } from 'shared/util'
 import { ProposalChildCardProps } from './index'
-import useParseQuorumText from 'app/hooks/useParseQuorumText'
+import useParseQuorumText from 'app/hooks/proposal/useParseQuorumText'
 
 const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
   const [copied, setCopied] = useState(false)

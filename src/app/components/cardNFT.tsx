@@ -1,17 +1,19 @@
 import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 
-import { Card, Row, Col, Typography, Image } from 'antd'
+import { Card, Row, Col, Typography, Image, Checkbox } from 'antd'
 
 import useNftMetaData from 'app/hooks/useNftMetaData'
 
-import IMAGE from 'app/static/images/system/avatar.png'
+import IMAGE_DEFAULT from 'app/static/images/system/avatar.png'
+
 export type CardNFTProps = {
   mintAddress: string
   onSelect: (mintAddress: string) => void
+  isSelected?: boolean
 }
 
-const CardNFT = ({ mintAddress, onSelect }: CardNFTProps) => {
+const CardNFT = ({ mintAddress, onSelect, isSelected }: CardNFTProps) => {
   const [nftImg, setNftImg] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -19,7 +21,7 @@ const CardNFT = ({ mintAddress, onSelect }: CardNFTProps) => {
   const metadataData = metadata?.data.data
 
   const getNftInfoFromURI = useCallback(async () => {
-    if (!metadata) return
+    if (!metadata) return setNftImg(IMAGE_DEFAULT)
     try {
       setLoading(true)
       const url = metadata.data.data.uri
@@ -48,24 +50,28 @@ const CardNFT = ({ mintAddress, onSelect }: CardNFTProps) => {
       onClick={() => onSelect(mintAddress)}
     >
       <Row gutter={[8, 8]}>
+        {isSelected && (
+          <Checkbox
+            style={{
+              position: 'absolute',
+              top: -2,
+              right: 2,
+              zIndex: 1,
+              borderRadius: 4,
+            }}
+            checked={true}
+          />
+        )}
+
         <Col span={24}>
           <Image
-            src={nftImg || IMAGE}
+            src={nftImg || IMAGE_DEFAULT}
             preview={false}
             style={{ borderRadius: 4, minHeight: 198 }}
           />
         </Col>
-        <Col span={24}>
-          <Row justify="space-between" wrap={false}>
-            <Col>
-              <Typography.Text>{metadataData?.name}</Typography.Text>
-            </Col>
-            <Col>
-              <Typography.Text type="secondary">
-                {metadataData?.symbol}
-              </Typography.Text>
-            </Col>
-          </Row>
+        <Col span={24} style={{ textAlign: 'center', paddingTop: '8px' }}>
+          <Typography.Text>{metadataData?.name}</Typography.Text>
         </Col>
       </Row>
     </Card>

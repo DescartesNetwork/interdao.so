@@ -7,7 +7,6 @@ import proposal from 'app/model/proposal.controller'
 import receipt from 'app/model/receipt.controller'
 import voteBid from 'app/model/voteBid.controller'
 import template from 'app/model/template.controller'
-import voteNFT from 'app/model/voteNFT.controller'
 
 /**
  * Isolated store
@@ -23,7 +22,6 @@ const model = configureStore({
     receipt,
     voteBid,
     template,
-    voteNFT,
   },
 })
 

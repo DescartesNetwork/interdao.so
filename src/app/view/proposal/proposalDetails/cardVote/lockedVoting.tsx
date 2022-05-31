@@ -5,8 +5,8 @@ import { Col, Row, Space, Tooltip, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { getRemainingTime } from 'app/helpers/countDown'
-import useProposal from 'app/hooks/useProposal'
-import useProposalStatus from 'app/hooks/useProposalStatus'
+import useProposal from 'app/hooks/proposal/useProposal'
+import useProposalStatus from 'app/hooks/proposal/useProposalStatus'
 import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
 
