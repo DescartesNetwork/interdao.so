@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DaoData } from '@interdao/core'
 
@@ -5,6 +6,7 @@ import { Card, Col, Row, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
 import Withdraw from '../../withdraw'
 import LockedVoting from '../lockedVoting'
+import ActionVote from './actionVote'
 
 import { AppState } from 'app/model'
 import { setVoteBidAmount } from 'app/model/voteBid.controller'
@@ -15,8 +17,6 @@ import { MintSymbol } from 'shared/antd/mint'
 import useProposalStatus from 'app/hooks/proposal/useProposalStatus'
 import useMetaData from 'app/hooks/useMetaData'
 import useProposal from 'app/hooks/proposal/useProposal'
-import ActionVote from './actionVote'
-import { useMemo } from 'react'
 
 const CardVoteToken = ({
   proposalAddress,

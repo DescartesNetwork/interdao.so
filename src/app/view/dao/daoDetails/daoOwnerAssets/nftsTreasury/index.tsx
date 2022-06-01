@@ -7,9 +7,9 @@ import { Card, Col, Image, Row } from 'antd'
 
 import useNftMetaData from 'app/hooks/useNftMetaData'
 import { fetchYourOwnerNTFs, MetadataDataType } from 'app/helpers/metaplex'
+import { AppState } from 'app/model'
 
 import IMAGE_DEFAULT from 'app/static/images/system/avatar.png'
-import { AppState } from 'app/model'
 
 const NftTreasury = ({ daoAddress }: { daoAddress: string }) => {
   const [listNFTs, setListNFTs] = useState<MetadataDataType[]>()
