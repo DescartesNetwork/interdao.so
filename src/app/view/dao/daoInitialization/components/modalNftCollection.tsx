@@ -60,23 +60,27 @@ const ModalNftCollection = ({
       </Card>
 
       <Modal
+        className="modal-nft-selection"
         visible={visible}
         footer={false}
         onCancel={() => setVisible(false)}
         destroyOnClose={true}
-        className="template-modal"
       >
-        <Row>
+        <Row gutter={[24, 24]}>
           <Col span={24}>
             <Typography.Title level={4}>
               Select a NFT collection
             </Typography.Title>
           </Col>
-          <Col span={24} className="template-info-body">
-            <Row gutter={[24, 24]}>
+          <Col span={24}>
+            <Row
+              gutter={[24, 24]}
+              className="scrollbar"
+              style={{ height: 500 }}
+            >
               {listCollectionNFTs &&
                 Object.keys(listCollectionNFTs).map((collectionAddress) => (
-                  <Col xs={24} md={8} key={collectionAddress}>
+                  <Col xs={12} md={8} key={collectionAddress}>
                     <LazyLoad height={198}>
                       <CardNFT
                         mintAddress={collectionAddress}

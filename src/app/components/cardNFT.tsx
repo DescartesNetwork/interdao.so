@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useUI } from '@senhub/providers'
 import axios from 'axios'
 
-import { Card, Row, Col, Typography, Image, Checkbox } from 'antd'
+import { Card, Row, Col, Typography, Image } from 'antd'
 
 import useNftMetaData from 'app/hooks/useNftMetaData'
+import IonIcon from 'shared/antd/ionicon'
 
 import IMAGE_DEFAULT from 'app/static/images/system/avatar.png'
 
@@ -13,9 +15,20 @@ export type CardNFTProps = {
   isSelected?: boolean
 }
 
+const SIZE_DESKTOP = 198
+const SIZE_MOBILE = 150
+
 const CardNFT = ({ mintAddress, onSelect, isSelected }: CardNFTProps) => {
   const [nftImg, setNftImg] = useState('')
   const [loading, setLoading] = useState(false)
+  const {
+    ui: { width },
+  } = useUI()
+
+  const imageSize = useMemo(() => {
+    if (width < 768) return SIZE_MOBILE
+    return SIZE_DESKTOP
+  }, [width])
 
   const metadata = useNftMetaData(mintAddress)
   const metadataData = metadata?.data.data
@@ -25,7 +38,7 @@ const CardNFT = ({ mintAddress, onSelect, isSelected }: CardNFTProps) => {
     try {
       setLoading(true)
       const url = metadata.data.data.uri
-      if (!url) return
+      if (!url) return setNftImg(IMAGE_DEFAULT)
 
       const response = await axios.get(url)
       const img = response.data.image
@@ -44,30 +57,31 @@ const CardNFT = ({ mintAddress, onSelect, isSelected }: CardNFTProps) => {
   return (
     <Card
       bordered={false}
-      style={{ cursor: 'pointer' }}
-      bodyStyle={{ padding: 8 }}
+      style={{ cursor: 'pointer', textAlign: 'center' }}
+      bodyStyle={{ padding: 0 }}
       loading={loading}
       onClick={() => onSelect(mintAddress)}
     >
-      <Row gutter={[8, 8]}>
+      <Row>
         {isSelected && (
-          <Checkbox
+          <IonIcon
+            name="checkbox"
             style={{
               position: 'absolute',
-              top: -2,
-              right: 2,
+              top: -1,
+              right: -1,
+              fontSize: 20,
               zIndex: 1,
-              borderRadius: 4,
             }}
-            checked={true}
           />
         )}
-
-        <Col span={24}>
+        <Col span={24} style={{ textAlign: 'center', width: imageSize }}>
           <Image
-            src={nftImg || IMAGE_DEFAULT}
+            src={nftImg}
             preview={false}
-            style={{ borderRadius: 4, minHeight: 198 }}
+            style={{ borderRadius: 4 }}
+            width={imageSize}
+            height={imageSize}
           />
         </Col>
         <Col span={24} style={{ textAlign: 'center', paddingTop: '8px' }}>

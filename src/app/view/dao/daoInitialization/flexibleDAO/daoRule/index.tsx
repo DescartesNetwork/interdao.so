@@ -1,9 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
-import BN from 'bn.js'
 
 import { Col, Row } from 'antd'
 import RegimeInput from './regimeInput'
-import CirculatingSupplyInput from './circulatingSupplyInput'
+import CirculatingSupply from '../circulatingSupply'
 import TokenAddressInput from './tokenAddressInput'
 import Privacy from './privacy'
 
@@ -16,7 +15,7 @@ const DaoRule = () => {
   const initDao = useSelector((state: AppState) => state.dao.initDao)
   const dispatch = useDispatch<AppDispatch>()
 
-  const { mintAddress, supply, regime, isPublic, isNft } = initDao
+  const { mintAddress, regime, isPublic, isNft } = initDao
 
   return (
     <Row gutter={[24, 24]}>
@@ -39,14 +38,7 @@ const DaoRule = () => {
         />
       </Col>
       <Col span={24}>
-        <CirculatingSupplyInput
-          mintAddress={mintAddress}
-          value={supply?.toString()}
-          onChange={(supply) =>
-            dispatch(setInitDao({ ...initDao, supply: new BN(supply) }))
-          }
-          isNFT={isNft}
-        />
+        <CirculatingSupply />
       </Col>
       <Col span={24}>
         <Privacy

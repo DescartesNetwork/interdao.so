@@ -1,4 +1,5 @@
 import { Card, Tabs } from 'antd'
+import NftTreasury from './nftsTreasury'
 import Treasury from './treasury'
 
 const DaoOwnerAssets = ({ daoAddress }: { daoAddress: string }) => {
@@ -8,7 +9,9 @@ const DaoOwnerAssets = ({ daoAddress }: { daoAddress: string }) => {
         <Tabs.TabPane tab="Treasury" key="treasury">
           <Treasury daoAddress={daoAddress} />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="NFTs" key="nft" disabled />
+        <Tabs.TabPane tab="NFTs" key="nft">
+          <NftTreasury daoAddress={daoAddress} />
+        </Tabs.TabPane>
       </Tabs>
     </Card>
   )

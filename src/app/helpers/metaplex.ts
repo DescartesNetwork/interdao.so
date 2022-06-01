@@ -8,6 +8,10 @@ const {
   metadata: { Metadata, MetadataData },
 } = programs
 
+const TOKEN_METADATA_PROGRAM_ID = new PublicKey(
+  'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s',
+)
+
 const connection = new Connection(net)
 
 export type MetadataType = InstanceType<typeof Metadata>
@@ -64,4 +68,25 @@ export const deserializeData = async (dataBuffer: Buffer) => {
 export const fetchNftFromURI = async (URL: string) => {
   const data = await axios.get(URL)
   return data
+}
+
+export const getListAccountNFTsBelongToCollection = async (
+  collectionAddress: string,
+) => {
+  const accounts = await connection.getProgramAccounts(
+    TOKEN_METADATA_PROGRAM_ID,
+    {
+      commitment: 'confirmed',
+      filters: [
+        { dataSize: 679 },
+        {
+          memcmp: {
+            offset: 368,
+            bytes: collectionAddress,
+          },
+        },
+      ],
+    },
+  )
+  return accounts
 }

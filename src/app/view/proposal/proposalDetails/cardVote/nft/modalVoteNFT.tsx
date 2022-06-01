@@ -101,11 +101,11 @@ const ModalVoteNFT = ({
 
   return (
     <Modal
+      className="modal-nft-selection"
       visible={visible}
       footer={false}
       onCancel={() => setVisible(false)}
       destroyOnClose={true}
-      className="template-modal"
     >
       <Row gutter={[24, 24]}>
         <Col span={24}>
@@ -115,9 +115,14 @@ const ModalVoteNFT = ({
           <Typography.Text>Choose NFT to vote</Typography.Text>
         </Col>
         <Col span={24}>
-          <Row gutter={[24, 24]}>
+          <Row gutter={[24, 24]} className="scrollbar" style={{ height: 240 }}>
             {collection.map((metadata) => (
-              <Col xs={24} md={8} key={metadata.mint}>
+              <Col
+                xs={12}
+                md={8}
+                key={metadata.mint}
+                style={{ textAlign: 'center' }}
+              >
                 <LazyLoad height={198}>
                   <CardNFT
                     mintAddress={metadata.mint}
