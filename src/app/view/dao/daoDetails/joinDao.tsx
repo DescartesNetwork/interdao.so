@@ -8,7 +8,6 @@ import { DaoDetailsProps } from './index'
 import useMetaData from 'app/hooks/useMetaData'
 import Distributor from 'app/helpers/distributor'
 import { explorer } from 'shared/util'
-
 import BG_JOIN_DAO from 'app/static/images/system/bg-join-dao.png'
 
 const JoinDao = ({ daoAddress }: DaoDetailsProps) => {
@@ -101,22 +100,43 @@ const JoinDao = ({ daoAddress }: DaoDetailsProps) => {
       onCancel={() => setVisible(false)}
       closeIcon={<IonIcon name="close-outline" />}
       footer={null}
-      // bodyStyle={{ background: `url(${BG_JOIN_DAO})` }}
       className="join-dao"
+      bodyStyle={{ padding: '72px 24px 24px 24px' }}
     >
-      <Image src={BG_JOIN_DAO} preview={false} className="join-dao-bg" />
-      <Row className="interdao-banner" gutter={[32, 32]}>
+      <Image preview={false} src={BG_JOIN_DAO} />
+      <Row
+        className="join-dao_content"
+        gutter={[48, 48]}
+        style={{ textAlign: 'center' }}
+      >
         <Col span={24}>
-          <Typography.Title level={4}>Join DAO</Typography.Title>
+          <Row gutter={[12, 12]}>
+            <Col span={24}>
+              <Typography.Title
+                style={{ fontSize: 32 }}
+                className="join-dao_title"
+                level={2}
+              >
+                Welcome to the DAO
+              </Typography.Title>
+            </Col>
+            <Col span={24}>
+              <Typography.Text style={{ fontSize: 16 }}>
+                Click the button below to become <br /> an official member of
+                DAO
+              </Typography.Text>
+            </Col>
+          </Row>
         </Col>
         <Col span={24}>
-          <Typography.Title level={5}>
-            Welcome to our DAO. Click here to join and vote with us!
-          </Typography.Title>
-        </Col>
-        <Col span={24}>
-          <Button loading={loading} onClick={onClaim} type="primary">
-            Join
+          <Button
+            block
+            size="large"
+            loading={loading}
+            onClick={onClaim}
+            type="primary"
+          >
+            Get started
           </Button>
         </Col>
       </Row>

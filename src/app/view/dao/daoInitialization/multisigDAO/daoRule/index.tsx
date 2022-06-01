@@ -1,6 +1,7 @@
 import { Col, Row } from 'antd'
 import Regime from './regime'
 import DAOMembers from './daoMembers'
+import Privacy from '../../components/privacy'
 
 const MultiSigDAORule = () => {
   return (
@@ -8,9 +9,9 @@ const MultiSigDAORule = () => {
       <Col span={24}>
         <Regime />
       </Col>
-      {/* <Col span={24}>
-        <PrivacyDAO value={privacy} onChange={setPrivacy} />
-      </Col> */}
+      <Col span={24}>
+        <Privacy />
+      </Col>
       <Col span={24}>
         <DAOMembers />
       </Col>

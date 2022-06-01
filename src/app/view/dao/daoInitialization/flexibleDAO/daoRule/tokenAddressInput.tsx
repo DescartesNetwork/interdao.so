@@ -1,27 +1,29 @@
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import isEqual from 'react-fast-compare'
 
 import { Button, Col, Input, Row, Space, Typography } from 'antd'
 import ModalNftCollection from '../../components/modalNftCollection'
 
 import { MintSelection } from 'shared/antd/mint'
+import { AppDispatch, AppState } from 'app/model'
+import { setInitDao } from 'app/model/dao.controller'
 
 import './index.less'
 
-export type TokenAddressInputProps = {
-  value: string
-  onChange: (value: string) => void
-  isNFT: boolean
-  onChangeNFT: (isNFT: boolean) => void
-}
-
-const TokenAddressInput = ({
-  value,
-  onChange,
-  isNFT = false,
-  onChangeNFT,
-}: TokenAddressInputProps) => {
+const TokenAddressInput = () => {
   const [visible, setVisible] = useState(false)
+  const initDao = useSelector((state: AppState) => state.dao.initDao)
+  const dispatch = useDispatch<AppDispatch>()
+  const { isNft, mintAddress } = initDao
+
+  const onNftChange = (isNft: boolean) => {
+    return dispatch(setInitDao({ ...initDao, isNft }))
+  }
+
+  const onMintAddressChange = (mintAddress: string) => {
+    return dispatch(setInitDao({ ...initDao, mintAddress }))
+  }
 
   return (
     <Row gutter={[8, 8]}>
@@ -33,14 +35,14 @@ const TokenAddressInput = ({
           <Col span={24}>
             <Space>
               <Button
-                onClick={() => onChangeNFT(false)}
-                className={isEqual(isNFT, false) ? '' : 'btn-unselect'}
+                onClick={() => onNftChange(false)}
+                className={isEqual(isNft, false) ? '' : 'btn-unselect'}
               >
                 Token
               </Button>
               <Button
-                onClick={() => onChangeNFT(true)}
-                className={isEqual(isNFT, true) ? '' : 'btn-unselect'}
+                onClick={() => onNftChange(true)}
+                className={isEqual(isNft, true) ? '' : 'btn-unselect'}
               >
                 NFT
               </Button>
@@ -50,18 +52,22 @@ const TokenAddressInput = ({
             <Input
               size="large"
               placeholder={
-                !isNFT
+                !isNft
                   ? 'Input Token Address'
                   : 'Input NFT collection address or Select'
               }
-              value={value}
+              value={mintAddress}
               className="border-less"
-              onChange={(e) => onChange(e.target.value)}
+              onChange={(e) =>
+                dispatch(
+                  setInitDao({ ...initDao, mintAddress: e.target.value }),
+                )
+              }
               suffix={
-                !isNFT && (
+                !isNft && (
                   <MintSelection
-                    value={value}
-                    onChange={onChange}
+                    value={mintAddress}
+                    onChange={onMintAddressChange}
                     style={{ marginRight: -7 }}
                   />
                 )
@@ -71,12 +77,12 @@ const TokenAddressInput = ({
           </Col>
         </Row>
       </Col>
-      {isNFT && (
+      {isNft && (
         <Col>
           <ModalNftCollection
             visible={visible}
             setVisible={setVisible}
-            onSelect={onChange}
+            onSelect={onMintAddressChange}
           />
         </Col>
       )}

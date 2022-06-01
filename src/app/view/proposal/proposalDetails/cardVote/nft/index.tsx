@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { DaoData } from '@interdao/core'
@@ -14,6 +14,7 @@ import { AppState } from 'app/model'
 import { ProposalChildCardProps } from '../../index'
 import useProposalStatus from 'app/hooks/proposal/useProposalStatus'
 import useOwnerNftByCollection from 'app/hooks/useOwnerNftByCollection'
+import useProposal from 'app/hooks/proposal/useProposal'
 
 export enum VotingType {
   Agree = 'Agree',
@@ -26,22 +27,25 @@ const CardVoteByNFT = ({
 }: ProposalChildCardProps) => {
   const [votingType, setVotingType] = useState<VotingType>(VotingType.Agree)
   const [visible, setVisible] = useState(false)
-  const daoData = useSelector((state: AppState) => state.dao.daos)
-  const { mint } = daoData[daoAddress] || ({} as DaoData)
+  const daos = useSelector((state: AppState) => state.dao.daos)
+  const { mint } = daos[daoAddress] || ({} as DaoData)
   const { status } = useProposalStatus(proposalAddress)
+  const { consensusMechanism } = useProposal(proposalAddress, daoAddress)
   const {
     wallet: { address: walletAddress },
   } = useWallet()
   const { nfts: collectionNFTs } = useOwnerNftByCollection(walletAddress)
   const myCollection = collectionNFTs?.[mint.toBase58()] || []
-
-  const disabled = useMemo(() => {
-    return (
-      status !== 'Voting' ||
-      !account.isAddress(proposalAddress) ||
-      !myCollection.length
-    )
-  }, [myCollection.length, proposalAddress, status])
+  const isLockedVote =
+    Object.keys(consensusMechanism || [])[0] === 'lockedTokenCounter'
+  const isComplete = useMemo(() => {
+    if (status === 'Preparing' || status === 'Voting') return false
+    return true
+  }, [status])
+  const disabled =
+    status !== 'Voting' ||
+    !account.isAddress(proposalAddress) ||
+    !myCollection.length
 
   const onVoteNftFor = () => {
     setVisible(true)
@@ -57,48 +61,51 @@ const CardVoteByNFT = ({
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Row>
-            <Col flex="auto">
-              <Typography.Title level={5}>Cast your votes</Typography.Title>
+          <Typography.Title level={5}>Cast your votes</Typography.Title>
+        </Col>
+        {isLockedVote && (
+          <Col span={24}>
+            <LockedVoting
+              proposalAddress={proposalAddress}
+              daoAddress={daoAddress}
+            />
+          </Col>
+        )}
+        {isComplete ? (
+          <Col span={24}>
+            <Withdraw
+              daoAddress={daoAddress}
+              proposalAddress={proposalAddress}
+            />
+          </Col>
+        ) : (
+          <Fragment>
+            <Col span={24}>
+              <Button
+                onClick={onVoteNftFor}
+                type="primary"
+                disabled={disabled}
+                block
+                size="large"
+                icon={<IonIcon name="thumbs-up-outline" />}
+              >
+                Agree
+              </Button>
             </Col>
-            <Col>
-              <Withdraw
-                daoAddress={daoAddress}
-                proposalAddress={proposalAddress}
-              />
+            <Col span={24}>
+              <Button
+                onClick={onVoteNftAgainst}
+                type="primary"
+                disabled={disabled}
+                block
+                size="large"
+                icon={<IonIcon name="thumbs-down-outline" />}
+              >
+                Disagree
+              </Button>
             </Col>
-          </Row>
-        </Col>
-        <Col span={24}>
-          <LockedVoting
-            proposalAddress={proposalAddress}
-            daoAddress={daoAddress}
-          />
-        </Col>
-        <Col span={24}>
-          <Button
-            onClick={onVoteNftFor}
-            type="primary"
-            disabled={disabled}
-            block
-            size="large"
-            icon={<IonIcon name="thumbs-up-outline" />}
-          >
-            Agree
-          </Button>
-        </Col>
-        <Col span={24}>
-          <Button
-            onClick={onVoteNftAgainst}
-            type="primary"
-            disabled={disabled}
-            block
-            size="large"
-            icon={<IonIcon name="thumbs-down-outline" />}
-          >
-            Disagree
-          </Button>
-        </Col>
+          </Fragment>
+        )}
       </Row>
       <ModalVoteNFT
         visible={visible}

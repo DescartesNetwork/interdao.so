@@ -14,6 +14,7 @@ import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { MintSymbol } from 'shared/antd/mint'
 import useProposalStatus from 'app/hooks/proposal/useProposalStatus'
 import useMetaData from 'app/hooks/useMetaData'
+import useProposal from 'app/hooks/proposal/useProposal'
 import ActionVote from './actionVote'
 import { useMemo } from 'react'
 
@@ -30,9 +31,11 @@ const CardVoteToken = ({
   const { balance } = useAccountBalanceByMintAddress(mint?.toBase58())
   const { status } = useProposalStatus(proposalAddress)
   const daoMetaData = useMetaData(daoAddress)
+  const { consensusMechanism } = useProposal(proposalAddress, daoAddress)
   const isMultisigDAO = daoMetaData?.daoType === 'multisig-dao'
-
-  const canWithdraw = useMemo(() => {
+  const isLockedVote =
+    Object.keys(consensusMechanism || [])[0] === 'lockedTokenCounter'
+  const isComplete = useMemo(() => {
     if (status === 'Preparing' || status === 'Voting') return false
     return true
   }, [status])
@@ -47,7 +50,7 @@ const CardVoteToken = ({
         <Col span={24}>
           <Typography.Title level={5}>Cast your votes</Typography.Title>
         </Col>
-        {!isMultisigDAO && !canWithdraw && (
+        {!isMultisigDAO && !isComplete && (
           <Col span={24}>
             <Card
               className="numric-ip-card"
@@ -85,14 +88,16 @@ const CardVoteToken = ({
             </Card>
           </Col>
         )}
+        {isLockedVote && (
+          <Col span={24}>
+            <LockedVoting
+              proposalAddress={proposalAddress}
+              daoAddress={daoAddress}
+            />
+          </Col>
+        )}
         <Col span={24}>
-          <LockedVoting
-            proposalAddress={proposalAddress}
-            daoAddress={daoAddress}
-          />
-        </Col>
-        <Col span={24}>
-          {!canWithdraw ? (
+          {!isComplete ? (
             <ActionVote
               proposalAddress={proposalAddress}
               daoAddress={daoAddress}

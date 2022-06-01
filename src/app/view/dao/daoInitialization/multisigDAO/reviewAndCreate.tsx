@@ -16,7 +16,7 @@ const ReviewAndCreate = () => {
     dao: { initDao },
     metadata: { initMetadata },
   } = useSelector((state: AppState) => state)
-  const { regime } = initDao
+  const { regime, isPublic } = initDao
   const { image, description, daoName, members } = initMetadata
 
   const {
@@ -37,6 +37,16 @@ const ReviewAndCreate = () => {
             <RowSpaceVertical
               label="Name of DAO"
               value={<Typography.Title level={1}>{daoName}</Typography.Title>}
+            />
+          </Col>
+          <Col>
+            <RowSpaceVertical
+              label="DAO privacy"
+              value={
+                <Typography.Title level={1}>
+                  {isPublic ? 'Public' : 'Member'}
+                </Typography.Title>
+              }
             />
           </Col>
         </Row>

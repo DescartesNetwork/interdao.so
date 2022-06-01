@@ -1,19 +1,24 @@
-import { useUI } from '@senhub/providers'
+import { useDispatch, useSelector } from 'react-redux'
 import isEqual from 'react-fast-compare'
+import { useUI } from '@senhub/providers'
 
 import { Button, Col, Row, Typography } from 'antd'
+import { AppDispatch, AppState } from 'app/model'
+import { setInitDao } from 'app/model/dao.controller'
 
-export type PrivacyProps = {
-  isPublic: boolean
-  onChange: (value: boolean) => void
-}
-
-const Privacy = ({ isPublic = false, onChange }: PrivacyProps) => {
+const Privacy = () => {
+  const initDao = useSelector((state: AppState) => state.dao.initDao)
+  const { isPublic } = initDao
+  const dispatch = useDispatch<AppDispatch>()
   const {
     ui: { infix },
   } = useUI()
   const mobileScreen = infix === 'xs'
   const mobileSpan = mobileScreen ? 8 : undefined
+
+  const handleClick = (isPublic: boolean) => {
+    return dispatch(setInitDao({ ...initDao, isPublic }))
+  }
   return (
     <Row gutter={[12, 12]}>
       <Col span={24}>
@@ -21,7 +26,7 @@ const Privacy = ({ isPublic = false, onChange }: PrivacyProps) => {
       </Col>
       <Col span={mobileSpan}>
         <Button
-          onClick={() => onChange(false)}
+          onClick={() => handleClick(false)}
           className={isEqual(isPublic, false) ? '' : 'btn-unselect'}
           block
         >
@@ -30,7 +35,7 @@ const Privacy = ({ isPublic = false, onChange }: PrivacyProps) => {
       </Col>
       <Col span={mobileSpan}>
         <Button
-          onClick={() => onChange(true)}
+          onClick={() => handleClick(true)}
           className={isEqual(isPublic, true) ? '' : 'btn-unselect'}
           block
         >

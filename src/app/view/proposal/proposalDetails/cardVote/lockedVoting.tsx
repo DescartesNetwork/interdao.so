@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Col, Row, Space, Tooltip, Typography } from 'antd'
@@ -26,17 +26,12 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
   const [remainingTime, setRemainingTime] = useState(defaultRemainingTime)
   const { status } = useProposalStatus(proposalAddress)
   const voteAmount = useSelector((state: AppState) => state.voteBid.amount)
-  const { consensusMechanism, endDate, startDate } = useProposal(
-    proposalAddress,
-    daoAddress,
-  )
+  const { endDate, startDate } = useProposal(proposalAddress, daoAddress)
 
   const voteNow = new Date().getTime()
   const endTime = Number(endDate) * 1000
   const startTime = Number(startDate) * 1000
 
-  const isLockedVote =
-    Object.keys(consensusMechanism || [])[0] === 'lockedTokenCounter'
   const remaining = voteNow < endTime ? endTime - voteNow : 0
   const votePower = (Number(voteAmount) * remaining) / 1000
 
@@ -53,8 +48,6 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
     }, 1000)
     return () => clearInterval(intervalId)
   }, [endTime, startTime, status, updateRemainingTime])
-
-  if (!isLockedVote) return <Fragment />
 
   return (
     <Row gutter={[16, 16]}>

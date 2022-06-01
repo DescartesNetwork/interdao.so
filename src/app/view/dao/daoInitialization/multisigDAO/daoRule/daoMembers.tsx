@@ -8,7 +8,7 @@ import IonIcon from 'shared/antd/ionicon'
 import MemberInput from './memberInput'
 
 import { AppDispatch, AppState } from 'app/model'
-import { DAOMember, setInitMetadata } from 'app/model/metadata.controller'
+import { setInitMetadata } from 'app/model/metadata.controller'
 
 const MY_INDEX = 0
 const DAOMembers = () => {
@@ -61,64 +61,6 @@ const DAOMembers = () => {
     return dispatch(setInitMetadata({ members: nextMembers }))
   }
 
-  const test = () => {
-    const members: DAOMember[] = [
-      {
-        name: 'tuan',
-        walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgn',
-      },
-      {
-        name: 'tuan',
-        walletAddress: '6JsMB6PRrgvb847ZDkPMkJaiab826GhyKfCkQxhWzVTd',
-      },
-      // {
-      //   name: 'tuan',
-      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgb',
-      // },
-      // {
-      //   name: 'tuan',
-      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgc',
-      // },
-      // {
-      //   name: 'tuan',
-      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgd',
-      // },
-      // {
-      //   name: 'tuan',
-      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzge',
-      // },
-      // {
-      //   name: 'tuan',
-      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgf',
-      // },
-      // {
-      //   name: 'tuan',
-      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgi',
-      // },
-      // {
-      //   name: 'tuan',
-      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgo',
-      // },
-      // {
-      //   name: 'tuan',
-      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgz',
-      // },
-      // {
-      //   name: 'tuan',
-      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgx',
-      // },
-      // {
-      //   name: 'tuan',
-      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgv',
-      // },
-      // {
-      //   name: 'tuan',
-      //   walletAddress: '2vAEiACep3J1N2J6YY9gt4gAbbFEvuVdWgyu8KUkgzgt',
-      // },
-    ]
-    return dispatch(setInitMetadata({ members }))
-  }
-
   useEffect(() => {
     setDefaultValue()
   }, [setDefaultValue])
@@ -169,7 +111,6 @@ const DAOMembers = () => {
               Add
             </Button>
           </Col>
-          <Button onClick={test}>Test</Button>
         </Row>
       </Col>
     </Row>
