@@ -23,6 +23,7 @@ export type MetaData = {
   optionals: string[]
   daoType: 'flexible-dao' | 'multisig-dao'
   members: DAOMember[]
+  distributorAddress: string
 }
 
 const DEFAULT_META_DATA: MetaData = {
@@ -32,6 +33,7 @@ const DEFAULT_META_DATA: MetaData = {
   optionals: [],
   daoType: 'flexible-dao',
   members: [],
+  distributorAddress: '',
 }
 
 type MetaDataState = {

@@ -50,7 +50,7 @@ const CirculatingSupplyInput = ({
       <Col>
         <Space>
           <Typography.Text type="secondary">
-            Suggestion (Token Supply):
+            Suggestion Token Supply:
           </Typography.Text>
           <Typography.Text>{numeric(suggestion).format('0,0')}</Typography.Text>
         </Space>

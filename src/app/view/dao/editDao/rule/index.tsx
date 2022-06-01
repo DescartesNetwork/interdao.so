@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { account, utils } from '@senswap/sen-js'
+import { account } from '@senswap/sen-js'
 import { SystemProgram } from '@solana/web3.js'
 import { BN } from 'bn.js'
 
@@ -16,7 +16,7 @@ const Rule = ({ daoAddress }: { daoAddress: string }) => {
   const {
     dao: { daos },
   } = useSelector((state: AppState) => state)
-  const { mint, regime, supply } = daos?.[daoAddress] || {
+  const { mint, regime, supply, isNft, isPublic } = daos?.[daoAddress] || {
     regime: {},
     supply: new BN(0),
     mint: SystemProgram.programId,
@@ -29,11 +29,13 @@ const Rule = ({ daoAddress }: { daoAddress: string }) => {
     if (!account.isAddress(daoAddress)) return
     const nextData: InitDao = {
       mintAddress: mint.toBase58(),
-      supply: new BN(utils.undecimalize(BigInt(supply.toNumber()), decimals)),
+      supply: supply.div(new BN(10 ** decimals)),
       regime,
+      isNft,
+      isPublic,
     }
     return dispatch(setInitDao(nextData))
-  }, [daoAddress, decimals, dispatch, mint, regime, supply])
+  }, [daoAddress, decimals, dispatch, isNft, isPublic, mint, regime, supply])
 
   useEffect(() => {
     setDefaultValue()

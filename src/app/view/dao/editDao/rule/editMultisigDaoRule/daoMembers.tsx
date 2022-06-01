@@ -4,10 +4,10 @@ import isEqual from 'react-fast-compare'
 
 import { Button, Col, Row, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
+import MemberInput from 'app/view/dao/daoInitialization/multisigDAO/daoRule/memberInput'
 
 import { AppDispatch, AppState } from 'app/model'
 import { setInitMetadata } from 'app/model/metadata.controller'
-import MemberInput from 'app/view/dao/daoInitialization/multisigDAO/daoRule/memberInput'
 
 const DAOMembers = () => {
   const [oldMember, setOldMember] = useState<string[]>([])

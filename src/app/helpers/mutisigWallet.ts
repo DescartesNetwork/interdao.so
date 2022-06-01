@@ -7,7 +7,14 @@ import {
   BN,
   utils,
 } from '@project-serum/anchor'
-import { PublicKey } from '@solana/web3.js'
+import { PublicKey, Transaction, ComputeBudgetProgram } from '@solana/web3.js'
+import { FeeOptions, FEE_OPTIONS, isAddress } from '@sentre/utility'
+
+import configs from 'app/configs'
+
+const {
+  sol: { utility },
+} = configs
 
 class MultisigWallet {
   private _mint: PublicKey
@@ -49,7 +56,7 @@ class MultisigWallet {
     return anchorProvider
   }
 
-  initializeAccount = async (
+  initializeAccountIx = async (
     associatedTokenAccount: web3.PublicKey,
     token: web3.PublicKey,
     authority: web3.PublicKey,
@@ -96,8 +103,7 @@ class MultisigWallet {
       programId: utils.token.ASSOCIATED_PROGRAM_ID,
       data: Buffer.from([]),
     })
-    const tx = new web3.Transaction().add(ix)
-    return await provider.sendAndConfirm(tx)
+    return ix
   }
 
   initializeMint = async (
@@ -108,19 +114,21 @@ class MultisigWallet {
     const spl = Spl.token()
     const ix = await (spl.account as any).mint.createInstruction(token)
     const tx = new web3.Transaction().add(ix)
-    await provider.sendAndConfirm(tx, [token])
-    return await spl.rpc.initializeMint(
-      decimals,
-      provider.wallet.publicKey,
-      provider.wallet.publicKey,
-      {
-        accounts: {
-          mint: token.publicKey,
-          rent: web3.SYSVAR_RENT_PUBKEY,
+    tx.add(
+      spl.instruction.initializeMint(
+        decimals,
+        provider.wallet.publicKey,
+        provider.wallet.publicKey,
+        {
+          accounts: {
+            mint: token.publicKey,
+            rent: web3.SYSVAR_RENT_PUBKEY,
+          },
+          signers: [],
         },
-        signers: [],
-      },
+      ),
     )
+    return provider.sendAndConfirm(tx, [token])
   }
 
   getProvider = async () => {
@@ -139,32 +147,101 @@ class MultisigWallet {
     const provider = await this.getProvider()
     await this.initializeMint(0, mint, provider)
     this._mint = mint.publicKey
+    return mint.publicKey.toBase58()
   }
 
   isValidMint = (): boolean => {
     return this._mint.toBase58() !== DEFAULT_EMPTY_ADDRESS
   }
 
-  mintToAccount = async (pubkey: PublicKey) => {
+  mintToAccount = async (dstAddress: string, amount: number) => {
+    if (!this.isValidMint()) throw new Error('Please create mint first!')
+    await utility.safeMintTo({
+      amount: new BN(amount),
+      tokenAddress: this._mint.toBase58(),
+      dstWalletAddress: dstAddress,
+    })
+  }
+  mintToAccounts = async (pubkeys: PublicKey[]) => {
     if (!this.isValidMint()) throw new Error('Please create mint first!')
 
     const provider = await this.getProvider()
-    const spl = Spl.token()
-    // Derive token account
-    const tokenAccount = await utils.token.associatedAddress({
-      mint: this._mint,
-      owner: pubkey,
-    })
-    await this.initializeAccount(tokenAccount, this._mint, pubkey, provider)
+    const transaction = new Transaction()
+    const additionalComputeBudgetInstruction =
+      ComputeBudgetProgram.requestUnits({
+        units: 400000,
+        additionalFee: 0,
+      })
+    transaction.add(additionalComputeBudgetInstruction)
 
-    //mintTo
-    await spl.rpc.mintTo(new BN(1), {
-      accounts: {
+    for (const pubkey of pubkeys) {
+      const tokenAccount = await utils.token.associatedAddress({
         mint: this._mint,
-        to: tokenAccount,
-        authority: provider.wallet.publicKey,
+        owner: pubkey,
+      })
+      const ixCreate = await this.initializeAccountIx(
+        tokenAccount,
+        this._mint,
+        pubkey,
+        provider,
+      )
+      transaction.add(ixCreate)
+
+      const ixMintTo = await this.wrapSafeMintTo({
+        amount: new BN(1),
+        tokenAddress: this._mint.toBase58(),
+        dstWalletAddress: tokenAccount.toBase58(),
+        feeOptions: FEE_OPTIONS(provider.wallet.publicKey.toBase58()),
+      })
+
+      transaction.add(ixMintTo)
+    }
+
+    return provider.sendAndConfirm(transaction)
+  }
+
+  wrapSafeMintTo = async ({
+    amount,
+    tokenAddress,
+    dstWalletAddress,
+    feeOptions,
+  }: {
+    amount: BN
+    tokenAddress: string
+    dstWalletAddress: string
+    feeOptions: FeeOptions
+  }) => {
+    const provider = await this.getProvider()
+    const { fee, feeCollectorAddress } = feeOptions
+    if (!isAddress(feeCollectorAddress))
+      throw new Error('Invalid fee collector address')
+    if (amount.isNeg()) throw new Error('Token amount must not be negative')
+    if (!isAddress(tokenAddress)) throw new Error('Invalid token address')
+    if (!isAddress(dstWalletAddress))
+      throw new Error('Invalid destination wallet address')
+
+    const tokenPublicKey = new web3.PublicKey(tokenAddress)
+    const dstWalletPublicKey = new web3.PublicKey(dstWalletAddress)
+    const dstPublicKey = await utils.token.associatedAddress({
+      mint: tokenPublicKey,
+      owner: dstWalletPublicKey,
+    })
+
+    const txId = await utility.program.instruction.safeMintTo(amount, fee, {
+      accounts: {
+        payer: provider.wallet.publicKey,
+        authority: dstWalletPublicKey,
+        dst: dstPublicKey,
+        feeCollector: new web3.PublicKey(feeCollectorAddress),
+        mint: tokenPublicKey,
+        tokenProgram: utils.token.TOKEN_PROGRAM_ID,
+        associatedTokenProgram: utils.token.ASSOCIATED_PROGRAM_ID,
+        systemProgram: web3.SystemProgram.programId,
+        rent: web3.SYSVAR_RENT_PUBKEY,
       },
     })
+
+    return txId
   }
 
   burnAccount = async (
@@ -193,5 +270,4 @@ class MultisigWallet {
     return this._mint.toBase58()
   }
 }
-
 export default MultisigWallet

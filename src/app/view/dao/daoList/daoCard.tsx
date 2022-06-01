@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { DaoData } from '@interdao/core'
-import { useUI } from '@senhub/providers'
+import { useAccount, useUI, useWallet } from '@senhub/providers'
 
 import {
   Avatar,
@@ -31,7 +31,7 @@ import autonomous from 'app/static/images/system/bg-autonomous.png'
 import democratic from 'app/static/images/system/bg-democratic.png'
 import dictatorial from 'app/static/images/system/bg-dictatorial.png'
 
-export type DaoCardProps = { daoAddress: string; special?: boolean }
+export type DaoCardProps = { daoAddress: string }
 export type DaoCardBackground = 'autonomous' | 'democratic' | 'dictatorial'
 const DAO_CARD_BG = {
   autonomous,
@@ -42,12 +42,21 @@ const PAGE_PADDING = 24
 const HEIGHT_RATIO = 1.777777
 const MAX_WIDTH_RATE = 24 / 18 // full screen is 24 col, max width is 18 col
 
-const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
+const DaoCard = ({ daoAddress }: DaoCardProps) => {
   const daos = useSelector((state: AppState) => state.dao.daos)
+  const { regime, nonce, mint, isPublic } =
+    daos?.[daoAddress] || ({} as DaoData)
   const history = useHistory()
   const {
     ui: { width },
   } = useUI()
+  const {
+    wallet: { address: myAddress },
+  } = useWallet()
+  const { accounts } = useAccount()
+  const members = useMembers(daoAddress)
+  const metaData = useMetaData(daoAddress)
+  const parseRegime = Object.keys(regime)?.[0]
 
   const heightRatio = useMemo(() => {
     if (width < 768) return HEIGHT_RATIO
@@ -55,19 +64,42 @@ const DaoCard = ({ daoAddress, special }: DaoCardProps) => {
     return HEIGHT_RATIO * 3
   }, [width])
 
-  const { regime, nonce, mint } = daos?.[daoAddress] || ({} as DaoData)
-  const members = useMembers(daoAddress)
-  const metaData = useMetaData(daoAddress)
-  const parseRegime = Object.keys(regime)?.[0]
+  const handleClick = () => {
+    if (isPublic || !metaData) return history.push(`dao/${daoAddress}`)
+    const { daoType, members } = metaData
+
+    if (daoType === 'flexible-dao') {
+      const mints = []
+      for (const accountAddr in accounts) mints.push(accounts[accountAddr].mint)
+
+      if (!mints.includes(mint.toBase58()))
+        return window.notify({
+          type: 'warning',
+          description: 'You are not a member of this DAO',
+        })
+    }
+    if (daoType === 'multisig-dao') {
+      let valid = false
+      for (const { walletAddress } of members)
+        if (walletAddress === myAddress) {
+          valid = true
+          break
+        }
+
+      if (!valid)
+        return window.notify({
+          type: 'warning',
+          description: 'You are not a member of this DAO',
+        })
+    }
+    return history.push(`dao/${daoAddress}`)
+  }
+
   const isMobile = width < 768
   const desktopWidth = width > 992 ? width / MAX_WIDTH_RATE : width
 
   return (
-    <Row
-      gutter={[0, 0]}
-      className="dao-card-wrapper"
-      onClick={() => history.push(`dao/${daoAddress}`)}
-    >
+    <Row gutter={[0, 0]} className="dao-card-wrapper" onClick={handleClick}>
       <Col
         span={24}
         className="dao-card-img"

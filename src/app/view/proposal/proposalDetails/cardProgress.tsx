@@ -12,8 +12,8 @@ import { ProposalChildCardProps } from './index'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
-import useProposalStatus from 'app/hooks/useProposalStatus'
-import useProposal from 'app/hooks/useProposal'
+import useProposalStatus from 'app/hooks/proposal/useProposalStatus'
+import useProposal from 'app/hooks/proposal/useProposal'
 
 const STROKE_COLOR = {
   dark: { default: '#312B29', agree: '#698033', disagree: '#F9575E' },
@@ -27,7 +27,6 @@ const CardProgress = ({
   const [backGroundColor, setBackGroundColor] = useState('')
   const [successColor, setSuccessColor] = useState('')
   const daos = useSelector((state: AppState) => state.dao.daos)
-
   const { votingAgainstPower, votingForPower, consensusQuorum } = useProposal(
     proposalAddress,
     daoAddress,
@@ -121,7 +120,7 @@ const CardProgress = ({
             <Typography.Text>
               {numeric(
                 utils.undecimalize(
-                  BigInt(powerRequire.toString()),
+                  BigInt(powerRequire.add(new BN(1)).toString()),
                   mintDecimal,
                 ),
               ).format('0,0.[0000]')}{' '}

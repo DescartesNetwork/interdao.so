@@ -9,6 +9,7 @@ import History from './history'
 import IonIcon from 'shared/antd/ionicon'
 
 import configs from 'app/configs'
+
 import './index.less'
 
 const {

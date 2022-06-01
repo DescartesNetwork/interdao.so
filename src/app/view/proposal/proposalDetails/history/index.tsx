@@ -5,7 +5,7 @@ import { Card, Col, Row, Typography, Table, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { HISTORY_COLUMNS_MULTISIG, HISTORY_COLUMNS_FLEXIBLE } from './column'
-import { getReceipts } from 'app/hooks/useReceipts'
+import { getReceipts } from 'app/hooks/proposal/useReceipts'
 
 import './index.less'
 import useMetaData from 'app/hooks/useMetaData'

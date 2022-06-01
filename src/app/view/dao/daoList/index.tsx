@@ -61,8 +61,8 @@ const DaoList = () => {
       ) : (
         (searchData || filterDaoAddress).map((daoAddress) => (
           <Col key={daoAddress} xs={24} md={12} xl={8}>
-            <LazyLoad height={479.75}>
-              <DaoCard daoAddress={daoAddress} special />
+            <LazyLoad height={479.75} offset={2}>
+              <DaoCard daoAddress={daoAddress} />
             </LazyLoad>
           </Col>
         ))

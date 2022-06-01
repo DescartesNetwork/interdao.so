@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { Col, Row, Space, Tooltip, Typography } from 'antd'
@@ -58,8 +58,13 @@ const InfoMember = ({ daoAddress }: { daoAddress: string }) => {
 const AmountMembers = ({ daoAddress }: { daoAddress: string }) => {
   const members = useMembers(daoAddress)
   const metaData = useMetaData(daoAddress)
+  const isMultisig = metaData?.daoType === 'multisig-dao'
 
-  const isMultisigDAO = metaData?.daoType === 'multisig-dao'
+  const amountMembers = useMemo(() => {
+    if (!isMultisig) return members
+    const { members: daoMembers } = metaData
+    return daoMembers.length
+  }, [isMultisig, members, metaData])
 
   return (
     <Row gutter={[8, 8]}>
@@ -68,7 +73,7 @@ const AmountMembers = ({ daoAddress }: { daoAddress: string }) => {
           <Typography.Text className="caption" type="secondary">
             Members
           </Typography.Text>
-          {isMultisigDAO && (
+          {isMultisig && (
             <Tooltip
               placement="bottomLeft"
               overlayClassName="info-member"
@@ -82,7 +87,7 @@ const AmountMembers = ({ daoAddress }: { daoAddress: string }) => {
           )}
         </Space>
       </Col>
-      <Col span={24}> {numeric(members).format('0,0')}</Col>
+      <Col span={24}> {numeric(amountMembers).format('0,0')}</Col>
     </Row>
   )
 }
