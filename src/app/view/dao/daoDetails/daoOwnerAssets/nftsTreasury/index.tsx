@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 import axios from 'axios'
 
@@ -8,14 +9,21 @@ import useNftMetaData from 'app/hooks/useNftMetaData'
 import { fetchYourOwnerNTFs, MetadataDataType } from 'app/helpers/metaplex'
 
 import IMAGE_DEFAULT from 'app/static/images/system/avatar.png'
+import { AppState } from 'app/model'
 
 const NftTreasury = ({ daoAddress }: { daoAddress: string }) => {
   const [listNFTs, setListNFTs] = useState<MetadataDataType[]>()
+  const daos = useSelector((state: AppState) => state.dao.daos)
+
+  const daoMasterAddress = useMemo(() => {
+    const { master } = daos[daoAddress] || {}
+    return master?.toBase58() || ''
+  }, [daos, daoAddress])
 
   const getYourOwnerNFTs = useCallback(async () => {
-    const nfts = await fetchYourOwnerNTFs(daoAddress)
-    if (nfts) return setListNFTs(nfts)
-  }, [daoAddress])
+    const nfts = await fetchYourOwnerNTFs(daoMasterAddress)
+    return setListNFTs(nfts)
+  }, [daoMasterAddress])
 
   useEffect(() => {
     getYourOwnerNFTs()
