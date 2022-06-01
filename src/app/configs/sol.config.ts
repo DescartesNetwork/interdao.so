@@ -10,7 +10,7 @@ import { Net } from 'shared/runtime'
 type Conf = {
   interDao: InterDAO
   utility: Utility
-  fee: string
+  fee: number
   taxman: string
 }
 
@@ -19,9 +19,13 @@ const conf: Record<Net, Conf> = {
    * Development configurations
    */
   devnet: {
-    interDao: new InterDAO(new SafeWallet(), 'https://api.devnet.solana.com'),
+    interDao: new InterDAO(
+      new SafeWallet(),
+      'https://api.devnet.solana.com',
+      'DaoMWqkUbZd1amaqxoxqCBveRbdcVZbVFNqa22EwCfMi',
+    ),
     utility: new Utility(new SafeWallet(), 'https://api.devnet.solana.com'),
-    fee: '50000', // 0.000005 SOL
+    fee: 1000000, // 0.000005 SOL
     taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',
   },
 
@@ -31,7 +35,7 @@ const conf: Record<Net, Conf> = {
   testnet: {
     interDao: new InterDAO(new SafeWallet(), 'https://api.testnet.solana.com'),
     utility: new Utility(new SafeWallet(), 'https://api.devnet.solana.com'),
-    fee: '50000', // 0.000005 SOL
+    fee: 1000000, // 0.000005 SOL
     taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',
   },
 
@@ -41,7 +45,7 @@ const conf: Record<Net, Conf> = {
   mainnet: {
     interDao: new InterDAO(new SafeWallet(), 'https://ssc-dao.genesysgo.net/'),
     utility: new Utility(new SafeWallet(), 'https://ssc-dao.genesysgo.net/'),
-    fee: '50000', // 0.000005 SOL
+    fee: 1000000, // 0.000005 SOL
     taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',
   },
 }

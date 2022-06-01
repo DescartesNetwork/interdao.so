@@ -34,7 +34,7 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
   const metaData = useMetaData(daoAddress)
   const history = useHistory()
 
-  const { regime, nonce, mint, authority } = daos?.[daoAddress] || {
+  const { regime, nonce, mint, authority, isNft } = daos?.[daoAddress] || {
     regime: {},
     nonce: new BN(0),
     mint: SystemProgram.programId,
@@ -116,10 +116,14 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
               <StatisticCard
                 title="Vote by"
                 value={
-                  <Space>
-                    <MintAvatar mintAddress={mint.toBase58()} />
-                    <MintSymbol mintAddress={mint.toBase58()} />
-                  </Space>
+                  isNft ? (
+                    'NFT'
+                  ) : (
+                    <Space>
+                      <MintAvatar mintAddress={mint.toBase58()} />
+                      <MintSymbol mintAddress={mint.toBase58()} />
+                    </Space>
+                  )
                 }
               />
             </Col>

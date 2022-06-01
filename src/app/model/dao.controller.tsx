@@ -26,6 +26,8 @@ export const DEFAULT_DAO_DATA = {
   metadata: undefined,
   dao: undefined,
   regime: DaoRegimes.Dictatorial,
+  isPublic: true,
+  isNft: false,
 }
 
 export type InitDao = {
@@ -34,6 +36,8 @@ export type InitDao = {
   metadata?: Buffer
   dao?: web3.Keypair
   regime: DaoRegime
+  isPublic: boolean
+  isNft: boolean
 }
 
 export type DaoState = {
