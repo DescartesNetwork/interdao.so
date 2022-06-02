@@ -12,6 +12,7 @@ import {
   Image,
   Row,
   Space,
+  Tag,
   Tooltip,
   Typography,
 } from 'antd'
@@ -147,6 +148,9 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
                           : shortenAddress(daoAddress)}
                       </Typography.Title>
                     </Tooltip>
+                    <Tag className="dao-tag" style={{ margin: 0 }}>
+                      {isPublic ? 'Public' : 'Member only'}
+                    </Tag>
                     <Space size={2} style={{ marginLeft: -3 }}>
                       {metaData?.optionals?.map(
                         (url, idx) =>
