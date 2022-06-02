@@ -5,7 +5,7 @@ import BN from 'bn.js'
 import { useUI, useWallet } from '@senhub/providers'
 
 import { Avatar, Button, Card, Col, Row, Space, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import StatisticCard from 'app/components/statisticCard'
 import RegimeTag from 'app/components/regimeTag'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'

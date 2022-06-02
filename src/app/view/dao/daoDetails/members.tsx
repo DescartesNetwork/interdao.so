@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { Col, Row, Space, Tooltip, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import useMembers from 'app/hooks/useMembers'
 import useMetaData from 'app/hooks/useMetaData'

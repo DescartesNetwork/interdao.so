@@ -1,38 +1,24 @@
 import { DEFAULT_EMPTY_ADDRESS } from '@senswap/sen-js'
-import {
-  Spl,
-  AnchorProvider,
-  web3,
-  setProvider,
-  BN,
-  utils,
-} from '@project-serum/anchor'
+import { ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { Spl, AnchorProvider, web3, BN, utils } from '@project-serum/anchor'
 import { PublicKey } from '@solana/web3.js'
 import { FeeOptions, isAddress } from '@sentre/utility'
 
 import configs from 'app/configs'
-import { ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import SafeWallet from 'app/helpers/safeWallet'
+import { rpc } from 'shared/runtime'
 
 const {
   sol: { utility },
 } = configs
+
+const DEFAULT_DECIMALS = 9
 
 class MultisigWallet {
   private _mint: PublicKey
 
   constructor(mintAddress: string) {
     this._mint = new PublicKey(mintAddress)
-  }
-
-  getAnchorProvider = async (node: string): Promise<AnchorProvider> => {
-    const connection = new web3.Connection(node, 'confirmed')
-    const anchorProvider = new AnchorProvider(connection, new SafeWallet(), {
-      commitment: 'confirmed',
-      skipPreflight: true,
-    })
-    setProvider(anchorProvider)
-    return anchorProvider
   }
 
   initializeMint = async (
@@ -61,10 +47,12 @@ class MultisigWallet {
   }
 
   getProvider = async () => {
-    const { splt } = window.sentre
-
-    const provider = await this.getAnchorProvider(splt.nodeUrl)
-    return provider
+    const connection = new web3.Connection(rpc, 'confirmed')
+    const anchorProvider = new AnchorProvider(connection, new SafeWallet(), {
+      commitment: 'confirmed',
+      skipPreflight: true,
+    })
+    return anchorProvider
   }
 
   createNewTokenAndMintTo = async (walletAddress: string, amount: number) => {
@@ -72,16 +60,16 @@ class MultisigWallet {
     const provider = await this.getProvider()
 
     const spl = Spl.token()
+    // Create Mint Instruction
     const ix = await (spl.account as any).mint.createInstruction(mint)
     const tx = new web3.Transaction().add(ix)
     const dstAddress = await utils.token.associatedAddress({
       owner: new PublicKey(walletAddress),
       mint: mint.publicKey,
     })
-
     tx.add(
       spl.instruction.initializeMint(
-        9,
+        DEFAULT_DECIMALS,
         provider.wallet.publicKey,
         provider.wallet.publicKey,
         {
@@ -92,6 +80,7 @@ class MultisigWallet {
         },
       ),
     )
+    // Mint to instruction
     const mintToIx = await utility.program.methods
       .safeMintTo(new BN(amount), new BN(0))
       .accounts({
@@ -113,9 +102,7 @@ class MultisigWallet {
     return mint.publicKey.toBase58()
   }
 
-  isValidMint = (): boolean => {
-    return this._mint.toBase58() !== DEFAULT_EMPTY_ADDRESS
-  }
+  isValidMint = (): boolean => this._mint.toBase58() !== DEFAULT_EMPTY_ADDRESS
 
   mintToAccount = async (dstAddress: string, amount: number) => {
     if (!this.isValidMint()) throw new Error('Please create mint first!')

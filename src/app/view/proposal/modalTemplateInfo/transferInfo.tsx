@@ -6,7 +6,7 @@ import moment from 'moment'
 import { Col, Row, Space, Tooltip, Typography } from 'antd'
 import RowSpaceBetween from 'app/components/rowSpaceBetween'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import RowSpaceVertical from 'app/components/rowSpaceVertical'
 
 import useMintDecimals from 'shared/hooks/useMintDecimals'

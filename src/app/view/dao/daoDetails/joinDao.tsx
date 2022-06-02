@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccount, useWallet } from '@senhub/providers'
 
 import { Button, Col, Image, Modal, Row, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { DaoDetailsProps } from './index'
 import useMetaData from 'app/hooks/useMetaData'
