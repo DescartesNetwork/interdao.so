@@ -1,4 +1,4 @@
-import { ChangeEvent, useMemo } from 'react'
+import { ChangeEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
@@ -60,17 +60,13 @@ const DaoInformation = () => {
     return dispatch(setInitMetadata({ optionals: socials }))
   }
 
-  const test = useMemo(() => {
-    console.log('initMetadata.daoName', initMetadata.daoName)
-    return initMetadata.daoName
-  }, [initMetadata.daoName])
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <Space direction="vertical" style={{ width: '100%' }}>
           <Typography.Text>DAO name</Typography.Text>
           <Input
-            value={test}
+            value={initMetadata.daoName}
             placeholder="Input DAO name"
             onChange={onChange}
             name="daoName"
