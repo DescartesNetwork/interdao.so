@@ -48,26 +48,28 @@ const DaoWatcher = () => {
   }, [dispatch, walletAddress])
   // Watch dao events
   const watchData = useCallback(async () => {
-    initializeDAOEventId = await interDao.addListener(
-      'InitializeDAOEvent',
-      reloadDaoData,
-    )
-    updateDaoRegimeEventId = await interDao.addListener(
-      'UpdateDaoRegimeEvent',
-      reloadDaoData,
-    )
-    updateSupplyEventId = await interDao.addListener(
-      'UpdateSupplyEvent',
-      reloadDaoData,
-    )
-    transferAuthorityEventId = await interDao.addListener(
-      'TransferAuthorityEvent',
-      reloadDaoData,
-    )
-    updateDaoMetadataEventId = await interDao.addListener(
-      'UpdateDaoMetadataEvent',
-      reloadDaoData,
-    )
+    setTimeout(async () => {
+      initializeDAOEventId = await interDao.addListener(
+        'InitializeDAOEvent',
+        reloadDaoData,
+      )
+      updateDaoRegimeEventId = await interDao.addListener(
+        'UpdateDaoRegimeEvent',
+        reloadDaoData,
+      )
+      updateSupplyEventId = await interDao.addListener(
+        'UpdateSupplyEvent',
+        reloadDaoData,
+      )
+      transferAuthorityEventId = await interDao.addListener(
+        'TransferAuthorityEvent',
+        reloadDaoData,
+      )
+      updateDaoMetadataEventId = await interDao.addListener(
+        'UpdateDaoMetadataEvent',
+        reloadDaoData,
+      )
+    }, 1000)
   }, [reloadDaoData])
 
   useEffect(() => {
