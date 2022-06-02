@@ -89,7 +89,7 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
 
         window.notify({
           type: 'success',
-          description: 'Close receipt successfully. Click to view details!',
+          description: 'Successful withdrawal. Click to view details!',
           onClick: () => window.open(explorer(response.txId), '_blank'),
         })
       }
