@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { DaoData } from '@interdao/core'
 import { useAccount, useUI, useWallet } from '@senhub/providers'
 
 import {
@@ -43,9 +42,9 @@ const HEIGHT_RATIO = 1.777777
 const MAX_WIDTH_RATE = 24 / 18 // full screen is 24 col, max width is 18 col
 
 const DaoCard = ({ daoAddress }: DaoCardProps) => {
-  const daos = useSelector((state: AppState) => state.dao.daos)
-  const { regime, nonce, mint, isPublic } =
-    daos?.[daoAddress] || ({} as DaoData)
+  const { regime, nonce, mint, isPublic } = useSelector(
+    (state: AppState) => state.dao.daos[daoAddress],
+  )
   const history = useHistory()
   const {
     ui: { width },

@@ -66,7 +66,6 @@ const DaoInformation = () => {
         <Space direction="vertical" style={{ width: '100%' }}>
           <Typography.Text>DAO name</Typography.Text>
           <Input
-            value={initMetadata.daoName}
             placeholder="Input DAO name"
             onChange={onChange}
             name="daoName"
@@ -78,7 +77,6 @@ const DaoInformation = () => {
         <Space direction="vertical" style={{ width: '100%' }}>
           <Typography.Text>DAO description</Typography.Text>
           <Input.TextArea
-            value={initMetadata.description}
             placeholder="Input DAO description"
             name="description"
             onChange={onChange}
@@ -140,7 +138,6 @@ const DaoInformation = () => {
                 <Row gutter={[12, 12]}>
                   <Col span={22}>
                     <Input
-                      value={social}
                       placeholder="Input link"
                       onChange={(e: ChangeEvent<HTMLInputElement>) =>
                         onOptionalChange(e, index)

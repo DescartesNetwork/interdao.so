@@ -48,7 +48,10 @@ const ProposalWatcher = () => {
   }, [reloadProposalData])
 
   useEffect(() => {
-    watchData()
+    // I don't understand why but this fixes the watcher error
+    setTimeout(async () => {
+      watchData()
+    }, 1500)
     dispatch(getProposals()) //fetch all proposal
     // Unwatch (cancel socket)
     return () => {
