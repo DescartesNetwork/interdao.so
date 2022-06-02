@@ -1,5 +1,5 @@
 import { Button, Col, Row } from 'antd'
-import { CreateSteps } from '../initDAOContainer'
+import { CreateDaoSteps } from '../initDAOContainer'
 import { InitDAOHeaderProps } from '../initDAOHeader'
 import BackAction from './backAction'
 import ConfirmButton from './confirmButton'
@@ -20,7 +20,7 @@ const ActionButton = ({
         <BackAction step={step} onHandleStep={setStep} />
       </Col>
       <Col>
-        {step === CreateSteps.stepThree ? (
+        {step === CreateDaoSteps.stepThree ? (
           <ConfirmButton />
         ) : (
           <Button

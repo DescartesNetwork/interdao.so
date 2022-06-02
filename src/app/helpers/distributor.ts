@@ -84,7 +84,14 @@ class Distributor {
     }
   }
 
-  getReceiptData = async (recipientData: Leaf, distributorAddress: string) => {
+  getReceiptData = async (
+    walletAddress: string,
+    distributorAddress: string,
+  ) => {
+    const recipientData = await this.getRecipientData(
+      walletAddress,
+      distributorAddress,
+    )
     if (!recipientData) return false
     const { salt } = recipientData
     const receiptAddress = await utility.deriveReceiptAddress(
@@ -96,7 +103,11 @@ class Distributor {
     return receiptData
   }
 
-  claimToken = async (recipientData: Leaf, distributorAddress: string) => {
+  claimToken = async (walletAddress: string, distributorAddress: string) => {
+    const recipientData = await this.getRecipientData(
+      walletAddress,
+      distributorAddress,
+    )
     if (!recipientData) throw new Error('You not on the list')
 
     const merkleDistributor = await this.getMerkleDistributor(

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { CID } from 'ipfs-core'
 
 import { Col, Row } from 'antd'
-import MetaDataForm from '../daoInitialization/metaDataForm'
+import DaoInformation from '../daoInitialization/daoInfomation'
 import ActionButton from './actionButton'
 
 import IPFS from 'shared/pdb/ipfs'
@@ -60,7 +60,7 @@ const Information = ({ daoAddress }: { daoAddress: string }) => {
   return (
     <Row gutter={[32, 32]}>
       <Col span={24}>
-        <MetaDataForm />
+        <DaoInformation />
       </Col>
       <Col span={24}>
         <ActionButton

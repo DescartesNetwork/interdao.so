@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 
 import { Row, Col, Card } from 'antd'
-import InitDAOContainer, { CreateSteps } from './initDAOContainer'
+import InitDAOContainer, { CreateDaoSteps } from './initDAOContainer'
 import InitDAOHeader from './initDAOHeader'
 import ActionButton from './actions'
 
@@ -23,9 +23,9 @@ const DaoInitialization = () => {
 
   const onNextStep = useCallback(async () => {
     try {
-      if (step === CreateSteps.stepOne && !initMetadata)
+      if (step === CreateDaoSteps.stepOne && !initMetadata)
         throw new Error('Invalid Metadata')
-      if (step === CreateSteps.stepTwo && !initDao)
+      if (step === CreateDaoSteps.stepTwo && !initDao)
         throw new Error('Invalid DAO data')
       return setStep(step + 1)
     } catch (err: any) {
@@ -42,13 +42,17 @@ const DaoInitialization = () => {
 
   const disabled = useMemo(() => {
     const { daoName, image, daoType, members, description } = initMetadata
-    if (step === CreateSteps.stepOne)
+    if (step === CreateDaoSteps.stepOne)
       return !daoName || !image || !description || !validLink
 
-    if (step === CreateSteps.stepTwo && daoType === 'flexible-dao')
+    if (step === CreateDaoSteps.stepTwo && daoType === 'flexible-dao')
       return !mintAddress || !regime || !Number(supply)
 
-    if (step === CreateSteps.stepTwo && daoType === 'multisig-dao' && members) {
+    if (
+      step === CreateDaoSteps.stepTwo &&
+      daoType === 'multisig-dao' &&
+      members
+    ) {
       let valid = false
       for (const member of members) {
         const { name, walletAddress } = member

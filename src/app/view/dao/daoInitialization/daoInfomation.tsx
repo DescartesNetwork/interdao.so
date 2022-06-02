@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
@@ -19,10 +19,10 @@ import { fileToBase64 } from 'app/helpers'
 import { MetaData, setInitMetadata } from 'app/model/metadata.controller'
 import { AppDispatch, AppState } from 'app/model'
 
-const MetaDataForm = () => {
-  const {
-    metadata: { initMetadata },
-  } = useSelector((state: AppState) => state)
+const DaoInformation = () => {
+  const initMetadata = useSelector(
+    (state: AppState) => state.metadata.initMetadata,
+  )
   const dispatch = useDispatch<AppDispatch>()
 
   const formatMetaData = async (imgBase64: string | ArrayBuffer | null) => {
@@ -59,13 +59,18 @@ const MetaDataForm = () => {
     socials.splice(index, 1)
     return dispatch(setInitMetadata({ optionals: socials }))
   }
+
+  const test = useMemo(() => {
+    console.log('initMetadata.daoName', initMetadata.daoName)
+    return initMetadata.daoName
+  }, [initMetadata.daoName])
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <Space direction="vertical" style={{ width: '100%' }}>
           <Typography.Text>DAO name</Typography.Text>
           <Input
-            value={initMetadata.daoName}
+            value={test}
             placeholder="Input DAO name"
             onChange={onChange}
             name="daoName"
@@ -173,4 +178,4 @@ const MetaDataForm = () => {
   )
 }
 
-export default MetaDataForm
+export default DaoInformation
