@@ -2,7 +2,7 @@ import { Card, Col, Row } from 'antd'
 
 import { useRootSelector, RootState } from 'os/store'
 
-import storePanel1 from 'os/static/images/market/store-bpanel1.png'
+import storePanel1 from 'os/static/images/market/store-bpanel1.jpeg'
 import storePanel2 from 'os/static/images/market/store-bpanel2.png'
 
 const PAGE_PADDING = 20
@@ -12,19 +12,17 @@ const PANELS = [
   {
     src: storePanel1,
     redirect:
-      'https://sentre.medium.com/sentre-to-change-its-token-name-to-sntr-532af58fab31',
+      'https://sentre.medium.com/sentre-protocol-won-wormhole-silver-at-convergence-hackathon-d5f582e19906',
   },
   {
     src: storePanel2,
     redirect:
-      'https://sentre.medium.com/sentre-to-repay-users-with-a-retroactive-airdrop-event-f7fbb70ae4ca',
+      'https://sentre.medium.com/now-live-make-defi-easy-with-sen-academy-vietnamese-below-8cf6f5b16427',
   },
 ]
 
-const BannerBottom = () => {
-  const {
-    ui: { width },
-  } = useRootSelector((state: RootState) => state)
+const BottomBanner = () => {
+  const width = useRootSelector((state: RootState) => state.ui.width)
 
   const bannerHeightRatio = width < 768 ? HEIGHT_RATIO : HEIGHT_RATIO * 2
   const bannerWidth =
@@ -57,4 +55,4 @@ const BannerBottom = () => {
   )
 }
 
-export default BannerBottom
+export default BottomBanner

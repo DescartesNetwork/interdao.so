@@ -58,3 +58,16 @@ const getChainId = () => {
 }
 export type ChainId = 101 | 102 | 103
 export const chainId: ChainId = getChainId()
+
+/**
+ * RPC Node
+ */
+const CLUSTERS: Record<Net, string> = {
+  devnet: 'https://api.devnet.solana.com',
+  testnet: 'https://api.testnet.solana.com',
+  mainnet:
+    env === 'development'
+      ? 'https://api.mainnet-beta.solana.com'
+      : 'https://solitary-autumn-water.solana-mainnet.quiknode.pro/dcbac9d444818a20ac583541dec35b44c6840888/',
+}
+export const rpc: string = CLUSTERS[net]
