@@ -19,6 +19,14 @@ let updateSupplyEventId = 0
 let transferAuthorityEventId = 0
 let updateDaoMetadataEventId = 0
 
+let watchInitializeDAOEventId: NodeJS.Timer
+let watchUpdateDaoRegimeEventId: NodeJS.Timer
+let watchUpdateSupplyEventId: NodeJS.Timer
+let watchTransferAuthorityEventId: NodeJS.Timer
+let watchUpdateDaoMetadataEventId: NodeJS.Timer
+
+const TIME_RECHECK = 2000
+
 const DaoWatcher = () => {
   const {
     wallet: { address: walletAddress },
@@ -48,34 +56,53 @@ const DaoWatcher = () => {
   }, [dispatch, walletAddress])
   // Watch dao events
   const watchData = useCallback(async () => {
-    initializeDAOEventId = await interDao.addListener(
-      'InitializeDAOEvent',
-      reloadDaoData,
-    )
-    updateDaoRegimeEventId = await interDao.addListener(
-      'UpdateDaoRegimeEvent',
-      reloadDaoData,
-    )
-    updateSupplyEventId = await interDao.addListener(
-      'UpdateSupplyEvent',
-      reloadDaoData,
-    )
-    transferAuthorityEventId = await interDao.addListener(
-      'TransferAuthorityEvent',
-      reloadDaoData,
-    )
-    updateDaoMetadataEventId = await interDao.addListener(
-      'UpdateDaoMetadataEvent',
-      reloadDaoData,
-    )
+    watchInitializeDAOEventId = setInterval(async () => {
+      if (initializeDAOEventId) return clearInterval(watchInitializeDAOEventId)
+      initializeDAOEventId = await interDao.addListener(
+        'InitializeDAOEvent',
+        reloadDaoData,
+      )
+    }, TIME_RECHECK)
+
+    watchUpdateDaoRegimeEventId = setInterval(async () => {
+      if (updateDaoRegimeEventId)
+        return clearInterval(watchUpdateDaoRegimeEventId)
+      updateDaoRegimeEventId = await interDao.addListener(
+        'UpdateDaoRegimeEvent',
+        reloadDaoData,
+      )
+    }, TIME_RECHECK)
+
+    watchUpdateSupplyEventId = setInterval(async () => {
+      if (updateSupplyEventId) return clearInterval(watchUpdateSupplyEventId)
+      updateSupplyEventId = await interDao.addListener(
+        'UpdateSupplyEvent',
+        reloadDaoData,
+      )
+    }, TIME_RECHECK)
+
+    watchTransferAuthorityEventId = setInterval(async () => {
+      if (transferAuthorityEventId)
+        return clearInterval(watchTransferAuthorityEventId)
+      transferAuthorityEventId = await interDao.addListener(
+        'TransferAuthorityEvent',
+        reloadDaoData,
+      )
+    }, TIME_RECHECK)
+
+    watchUpdateDaoMetadataEventId = setInterval(async () => {
+      if (updateDaoMetadataEventId)
+        return clearInterval(watchUpdateDaoMetadataEventId)
+      updateDaoMetadataEventId = await interDao.addListener(
+        'UpdateDaoMetadataEvent',
+        reloadDaoData,
+      )
+    }, 2000)
   }, [reloadDaoData])
 
   useEffect(() => {
     fetchData()
-    // I don't understand why but this fixes the watcher error
-    setTimeout(async () => {
-      watchData()
-    }, 1500)
+    watchData()
     // Unwatch (cancel socket)
     return () => {
       ;(async () => {
