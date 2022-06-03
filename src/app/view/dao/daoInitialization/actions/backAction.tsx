@@ -14,7 +14,7 @@ const BackAction = ({ step, onHandleStep = () => {} }: InitDAOHeaderProps) => {
 
   if (step > 0)
     return (
-      <Button onClick={onHandleStep} size="large">
+      <Button type="ghost" onClick={onHandleStep} size="large">
         Back
       </Button>
     )

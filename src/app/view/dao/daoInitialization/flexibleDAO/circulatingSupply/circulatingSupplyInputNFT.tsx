@@ -1,9 +1,5 @@
 import { Button, Col, Row, Space, Typography } from 'antd'
-import { Spin } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
-import { account } from '@senswap/sen-js'
-
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import NumericInput from 'shared/antd/numericInput'
 
 import { numeric } from 'shared/util'

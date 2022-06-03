@@ -5,7 +5,7 @@ import { DaoData } from '@interdao/core'
 import { useWallet } from '@senhub/providers'
 
 import { Button, Card, Col, Row, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import ModalVoteNFT from './modalVoteNFT'
 import Withdraw from '../../withdraw'
 import LockedVoting from '../lockedVoting'

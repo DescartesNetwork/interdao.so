@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import isEqual from 'react-fast-compare'
 
 import { Button, Col, Row, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import MemberInput from 'app/view/dao/daoInitialization/multisigDAO/daoRule/memberInput'
 
 import { AppDispatch, AppState } from 'app/model'

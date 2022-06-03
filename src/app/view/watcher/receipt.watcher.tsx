@@ -58,7 +58,10 @@ const ReceiptWatcher = () => {
 
   useEffect(() => {
     fetchData()
-    watchData()
+    // I don't understand why but this fixes the watcher error
+    setTimeout(async () => {
+      watchData()
+    }, 1500)
     // Unwatch (cancel socket)
     return () => {
       ;(async () => {

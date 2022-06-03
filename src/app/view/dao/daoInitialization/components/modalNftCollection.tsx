@@ -1,7 +1,6 @@
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { useWallet } from '@senhub/providers'
-import LazyLoad from '@senswap/react-lazyload'
-import { account } from '@senswap/sen-js'
+import LazyLoad from '@sentre/react-lazyload'
 
 import { Card, Col, Empty, Modal, Row, Space, Typography } from 'antd'
 

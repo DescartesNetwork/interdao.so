@@ -5,7 +5,7 @@ import SPL from './spl'
 
 import { AppDispatch, AppState } from 'app/model'
 import { setVisible } from 'app/model/template.controller'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import './index.less'
 

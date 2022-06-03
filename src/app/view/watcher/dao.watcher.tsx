@@ -48,33 +48,34 @@ const DaoWatcher = () => {
   }, [dispatch, walletAddress])
   // Watch dao events
   const watchData = useCallback(async () => {
-    setTimeout(async () => {
-      initializeDAOEventId = await interDao.addListener(
-        'InitializeDAOEvent',
-        reloadDaoData,
-      )
-      updateDaoRegimeEventId = await interDao.addListener(
-        'UpdateDaoRegimeEvent',
-        reloadDaoData,
-      )
-      updateSupplyEventId = await interDao.addListener(
-        'UpdateSupplyEvent',
-        reloadDaoData,
-      )
-      transferAuthorityEventId = await interDao.addListener(
-        'TransferAuthorityEvent',
-        reloadDaoData,
-      )
-      updateDaoMetadataEventId = await interDao.addListener(
-        'UpdateDaoMetadataEvent',
-        reloadDaoData,
-      )
-    }, 1000)
+    initializeDAOEventId = await interDao.addListener(
+      'InitializeDAOEvent',
+      reloadDaoData,
+    )
+    updateDaoRegimeEventId = await interDao.addListener(
+      'UpdateDaoRegimeEvent',
+      reloadDaoData,
+    )
+    updateSupplyEventId = await interDao.addListener(
+      'UpdateSupplyEvent',
+      reloadDaoData,
+    )
+    transferAuthorityEventId = await interDao.addListener(
+      'TransferAuthorityEvent',
+      reloadDaoData,
+    )
+    updateDaoMetadataEventId = await interDao.addListener(
+      'UpdateDaoMetadataEvent',
+      reloadDaoData,
+    )
   }, [reloadDaoData])
 
   useEffect(() => {
     fetchData()
-    watchData()
+    // I don't understand why but this fixes the watcher error
+    setTimeout(async () => {
+      watchData()
+    }, 1500)
     // Unwatch (cancel socket)
     return () => {
       ;(async () => {

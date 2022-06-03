@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
-import LazyLoad from '@senswap/react-lazyload'
+import LazyLoad from '@sentre/react-lazyload'
 
 import { Col, Empty, Row } from 'antd'
 import DaoCard from './daoCard'

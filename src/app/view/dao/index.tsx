@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom'
 
 import { Row, Col, Button, Tabs } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import Hero from './hero'
 import DaoList from './daoList'
 import YourDaos from './daoList/yourDao'

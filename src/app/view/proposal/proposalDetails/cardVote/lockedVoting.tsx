@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Col, Row, Space, Tooltip, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { getRemainingTime } from 'app/helpers/countDown'
 import useProposal from 'app/hooks/proposal/useProposal'

@@ -1,13 +1,13 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import LazyLoad from '@senswap/react-lazyload'
+import LazyLoad from '@sentre/react-lazyload'
 import { useUI, useWallet } from '@senhub/providers'
 import { DaoRegimes } from '@interdao/core'
 import isEqual from 'react-fast-compare'
 import { SystemProgram } from '@solana/web3.js'
 
 import { Button, Col, Empty, Row, Select, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import ProposalCard from './proposalCard'
 
 import { AppDispatch, AppState } from 'app/model'

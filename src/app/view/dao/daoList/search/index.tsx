@@ -1,5 +1,5 @@
 import { Button, Input, Spin } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import { LoadingOutlined } from '@ant-design/icons'
 
 type SearchDaoProps = {

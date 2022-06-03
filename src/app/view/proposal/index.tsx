@@ -1,7 +1,7 @@
 import { useHistory, useParams } from 'react-router-dom'
 
 import { Button, Col, Row } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import ProposalList from './proposalList'
 import DaoDetails from '../dao/daoDetails'
 

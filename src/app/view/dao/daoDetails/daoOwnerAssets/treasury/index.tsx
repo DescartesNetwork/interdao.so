@@ -6,7 +6,7 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 import { Col, Row, Space, Tooltip, Typography } from 'antd'
 import MintBalance from './mintBalance'
 import RowSpaceBetween from 'app/components/rowSpaceBetween'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { AppState } from 'app/model'
 import useTotalUSD from 'app/hooks/useBalance'

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import ProposalStatus from 'app/components/proposalStatus'
 
 import { ProposalChildCardProps } from './index'

@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import LazyLoad from '@senswap/react-lazyload'
+import LazyLoad from '@sentre/react-lazyload'
 import { account } from '@senswap/sen-js'
 
 import { Button, Col, Modal, Row, Space, Typography } from 'antd'

@@ -5,7 +5,7 @@ import { DaoData } from '@interdao/core'
 import { BN } from 'bn.js'
 
 import { Button, Col, Row } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { AppState } from 'app/model'
 import { ProposalChildCardProps } from '../../index'
