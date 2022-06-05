@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { useAccount, useUI, useWallet } from '@senhub/providers'
+import { useUI } from '@senhub/providers'
 
 import {
   Avatar,
@@ -11,6 +11,7 @@ import {
   Image,
   Row,
   Space,
+  Tag,
   Tooltip,
   Typography,
 } from 'antd'
@@ -24,6 +25,7 @@ import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
 import useMembers from 'app/hooks/useMembers'
 import useMetaData from 'app/hooks/useMetaData'
+import useCheckMemberOnly from 'app/hooks/dao/useCheckMemberOnly'
 import { getIcon, validURL } from 'app/helpers'
 
 import autonomous from 'app/static/images/system/bg-autonomous.png'
@@ -42,19 +44,17 @@ const HEIGHT_RATIO = 1.777777
 const MAX_WIDTH_RATE = 24 / 18 // full screen is 24 col, max width is 18 col
 
 const DaoCard = ({ daoAddress }: DaoCardProps) => {
-  const { regime, nonce, mint, isPublic } = useSelector(
+  const { regime, nonce, mint, isPublic, isNft } = useSelector(
     (state: AppState) => state.dao.daos[daoAddress],
   )
   const history = useHistory()
   const {
     ui: { width },
   } = useUI()
-  const {
-    wallet: { address: myAddress },
-  } = useWallet()
-  const { accounts } = useAccount()
+
   const members = useMembers(daoAddress)
   const metaData = useMetaData(daoAddress)
+  const { isMemberOnly } = useCheckMemberOnly(daoAddress)
   const parseRegime = Object.keys(regime)?.[0]
 
   const heightRatio = useMemo(() => {
@@ -63,34 +63,13 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
     return HEIGHT_RATIO * 3
   }, [width])
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (isPublic || !metaData) return history.push(`dao/${daoAddress}`)
-    const { daoType, members } = metaData
-
-    if (daoType === 'flexible-dao') {
-      const mints = []
-      for (const accountAddr in accounts) mints.push(accounts[accountAddr].mint)
-
-      if (!mints.includes(mint.toBase58()))
-        return window.notify({
-          type: 'warning',
-          description: 'You are not a member of this DAO',
-        })
-    }
-    if (daoType === 'multisig-dao') {
-      let valid = false
-      for (const { walletAddress } of members)
-        if (walletAddress === myAddress) {
-          valid = true
-          break
-        }
-
-      if (!valid)
-        return window.notify({
-          type: 'warning',
-          description: 'You are not a member of this DAO',
-        })
-    }
+    if (!isMemberOnly)
+      return window.notify({
+        type: 'warning',
+        description: 'You are not a member of this DAO',
+      })
     return history.push(`dao/${daoAddress}`)
   }
 
@@ -146,6 +125,9 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
                           : shortenAddress(daoAddress)}
                       </Typography.Title>
                     </Tooltip>
+                    <Tag className="dao-tag" style={{ margin: 0 }}>
+                      {isPublic ? 'Public' : 'Member only'}
+                    </Tag>
                     <Space size={2} style={{ marginLeft: -3 }}>
                       {metaData?.optionals?.map(
                         (url, idx) =>
@@ -168,12 +150,16 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
               <Row gutter={[16, 16]}>
                 <Col span={8}>
                   <StatisticCard
-                    title="Token"
+                    title="Vote by"
                     value={
-                      <Space>
-                        <MintAvatar mintAddress={mint.toBase58()} />
-                        <MintSymbol mintAddress={mint.toBase58()} />
-                      </Space>
+                      isNft ? (
+                        'NFT'
+                      ) : (
+                        <Space>
+                          <MintAvatar mintAddress={mint.toBase58()} />
+                          <MintSymbol mintAddress={mint.toBase58()} />
+                        </Space>
+                      )
                     }
                   />
                 </Col>

@@ -5,7 +5,7 @@ import { DaoData, ReceiptData } from '@interdao/core'
 import BN from 'bn.js'
 import moment from 'moment'
 
-import { Button, Col, Modal, Row, Space, Typography, Table } from 'antd'
+import { Button, Col, Modal, Row, Typography, Table } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import ColumnType from './history/columnType'
 import ColumnPower from './history/columnPower'
@@ -15,28 +15,6 @@ import useReceipts from 'app/hooks/proposal/useReceipts'
 import configs from 'app/configs'
 import { explorer } from 'shared/util'
 import { AppState } from 'app/model'
-
-const COLUMNS = [
-  {
-    title: 'TIME',
-    dataIndex: 'lockedDate',
-    render: (lockedDate: BN) => (
-      <Typography.Text>
-        {moment(lockedDate.toNumber() * 1000).format('DD/MM/YYYY HH:mm')}
-      </Typography.Text>
-    ),
-  },
-  {
-    title: 'POWER',
-    dataIndex: 'power',
-    render: (_: any, receipt: ReceiptData) => <ColumnPower receipt={receipt} />,
-  },
-  {
-    title: 'TYPE',
-    dataIndex: 'authority',
-    render: (_: any, receipt: ReceiptData) => <ColumnType record={receipt} />,
-  },
-]
 
 export type Receipt = ReceiptData & { address: string }
 
@@ -48,13 +26,45 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
   const [listReceipt, setListReceipt] = useState<Receipt[]>([])
-  const [receiptAddress, setReceiptAddress] = useState<string[]>([])
   const { receipts } = useReceipts({ proposalAddress })
   const { daos } = useSelector((state: AppState) => state.dao)
   const { isNft } = daos[daoAddress] || ({} as DaoData)
   const {
     wallet: { address: walletAddress },
   } = useWallet()
+
+  const COLUMNS = [
+    {
+      title: 'TIME',
+      dataIndex: 'lockedDate',
+      render: (lockedDate: BN) => (
+        <Typography.Text>
+          {moment(lockedDate.toNumber() * 1000).format('DD/MM/YYYY HH:mm')}
+        </Typography.Text>
+      ),
+    },
+    {
+      title: 'POWER',
+      dataIndex: 'power',
+      render: (_: any, receipt: ReceiptData) => (
+        <ColumnPower receipt={receipt} />
+      ),
+    },
+    {
+      title: 'TYPE',
+      dataIndex: 'authority',
+      render: (_: any, receipt: ReceiptData) => <ColumnType record={receipt} />,
+    },
+    {
+      title: '',
+      dataIndex: '',
+      render: (_: any, receipt: Receipt) => (
+        <Button type="primary" onClick={() => onWithdraw(receipt)} size="small">
+          Withdraw
+        </Button>
+      ),
+    },
+  ]
 
   const filterReceipts = useCallback(() => {
     const listRecept = Object.keys(receipts).map((address) => ({
@@ -69,45 +79,38 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
     return setListReceipt(myRecept)
   }, [receipts, walletAddress])
 
-  const onSelect = (_: React.Key[], receipts: Receipt[]) => {
-    const addresses: string[] = []
-    for (const { address } of receipts) {
-      addresses.push(address)
-    }
-    return setReceiptAddress(addresses)
-  }
-
-  const onConfirm = useCallback(async () => {
-    if (!receiptAddress.length) return
-    setLoading(true)
-    try {
-      for (const address of receiptAddress) {
+  const onWithdraw = useCallback(
+    async (receiptData: Receipt) => {
+      const receiptAddress = receiptData.address
+      if (!receiptAddress.length) return
+      setLoading(true)
+      try {
         let response: { txId: string; receiptAddress: string }
-
-        if (isNft) response = await interDao.closeNftVoting(address)
-        else response = await interDao.close(address)
-
+        if (isNft) response = await interDao.closeNftVoting(receiptAddress)
+        else response = await interDao.close(receiptAddress)
         window.notify({
           type: 'success',
-          description: 'Close receipt successfully. Click to view details!',
+          description: 'Successful withdrawal. Click to view details!',
           onClick: () => window.open(explorer(response.txId), '_blank'),
         })
+
+        //for real time
+        setListReceipt(
+          [...listReceipt].filter(
+            (receipt) => !receiptAddress.includes(receipt.address),
+          ),
+        )
+      } catch (er: any) {
+        window.notify({
+          type: 'error',
+          description: er.message,
+        })
+      } finally {
+        setLoading(false)
       }
-      //for real time
-      setListReceipt(
-        [...listReceipt].filter(
-          (receipt) => !receiptAddress.includes(receipt.address),
-        ),
-      )
-    } catch (er: any) {
-      window.notify({
-        type: 'error',
-        description: er.message,
-      })
-    } finally {
-      setLoading(false)
-    }
-  }, [isNft, listReceipt, receiptAddress])
+    },
+    [isNft, listReceipt],
+  )
 
   useEffect(() => {
     filterReceipts()
@@ -136,22 +139,15 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
           </Col>
           <Col span={24}>
             <Table
-              rowSelection={{ type: 'checkbox', onChange: onSelect }}
               columns={COLUMNS}
               dataSource={listReceipt}
               pagination={false}
               rowKey={({ index, lockedDate }) =>
                 index.toNumber() + lockedDate.toNumber()
               }
+              scroll={{ y: 300 }}
+              loading={loading}
             />
-          </Col>
-          <Col span={24} style={{ textAlign: 'right' }}>
-            <Space>
-              <Button onClick={() => setVisible(false)}>Cancel</Button>
-              <Button loading={loading} onClick={onConfirm} type="primary">
-                Confirm
-              </Button>
-            </Space>
           </Col>
         </Row>
       </Modal>

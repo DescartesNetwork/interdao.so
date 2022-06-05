@@ -115,7 +115,7 @@ const ActionVote = ({
               size="large"
               icon={<IonIcon name="thumbs-up-outline" />}
             >
-              Agree
+              Vote For
             </Button>
           </Col>
           <Col span={isMultisigDAO ? 24 : 12}>
@@ -128,7 +128,7 @@ const ActionVote = ({
               size="large"
               icon={<IonIcon name="thumbs-down-outline" />}
             >
-              Disagree
+              Vote Against
             </Button>
           </Col>
         </Row>

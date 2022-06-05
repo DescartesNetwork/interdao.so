@@ -1,6 +1,9 @@
-import { Button, Col, Row, Space, Typography } from 'antd'
+import { account } from '@senswap/sen-js'
+
+import { Button, Col, Row, Space, Spin, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import NumericInput from 'shared/antd/numericInput'
+import { LoadingOutlined } from '@ant-design/icons'
 
 import { numeric } from 'shared/util'
 import { getListAccountNFTsBelongToCollection } from 'app/helpers/metaplex'
@@ -18,10 +21,19 @@ const CirculatingSupplyInputNFT = ({
   onChange,
 }: CirculatingSupplyInputProps) => {
   const [suggestion, setSuggestion] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const getNftSuggestion = useCallback(async () => {
-    let accounts = await getListAccountNFTsBelongToCollection(mintAddress)
-    setSuggestion(accounts.length.toString())
+    if (!account.isAddress(mintAddress)) return setSuggestion('')
+    setLoading(true)
+    try {
+      let accounts = await getListAccountNFTsBelongToCollection(mintAddress)
+      setSuggestion(accounts.length.toString())
+    } catch (er: any) {
+      window.notify({ type: 'error', description: er.message })
+    } finally {
+      setLoading(false)
+    }
   }, [mintAddress])
 
   useEffect(() => {
@@ -57,7 +69,16 @@ const CirculatingSupplyInputNFT = ({
           <Typography.Text type="secondary">
             Suggestion NFT collection supply:
           </Typography.Text>
-          <Typography.Text>{numeric(suggestion).format('0,0')}</Typography.Text>
+          {loading ? (
+            <Spin
+              spinning={loading}
+              indicator={<LoadingOutlined style={{ fontSize: 24 }} />}
+            />
+          ) : (
+            <Typography.Text>
+              {numeric(suggestion).format('0,0')}
+            </Typography.Text>
+          )}
         </Space>
       </Col>
     </Row>

@@ -1,11 +1,18 @@
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { useWallet } from '@senhub/providers'
 import LazyLoad from '@sentre/react-lazyload'
+import { account } from '@senswap/sen-js'
 
-import { Card, Col, Modal, Row, Space, Typography } from 'antd'
+import { Card, Col, Empty, Modal, Row, Space, Typography } from 'antd'
+
 import CardNFT from 'app/components/cardNFT'
+import SearchNftCollection from './searchNftCollection'
 
-import { fetchListNTFs, MetadataDataType } from 'app/helpers/metaplex'
+import {
+  fetchListNTFs,
+  getNftMetaData,
+  MetadataDataType,
+} from 'app/helpers/metaplex'
 
 import BG_BTN from 'app/static/images/system/select-dao.png'
 
@@ -22,23 +29,55 @@ const ModalNftCollection = ({
 }: ModalNftCollectionProps) => {
   const [listCollectionNFTs, setListCollectionNFTs] =
     useState<Record<string, MetadataDataType[]>>()
+  const [searchText, setSearchText] = useState<string>('')
+  const [loading, setLoading] = useState(false)
+
   const {
     wallet: { address: walletAddress },
   } = useWallet()
 
+  const getNftCollectionInfo = useCallback(async () => {
+    let collectionNFTs: Record<string, MetadataDataType[]> = {}
+    if (!account.isAddress(searchText)) return collectionNFTs
+    let collectionInfo = await getNftMetaData(searchText)
+    if (collectionInfo.data) {
+      collectionNFTs[collectionInfo.data.mint] = [collectionInfo.data]
+    } else {
+      collectionNFTs = {}
+    }
+    return collectionNFTs
+  }, [searchText])
+
+  const onSelectNFT = (mintAddress: string) => {
+    onSelect(mintAddress)
+    onCloseModal()
+  }
+
+  const onCloseModal = () => {
+    setSearchText('')
+    setVisible(false)
+  }
+
   const getCollectionNFTs = useCallback(async () => {
-    const collectionNFTs = await fetchListNTFs(walletAddress)
-    if (collectionNFTs) return setListCollectionNFTs(collectionNFTs)
-  }, [walletAddress])
+    setLoading(true)
+    let collectionNFTs: Record<string, MetadataDataType[]> = {}
+    try {
+      if (searchText.length > 0) {
+        collectionNFTs = await getNftCollectionInfo()
+      } else {
+        collectionNFTs = await fetchListNTFs(walletAddress)
+      }
+    } catch (er: any) {
+      return window.notify({ type: 'error', description: er.message })
+    } finally {
+      setLoading(false)
+    }
+    return setListCollectionNFTs(collectionNFTs)
+  }, [getNftCollectionInfo, searchText, walletAddress])
 
   useEffect(() => {
     getCollectionNFTs()
   }, [getCollectionNFTs])
-
-  const onSelectNFT = (mintAddress: string) => {
-    onSelect(mintAddress)
-    return setVisible(false)
-  }
 
   return (
     <Fragment>
@@ -63,7 +102,7 @@ const ModalNftCollection = ({
         className="modal-nft-selection"
         visible={visible}
         footer={false}
-        onCancel={() => setVisible(false)}
+        onCancel={onCloseModal}
         destroyOnClose={true}
       >
         <Row gutter={[24, 24]}>
@@ -73,12 +112,20 @@ const ModalNftCollection = ({
             </Typography.Title>
           </Col>
           <Col span={24}>
+            <SearchNftCollection
+              loading={loading}
+              searchText={searchText}
+              onSearch={(value) => setSearchText(value)}
+            />
+          </Col>
+          <Col span={24}>
             <Row
               gutter={[24, 24]}
               className="scrollbar"
               style={{ height: 500 }}
             >
               {listCollectionNFTs &&
+              Object.keys(listCollectionNFTs).length > 0 ? (
                 Object.keys(listCollectionNFTs).map((collectionAddress) => (
                   <Col xs={12} md={8} key={collectionAddress}>
                     <LazyLoad height={198}>
@@ -88,7 +135,12 @@ const ModalNftCollection = ({
                       />
                     </LazyLoad>
                   </Col>
-                ))}
+                ))
+              ) : (
+                <Col span={24}>
+                  <Empty />
+                </Col>
+              )}
             </Row>
           </Col>
         </Row>

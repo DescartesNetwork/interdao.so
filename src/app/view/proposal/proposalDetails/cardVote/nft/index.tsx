@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { DaoData } from '@interdao/core'
@@ -79,32 +79,34 @@ const CardVoteByNFT = ({
             />
           </Col>
         ) : (
-          <Fragment>
-            <Col span={24}>
-              <Button
-                onClick={onVoteNftFor}
-                type="primary"
-                disabled={disabled}
-                block
-                size="large"
-                icon={<IonIcon name="thumbs-up-outline" />}
-              >
-                Agree
-              </Button>
-            </Col>
-            <Col span={24}>
-              <Button
-                onClick={onVoteNftAgainst}
-                type="primary"
-                disabled={disabled}
-                block
-                size="large"
-                icon={<IonIcon name="thumbs-down-outline" />}
-              >
-                Disagree
-              </Button>
-            </Col>
-          </Fragment>
+          <Col span={24}>
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <Button
+                  onClick={onVoteNftFor}
+                  type="primary"
+                  disabled={disabled}
+                  block
+                  size="large"
+                  icon={<IonIcon name="thumbs-up-outline" />}
+                >
+                  Vote For
+                </Button>
+              </Col>
+              <Col span={12}>
+                <Button
+                  onClick={onVoteNftAgainst}
+                  type="primary"
+                  disabled={disabled}
+                  block
+                  size="large"
+                  icon={<IonIcon name="thumbs-down-outline" />}
+                >
+                  Vote Against
+                </Button>
+              </Col>
+            </Row>
+          </Col>
         )}
       </Row>
       <ModalVoteNFT

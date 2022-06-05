@@ -65,12 +65,14 @@ const Treasury = ({ daoAddress }: { daoAddress: string }) => {
       { programId: splt.spltProgramId },
     )
     let bulk: AccountData[] = []
-
-    value.forEach(({ account: { data: buf } }) => {
-      const data = splt.parseAccountData(buf)
-      return bulk.push(data)
-    })
-
+    await Promise.all(
+      value.map(async ({ account: { data: buf } }) => {
+        const data = splt.parseAccountData(buf)
+        const mintInfo = await splt.getMintData(data.mint)
+        if (!(mintInfo.decimals === 0) && !(Number(mintInfo.supply) === 1))
+          return bulk.push(data)
+      }),
+    )
     return setListAccount(bulk)
   }, [daoMasterAddress])
 

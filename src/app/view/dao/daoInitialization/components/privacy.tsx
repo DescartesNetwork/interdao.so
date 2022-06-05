@@ -30,7 +30,7 @@ const Privacy = () => {
           className={isEqual(isPublic, false) ? '' : 'btn-unselect'}
           block
         >
-          Member
+          Member Only
         </Button>
       </Col>
       <Col span={mobileSpan}>
