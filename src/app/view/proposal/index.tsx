@@ -7,6 +7,8 @@ import DaoDetails from '../dao/daoDetails'
 
 import configs from 'app/configs'
 import './index.less'
+import { useEffect } from 'react'
+import useCheckMemberOnly from 'app/hooks/dao/useCheckMemberOnly'
 
 const {
   manifest: { appId },
@@ -15,6 +17,12 @@ const {
 const Proposal = () => {
   const history = useHistory()
   const { daoAddress } = useParams<{ daoAddress: string }>()
+  const { isMemberOnly, loadingDaoMetadata } = useCheckMemberOnly(daoAddress)
+  useEffect(() => {
+    if (!isMemberOnly && !loadingDaoMetadata) {
+      return history.push(`/app/${appId}/dao`)
+    }
+  }, [daoAddress, history, isMemberOnly, loadingDaoMetadata])
 
   return (
     <Row gutter={[24, 24]} justify="center" align="middle">
