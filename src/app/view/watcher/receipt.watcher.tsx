@@ -17,6 +17,12 @@ let voteForEventId = 0
 let voteAgainstEventId = 0
 let closeEventId = 0
 
+let watchVoteFor: NodeJS.Timer
+let watchVoteAgainst: NodeJS.Timer
+let watchClose: NodeJS.Timer
+
+const TIME_RECHECK = 2000
+
 const ReceiptWatcher = () => {
   const {
     wallet: { address: walletAddress },
@@ -45,23 +51,31 @@ const ReceiptWatcher = () => {
   }, [dispatch, walletAddress])
   // Watch dao events
   const watchData = useCallback(async () => {
-    voteForEventId = await interDao.addListener(
-      'VoteForEvent',
-      reloadReceiptData,
-    )
-    voteAgainstEventId = await interDao.addListener(
-      'VoteAgainstEvent',
-      reloadReceiptData,
-    )
-    closeEventId = await interDao.addListener('CloseEvent', reloadReceiptData)
+    watchVoteFor = setInterval(async () => {
+      if (voteForEventId) return clearInterval(watchVoteFor)
+      voteForEventId = await interDao.addListener(
+        'VoteForEvent',
+        reloadReceiptData,
+      )
+    }, TIME_RECHECK)
+
+    watchVoteAgainst = setInterval(async () => {
+      if (voteAgainstEventId) return clearInterval(watchVoteAgainst)
+      voteAgainstEventId = await interDao.addListener(
+        'VoteAgainstEvent',
+        reloadReceiptData,
+      )
+    }, TIME_RECHECK)
+
+    watchClose = setInterval(async () => {
+      if (closeEventId) return clearInterval(watchClose)
+      closeEventId = await interDao.addListener('CloseEvent', reloadReceiptData)
+    }, TIME_RECHECK)
   }, [reloadReceiptData])
 
   useEffect(() => {
     fetchData()
-    // I don't understand why but this fixes the watcher error
-    setTimeout(async () => {
-      watchData()
-    }, 1500)
+    watchData()
     // Unwatch (cancel socket)
     return () => {
       ;(async () => {

@@ -16,6 +16,13 @@ let voteForEventId = 0
 let voteAgainstEventId = 0
 let executeProposalEventId = 0
 
+let watchInitializeProposal: NodeJS.Timer
+let watchVoteFor: NodeJS.Timer
+let watchVoteAgainst: NodeJS.Timer
+let watchExecuteProposal: NodeJS.Timer
+
+const TIME_RECHECK = 2000
+
 const ProposalWatcher = () => {
   const dispatch = useDispatch<AppDispatch>()
 
@@ -29,29 +36,43 @@ const ProposalWatcher = () => {
 
   // Watch dao events
   const watchData = useCallback(async () => {
-    initializeProposalEventId = await interDao.addListener(
-      'InitializeProposalEvent',
-      reloadProposalData,
-    )
-    voteForEventId = await interDao.addListener(
-      'VoteForEvent',
-      reloadProposalData,
-    )
-    voteAgainstEventId = await interDao.addListener(
-      'VoteAgainstEvent',
-      reloadProposalData,
-    )
-    executeProposalEventId = await interDao.addListener(
-      'ExecuteProposalEvent',
-      reloadProposalData,
-    )
+    watchInitializeProposal = setInterval(async () => {
+      if (initializeProposalEventId)
+        return clearInterval(watchInitializeProposal)
+      initializeProposalEventId = await interDao.addListener(
+        'InitializeProposalEvent',
+        reloadProposalData,
+      )
+    }, TIME_RECHECK)
+
+    watchVoteFor = setInterval(async () => {
+      if (voteForEventId) return clearInterval(watchVoteFor)
+      voteForEventId = await interDao.addListener(
+        'VoteForEvent',
+        reloadProposalData,
+      )
+    }, TIME_RECHECK)
+
+    watchVoteAgainst = setInterval(async () => {
+      if (voteAgainstEventId) return clearInterval(watchVoteAgainst)
+      voteAgainstEventId = await interDao.addListener(
+        'VoteAgainstEvent',
+        reloadProposalData,
+      )
+    }, TIME_RECHECK)
+
+    watchExecuteProposal = setInterval(async () => {
+      if (executeProposalEventId) return clearInterval(watchExecuteProposal)
+      executeProposalEventId = await interDao.addListener(
+        'ExecuteProposalEvent',
+        reloadProposalData,
+      )
+    }, TIME_RECHECK)
   }, [reloadProposalData])
 
   useEffect(() => {
     // I don't understand why but this fixes the watcher error
-    setTimeout(async () => {
-      watchData()
-    }, 1500)
+    watchData()
     dispatch(getProposals()) //fetch all proposal
     // Unwatch (cancel socket)
     return () => {
