@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { Button, Row, Col, Space, Typography, Popover } from 'antd'
 import CardRegime from '../../components/cardRegime'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { AppDispatch, AppState } from 'app/model'
 import { setInitDao } from 'app/model/dao.controller'

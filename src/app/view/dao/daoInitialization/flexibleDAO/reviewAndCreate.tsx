@@ -67,9 +67,14 @@ const ReviewAndCreate = () => {
       <Col span={24}>
         <Space direction="vertical">
           <Typography.Text type="secondary">Total power</Typography.Text>
-          <Typography.Title level={1}>
-            {numeric(supply?.toNumber()).format('0,0.[00]')}
-          </Typography.Title>
+          <Space direction="horizontal">
+            <Typography.Title level={1}>
+              {numeric(supply?.toNumber()).format('0,0.[00]')}
+            </Typography.Title>
+            <Typography.Title level={1}>
+              <MintSymbol mintAddress={mintAddress} />
+            </Typography.Title>
+          </Space>
         </Space>
       </Col>
       <Col span={24}>

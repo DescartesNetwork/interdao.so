@@ -1,4 +1,4 @@
-import { BN } from '@project-serum/anchor'
+import { BN, utils, web3 } from '@project-serum/anchor'
 import { PublicKey } from '@solana/web3.js'
 import { Leaf, MerkleDistributor } from '@sentre/utility'
 import IPFS from 'shared/pdb/ipfs'
@@ -52,6 +52,61 @@ class Distributor {
     })
 
     return distributorAddress
+  }
+
+  createDistributorInstruction = async (
+    walletAddress: string,
+    pubkeys: PublicKey[],
+    mintAddress: string,
+  ) => {
+    const treeData = this.getTreeData(pubkeys)
+    const merkleDistributor = MerkleDistributor.fromBuffer(treeData)
+
+    const cid = await ipfs.set(treeData.toJSON().data)
+    const {
+      multihash: { digest },
+    } = CID.parse(cid)
+
+    const walletPublicKey = new PublicKey(walletAddress)
+    const tokenPublicKey = new PublicKey(mintAddress)
+    const metadata = Buffer.from(digest)
+    const distributor = web3.Keypair.generate()
+    const srcPublicKey = await utils.token.associatedAddress({
+      mint: tokenPublicKey,
+      owner: walletPublicKey,
+    })
+    const treasurer = await utility.deriveTreasurerAddress(
+      distributor.publicKey.toBase58(),
+    )
+    const treasury = await utils.token.associatedAddress({
+      mint: tokenPublicKey,
+      owner: new PublicKey(treasurer),
+    })
+
+    return utility.program.methods
+      .initializeDistributor(
+        Array.from(merkleDistributor.deriveMerkleRoot()),
+        merkleDistributor.getTotal(),
+        new BN(ENDED_AT / 1000),
+        Array.from(metadata),
+        new BN(0),
+      )
+      .accounts({
+        authority: new PublicKey(walletAddress),
+        distributor: distributor.publicKey,
+        src: srcPublicKey,
+        treasurer: utility.deriveTreasurerAddress(
+          distributor.publicKey.toBase58(),
+        ),
+        treasury,
+        feeCollector: new PublicKey(walletAddress),
+        mint: tokenPublicKey,
+        tokenProgram: utils.token.TOKEN_PROGRAM_ID,
+        associatedTokenProgram: utils.token.ASSOCIATED_PROGRAM_ID,
+        systemProgram: web3.SystemProgram.programId,
+        rent: web3.SYSVAR_RENT_PUBKEY,
+      })
+      .instruction()
   }
 
   getMintAddress = async (distributorAddress: string) => {

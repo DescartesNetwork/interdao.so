@@ -6,7 +6,7 @@ import CardVote from './cardVote'
 import CardInfo from './cardInfo'
 import CardProgress from './cardProgress'
 import History from './history'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import configs from 'app/configs'
 

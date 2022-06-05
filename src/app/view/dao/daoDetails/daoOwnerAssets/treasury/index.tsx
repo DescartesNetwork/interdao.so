@@ -6,7 +6,7 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 import { Col, Row, Space, Tooltip, Typography } from 'antd'
 import MintBalance from './mintBalance'
 import RowSpaceBetween from 'app/components/rowSpaceBetween'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { AppState } from 'app/model'
 import useTotalUSD from 'app/hooks/useBalance'
@@ -65,12 +65,14 @@ const Treasury = ({ daoAddress }: { daoAddress: string }) => {
       { programId: splt.spltProgramId },
     )
     let bulk: AccountData[] = []
-
-    value.forEach(({ account: { data: buf } }) => {
-      const data = splt.parseAccountData(buf)
-      return bulk.push(data)
-    })
-
+    await Promise.all(
+      value.map(async ({ account: { data: buf } }) => {
+        const data = splt.parseAccountData(buf)
+        const mintInfo = await splt.getMintData(data.mint)
+        if (!(mintInfo.decimals === 0) && !(Number(mintInfo.supply) === 1))
+          return bulk.push(data)
+      }),
+    )
     return setListAccount(bulk)
   }, [daoMasterAddress])
 

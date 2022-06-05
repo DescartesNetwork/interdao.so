@@ -6,9 +6,9 @@ import ReviewAndCreateFlexibleDAO from './flexibleDAO/reviewAndCreate'
 import ReviewAndCreateMultisigDAO from './multisigDAO/reviewAndCreate'
 import FlexibleDAORule from './flexibleDAO/daoRule'
 import MultiSigDAORule from './multisigDAO/daoRule'
-import MetaDataForm from './metaDataForm'
+import DaoInformation from './daoInfomation'
 
-export enum CreateSteps {
+export enum CreateDaoSteps {
   stepOne = 1,
   stepTwo = 2,
   stepThree = 3,
@@ -18,16 +18,16 @@ const InitDAOContainer = ({ step }: { step: number }) => {
   const daoType = useSelector(
     (state: AppState) => state.metadata.initMetadata.daoType,
   )
-  if (step === CreateSteps.stepOne) return <MetaDataForm />
+  if (step === CreateDaoSteps.stepOne) return <DaoInformation />
 
-  if (step === CreateSteps.stepTwo && daoType === 'flexible-dao')
+  if (step === CreateDaoSteps.stepTwo && daoType === 'flexible-dao')
     return <FlexibleDAORule />
-  if (step === CreateSteps.stepTwo && daoType === 'multisig-dao')
+  if (step === CreateDaoSteps.stepTwo && daoType === 'multisig-dao')
     return <MultiSigDAORule />
 
-  if (step === CreateSteps.stepThree && daoType === 'flexible-dao')
+  if (step === CreateDaoSteps.stepThree && daoType === 'flexible-dao')
     return <ReviewAndCreateFlexibleDAO />
-  if (step === CreateSteps.stepThree && daoType === 'multisig-dao')
+  if (step === CreateDaoSteps.stepThree && daoType === 'multisig-dao')
     return <ReviewAndCreateMultisigDAO />
 
   return <ChooseDaoType />

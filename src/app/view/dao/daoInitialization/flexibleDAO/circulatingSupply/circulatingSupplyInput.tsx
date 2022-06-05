@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 
 import { Button, Col, Row, Space, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import NumericInput from 'shared/antd/numericInput'
 
 import useMintDecimals from 'shared/hooks/useMintDecimals'

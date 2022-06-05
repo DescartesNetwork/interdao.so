@@ -5,7 +5,7 @@ import { DaoData } from '@interdao/core'
 import { BN } from 'bn.js'
 
 import { Button, Col, Row } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { AppState } from 'app/model'
 import { ProposalChildCardProps } from '../../index'
@@ -115,7 +115,7 @@ const ActionVote = ({
               size="large"
               icon={<IonIcon name="thumbs-up-outline" />}
             >
-              Agree
+              Vote For
             </Button>
           </Col>
           <Col span={isMultisigDAO ? 24 : 12}>
@@ -128,7 +128,7 @@ const ActionVote = ({
               size="large"
               icon={<IonIcon name="thumbs-down-outline" />}
             >
-              Disagree
+              Vote Against
             </Button>
           </Col>
         </Row>

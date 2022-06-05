@@ -1,16 +1,19 @@
 .interdao-banner {
-  padding-top: 48px;
-  padding-bottom: 72px;
+  padding-top: 0;
+  padding-bottom: 60px;
   &::before {
     content: '';
     position: absolute;
     width: 100%;
-    height: calc(100% + 24px);
+    height: calc(100%);
     top: -24px;
     left: 0;
     background: url('../../../static/images/system/bg-banner.png');
     background-size: cover;
     background-position: top center;
+  }
+  .title-underline {
+    border-bottom: 1px solid #f9deb0;
   }
 }
 .spec-title {

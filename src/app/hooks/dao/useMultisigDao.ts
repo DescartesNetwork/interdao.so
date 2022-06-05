@@ -31,12 +31,13 @@ const useMultisigDao = () => {
     wallet: { address: myWallet },
   } = useWallet()
 
-  const getMintAddr = useCallback(async () => {
+  const createVotingMint = useCallback(async () => {
     const { members } = initMetadata
     const multiSigWallet = new MultisigWallet(DEFAULT_EMPTY_ADDRESS)
-    const mintAddress = await multiSigWallet.createNewToken()
-    await multiSigWallet.mintToAccount(myWallet, members.length)
-
+    const mintAddress = await multiSigWallet.createNewTokenAndMintTo(
+      myWallet,
+      members.length,
+    )
     return mintAddress
   }, [initMetadata, myWallet])
 
@@ -62,7 +63,7 @@ const useMultisigDao = () => {
     try {
       setLoading(true)
       const { regime, isPublic, isNft } = initDao
-      const mintAddress = await getMintAddr()
+      const mintAddress = await createVotingMint()
       const distributorAddress = await getDistributorAddress(mintAddress)
       const ipfs = new IPFS()
       const cid = await ipfs.set({ ...initMetadata, distributorAddress })
@@ -98,7 +99,14 @@ const useMultisigDao = () => {
     } finally {
       setLoading(false)
     }
-  }, [initDao, getMintAddr, getDistributorAddress, initMetadata, pdb, history])
+  }, [
+    initDao,
+    createVotingMint,
+    getDistributorAddress,
+    initMetadata,
+    pdb,
+    history,
+  ])
 
   return { createMultisigDao, loading }
 }

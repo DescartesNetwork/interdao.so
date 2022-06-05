@@ -3,7 +3,7 @@ import moment from 'moment'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { Card, Col, Row, Space, Typography, Tooltip, Button } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import ModalTemplateInfo from '../modalTemplateInfo'
 import RowSpaceBetween from 'app/components/rowSpaceBetween'
 

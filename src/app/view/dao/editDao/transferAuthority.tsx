@@ -4,7 +4,7 @@ import { account } from '@senswap/sen-js'
 import { Col, Input, Row, Space, Typography } from 'antd'
 import RowSpaceVertical from 'app/components/rowSpaceVertical'
 import ActionButton from './actionButton'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import configs from 'app/configs'
 import { explorer } from 'shared/util'
