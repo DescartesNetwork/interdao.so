@@ -6,7 +6,7 @@ import { DaoRegime } from '@interdao/core'
 import isEqual from 'react-fast-compare'
 
 import { Col, Row } from 'antd'
-import DaoRule from '../../daoInitialization/flexibleDAO/daoRule'
+import DaoRule from '../../../createDao/flexibleDAO/daoRule'
 import ActionButton from '../actionButton'
 
 import configs from 'app/configs'

@@ -4,7 +4,7 @@ import { account } from '@senswap/sen-js'
 import { CID } from 'ipfs-core'
 
 import { Col, Row } from 'antd'
-import Regime from '../../../daoInitialization/multisigDAO/daoRule/regime'
+import Regime from '../../../../createDao/multisigDAO/daoRule/regime'
 import ActionButton from '../../actionButton'
 import DAOMembers from './daoMembers'
 

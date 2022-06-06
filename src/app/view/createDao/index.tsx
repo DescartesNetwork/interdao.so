@@ -12,7 +12,7 @@ import { validURL } from 'app/helpers'
 
 import './index.less'
 
-const DaoInitialization = () => {
+const CreateDao = () => {
   const [step, setStep] = useState(0)
 
   const initMetadata = useSelector(
@@ -91,4 +91,4 @@ const DaoInitialization = () => {
   )
 }
 
-export default DaoInitialization
+export default CreateDao

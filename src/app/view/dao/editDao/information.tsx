@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { CID } from 'ipfs-core'
 
 import { Col, Row } from 'antd'
-import DaoInformation from '../daoInitialization/daoInfomation'
+import DaoInformation from '../../createDao/daoInfomation'
 import ActionButton from './actionButton'
 
 import IPFS from 'shared/pdb/ipfs'

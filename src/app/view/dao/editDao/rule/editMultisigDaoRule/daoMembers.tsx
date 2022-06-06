@@ -4,7 +4,7 @@ import isEqual from 'react-fast-compare'
 
 import { Button, Col, Row, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
-import MemberInput from 'app/view/dao/daoInitialization/multisigDAO/daoRule/memberInput'
+import MemberInput from 'app/view/createDao/multisigDAO/daoRule/memberInput'
 
 import { AppDispatch, AppState } from 'app/model'
 import { setInitMetadata } from 'app/model/metadata.controller'
