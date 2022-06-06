@@ -177,7 +177,6 @@ const ModalNftCollection = ({
         visible={visible}
         footer={false}
         onCancel={onCloseModal}
-        destroyOnClose={true}
       >
         <Row gutter={[24, 24]}>
           <Col span={24}>
