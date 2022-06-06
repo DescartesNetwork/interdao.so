@@ -20,6 +20,10 @@ const Proposal = () => {
   const { isMemberOnly, loadingDaoMetadata } = useCheckMemberOnly(daoAddress)
   useEffect(() => {
     if (!isMemberOnly && !loadingDaoMetadata) {
+      window.notify({
+        type: 'warning',
+        description: 'You are not a member of this DAO',
+      })
       return history.push(`/app/${appId}/dao`)
     }
   }, [daoAddress, history, isMemberOnly, loadingDaoMetadata])
