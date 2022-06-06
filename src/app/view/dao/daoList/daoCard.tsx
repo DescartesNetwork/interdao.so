@@ -54,7 +54,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
 
   const members = useMembers(daoAddress)
   const metaData = useMetaData(daoAddress)
-  const { isMemberOnly } = useCheckMemberOnly(daoAddress)
+  const { isMemberOnly, loadingDaoMetadata } = useCheckMemberOnly(daoAddress)
   const parseRegime = Object.keys(regime)?.[0]
 
   const heightRatio = useMemo(() => {
@@ -64,13 +64,14 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
   }, [width])
 
   const handleClick = async () => {
-    if (isPublic || !metaData) return history.push(`dao/${daoAddress}`)
-    if (!isMemberOnly)
+    if (isPublic) return history.push(`dao/${daoAddress}`)
+    if (!isMemberOnly && !loadingDaoMetadata) {
       return window.notify({
         type: 'warning',
         description: 'You are not a member of this DAO',
       })
-    return history.push(`dao/${daoAddress}`)
+    }
+    history.push(`dao/${daoAddress}`)
   }
 
   const isMobile = width < 768
