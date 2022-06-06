@@ -10,7 +10,7 @@ import { asyncWait, numeric, shortenAddress } from 'shared/util'
 
 const InfoMember = ({ daoAddress }: { daoAddress: string }) => {
   const [copied, setCopied] = useState('address')
-  const metaData = useMetaData(daoAddress)
+  const { metaData } = useMetaData(daoAddress)
 
   const onCopy = async (address: string) => {
     setCopied(address)
@@ -57,7 +57,7 @@ const InfoMember = ({ daoAddress }: { daoAddress: string }) => {
 
 const AmountMembers = ({ daoAddress }: { daoAddress: string }) => {
   const members = useMembers(daoAddress)
-  const metaData = useMetaData(daoAddress)
+  const { metaData } = useMetaData(daoAddress)
   const isMultisig = metaData?.daoType === 'multisig-dao'
 
   const amountMembers = useMemo(() => {

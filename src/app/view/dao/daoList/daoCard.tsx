@@ -53,7 +53,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
   } = useUI()
 
   const members = useMembers(daoAddress)
-  const metaData = useMetaData(daoAddress)
+  const { metaData, loading: loadingMetadata } = useMetaData(daoAddress)
   const { isMemberOnly, loadingDaoMetadata } = useCheckMemberOnly(daoAddress)
   const parseRegime = Object.keys(regime)?.[0]
 
@@ -97,7 +97,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
         <RegimeTag regime={regime} special />
       </Col>
       <Col span={24}>
-        <Card bordered={false}>
+        <Card bordered={false} loading={loadingMetadata}>
           <Row gutter={[20, 20]}>
             <Col span={24} style={{ minHeight: 88 }}>
               <Row gutter={[16, 16]} wrap={false} align="top">

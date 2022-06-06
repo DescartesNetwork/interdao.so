@@ -31,7 +31,7 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const metaData = useMetaData(daoAddress)
+  const { metaData } = useMetaData(daoAddress)
   const history = useHistory()
 
   const { regime, nonce, mint, authority, isNft } = daos?.[daoAddress] || {

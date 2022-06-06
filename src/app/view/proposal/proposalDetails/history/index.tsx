@@ -22,7 +22,7 @@ const History = ({
   const [amount, setAmount] = useState(DEFAULT_AMOUNT_HISTORY)
   const [loading, setLoading] = useState(false)
   const [listReceipt, setListReceipt] = useState<ReceiptData[]>([])
-  const metaData = useMetaData(daoAddress)
+  const { metaData } = useMetaData(daoAddress)
   const isMultisigDAO = metaData?.daoType === 'multisig-dao'
   const historyColum = isMultisigDAO
     ? HISTORY_COLUMNS_MULTISIG
