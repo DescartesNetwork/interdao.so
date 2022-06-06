@@ -53,7 +53,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
   } = useUI()
 
   const members = useMembers(daoAddress)
-  const metaData = useMetaData(daoAddress)
+  const { metaData } = useMetaData(daoAddress)
   const { isMemberOnly, loadingDaoMetadata } = useCheckMemberOnly(daoAddress)
   const parseRegime = Object.keys(regime)?.[0]
 

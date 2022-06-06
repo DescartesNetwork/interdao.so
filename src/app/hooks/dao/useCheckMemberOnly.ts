@@ -12,7 +12,7 @@ const useCheckMemberOnly = (daoAddress: string) => {
 
   const { mint, isPublic, isNft } = daos[daoAddress] || ({} as DaoData)
   const { accounts } = useAccount()
-  const metaData = useMetaData(daoAddress)
+  const { metaData } = useMetaData(daoAddress)
   const [isMemberOnly, setIsMemberOnly] = useState(false)
   const [loadingDaoMetadata, setLoadingDaoMetadata] = useState(true)
   const {

@@ -92,7 +92,7 @@ const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
   const decimals = useMintDecimals(mintAddress)
   const dispatch = useDispatch<AppDispatch>()
   const history = useHistory()
-  const daoMetaData = useMetaData(daoAddress)
+  const { metaData: daoMetaData } = useMetaData(daoAddress)
 
   const senderAddress = useMemo(() => {
     const { master } = listDAO[daoAddress] || {}

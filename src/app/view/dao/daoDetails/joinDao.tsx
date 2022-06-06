@@ -16,7 +16,7 @@ const JoinDao = ({ daoAddress }: DaoDetailsProps) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const metaData = useMetaData(daoAddress)
+  const { metaData } = useMetaData(daoAddress)
   const { accounts } = useAccount()
 
   const listMint = useMemo(() => {

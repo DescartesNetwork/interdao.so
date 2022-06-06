@@ -30,7 +30,7 @@ const CardVoteToken = ({
   const { mint } = daos[daoAddress] || ({} as DaoData)
   const { balance } = useAccountBalanceByMintAddress(mint?.toBase58())
   const { status } = useProposalStatus(proposalAddress)
-  const daoMetaData = useMetaData(daoAddress)
+  const { metaData: daoMetaData } = useMetaData(daoAddress)
   const { consensusMechanism } = useProposal(proposalAddress, daoAddress)
   const isMultisigDAO = daoMetaData?.daoType === 'multisig-dao'
   const isLockedVote =

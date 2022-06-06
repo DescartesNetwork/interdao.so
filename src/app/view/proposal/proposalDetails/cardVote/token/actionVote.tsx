@@ -35,7 +35,7 @@ const ActionVote = ({
   const { mint } = daos[daoAddress] || ({} as DaoData)
   const { balance, decimals } = useAccountBalanceByMintAddress(mint?.toBase58())
   const { status } = useProposalStatus(proposalAddress)
-  const daoMetaData = useMetaData(daoAddress)
+  const { metaData: daoMetaData } = useMetaData(daoAddress)
   const proposalFee = useProposalFee({ daoAddress })
   const isMultisigDAO = daoMetaData?.daoType === 'multisig-dao'
 

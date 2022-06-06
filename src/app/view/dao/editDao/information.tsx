@@ -24,7 +24,7 @@ const Information = ({ daoAddress }: { daoAddress: string }) => {
     metadata: { initMetadata },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch<AppDispatch>()
-  const metaData = useMetaData(daoAddress)
+  const { metaData } = useMetaData(daoAddress)
   const pdb = usePDB()
 
   const updateMetaData = async () => {
