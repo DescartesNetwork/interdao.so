@@ -1,18 +1,20 @@
-import { useAccount, useWallet } from '@senhub/providers'
 import { useSelector } from 'react-redux'
 import { useCallback, useEffect, useState } from 'react'
+import { DaoData } from '@interdao/core'
+import { useAccount, useWallet } from '@senhub/providers'
 
 import { AppState } from 'app/model'
 import { isNftBelongsToCollection } from 'app/helpers/metaplex'
 import useMetaData from 'app/hooks/useMetaData'
-import { DaoData } from '@interdao/core'
 
 const useCheckMemberOnly = (daoAddress: string) => {
   const daos = useSelector((state: AppState) => state.dao.daos)
+
   const { mint, isPublic, isNft } = daos[daoAddress] || ({} as DaoData)
   const { accounts } = useAccount()
   const metaData = useMetaData(daoAddress)
   const [isMemberOnly, setIsMemberOnly] = useState(false)
+  const [loadingDaoMetadata, setLoadingDaoMetadata] = useState(true)
   const {
     wallet: { address: myAddress },
   } = useWallet()
@@ -50,8 +52,9 @@ const useCheckMemberOnly = (daoAddress: string) => {
     return valid
   }, [metaData, myAddress])
 
-  const isDaoMember = useCallback(async () => {
-    if (isPublic || !metaData) return true
+  const checkDaoMember = useCallback(async () => {
+    if (isPublic) return true
+    if (!metaData) return setLoadingDaoMetadata(true)
     const { daoType } = metaData
 
     let isMemberOnly: boolean = false
@@ -63,24 +66,23 @@ const useCheckMemberOnly = (daoAddress: string) => {
       isMemberOnly = await checkMemberOnlyMultisigDao()
     }
     setIsMemberOnly(isMemberOnly)
+    setLoadingDaoMetadata(false)
   }, [
-    checkMemberOnlyMultisigDao,
-    checkMemberOnlyNFT,
-    checkMemberOnlyToken,
     isNft,
     isPublic,
     metaData,
+    checkMemberOnlyMultisigDao,
+    checkMemberOnlyNFT,
+    checkMemberOnlyToken,
   ])
 
   useEffect(() => {
-    isDaoMember()
-  }, [isDaoMember])
+    checkDaoMember()
+  }, [checkDaoMember])
 
   return {
     isMemberOnly,
-    checkMemberOnlyNFT,
-    checkMemberOnlyToken,
-    checkMemberOnlyMultisigDao,
+    loadingDaoMetadata,
   }
 }
 
