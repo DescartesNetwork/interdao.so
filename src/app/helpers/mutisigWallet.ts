@@ -26,7 +26,7 @@ class MultisigWallet {
     token: web3.Keypair,
     provider: AnchorProvider,
   ) => {
-    const spl = Spl.token()
+    const spl = Spl.token(provider)
     const ix = await (spl.account as any).mint.createInstruction(token)
     const tx = new web3.Transaction().add(ix)
     tx.add(
@@ -55,11 +55,25 @@ class MultisigWallet {
     return anchorProvider
   }
 
+  createNewToken = async () => {
+    const mint = new web3.Keypair()
+    const { wallet, splt } = window.sentre
+    const walletAddress = await wallet.getAddress()
+    await splt.initializeMint(
+      0,
+      walletAddress,
+      null,
+      mint,
+      window.sentre.wallet,
+    )
+    this._mint = mint.publicKey
+    return mint.publicKey.toBase58()
+  }
   createNewTokenAndMintTo = async (walletAddress: string, amount: number) => {
     const mint = new web3.Keypair()
     const provider = await this.getProvider()
 
-    const spl = Spl.token()
+    const spl = Spl.token(provider)
     // Create Mint Instruction
     const ix = await (spl.account as any).mint.createInstruction(mint)
     const tx = new web3.Transaction().add(ix)
