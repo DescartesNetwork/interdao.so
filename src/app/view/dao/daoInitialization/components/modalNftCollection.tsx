@@ -22,6 +22,8 @@ import {
 import BG_BTN from 'app/static/images/system/select-dao.png'
 import useNftMetaData from 'app/hooks/useNftMetaData'
 
+const SIZE_COLLECTION_IMAGE = 88
+
 type ModalNftCollectionProps = {
   visible: boolean
   setVisible: (visible: boolean) => void
@@ -58,21 +60,27 @@ const CardNftImageOnly = ({ mintAddress }: { mintAddress: string }) => {
   return (
     <Card
       bordered={false}
-      style={{ cursor: 'pointer' }}
+      style={{
+        cursor: 'pointer',
+        height: SIZE_COLLECTION_IMAGE,
+        width: SIZE_COLLECTION_IMAGE,
+      }}
       bodyStyle={{ padding: 0 }}
       loading={loading}
       className="card-nft-image-only"
     >
       <Row gutter={[8, 8]}>
         <Col span={24}>
-          <Image
-            src={nftImg}
-            preview={false}
-            style={{ borderRadius: 4 }}
-            width={88}
-            height={88}
-            className="nft-image"
-          />
+          <LazyLoad height={SIZE_COLLECTION_IMAGE}>
+            <Image
+              src={nftImg}
+              preview={false}
+              style={{ borderRadius: 4 }}
+              width={SIZE_COLLECTION_IMAGE}
+              height={SIZE_COLLECTION_IMAGE}
+              className="nft-image"
+            />
+          </LazyLoad>
         </Col>
       </Row>
     </Card>
@@ -140,10 +148,7 @@ const ModalNftCollection = ({
 
   return (
     <Row>
-      <Col
-        style={{ height: '88px', width: '88px' }}
-        onClick={() => setVisible(true)}
-      >
+      <Col onClick={() => setVisible(true)}>
         {!mintAddress ? (
           <Card
             className="btn-select-nft"
