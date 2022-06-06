@@ -7,14 +7,14 @@ import { AppState } from 'app/model'
 import { isNftBelongsToCollection } from 'app/helpers/metaplex'
 import useMetaData from 'app/hooks/useMetaData'
 
-const useCheckMemberOnly = (daoAddress: string) => {
+const useDaoMemberOnly = (daoAddress: string) => {
   const daos = useSelector((state: AppState) => state.daos.daos)
 
   const { mint, isPublic, isNft } = daos[daoAddress] || ({} as DaoData)
   const { accounts } = useAccount()
   const { metaData } = useMetaData(daoAddress)
   const [isMemberOnly, setIsMemberOnly] = useState(false)
-  const [loadingDaoMetadata, setLoadingDaoMetadata] = useState(true)
+  const [loading, setLoading] = useState(true)
   const {
     wallet: { address: myAddress },
   } = useWallet()
@@ -55,9 +55,9 @@ const useCheckMemberOnly = (daoAddress: string) => {
   const checkDaoMember = useCallback(async () => {
     if (isPublic) {
       setIsMemberOnly(true)
-      return setLoadingDaoMetadata(false)
+      return setLoading(false)
     }
-    if (!metaData) return setLoadingDaoMetadata(true)
+    if (!metaData) return setLoading(true)
     const { daoType } = metaData
 
     let isMemberOnly: boolean = false
@@ -69,7 +69,7 @@ const useCheckMemberOnly = (daoAddress: string) => {
       isMemberOnly = await checkMemberOnlyMultisigDao()
     }
     setIsMemberOnly(isMemberOnly)
-    setLoadingDaoMetadata(false)
+    setLoading(false)
   }, [
     isNft,
     isPublic,
@@ -85,8 +85,8 @@ const useCheckMemberOnly = (daoAddress: string) => {
 
   return {
     isMemberOnly,
-    loadingDaoMetadata,
+    loading,
   }
 }
 
-export default useCheckMemberOnly
+export default useDaoMemberOnly
