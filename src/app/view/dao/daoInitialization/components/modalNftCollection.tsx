@@ -61,6 +61,7 @@ const CardNftImageOnly = ({ mintAddress }: { mintAddress: string }) => {
       style={{ cursor: 'pointer' }}
       bodyStyle={{ padding: 0 }}
       loading={loading}
+      className="card-nft-image-only"
     >
       <Row gutter={[8, 8]}>
         <Col span={24}>
@@ -70,6 +71,7 @@ const CardNftImageOnly = ({ mintAddress }: { mintAddress: string }) => {
             style={{ borderRadius: 4 }}
             width={88}
             height={88}
+            className="nft-image"
           />
         </Col>
       </Row>
