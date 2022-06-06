@@ -47,7 +47,7 @@ const Treasury = ({ daoAddress }: { daoAddress: string }) => {
   const totalUSD = useTotalUSD({ accounts: listAccount })
 
   const {
-    dao: { daos },
+    daos: { daos },
   } = useSelector((state: AppState) => state)
 
   const daoMasterAddress = useMemo(() => {

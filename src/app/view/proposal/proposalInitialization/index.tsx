@@ -51,7 +51,7 @@ const ProposalInitialization = () => {
   const { daoAddress } = useParams<{ daoAddress: string }>()
   const {
     template: { tx, templateName },
-    dao: { daos },
+    daos: { daos },
   } = useSelector((state: AppState) => state)
   const history = useHistory()
   const dispatch = useDispatch()

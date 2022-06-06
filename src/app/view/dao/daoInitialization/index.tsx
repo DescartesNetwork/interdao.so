@@ -18,7 +18,7 @@ const DaoInitialization = () => {
   const initMetadata = useSelector(
     (state: AppState) => state.metadata.initMetadata,
   )
-  const initDao = useSelector((state: AppState) => state.dao.initDao)
+  const initDao = useSelector((state: AppState) => state.daos.initDao)
   const { mintAddress, supply, regime } = initDao
 
   const onNextStep = useCallback(async () => {

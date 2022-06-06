@@ -6,11 +6,11 @@ import { Col, Row, Typography } from 'antd'
 import CardRegime from '../../components/cardRegime'
 
 import { AppDispatch, AppState } from 'app/model'
-import { setInitDao } from 'app/model/dao.controller'
+import { setInitDao } from 'app/model/daos.controller'
 
 const Regime = () => {
   const {
-    dao: { initDao },
+    daos: { initDao },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch<AppDispatch>()
   const { regime } = initDao

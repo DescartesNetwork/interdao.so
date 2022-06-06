@@ -21,7 +21,7 @@ const YourDaos = () => {
     wallet: { address: walletAddress },
   } = useWallet()
   const {
-    dao: { daos },
+    daos: { daos },
   } = useSelector((state: AppState) => state)
   const history = useHistory()
 

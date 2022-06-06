@@ -8,13 +8,13 @@ import usePDB from './usePDB'
 import IPFS from 'shared/pdb/ipfs'
 import { AppState } from 'app/model'
 import { getCID } from 'app/helpers'
-import { LocalMetadata } from 'app/view/watcher/metadata.watcher'
+import { LocalMetadata } from 'app/watcher/metadata.watcher'
 
 const ipfs = new IPFS()
 
 const useMetaData = (daoAddress: string) => {
   const [metaData, setMetaData] = useState<MetaData>()
-  const daos = useSelector((state: AppState) => state.dao.daos)
+  const daos = useSelector((state: AppState) => state.daos.daos)
   const pdb = usePDB()
 
   const getMetaData = useCallback(async () => {

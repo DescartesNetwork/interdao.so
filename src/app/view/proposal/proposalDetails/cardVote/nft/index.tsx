@@ -27,7 +27,7 @@ const CardVoteByNFT = ({
 }: ProposalChildCardProps) => {
   const [votingType, setVotingType] = useState<VotingType>(VotingType.Agree)
   const [visible, setVisible] = useState(false)
-  const daos = useSelector((state: AppState) => state.dao.daos)
+  const daos = useSelector((state: AppState) => state.daos.daos)
   const { mint } = daos[daoAddress] || ({} as DaoData)
   const { status } = useProposalStatus(proposalAddress)
   const { consensusMechanism } = useProposal(proposalAddress, daoAddress)

@@ -5,12 +5,12 @@ import { Button, Col, Row, Space, Typography } from 'antd'
 import VoteInput from './voteInput'
 
 import { AppDispatch, AppState } from 'app/model'
-import { setInitDao } from 'app/model/dao.controller'
+import { setInitDao } from 'app/model/daos.controller'
 
 import './index.less'
 
 const TokenAddressInput = () => {
-  const initDao = useSelector((state: AppState) => state.dao.initDao)
+  const initDao = useSelector((state: AppState) => state.daos.initDao)
   const dispatch = useDispatch<AppDispatch>()
   const { isNft } = initDao
 

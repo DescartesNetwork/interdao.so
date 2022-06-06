@@ -9,7 +9,7 @@ const useMembers = (daoAddress: string) => {
   const dispatch = useDispatch<AppDispatch>()
   const {
     metadata: { tokenHolders },
-    dao: { daos },
+    daos: { daos },
   } = useSelector((state: AppState) => state)
 
   const amountHolder = useMemo(

@@ -4,11 +4,11 @@ import BN from 'bn.js'
 import CirculatingSupplyInput from './circulatingSupplyInput'
 import CirculatingSupplyInputNFT from './circulatingSupplyInputNFT'
 
-import { setInitDao } from 'app/model/dao.controller'
+import { setInitDao } from 'app/model/daos.controller'
 import { AppDispatch, AppState } from 'app/model'
 
 const CirculatingSupply = () => {
-  const initDao = useSelector((state: AppState) => state.dao.initDao)
+  const initDao = useSelector((state: AppState) => state.daos.initDao)
   const dispatch = useDispatch<AppDispatch>()
 
   const { isNft, supply, mintAddress } = initDao

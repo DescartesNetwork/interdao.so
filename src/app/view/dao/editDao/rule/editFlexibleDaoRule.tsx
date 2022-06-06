@@ -23,7 +23,7 @@ const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
   const [oldRegime, setOldRegime] = useState<DaoRegime>()
   const [oldSupply, setOldSupply] = useState<BN>(new BN(0))
   const {
-    dao: { daos, initDao },
+    daos: { daos, initDao },
   } = useSelector((state: AppState) => state)
   const { mint, regime, supply } = daos?.[daoAddress] || {
     regime: {},

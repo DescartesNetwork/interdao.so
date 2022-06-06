@@ -21,7 +21,7 @@ const {
 
 const useMultisigDao = () => {
   const [loading, setLoading] = useState(false)
-  const initDao = useSelector((state: AppState) => state.dao.initDao)
+  const initDao = useSelector((state: AppState) => state.daos.initDao)
   const initMetadata = useSelector(
     (state: AppState) => state.metadata.initMetadata,
   )

@@ -6,7 +6,6 @@ import {
   DaoRegime,
   DaoRegimes,
 } from '@interdao/core'
-import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { web3 } from '@project-serum/anchor'
 import BN from 'bn.js'
 
@@ -60,28 +59,18 @@ const initialState: DaoState = {
  */
 
 export const getDaos = createAsyncThunk(`${NAME}/getDaos`, async () => {
-  const {
-    provider: { connection },
-    programId,
-    account: { dao },
-  } = interDao.program
-  const value: Array<{ pubkey: PublicKey; account: AccountInfo<Buffer> }> =
-    await connection.getProgramAccounts(programId, {
-      filters: [
-        { dataSize: dao.size },
-        {
-          memcmp: {
-            offset: 0,
-            bytes: DAO_DISCRIMINATOR,
-          },
-        },
-      ],
-    })
+  const accounts = await interDao.program.account.dao.all([
+    {
+      memcmp: {
+        offset: 0,
+        bytes: DAO_DISCRIMINATOR,
+      },
+    },
+  ])
   let bulk: Record<string, DaoData> = {}
-  value.forEach(({ pubkey, account: { data: buf } }) => {
-    const address = pubkey.toBase58()
-    const data = interDao.parseDaoData(buf)
-    bulk[address] = { ...data }
+  accounts.forEach(({ publicKey, account }) => {
+    const address = publicKey.toBase58()
+    bulk[address] = account as any
   })
   return { daos: bulk }
 })
@@ -98,11 +87,9 @@ export const getDao = createAsyncThunk<
     },
   } = getState()
   if (data && !force) return { [address]: data }
-  const raw = await interDao.getDaoData(address)
+  const daoData: DaoData = await interDao.getDaoData(address)
   return {
-    [address]: {
-      ...raw,
-    },
+    [address]: daoData,
   }
 })
 

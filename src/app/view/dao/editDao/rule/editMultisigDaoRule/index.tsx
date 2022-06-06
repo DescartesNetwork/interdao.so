@@ -21,7 +21,7 @@ const {
 
 const EditMultisigDaoRule = ({ daoAddress }: { daoAddress: string }) => {
   const [loading, setLoading] = useState(false)
-  const daos = useSelector((state: AppState) => state.dao.daos)
+  const daos = useSelector((state: AppState) => state.daos.daos)
   const initMetadata = useSelector(
     (state: AppState) => state.metadata.initMetadata,
   )

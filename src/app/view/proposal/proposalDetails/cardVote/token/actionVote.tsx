@@ -29,7 +29,7 @@ const ActionVote = ({
   const [loadingFor, setLoadingFor] = useState(false)
   const [loadingAgainst, setLoadingAgainst] = useState(false)
   const {
-    dao: { daos },
+    daos: { daos },
     voteBid: { amount },
   } = useSelector((state: AppState) => state)
   const { mint } = daos[daoAddress] || ({} as DaoData)

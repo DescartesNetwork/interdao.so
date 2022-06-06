@@ -14,7 +14,7 @@ const HEIGHT_RATIO = 1.777777
 
 const ReviewAndCreate = () => {
   const {
-    dao: { initDao },
+    daos: { initDao },
     metadata: { initMetadata },
   } = useSelector((state: AppState) => state)
   const {

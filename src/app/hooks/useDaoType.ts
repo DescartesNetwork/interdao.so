@@ -6,7 +6,7 @@ import { MetaData } from 'app/model/metadata.controller'
 import usePDB from './usePDB'
 
 const useDaoType = (type: string) => {
-  const daos = useSelector((state: AppState) => state.dao.daos)
+  const daos = useSelector((state: AppState) => state.daos.daos)
   const [daoAddresses, setDaoAddresses] = useState<string[]>([])
   const pdb = usePDB()
 

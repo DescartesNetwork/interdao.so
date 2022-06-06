@@ -22,7 +22,7 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
   const [status, setStatus] = useState('all-status')
   const {
     proposal,
-    dao: { daos },
+    daos: { daos },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch<AppDispatch>()
   const {

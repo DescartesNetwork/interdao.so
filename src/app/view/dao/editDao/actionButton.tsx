@@ -5,7 +5,7 @@ import { Row, Button, Col, ButtonProps } from 'antd'
 
 import configs from 'app/configs'
 import { AppDispatch } from 'app/model'
-import { setInitDao } from 'app/model/dao.controller'
+import { setInitDao } from 'app/model/daos.controller'
 import { setInitMetadata } from 'app/model/metadata.controller'
 
 const {

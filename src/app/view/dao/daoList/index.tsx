@@ -19,7 +19,7 @@ const DaoList = () => {
   const [type, setType] = useState('all-type')
   const [searchKey, setSearchKey] = useState('')
   const {
-    dao: { daos },
+    daos: { daos },
   } = useSelector((state: AppState) => state)
   const listDaoByType = useDaoType(type)
 

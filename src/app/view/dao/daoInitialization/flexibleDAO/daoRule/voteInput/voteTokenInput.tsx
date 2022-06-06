@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row, Input } from 'antd'
 import { MintSelection } from 'shared/antd/mint'
 
-import { setInitDao } from 'app/model/dao.controller'
+import { setInitDao } from 'app/model/daos.controller'
 import { AppDispatch, AppState } from 'app/model'
 
 const VoteTokenInput = () => {
-  const initDao = useSelector((state: AppState) => state.dao.initDao)
+  const initDao = useSelector((state: AppState) => state.daos.initDao)
   const dispatch = useDispatch<AppDispatch>()
   const { mintAddress } = initDao
 

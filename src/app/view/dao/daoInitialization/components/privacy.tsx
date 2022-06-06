@@ -3,10 +3,10 @@ import isEqual from 'react-fast-compare'
 
 import { Button, Col, Row, Typography } from 'antd'
 import { AppDispatch, AppState } from 'app/model'
-import { setInitDao } from 'app/model/dao.controller'
+import { setInitDao } from 'app/model/daos.controller'
 
 const Privacy = () => {
-  const initDao = useSelector((state: AppState) => state.dao.initDao)
+  const initDao = useSelector((state: AppState) => state.daos.initDao)
   const { isPublic } = initDao
   const dispatch = useDispatch<AppDispatch>()
 

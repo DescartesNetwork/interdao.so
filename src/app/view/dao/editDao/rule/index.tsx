@@ -8,13 +8,13 @@ import EditMultisigDaoRule from './editMultisigDaoRule'
 import EditFlexibleDaoRule from './editFlexibleDaoRule'
 
 import { AppDispatch, AppState } from 'app/model'
-import { InitDao, setInitDao } from 'app/model/dao.controller'
+import { InitDao, setInitDao } from 'app/model/daos.controller'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import useMetaData from 'app/hooks/useMetaData'
 
 const Rule = ({ daoAddress }: { daoAddress: string }) => {
   const {
-    dao: { daos },
+    daos: { daos },
   } = useSelector((state: AppState) => state)
   const { mint, regime, supply, isNft, isPublic } = daos?.[daoAddress] || {
     regime: {},

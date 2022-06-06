@@ -6,7 +6,7 @@ import { Col, Row, Space, Tooltip, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import ModalNftCollection from '../../../components/modalNftCollection'
 
-import { setInitDao } from 'app/model/dao.controller'
+import { setInitDao } from 'app/model/daos.controller'
 import { AppDispatch, AppState } from 'app/model'
 import { asyncWait, shortenAddress } from 'shared/util'
 
@@ -37,7 +37,7 @@ const Address = ({ address }: { address: string }) => {
 
 const VoteNftInput = () => {
   const [visible, setVisible] = useState(false)
-  const initDao = useSelector((state: AppState) => state.dao.initDao)
+  const initDao = useSelector((state: AppState) => state.daos.initDao)
   const dispatch = useDispatch<AppDispatch>()
   const { mintAddress } = initDao
 

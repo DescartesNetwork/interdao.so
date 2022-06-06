@@ -6,7 +6,7 @@ import CardRegime from '../../components/cardRegime'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { AppDispatch, AppState } from 'app/model'
-import { setInitDao } from 'app/model/dao.controller'
+import { setInitDao } from 'app/model/daos.controller'
 
 export const REGIME_LIST = [
   DaoRegimes.Dictatorial,
@@ -15,7 +15,7 @@ export const REGIME_LIST = [
 ]
 
 const RegimeInput = () => {
-  const initDao = useSelector((state: AppState) => state.dao.initDao)
+  const initDao = useSelector((state: AppState) => state.daos.initDao)
   const dispatch = useDispatch<AppDispatch>()
 
   const { regime: value } = initDao

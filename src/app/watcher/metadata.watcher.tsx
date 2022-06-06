@@ -14,7 +14,7 @@ export type LocalMetadata = {
 } & MetaData
 
 const MetadataWatcher = () => {
-  const daos = useSelector((state: AppState) => state.dao.daos)
+  const daos = useSelector((state: AppState) => state.daos.daos)
   const pdb = usePDB()
 
   const loadAllMetaData = useCallback(async () => {

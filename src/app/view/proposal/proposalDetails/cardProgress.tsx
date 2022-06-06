@@ -26,7 +26,7 @@ const CardProgress = ({
 }: ProposalChildCardProps) => {
   const [backGroundColor, setBackGroundColor] = useState('')
   const [successColor, setSuccessColor] = useState('')
-  const daos = useSelector((state: AppState) => state.dao.daos)
+  const daos = useSelector((state: AppState) => state.daos.daos)
   const { votingAgainstPower, votingForPower, consensusQuorum } = useProposal(
     proposalAddress,
     daoAddress,

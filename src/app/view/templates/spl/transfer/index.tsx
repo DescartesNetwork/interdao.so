@@ -88,7 +88,7 @@ const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
   const [dstAddress, setDstAddress] = useState('')
 
   const [amount, setAmount] = useState('')
-  const listDAO = useSelector((state: AppState) => state.dao.daos)
+  const listDAO = useSelector((state: AppState) => state.daos.daos)
   const decimals = useMintDecimals(mintAddress)
   const dispatch = useDispatch<AppDispatch>()
   const history = useHistory()

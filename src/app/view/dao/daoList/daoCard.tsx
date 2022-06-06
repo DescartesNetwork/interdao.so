@@ -45,7 +45,7 @@ const MAX_WIDTH_RATE = 24 / 18 // full screen is 24 col, max width is 18 col
 
 const DaoCard = ({ daoAddress }: DaoCardProps) => {
   const { regime, nonce, mint, isPublic, isNft } = useSelector(
-    (state: AppState) => state.dao.daos[daoAddress],
+    (state: AppState) => state.daos.daos[daoAddress],
   )
   const history = useHistory()
   const {

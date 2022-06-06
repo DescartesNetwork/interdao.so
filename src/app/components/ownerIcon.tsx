@@ -11,7 +11,7 @@ const OwnerIcon = ({ daoAddress }: { daoAddress: string }) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const daos = useSelector((state: AppState) => state.dao.daos)
+  const daos = useSelector((state: AppState) => state.daos.daos)
 
   const { authority } = daos[daoAddress] || ({} as DaoData)
   const authAddress = authority?.toBase58()

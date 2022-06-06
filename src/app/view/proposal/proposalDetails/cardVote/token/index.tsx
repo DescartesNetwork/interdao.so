@@ -23,7 +23,7 @@ const CardVoteToken = ({
   daoAddress,
 }: ProposalChildCardProps) => {
   const {
-    dao: { daos },
+    daos: { daos },
     voteBid: { amount },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch()
