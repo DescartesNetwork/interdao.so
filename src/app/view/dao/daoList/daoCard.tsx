@@ -25,7 +25,7 @@ import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
 import useMembers from 'app/hooks/useMembers'
 import useMetaData from 'app/hooks/useMetaData'
-import useCheckMemberOnly from 'app/hooks/dao/useCheckMemberOnly'
+import useDaoMemberOnly from 'app/hooks/dao/useDaoMemberOnly'
 import { getIcon, validURL } from 'app/helpers'
 
 import autonomous from 'app/static/images/system/bg-autonomous.png'
@@ -54,7 +54,8 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
 
   const members = useMembers(daoAddress)
   const { metaData, loading: loadingMetadata } = useMetaData(daoAddress)
-  const { isMemberOnly, loadingDaoMetadata } = useCheckMemberOnly(daoAddress)
+  const { isMemberOnly, loading: loadingDaoMetadata } =
+    useDaoMemberOnly(daoAddress)
   const parseRegime = Object.keys(regime)?.[0]
 
   const heightRatio = useMemo(() => {

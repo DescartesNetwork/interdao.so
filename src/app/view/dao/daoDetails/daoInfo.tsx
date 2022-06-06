@@ -31,7 +31,7 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const { metaData } = useMetaData(daoAddress)
+  const { metaData, loading } = useMetaData(daoAddress)
   const history = useHistory()
 
   const { regime, nonce, mint, authority, isNft } = daos?.[daoAddress] || {
@@ -45,7 +45,7 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
   const mobileScreen = width < 768
 
   return (
-    <Card bordered={false}>
+    <Card bordered={false} loading={loading}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Row>
