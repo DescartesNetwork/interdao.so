@@ -39,7 +39,7 @@ const View = () => {
           <Route exact path={`/app/${appId}/dao`} component={Dao} />
           <Route
             exact
-            path={`/app/${appId}/dao/new-dao`}
+            path={`/app/${appId}/dao/create-dao`}
             component={CreateDao}
           />
           <Route

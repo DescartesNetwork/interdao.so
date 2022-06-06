@@ -31,7 +31,7 @@ const Dao = () => {
               tabBarExtraContent={
                 <Button
                   type="primary"
-                  onClick={() => history.push(`/app/${appId}/dao/new-dao`)}
+                  onClick={() => history.push(`/app/${appId}/dao/create-dao`)}
                   icon={<IonIcon name="add-outline" />}
                 >
                   Create a DAO
