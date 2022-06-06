@@ -55,7 +55,7 @@ const ProposalInitialization = () => {
   } = useSelector((state: AppState) => state)
   const history = useHistory()
   const dispatch = useDispatch()
-  const daoMetaData = useMetaData(daoAddress)
+  const { metaData: daoMetaData } = useMetaData(daoAddress)
 
   const disabled = !title || !description
   const isMultisigDAO = daoMetaData?.daoType === 'multisig-dao'

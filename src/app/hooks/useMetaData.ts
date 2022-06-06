@@ -14,30 +14,37 @@ const ipfs = new IPFS()
 
 const useMetaData = (daoAddress: string) => {
   const [metaData, setMetaData] = useState<MetaData>()
+  const [loading, setLoading] = useState(false)
   const daos = useSelector((state: AppState) => state.daos.daos)
   const pdb = usePDB()
 
   const getMetaData = useCallback(async () => {
     if (!account.isAddress(daoAddress)) return setMetaData(undefined)
+    setLoading(true)
     const data = (await pdb.getItem(daoAddress)) as LocalMetadata
     const { metadata: digest } = daos[daoAddress] || ({} as DaoData)
-    if (!digest) return
+    if (!digest) return setLoading(false)
     const cid = getCID(digest)
-    if (data && cid === data.cid) return setMetaData(data)
+    if (data && cid === data.cid) {
+      setMetaData(data)
+      return setLoading(false)
+    }
 
     const metadata: MetaData = await ipfs.get(cid)
-    if (!metadata) return
+    if (!metadata) return setLoading(false)
+
     const localMetadata = { ...metadata, cid }
     await pdb.setItem(daoAddress, localMetadata)
 
-    return setMetaData(metadata)
+    setMetaData(metadata)
+    return setLoading(false)
   }, [daoAddress, daos, pdb])
 
   useEffect(() => {
     getMetaData()
   }, [getMetaData])
 
-  return metaData
+  return { metaData, loading }
 }
 
 export default useMetaData

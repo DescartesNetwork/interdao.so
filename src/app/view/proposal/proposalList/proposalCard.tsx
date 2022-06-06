@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { SystemProgram } from '@solana/web3.js'
 import BN from 'bn.js'
 
-import { Card, Col, Row, Typography } from 'antd'
+import { Card, Col, Row, Skeleton, Typography } from 'antd'
 import ProposalStatus from 'app/components/proposalStatus'
 import TemplateInfo from '../modalTemplateInfo/component/templateInfo'
 
@@ -39,7 +39,8 @@ const ProposalCard = ({
   }
   const { status } = useProposalStatus(proposalAddress)
   const history = useHistory()
-  const metaData = useProposalMetaData(proposalAddress)
+  const { metaData, loading: loadingProposalMetadata } =
+    useProposalMetaData(proposalAddress)
   const endTime = Number(endDate) * 1000
 
   return (
@@ -63,11 +64,16 @@ const ProposalCard = ({
         <Col span={24}>
           <Row>
             <Col flex="auto">
-              <Typography.Title level={4}>
-                {metaData?.title
-                  ? metaData.title
-                  : shortenAddress(proposalAddress)}
-              </Typography.Title>
+              <Skeleton
+                loading={loadingProposalMetadata}
+                paragraph={{ rows: 0 }}
+              >
+                <Typography.Title level={4}>
+                  {metaData?.title
+                    ? metaData.title
+                    : shortenAddress(proposalAddress)}
+                </Typography.Title>
+              </Skeleton>
             </Col>
             <Col>
               <ProposalStatus status={status} />

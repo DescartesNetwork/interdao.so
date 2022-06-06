@@ -18,7 +18,7 @@ const {
 const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
   const [loading, setLoading] = useState(false)
   const { status } = useProposalStatus(proposalAddress)
-  const metaData = useProposalMetaData(proposalAddress)
+  const { metaData } = useProposalMetaData(proposalAddress)
   const { receipts } = useReceipts({ proposalAddress })
 
   const members = useMemo(() => {
