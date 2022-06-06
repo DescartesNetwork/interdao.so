@@ -82,7 +82,6 @@ class Distributor {
       mint: tokenPublicKey,
       owner: new PublicKey(treasurer),
     })
-
     return utility.program.methods
       .initializeDistributor(
         Array.from(merkleDistributor.deriveMerkleRoot()),
@@ -95,9 +94,7 @@ class Distributor {
         authority: new PublicKey(walletAddress),
         distributor: distributor.publicKey,
         src: srcPublicKey,
-        treasurer: utility.deriveTreasurerAddress(
-          distributor.publicKey.toBase58(),
-        ),
+        treasurer,
         treasury,
         feeCollector: new PublicKey(walletAddress),
         mint: tokenPublicKey,
