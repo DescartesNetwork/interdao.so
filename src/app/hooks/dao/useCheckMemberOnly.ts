@@ -53,7 +53,10 @@ const useCheckMemberOnly = (daoAddress: string) => {
   }, [metaData, myAddress])
 
   const checkDaoMember = useCallback(async () => {
-    if (isPublic) return true
+    if (isPublic) {
+      setIsMemberOnly(true)
+      return setLoadingDaoMetadata(false)
+    }
     if (!metaData) return setLoadingDaoMetadata(true)
     const { daoType } = metaData
 
