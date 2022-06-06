@@ -34,10 +34,8 @@ const useMultisigDao = () => {
   const createVotingMint = useCallback(async () => {
     const { members } = initMetadata
     const multiSigWallet = new MultisigWallet(DEFAULT_EMPTY_ADDRESS)
-    const mintAddress = await multiSigWallet.createNewTokenAndMintTo(
-      myWallet,
-      members.length,
-    )
+    const mintAddress = await multiSigWallet.createNewToken()
+    await multiSigWallet.mintToAccount(myWallet, members.length)
     return mintAddress
   }, [initMetadata, myWallet])
 
