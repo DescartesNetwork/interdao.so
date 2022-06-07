@@ -6,6 +6,7 @@ import { Row, Col, Card } from 'antd'
 import InitDAOContainer, { CreateDaoSteps } from './initDAOContainer'
 import InitDAOHeader from './initDAOHeader'
 import ActionButton from './actions'
+import InitDAOBody from './initDAOBody'
 
 import { AppState } from 'app/model'
 import { validURL } from 'app/helpers'
@@ -74,16 +75,16 @@ const CreateDao = () => {
               <InitDAOHeader step={step} />
             </Col>
             <Col span={24}>
-              <InitDAOContainer step={step} />
+              <InitDAOBody />
             </Col>
-            <Col span={24}>
+            {/* <Col span={24}>
               <ActionButton
                 step={step}
                 onHandleStep={onNextStep}
                 disabled={disabled}
                 setStep={() => setStep(step - 1)}
               />
-            </Col>
+            </Col> */}
           </Row>
         </Card>
       </Col>

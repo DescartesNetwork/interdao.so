@@ -26,7 +26,7 @@ export type MetaData = {
   distributorAddress: string
 }
 
-const DEFAULT_META_DATA: MetaData = {
+export const DEFAULT_META_DATA: MetaData = {
   daoName: '',
   description: '',
   image: '',

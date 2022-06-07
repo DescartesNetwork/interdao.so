@@ -9,7 +9,7 @@ export type InitDAOHeaderProps = {
 const DEFAULT_PERCENT = 25
 const DAO_PROGRESS_TITLE = [
   'Choose type of DAO',
-  'Input DAO infomation',
+  'Input DAO information',
   'Set the rule',
   'Review',
 ]
