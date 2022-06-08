@@ -108,14 +108,29 @@ export const submitStepSetRule = createAsyncThunk<
   return newState
 })
 
-export const prevStep = createAsyncThunk<
+export const revertPrevStep = createAsyncThunk<
   CreateDaoState,
-  { step: CreateDaoSteps },
+  void,
   { state: { createDao: CreateDaoState } }
->(`${NAME}/prevStep`, async ({ step }, { getState }) => {
+>(`${NAME}/prevStep`, async (_, { getState }) => {
   const { createDao } = getState()
+  let prevStep = createDao.step
+  switch (prevStep) {
+    case CreateDaoSteps.Review:
+      prevStep = CreateDaoSteps.SetRule
+      break
+    case CreateDaoSteps.SetRule:
+      prevStep = CreateDaoSteps.InputDetails
+      break
+    case CreateDaoSteps.InputDetails:
+      prevStep = CreateDaoSteps.ChooseType
+      break
+    default:
+      prevStep = CreateDaoSteps.ChooseType
+      break
+  }
   const newState: CreateDaoState = {
-    step,
+    step: prevStep,
     data: { ...createDao.data },
   }
   return newState
@@ -154,7 +169,7 @@ const slice = createSlice({
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        prevStep.fulfilled,
+        revertPrevStep.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(

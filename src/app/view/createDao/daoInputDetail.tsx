@@ -23,8 +23,7 @@ import {
 } from 'app/model/metadata.controller'
 import { AppDispatch } from 'app/model'
 import {
-  CreateDaoSteps,
-  prevStep,
+  revertPrevStep,
   submitStepDaoDetail,
 } from 'app/model/createDao.controller'
 
@@ -200,9 +199,7 @@ const DaoInputDetails = () => {
             <Button
               type="text"
               size="large"
-              onClick={() =>
-                dispatch(prevStep({ step: CreateDaoSteps.ChooseType }))
-              }
+              onClick={() => dispatch(revertPrevStep())}
             >
               Back
             </Button>

@@ -12,8 +12,7 @@ import CirculatingSupply from './circulatingSupply'
 import { AppDispatch } from 'app/model'
 
 import {
-  CreateDaoSteps,
-  prevStep,
+  revertPrevStep,
   submitStepSetRule,
 } from 'app/model/createDao.controller'
 
@@ -72,9 +71,7 @@ const FlexibleDaoRule = () => {
             <Button
               type="text"
               size="large"
-              onClick={() =>
-                dispatch(prevStep({ step: CreateDaoSteps.InputDetails }))
-              }
+              onClick={() => dispatch(revertPrevStep())}
             >
               Back
             </Button>

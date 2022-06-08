@@ -12,6 +12,16 @@ const {
  * Interface & Utility
  */
 
+export const DEFAULT_META_DATA: MetaData = {
+  daoName: '',
+  description: '',
+  image: '',
+  optionals: [],
+  daoType: 'flexible-dao',
+  members: [],
+  distributorAddress: '',
+}
+
 export type DAOMember = {
   name: string
   walletAddress: string
@@ -24,16 +34,6 @@ export type MetaData = {
   daoType: 'flexible-dao' | 'multisig-dao'
   members: DAOMember[]
   distributorAddress: string
-}
-
-export const DEFAULT_META_DATA: MetaData = {
-  daoName: '',
-  description: '',
-  image: '',
-  optionals: [],
-  daoType: 'flexible-dao',
-  members: [],
-  distributorAddress: '',
 }
 
 type MetaDataState = {

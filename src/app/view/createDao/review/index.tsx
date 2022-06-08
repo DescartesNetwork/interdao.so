@@ -5,7 +5,7 @@ import FlexibleDaoReview from './flexibleDaoReview'
 import MultisigDAOReview from './multisigDaoReview'
 
 import { AppDispatch, AppState } from 'app/model'
-import { CreateDaoSteps, prevStep } from 'app/model/createDao.controller'
+import { revertPrevStep } from 'app/model/createDao.controller'
 import ConfirmButton from './confirmButton'
 
 const Review = () => {
@@ -29,9 +29,7 @@ const Review = () => {
             <Button
               type="text"
               size="large"
-              onClick={() =>
-                dispatch(prevStep({ step: CreateDaoSteps.ChooseType }))
-              }
+              onClick={() => dispatch(revertPrevStep())}
             >
               Back
             </Button>
