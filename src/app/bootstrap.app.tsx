@@ -32,3 +32,5 @@ export const Page = () => {
     </UIProvider>
   )
 }
+
+export * from 'app/static.app'
