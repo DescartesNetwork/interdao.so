@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/static/js/main.741e2fd5.js",
+    "main.js": "/static/js/main.85114840.js",
     "interdao.js": "/index.js",
     "static/css/src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.0cbbc932.chunk.css": "/static/css/src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.0cbbc932.chunk.css",
     "static/js/src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.e3dd8995.chunk.js": "/static/js/src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.e3dd8995.chunk.js",
@@ -10,8 +10,8 @@
     "static/js/node_modules_babel_runtime_regenerator_index_js.e0f6cd0a.chunk.js": "/static/js/node_modules_babel_runtime_regenerator_index_js.e0f6cd0a.chunk.js",
     "static/js/node_modules_prop-types_index_js-node_modules_react-router-dom_esm_react-router-dom_js.f78469c9.chunk.js": "/static/js/node_modules_prop-types_index_js-node_modules_react-router-dom_esm_react-router-dom_js.f78469c9.chunk.js",
     "static/js/node_modules_react_index_js.b231be6d.chunk.js": "/static/js/node_modules_react_index_js.b231be6d.chunk.js",
-    "static/css/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.d37344c1.chunk.css": "/static/css/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.d37344c1.chunk.css",
-    "static/js/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.d19095ad.chunk.js": "/static/js/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.d19095ad.chunk.js",
+    "static/css/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.6a284b7b.chunk.css": "/static/css/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.6a284b7b.chunk.css",
+    "static/js/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.cc79f9ef.chunk.js": "/static/js/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.cc79f9ef.chunk.js",
     "static/js/vendors-node_modules_react-dom_index_js.8e44dcc3.chunk.js": "/static/js/vendors-node_modules_react-dom_index_js.8e44dcc3.chunk.js",
     "static/js/node_modules_react-router-dom_esm_react-router-dom_js.8f0d6984.chunk.js": "/static/js/node_modules_react-router-dom_esm_react-router-dom_js.8f0d6984.chunk.js",
     "static/js/src_os_store_context_ts-_3b661.413283b5.chunk.js": "/static/js/src_os_store_context_ts-_3b661.413283b5.chunk.js",
@@ -20,7 +20,7 @@
     "static/js/vendors-node_modules_chainsafe_libp2p-noise_dist_src_noise_js-node_modules_senswap_sen-js_dis-67ecde.92b16056.chunk.js": "/static/js/vendors-node_modules_chainsafe_libp2p-noise_dist_src_noise_js-node_modules_senswap_sen-js_dis-67ecde.92b16056.chunk.js",
     "static/js/vendors-node_modules_ant-design_icons_es_icons_LoadingOutlined_js-node_modules_copy-to-clipbo-f41099.acc42072.chunk.js": "/static/js/vendors-node_modules_ant-design_icons_es_icons_LoadingOutlined_js-node_modules_copy-to-clipbo-f41099.acc42072.chunk.js",
     "static/js/vendors-node_modules_react-router_esm_react-router_js.3cc5ea8d.chunk.js": "/static/js/vendors-node_modules_react-router_esm_react-router_js.3cc5ea8d.chunk.js",
-    "static/js/vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-d20af6.5ed102e3.chunk.js": "/static/js/vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-d20af6.5ed102e3.chunk.js",
+    "static/js/vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-d20af6.2388d098.chunk.js": "/static/js/vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-d20af6.2388d098.chunk.js",
     "static/js/vendors-node_modules_antd_es_index_js.37dd9ed1.chunk.js": "/static/js/vendors-node_modules_antd_es_index_js.37dd9ed1.chunk.js",
     "static/js/vendors-node_modules_solana_web3_js_lib_index_browser_esm_js-node_modules_base64-js_index_js--1c07f4.5ffca32c.chunk.js": "/static/js/vendors-node_modules_solana_web3_js_lib_index_browser_esm_js-node_modules_base64-js_index_js--1c07f4.5ffca32c.chunk.js",
     "static/js/vendors-node_modules_react-redux_es_index_js.36eaa414.chunk.js": "/static/js/vendors-node_modules_react-redux_es_index_js.36eaa414.chunk.js",
@@ -81,7 +81,7 @@
     "static/media/icon-telegram.svg": "/static/media/icon-telegram.2450489f40d03000fe65fc1c6f238d85.svg",
     "interdao-asset-senhub.json": "/interdao-asset-senhub.json",
     "static/media/README.md": "/static/media/README.cc06a5f56da5ba785b81.md",
-    "main.741e2fd5.js.map": "/static/js/main.741e2fd5.js.map",
+    "main.85114840.js.map": "/static/js/main.85114840.js.map",
     "index.js.map": "/index.js.map",
     "src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.0cbbc932.chunk.css.map": "/static/css/src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.0cbbc932.chunk.css.map",
     "src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.e3dd8995.chunk.js.map": "/static/js/src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.e3dd8995.chunk.js.map",
@@ -91,8 +91,8 @@
     "node_modules_babel_runtime_regenerator_index_js.e0f6cd0a.chunk.js.map": "/static/js/node_modules_babel_runtime_regenerator_index_js.e0f6cd0a.chunk.js.map",
     "node_modules_prop-types_index_js-node_modules_react-router-dom_esm_react-router-dom_js.f78469c9.chunk.js.map": "/static/js/node_modules_prop-types_index_js-node_modules_react-router-dom_esm_react-router-dom_js.f78469c9.chunk.js.map",
     "node_modules_react_index_js.b231be6d.chunk.js.map": "/static/js/node_modules_react_index_js.b231be6d.chunk.js.map",
-    "src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.d37344c1.chunk.css.map": "/static/css/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.d37344c1.chunk.css.map",
-    "src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.d19095ad.chunk.js.map": "/static/js/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.d19095ad.chunk.js.map",
+    "src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.6a284b7b.chunk.css.map": "/static/css/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.6a284b7b.chunk.css.map",
+    "src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.cc79f9ef.chunk.js.map": "/static/js/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.cc79f9ef.chunk.js.map",
     "vendors-node_modules_react-dom_index_js.8e44dcc3.chunk.js.map": "/static/js/vendors-node_modules_react-dom_index_js.8e44dcc3.chunk.js.map",
     "node_modules_react-router-dom_esm_react-router-dom_js.8f0d6984.chunk.js.map": "/static/js/node_modules_react-router-dom_esm_react-router-dom_js.8f0d6984.chunk.js.map",
     "src_os_store_context_ts-_3b661.413283b5.chunk.js.map": "/static/js/src_os_store_context_ts-_3b661.413283b5.chunk.js.map",
@@ -101,7 +101,7 @@
     "vendors-node_modules_chainsafe_libp2p-noise_dist_src_noise_js-node_modules_senswap_sen-js_dis-67ecde.92b16056.chunk.js.map": "/static/js/vendors-node_modules_chainsafe_libp2p-noise_dist_src_noise_js-node_modules_senswap_sen-js_dis-67ecde.92b16056.chunk.js.map",
     "vendors-node_modules_ant-design_icons_es_icons_LoadingOutlined_js-node_modules_copy-to-clipbo-f41099.acc42072.chunk.js.map": "/static/js/vendors-node_modules_ant-design_icons_es_icons_LoadingOutlined_js-node_modules_copy-to-clipbo-f41099.acc42072.chunk.js.map",
     "vendors-node_modules_react-router_esm_react-router_js.3cc5ea8d.chunk.js.map": "/static/js/vendors-node_modules_react-router_esm_react-router_js.3cc5ea8d.chunk.js.map",
-    "vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-d20af6.5ed102e3.chunk.js.map": "/static/js/vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-d20af6.5ed102e3.chunk.js.map",
+    "vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-d20af6.2388d098.chunk.js.map": "/static/js/vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-d20af6.2388d098.chunk.js.map",
     "vendors-node_modules_antd_es_index_js.37dd9ed1.chunk.js.map": "/static/js/vendors-node_modules_antd_es_index_js.37dd9ed1.chunk.js.map",
     "vendors-node_modules_solana_web3_js_lib_index_browser_esm_js-node_modules_base64-js_index_js--1c07f4.5ffca32c.chunk.js.map": "/static/js/vendors-node_modules_solana_web3_js_lib_index_browser_esm_js-node_modules_base64-js_index_js--1c07f4.5ffca32c.chunk.js.map",
     "vendors-node_modules_react-redux_es_index_js.36eaa414.chunk.js.map": "/static/js/vendors-node_modules_react-redux_es_index_js.36eaa414.chunk.js.map",
@@ -112,6 +112,6 @@
     "src_os_store_index_ts-src_shared_dataloader_index_ts.48686f44.chunk.js.map": "/static/js/src_os_store_index_ts-src_shared_dataloader_index_ts.48686f44.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.741e2fd5.js"
+    "static/js/main.85114840.js"
   ]
 }
