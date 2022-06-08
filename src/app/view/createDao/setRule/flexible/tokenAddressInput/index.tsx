@@ -10,6 +10,7 @@ type TokenAddressInputProps = {
   onNftChange: (isNft: boolean) => void
   mintAddress: string
   onMintAddressChange: (mintAddress: string) => void
+  disabled?: boolean
 }
 
 const TokenAddressInput = ({
@@ -17,6 +18,7 @@ const TokenAddressInput = ({
   onNftChange,
   mintAddress,
   onMintAddressChange,
+  disabled = false,
 }: TokenAddressInputProps) => {
   return (
     <Row gutter={[8, 8]}>
@@ -46,6 +48,7 @@ const TokenAddressInput = ({
           isNft={isNft}
           mintAddress={mintAddress}
           onMintAddressChange={onMintAddressChange}
+          disabled={disabled}
         />
       </Col>
     </Row>

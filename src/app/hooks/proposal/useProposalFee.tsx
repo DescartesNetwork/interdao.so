@@ -15,7 +15,7 @@ const {
 } = configs
 
 const useProposalFee = ({ daoAddress }: useProposalFeeProps) => {
-  const daos = useSelector((state: AppState) => state.daos.daos)
+  const daos = useSelector((state: AppState) => state.daos)
   const { regime, authority } = daos[daoAddress] || ({} as DaoData)
 
   const parseRegime = useMemo(() => {

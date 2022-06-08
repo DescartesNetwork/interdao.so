@@ -21,9 +21,9 @@ const {
 
 const useMultisigDao = () => {
   const [loading, setLoading] = useState(false)
-  const initDao = useSelector((state: AppState) => state.daos.initDao)
-  const initMetadata = useSelector(
-    (state: AppState) => state.metadata.initMetadata,
+  const createDaoData = useSelector((state: AppState) => state.createDao.data)
+  const metadata = useSelector(
+    (state: AppState) => state.createDao.data.metadata,
   )
   const pdb = usePDB()
   const history = useHistory()
@@ -32,16 +32,16 @@ const useMultisigDao = () => {
   } = useWallet()
 
   const createVotingMint = useCallback(async () => {
-    const { members } = initMetadata
+    const { members } = metadata
     const multiSigWallet = new MultisigWallet(DEFAULT_EMPTY_ADDRESS)
     const mintAddress = await multiSigWallet.createNewToken()
     await multiSigWallet.mintToAccount(myWallet, members.length)
     return mintAddress
-  }, [initMetadata, myWallet])
+  }, [metadata, myWallet])
 
   const getDistributorAddress = useCallback(
     async (mintAddress: string) => {
-      const { members, daoType } = initMetadata
+      const { members, daoType } = metadata
       if (daoType === 'flexible-dao') return ''
       const distributor = new Distributor()
       const pubKeys = members
@@ -54,27 +54,27 @@ const useMultisigDao = () => {
       )
       return distributorAddress
     },
-    [initMetadata, myWallet],
+    [metadata, myWallet],
   )
 
   const createMultisigDao = useCallback(async () => {
     try {
       setLoading(true)
-      const { regime, isPublic, isNft } = initDao
+      const { regime, isPublic, isNft } = createDaoData
       const mintAddress = await createVotingMint()
       const distributorAddress = await getDistributorAddress(mintAddress)
       const ipfs = new IPFS()
-      const cid = await ipfs.set({ ...initMetadata, distributorAddress })
+      const cid = await ipfs.set({ ...metadata, distributorAddress })
       const {
         multihash: { digest },
       } = CID.parse(cid)
-      const metadata = Buffer.from(digest)
-      const { members } = initMetadata
+      const metadataBuff = Buffer.from(digest)
+      const { members } = metadata
       const totalSupply = new BN(members.length)
       const { txId, daoAddress } = await interDao.initializeDao(
         mintAddress,
         totalSupply,
-        metadata,
+        metadataBuff,
         undefined, // Optional DAO's keypair
         regime,
         isNft,
@@ -82,7 +82,7 @@ const useMultisigDao = () => {
       )
 
       await pdb.setItem(daoAddress, {
-        ...initMetadata,
+        ...metadata,
         distributorAddress,
         cid,
       }) // to realtime
@@ -98,10 +98,10 @@ const useMultisigDao = () => {
       setLoading(false)
     }
   }, [
-    initDao,
+    createDaoData,
     createVotingMint,
     getDistributorAddress,
-    initMetadata,
+    metadata,
     pdb,
     history,
   ])

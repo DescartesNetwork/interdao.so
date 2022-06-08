@@ -8,7 +8,7 @@ import { isNftBelongsToCollection } from 'app/helpers/metaplex'
 import useMetaData from 'app/hooks/useMetaData'
 
 const useDaoMemberOnly = (daoAddress: string) => {
-  const daos = useSelector((state: AppState) => state.daos.daos)
+  const daos = useSelector((state: AppState) => state.daos)
 
   const { mint, isPublic, isNft } = daos[daoAddress] || ({} as DaoData)
   const { accounts } = useAccount()

@@ -6,7 +6,7 @@ import { Button, Col, Row, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import MemberInput from './memberInput'
 
-import { DAOMember } from 'app/model/metadata.controller'
+import { DAOMember } from 'app/model/createDao.controller'
 
 const MY_INDEX = 0
 type DAOMembersProps = {

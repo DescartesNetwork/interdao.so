@@ -3,8 +3,6 @@ import { DaoRegime, DaoRegimes } from '@interdao/core'
 import { web3 } from '@project-serum/anchor'
 import BN from 'bn.js'
 
-import { MetaData } from './metadata.controller'
-
 export const DEFAULT_META_DATA: MetaData = {
   daoName: '',
   description: '',
@@ -38,6 +36,21 @@ export type CreateDaoData = {
   regime: DaoRegime
   isPublic: boolean
   isNft: boolean
+}
+
+export type MetaData = {
+  daoName: string
+  description: string
+  image: string | ArrayBuffer | null
+  optionals: string[]
+  daoType: 'flexible-dao' | 'multisig-dao'
+  members: DAOMember[]
+  distributorAddress: string
+}
+
+export type DAOMember = {
+  name: string
+  walletAddress: string
 }
 
 export enum CreateDaoSteps {

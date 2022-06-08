@@ -27,7 +27,7 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
   const [loading, setLoading] = useState(false)
   const [listReceipt, setListReceipt] = useState<Receipt[]>([])
   const { receipts } = useReceipts({ proposalAddress })
-  const { daos } = useSelector((state: AppState) => state.daos)
+  const daos = useSelector((state: AppState) => state.daos)
   const { isNft } = daos[daoAddress] || ({} as DaoData)
   const {
     wallet: { address: walletAddress },

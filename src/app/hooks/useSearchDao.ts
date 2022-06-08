@@ -4,8 +4,8 @@ import { account } from '@senswap/sen-js'
 import DaoProvider, {
   RegisterDaoData,
 } from 'app/view/dao/daoList/search/daoProvider'
-import { MetaData } from 'app/model/metadata.controller'
 import usePDB from './usePDB'
+import { MetaData } from 'app/model/createDao.controller'
 
 const useSearchDao = (keyword: string, daoAddresses: string[]) => {
   const [metaData, setMetaData] = useState<RegisterDaoData>()

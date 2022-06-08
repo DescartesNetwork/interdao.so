@@ -46,9 +46,7 @@ const Treasury = ({ daoAddress }: { daoAddress: string }) => {
   const [listAccount, setListAccount] = useState<AccountData[]>([])
   const totalUSD = useTotalUSD({ accounts: listAccount })
 
-  const {
-    daos: { daos },
-  } = useSelector((state: AppState) => state)
+  const daos = useSelector((state: AppState) => state.daos)
 
   const daoMasterAddress = useMemo(() => {
     const { master } = daos[daoAddress] || {}

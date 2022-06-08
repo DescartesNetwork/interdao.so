@@ -1,26 +1,24 @@
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import isEqual from 'react-fast-compare'
 
 import { Button, Col, Row, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
-import MemberInput from 'app/view/createDao/multisigDAO/daoRule/memberInput'
+import MemberInput from 'app/view/createDao/setRule/multisig/memberInput'
 
-import { AppDispatch, AppState } from 'app/model'
-import { setInitMetadata } from 'app/model/metadata.controller'
+import { DAOMember } from 'app/model/createDao.controller'
 
-const DAOMembers = () => {
+type DAOMembersProps = {
+  members: DAOMember[]
+  setMember: (members: DAOMember[]) => void
+}
+
+const DAOMembers = ({ members, setMember }: DAOMembersProps) => {
   const [oldMember, setOldMember] = useState<string[]>([])
-  const {
-    metadata: { initMetadata },
-  } = useSelector((state: AppState) => state)
-  const dispatch = useDispatch<AppDispatch>()
-  const { members } = initMetadata
 
   const addMember = () => {
     const nextMembers = [...members]
     nextMembers.push({ name: '', walletAddress: '' })
-    return dispatch(setInitMetadata({ members: nextMembers }))
+    return setMember(nextMembers)
   }
 
   const onChangeMember = (e: ChangeEvent<HTMLInputElement>, index: number) => {
@@ -36,13 +34,13 @@ const DAOMembers = () => {
       ...nextMembers[index],
       [e.target.name]: e.target.value,
     }
-    return dispatch(setInitMetadata({ members: nextMembers }))
+    return setMember(nextMembers)
   }
 
   const remove = (index: number) => {
     const nextMembers = [...members]
     nextMembers.splice(index, 1)
-    return dispatch(setInitMetadata({ members: nextMembers }))
+    return setMember(nextMembers)
   }
 
   const setDefaultMembers = useCallback(() => {

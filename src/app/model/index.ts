@@ -3,7 +3,7 @@ import { devTools, bigintSerializationMiddleware } from 'app/model/devTools'
 
 import daos from 'app/model/daos.controller'
 import createDao from 'app/model/createDao.controller'
-import metadata from 'app/model/metadata.controller'
+import tokenHolder from 'app/model/tokenHolder.controller'
 import proposal from 'app/model/proposal.controller'
 import receipt from 'app/model/receipt.controller'
 import voteBid from 'app/model/voteBid.controller'
@@ -19,7 +19,7 @@ const model = configureStore({
   reducer: {
     createDao,
     daos,
-    metadata,
+    tokenHolder,
     proposal,
     receipt,
     voteBid,

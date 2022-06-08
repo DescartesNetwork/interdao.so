@@ -3,7 +3,7 @@ import isEqual from 'react-fast-compare'
 
 import { Button, Col, Row, Typography } from 'antd'
 import { AppDispatch, AppState } from 'app/model'
-import { setInitDao } from 'app/model/daos.controller'
+// import { setInitDao } from 'app/model/daos.controller'
 
 const Privacy = () => {
   const initDao = useSelector((state: AppState) => state.daos.initDao)
@@ -11,7 +11,7 @@ const Privacy = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   const handleClick = (isPublic: boolean) => {
-    return dispatch(setInitDao({ ...initDao, isPublic }))
+    // return dispatch(setInitDao({ ...initDao, isPublic }))
   }
   return (
     <Row gutter={[12, 12]}>

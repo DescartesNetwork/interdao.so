@@ -22,6 +22,7 @@ const isPlain = (val: any): boolean => {
     const proto = Object.getPrototypeOf(obj)
     return proto !== null && Object.getPrototypeOf(proto) === null
   }
+
   return (
     typeof val === 'undefined' ||
     val === null ||
@@ -33,12 +34,13 @@ const isPlain = (val: any): boolean => {
     typeof val === 'bigint' ||
     val instanceof PublicKey ||
     val instanceof BN ||
-    val instanceof Buffer
+    Buffer.isBuffer(val)
   )
 }
 BigInt.prototype.toJSON = function () {
   return this.toString() // https://github.com/GoogleChromeLabs/jsbi/issues/30
 }
+
 export const bigintSerializationMiddleware = {
   serializableCheck: {
     isSerializable: isPlain,

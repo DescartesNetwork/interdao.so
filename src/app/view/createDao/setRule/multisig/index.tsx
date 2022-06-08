@@ -8,9 +8,9 @@ import Regime from './regime'
 import DAOMembers from './daoMembers'
 import Privacy from '../privacy'
 
-import { DAOMember } from 'app/model/metadata.controller'
 import { AppDispatch, AppState } from 'app/model'
 import {
+  DAOMember,
   revertPrevStep,
   submitStepSetRule,
 } from 'app/model/createDao.controller'

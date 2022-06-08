@@ -22,14 +22,12 @@ const DAO_TYPE = [
     label: 'Flexible DAO',
     description:
       'The Flexible DAO has 3 regimes that allow you to create a DAO customized for your individual requirements, community structure, and governance token setup.',
-    state: 1,
   },
   {
     key: 'multisig-dao',
     label: 'MultiSig DAO',
     description:
       'The Multisig DAO allows you to create an organization for your team members with Autonomous regime and jointly own, manage shared assets such as treasury accounts, NFTs or mints.',
-    state: 0,
   },
 ]
 
@@ -54,7 +52,7 @@ const ChooseDaoType = () => {
           className="btn-radio-card"
         >
           <Row gutter={[24, 24]}>
-            {DAO_TYPE.map(({ key, label, description, state }) => (
+            {DAO_TYPE.map(({ key, label, description }) => (
               <Col xs={24} md={12} key={key}>
                 <Radio.Button value={key} style={{ border: 'none' }}>
                   <Card

@@ -18,9 +18,7 @@ const DaoList = () => {
   const [mechanisms, setMechanisms] = useState('all-regime')
   const [type, setType] = useState('all-type')
   const [searchKey, setSearchKey] = useState('')
-  const {
-    daos: { daos },
-  } = useSelector((state: AppState) => state)
+  const daos = useSelector((state: AppState) => state.daos)
   const listDaoByType = useDaoType(type)
 
   const filterDaoAddress = useMemo(() => {

@@ -1,5 +1,4 @@
 import { ChangeEvent } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
 import {
   Button,
@@ -16,21 +15,20 @@ import IonIcon from '@sentre/antd-ionicon'
 
 import { UploadChangeParam } from 'antd/lib/upload'
 import { fileToBase64 } from 'app/helpers'
-import { MetaData, setInitMetadata } from 'app/model/metadata.controller'
-import { AppDispatch, AppState } from 'app/model'
+import { MetaData } from 'app/model/createDao.controller'
 
-const DaoInformation = () => {
-  const initMetadata = useSelector(
-    (state: AppState) => state.metadata.initMetadata,
-  )
-  const dispatch = useDispatch<AppDispatch>()
+type FormInputDetailProps = {
+  metadata: MetaData
+  setMetadata: (metadata: MetaData) => void
+}
 
+const FormInputDetail = ({ metadata, setMetadata }: FormInputDetailProps) => {
   const formatMetaData = async (imgBase64: string | ArrayBuffer | null) => {
     const nextMetaData: MetaData = {
-      ...initMetadata,
+      ...metadata,
       image: imgBase64,
     }
-    return dispatch(setInitMetadata(nextMetaData))
+    return setMetadata(nextMetaData)
   }
 
   const onFileChange = (file: UploadChangeParam) => {
@@ -40,24 +38,24 @@ const DaoInformation = () => {
   }
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    dispatch(setInitMetadata({ [e.target.name]: e.target.value }))
+    setMetadata({ ...metadata, [e.target.name]: e.target.value })
 
   const onOptionalChange = (e: ChangeEvent<HTMLInputElement>, idx: number) => {
-    const socials: string[] = [...initMetadata.optionals]
+    const socials: string[] = [...metadata.optionals]
     socials[idx] = e.target.value
-    dispatch(setInitMetadata({ optionals: socials }))
+    return setMetadata({ ...metadata, optionals: socials })
   }
 
   const addLink = () => {
-    const socials: string[] = [...initMetadata.optionals]
+    const socials: string[] = [...metadata.optionals]
     socials.push('')
-    return dispatch(setInitMetadata({ optionals: socials }))
+    return setMetadata({ ...metadata, optionals: socials })
   }
 
-  const remove = (index: number) => {
-    const socials: string[] = [...initMetadata.optionals]
+  const removeLink = (index: number) => {
+    const socials: string[] = [...metadata.optionals]
     socials.splice(index, 1)
-    return dispatch(setInitMetadata({ optionals: socials }))
+    return setMetadata({ ...metadata, optionals: socials })
   }
 
   return (
@@ -70,6 +68,7 @@ const DaoInformation = () => {
             onChange={onChange}
             name="daoName"
             className="border-less"
+            value={metadata.daoName}
           />
         </Space>
       </Col>
@@ -81,31 +80,33 @@ const DaoInformation = () => {
             name="description"
             onChange={onChange}
             className="border-less"
+            value={metadata.description}
           />
         </Space>
       </Col>
       <Col span={24}>
         <Space direction="vertical">
           <Typography.Text>Avatar</Typography.Text>
-          {initMetadata.image ? (
+          {metadata.image ? (
             <Card
               className="img-card-preview-upload"
-              bodyStyle={{ padding: 0, position: 'relative', height: '100%' }}
+              bodyStyle={{
+                padding: 0,
+                position: 'relative',
+                height: '100%',
+              }}
             >
-              <Image
-                src={initMetadata.image?.toString() || ''}
-                preview={false}
-              />
+              <Image src={metadata.image?.toString() || ''} preview={false} />
               <IonIcon
                 className="ico-action-upload"
                 name="trash-outline"
-                onClick={() => dispatch(setInitMetadata({ image: '' }))}
+                onClick={() => setMetadata({ ...metadata, image: '' })}
               />
             </Card>
           ) : (
             <Upload
               className={`interdao-upload-metadata ${
-                !!initMetadata.image ? 'uploaded' : ''
+                !!metadata.image ? 'uploaded' : ''
               }`}
               accept="image/png,image/jpg,image/webp"
               name="avatar"
@@ -113,7 +114,7 @@ const DaoInformation = () => {
               maxCount={1}
               onChange={onFileChange}
               onRemove={() => {
-                dispatch(setInitMetadata({ image: '' }))
+                setMetadata({ ...metadata, image: '' })
                 return true
               }}
             >
@@ -133,7 +134,7 @@ const DaoInformation = () => {
         <Space direction="vertical" style={{ width: '100%' }}>
           <Typography.Text>Social media (Optional)</Typography.Text>
           <Row gutter={[8, 8]}>
-            {initMetadata.optionals.map((social, index) => (
+            {metadata.optionals.map((social, index) => (
               <Col span={24} key={index}>
                 <Row gutter={[12, 12]}>
                   <Col span={22}>
@@ -143,13 +144,14 @@ const DaoInformation = () => {
                         onOptionalChange(e, index)
                       }
                       className="border-less"
+                      value={social}
                     />
                   </Col>
                   <Col span={2}>
                     <Button
                       type="text"
                       icon={<IonIcon name="trash-outline" />}
-                      onClick={() => remove(index)}
+                      onClick={() => removeLink(index)}
                     />
                   </Col>
                 </Row>
@@ -171,4 +173,4 @@ const DaoInformation = () => {
   )
 }
 
-export default DaoInformation
+export default FormInputDetail

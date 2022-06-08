@@ -96,8 +96,9 @@ const ModalNftCollection = ({
     useState<Record<string, MetadataDataType[]>>()
   const [searchText, setSearchText] = useState<string>('')
   const [loading, setLoading] = useState(false)
-  const initDao = useSelector((state: AppState) => state.daos.initDao)
-  const { mintAddress } = initDao
+  const mintAddress = useSelector(
+    (state: AppState) => state.createDao.data.mintAddress,
+  )
 
   const {
     wallet: { address: walletAddress },

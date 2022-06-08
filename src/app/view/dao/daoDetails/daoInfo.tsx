@@ -24,7 +24,7 @@ const {
 } = configs
 
 const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
-  const daos = useSelector((state: AppState) => state.daos.daos)
+  const daos = useSelector((state: AppState) => state.daos)
   const {
     ui: { width },
   } = useUI()

@@ -12,7 +12,7 @@ import { AppState } from 'app/model'
 import './index.less'
 
 const Hero = () => {
-  const daos = useSelector((state: AppState) => state.daos.daos)
+  const daos = useSelector((state: AppState) => state.daos)
   const proposal = useSelector((state: AppState) => state.proposal)
 
   const executeProposal = useMemo(() => {

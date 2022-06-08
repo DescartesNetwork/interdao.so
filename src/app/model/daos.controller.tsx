@@ -1,13 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { account } from '@senswap/sen-js'
-import {
-  DaoData,
-  DAO_DISCRIMINATOR,
-  DaoRegime,
-  DaoRegimes,
-} from '@interdao/core'
-import { web3 } from '@project-serum/anchor'
-import BN from 'bn.js'
+import { DaoData, DAO_DISCRIMINATOR } from '@interdao/core'
 
 import configs from 'app/configs'
 
@@ -19,40 +12,14 @@ const {
  * Interface & Utility
  */
 
-export const DEFAULT_DAO_DATA = {
-  mintAddress: '',
-  supply: new BN(0),
-  metadata: undefined,
-  dao: undefined,
-  regime: DaoRegimes.Dictatorial,
-  isPublic: true,
-  isNft: false,
-}
-
-export type InitDao = {
-  mintAddress: string
-  supply: BN
-  metadata?: Buffer
-  dao?: web3.Keypair
-  regime: DaoRegime
-  isPublic: boolean
-  isNft: boolean
-}
-
-export type DaoState = {
-  daos: Record<string, DaoData>
-  initDao: InitDao
-}
+export type DaoState = Record<string, DaoData>
 
 /**
  * Store constructor
  */
 
 const NAME = 'dao'
-const initialState: DaoState = {
-  daos: {},
-  initDao: DEFAULT_DAO_DATA,
-}
+const initialState: DaoState = {}
 
 /**
  * Actions
@@ -72,7 +39,7 @@ export const getDaos = createAsyncThunk(`${NAME}/getDaos`, async () => {
     const address = publicKey.toBase58()
     bulk[address] = account as any
   })
-  return { daos: bulk }
+  return bulk
 })
 
 export const getDao = createAsyncThunk<
@@ -82,9 +49,7 @@ export const getDao = createAsyncThunk<
 >(`${NAME}/getDao`, async ({ address, force }, { getState }) => {
   if (!account.isAddress(address)) throw new Error('Invalid address')
   const {
-    dao: {
-      daos: { [address]: data },
-    },
+    daos: { [address]: data },
   } = getState()
   if (data && !force) return { [address]: data }
   const daoData: DaoData = await interDao.getDaoData(address)
@@ -105,14 +70,6 @@ export const upsetDao = createAsyncThunk<
   }
 })
 
-export const setInitDao = createAsyncThunk(
-  `${NAME}/setInitDao`,
-  async (initDao?: InitDao) => {
-    if (!initDao) return { initDao: DEFAULT_DAO_DATA }
-    return { initDao }
-  },
-)
-
 /**
  * Usual procedure
  */
@@ -129,14 +86,10 @@ const slice = createSlice({
       )
       .addCase(
         getDao.fulfilled,
-        (state, { payload }) => void Object.assign(state.daos, payload),
+        (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
         upsetDao.fulfilled,
-        (state, { payload }) => void Object.assign(state.daos, payload),
-      )
-      .addCase(
-        setInitDao.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })
