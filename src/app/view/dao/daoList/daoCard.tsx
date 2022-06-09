@@ -53,9 +53,8 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
   } = useUI()
 
   const members = useMembers(daoAddress)
-  const { metaData, loading: loadingMetadata } = useMetaData(daoAddress)
-  const { isMemberOnly, loading: loadingDaoMetadata } =
-    useDaoMemberOnly(daoAddress)
+  const { metaData, loading } = useMetaData(daoAddress)
+  const { validMember } = useDaoMemberOnly(daoAddress)
   const parseRegime = Object.keys(regime)?.[0]
 
   const heightRatio = useMemo(() => {
@@ -65,13 +64,17 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
   }, [width])
 
   const handleClick = async () => {
-    if (isPublic) return history.push(`dao/${daoAddress}`)
-    if (!isMemberOnly && !loadingDaoMetadata) {
+    if (loading)
+      return window.notify({
+        type: 'warning',
+        description: 'Data is loading',
+      })
+    if (!validMember && !isPublic)
       return window.notify({
         type: 'warning',
         description: 'You are not a member of this DAO',
       })
-    }
+
     history.push(`dao/${daoAddress}`)
   }
 
@@ -98,7 +101,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
         <RegimeTag regime={regime} special />
       </Col>
       <Col span={24}>
-        <Card bordered={false} loading={loadingMetadata}>
+        <Card bordered={false} loading={loading}>
           <Row gutter={[20, 20]}>
             <Col span={24} style={{ minHeight: 88 }}>
               <Row gutter={[16, 16]} wrap={false} align="top">

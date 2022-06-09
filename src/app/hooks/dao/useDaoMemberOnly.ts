@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useAccount, useMint, useWallet } from '@senhub/providers'
 import { DaoData } from '@interdao/core'
-import { useAccount, useWallet } from '@senhub/providers'
 
 import { AppState } from 'app/model'
 import { isNftBelongsToCollection } from 'app/helpers/metaplex'
@@ -9,38 +9,37 @@ import useMetaData from 'app/hooks/useMetaData'
 
 const useDaoMemberOnly = (daoAddress: string) => {
   const daos = useSelector((state: AppState) => state.daos)
-
-  const { mint, isPublic, isNft } = daos[daoAddress] || ({} as DaoData)
+  const { mint: daoMint, isNft } = daos[daoAddress] || ({} as DaoData)
   const { accounts } = useAccount()
   const { metaData } = useMetaData(daoAddress)
-  const [isMemberOnly, setIsMemberOnly] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [validMember, setValidMember] = useState(false)
+  const [checking, setChecking] = useState(true)
   const {
     wallet: { address: myAddress },
   } = useWallet()
+  const { getDecimals } = useMint()
 
   const checkMemberOnlyNFT = useCallback(async () => {
-    let valid = false
-    for (const accountAddr in accounts) {
-      let isMemnberOnly = await isNftBelongsToCollection(
-        accounts[accountAddr].mint,
-        mint.toBase58(),
+    for (const { mint: mintAddress } of Object.values(accounts)) {
+      const decimals = await getDecimals(mintAddress)
+      if (decimals) continue
+      const isMemberOnly = await isNftBelongsToCollection(
+        mintAddress,
+        daoMint.toBase58(),
       )
-      if (isMemnberOnly) {
-        valid = true
-        break
-      }
+      if (isMemberOnly) return isMemberOnly
     }
-    return valid
-  }, [accounts, mint])
+    return false
+  }, [accounts, daoMint, getDecimals])
 
-  const checkMemberOnlyToken = useCallback(async () => {
+  const isMemberTokenDAO = useMemo(() => {
+    if (!daoMint) return false
     const mints = []
-    for (const accountAddr in accounts) mints.push(accounts[accountAddr].mint)
-    return mints.includes(mint.toBase58())
-  }, [accounts, mint])
+    for (const { mint } of Object.values(accounts)) mints.push(mint)
+    return mints.includes(daoMint.toBase58())
+  }, [accounts, daoMint])
 
-  const checkMemberOnlyMultisigDao = useCallback(async () => {
+  const isMemberMultisig = useMemo(() => {
     if (!metaData) return false
     const { members } = metaData
     let valid = false
@@ -53,40 +52,31 @@ const useDaoMemberOnly = (daoAddress: string) => {
   }, [metaData, myAddress])
 
   const checkDaoMember = useCallback(async () => {
-    if (isPublic) {
-      setIsMemberOnly(true)
-      return setLoading(false)
-    }
-    if (!metaData) return setLoading(true)
+    if (!metaData || !daoMint) return setChecking(true)
     const { daoType } = metaData
+    let valid = false
+    if (daoType === 'flexible-dao' && isNft) valid = await checkMemberOnlyNFT()
 
-    let isMemberOnly: boolean = false
-    if (daoType === 'flexible-dao') {
-      if (isNft) isMemberOnly = await checkMemberOnlyNFT()
-      else isMemberOnly = await checkMemberOnlyToken()
-    }
-    if (daoType === 'multisig-dao') {
-      isMemberOnly = await checkMemberOnlyMultisigDao()
-    }
-    setIsMemberOnly(isMemberOnly)
-    setLoading(false)
+    if (daoType === 'flexible-dao' && !isNft) valid = isMemberTokenDAO
+
+    if (daoType === 'multisig-dao') valid = isMemberMultisig
+
+    setValidMember(valid)
+    setChecking(false)
   }, [
-    isNft,
-    isPublic,
+    daoMint,
     metaData,
-    checkMemberOnlyMultisigDao,
+    isNft,
+    isMemberTokenDAO,
+    isMemberMultisig,
     checkMemberOnlyNFT,
-    checkMemberOnlyToken,
   ])
 
   useEffect(() => {
     checkDaoMember()
   }, [checkDaoMember])
 
-  return {
-    isMemberOnly,
-    loading,
-  }
+  return { validMember, checking }
 }
 
 export default useDaoMemberOnly
