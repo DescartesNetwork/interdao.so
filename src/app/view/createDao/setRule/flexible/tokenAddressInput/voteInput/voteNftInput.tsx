@@ -41,14 +41,11 @@ const VoteNftInput = ({
   mintAddress,
   onMintAddressChange,
 }: VoteNftInputProps) => {
-  const [visible, setVisible] = useState(false)
-
   return (
     <Row gutter={[24, 24]}>
       <Col>
         <ModalNftCollection
-          visible={visible}
-          setVisible={setVisible}
+          mintAddress={mintAddress}
           onSelect={onMintAddressChange}
         />
       </Col>

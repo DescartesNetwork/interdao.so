@@ -4,13 +4,11 @@ import { MintSelection } from 'shared/antd/mint'
 type VoteTokenInputProps = {
   mintAddress: string
   onMintAddressChange: (mintAddress: string) => void
-  disabled: boolean
 }
 
 const VoteTokenInput = ({
   mintAddress,
   onMintAddressChange,
-  disabled,
 }: VoteTokenInputProps) => {
   return (
     <Col flex={1}>
@@ -27,11 +25,9 @@ const VoteTokenInput = ({
                 value={mintAddress}
                 onChange={onMintAddressChange}
                 style={{ marginRight: -7 }}
-                disabled={disabled}
               />
             }
             autoFocus={true}
-            disabled={disabled}
           />
         </Col>
       </Row>

@@ -4,11 +4,10 @@ import BN from 'bn.js'
 import { DaoRegime } from '@interdao/core'
 import isEqual from 'react-fast-compare'
 
-import { Button, Col, Row, Typography } from 'antd'
+import { Col, Row } from 'antd'
 import ActionButton from '../actionButton'
 import RegimeInput from 'app/view/createDao/setRule/flexible/regimeInput'
 import CirculatingSupply from 'app/view/createDao/setRule/flexible/circulatingSupply'
-import TokenAddressInput from 'app/view/createDao/setRule/flexible/tokenAddressInput'
 
 import configs from 'app/configs'
 import { AppState } from 'app/model'
@@ -20,7 +19,7 @@ const {
 } = configs
 
 const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
-  const { isNft, isPublic, mint, regime, supply } = useSelector(
+  const { isNft, mint, regime, supply } = useSelector(
     (state: AppState) => state.daos[daoAddress],
   )
   const decimals = useMintDecimals(mint.toBase58()) || 0
@@ -80,31 +79,12 @@ const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
             <RegimeInput value={nextRegime} onChangeRegime={setRegime} />
           </Col>
           <Col span={24}>
-            <TokenAddressInput
-              onMintAddressChange={() => {}}
-              mintAddress={mint.toBase58()}
-              isNft={isNft}
-              onNftChange={() => {}}
-              disabled
-            />
-          </Col>
-          <Col span={24}>
             <CirculatingSupply
               isNft={isNft}
               mintAddress={mint.toBase58()}
               supply={nextSupply}
               onChangeSupply={setSupply}
             />
-          </Col>
-          <Col span={24}>
-            <Row gutter={[12, 12]}>
-              <Col span={24}>
-                <Typography.Text>DAO privacy</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Button>{isPublic ? 'Public' : 'Member Only'}</Button>
-              </Col>
-            </Row>
           </Col>
         </Row>
       </Col>

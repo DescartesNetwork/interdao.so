@@ -5,14 +5,12 @@ type VoteInputProps = {
   isNft: boolean
   mintAddress: string
   onMintAddressChange: (mintAddress: string) => void
-  disabled: boolean
 }
 
 const VoteInput = ({
   isNft,
   mintAddress,
   onMintAddressChange,
-  disabled,
 }: VoteInputProps) => {
   return isNft ? (
     <VoteNftInput
@@ -23,7 +21,6 @@ const VoteInput = ({
     <VoteTokenInput
       mintAddress={mintAddress}
       onMintAddressChange={onMintAddressChange}
-      disabled={disabled}
     />
   )
 }
