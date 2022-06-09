@@ -1,20 +1,15 @@
-import { useDispatch, useSelector } from 'react-redux'
-
 import { Col, Row, Input } from 'antd'
 import { MintSelection } from 'shared/antd/mint'
 
-import { setInitDao } from 'app/model/daos.controller'
-import { AppDispatch, AppState } from 'app/model'
+type VoteTokenInputProps = {
+  mintAddress: string
+  onMintAddressChange: (mintAddress: string) => void
+}
 
-const VoteTokenInput = () => {
-  const initDao = useSelector((state: AppState) => state.daos.initDao)
-  const dispatch = useDispatch<AppDispatch>()
-  const { mintAddress } = initDao
-
-  const onMintAddressChange = (mintAddress: string) => {
-    return dispatch(setInitDao({ ...initDao, mintAddress }))
-  }
-
+const VoteTokenInput = ({
+  mintAddress,
+  onMintAddressChange,
+}: VoteTokenInputProps) => {
   return (
     <Col flex={1}>
       <Row gutter={[24, 24]}>
@@ -24,9 +19,7 @@ const VoteTokenInput = () => {
             placeholder={'Input Token Address'}
             value={mintAddress}
             className="border-less"
-            onChange={(e) =>
-              dispatch(setInitDao({ ...initDao, mintAddress: e.target.value }))
-            }
+            onChange={(e) => onMintAddressChange(e.target.value)}
             suffix={
               <MintSelection
                 value={mintAddress}

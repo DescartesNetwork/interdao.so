@@ -1,23 +1,23 @@
-import { useDispatch, useSelector } from 'react-redux'
 import isEqual from 'react-fast-compare'
 
 import { Button, Col, Row, Space, Typography } from 'antd'
 import VoteInput from './voteInput'
 
-import { AppDispatch, AppState } from 'app/model'
-import { setInitDao } from 'app/model/daos.controller'
-
 import './index.less'
 
-const TokenAddressInput = () => {
-  const initDao = useSelector((state: AppState) => state.daos.initDao)
-  const dispatch = useDispatch<AppDispatch>()
-  const { isNft } = initDao
+type TokenAddressInputProps = {
+  isNft: boolean
+  onNftChange: (isNft: boolean) => void
+  mintAddress: string
+  onMintAddressChange: (mintAddress: string) => void
+}
 
-  const onNftChange = (isNft: boolean) => {
-    return dispatch(setInitDao({ ...initDao, isNft, mintAddress: '' }))
-  }
-
+const TokenAddressInput = ({
+  isNft,
+  onNftChange,
+  mintAddress,
+  onMintAddressChange,
+}: TokenAddressInputProps) => {
   return (
     <Row gutter={[8, 8]}>
       <Col span={24}>
@@ -42,7 +42,11 @@ const TokenAddressInput = () => {
         </Space>
       </Col>
       <Col span={24}>
-        <VoteInput />
+        <VoteInput
+          isNft={isNft}
+          mintAddress={mintAddress}
+          onMintAddressChange={onMintAddressChange}
+        />
       </Col>
     </Row>
   )

@@ -1,18 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux'
 import isEqual from 'react-fast-compare'
 
 import { Button, Col, Row, Typography } from 'antd'
-import { AppDispatch, AppState } from 'app/model'
-import { setInitDao } from 'app/model/daos.controller'
 
-const Privacy = () => {
-  const initDao = useSelector((state: AppState) => state.daos.initDao)
-  const { isPublic } = initDao
-  const dispatch = useDispatch<AppDispatch>()
+type PrivacyProps = {
+  isPublic: boolean
+  setIsPublic: (isPublic: boolean) => void
+}
 
-  const handleClick = (isPublic: boolean) => {
-    return dispatch(setInitDao({ ...initDao, isPublic }))
-  }
+const Privacy = ({ isPublic, setIsPublic }: PrivacyProps) => {
   return (
     <Row gutter={[12, 12]}>
       <Col span={24}>
@@ -20,7 +15,7 @@ const Privacy = () => {
       </Col>
       <Col>
         <Button
-          onClick={() => handleClick(false)}
+          onClick={() => setIsPublic(false)}
           className={isEqual(isPublic, false) ? '' : 'btn-unselect'}
           block
         >
@@ -29,7 +24,7 @@ const Privacy = () => {
       </Col>
       <Col>
         <Button
-          onClick={() => handleClick(true)}
+          onClick={() => setIsPublic(true)}
           className={isEqual(isPublic, true) ? '' : 'btn-unselect'}
           block
         >

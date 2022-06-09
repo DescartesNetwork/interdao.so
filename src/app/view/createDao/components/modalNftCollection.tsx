@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { Fragment, useCallback, useEffect, useState } from 'react'
 import { useWallet } from '@senhub/providers'
 import LazyLoad from '@sentre/react-lazyload'
 import { account } from '@senswap/sen-js'
@@ -9,31 +8,32 @@ import { Card, Col, Empty, Image, Modal, Row, Space, Typography } from 'antd'
 import CardNFT from 'app/components/cardNFT'
 import SearchNftCollection from './searchNftCollection'
 
-import { AppState } from 'app/model'
-
-import IMAGE_DEFAULT from 'app/static/images/system/avatar.png'
-
 import {
   fetchListNTFs,
   getNftMetaData,
   MetadataDataType,
 } from 'app/helpers/metaplex'
+import useNftMetaData from 'app/hooks/useNftMetaData'
 
 import BG_BTN from 'app/static/images/system/select-dao.png'
-import useNftMetaData from 'app/hooks/useNftMetaData'
+import IMAGE_DEFAULT from 'app/static/images/system/avatar.png'
 
 const SIZE_COLLECTION_IMAGE = 88
 
 type ModalNftCollectionProps = {
-  visible: boolean
-  setVisible: (visible: boolean) => void
   onSelect: (mintAddress: string) => void
+  mintAddress: string
 }
 
-const CardNftImageOnly = ({ mintAddress }: { mintAddress: string }) => {
+const CardNftImageOnly = ({
+  mintAddress,
+  openNftModal,
+}: {
+  mintAddress: string
+  openNftModal: (visible: boolean) => void
+}) => {
   const [nftImg, setNftImg] = useState('')
   const [loading, setLoading] = useState(false)
-
   const metadata = useNftMetaData(mintAddress)
 
   const getNftInfoFromURI = useCallback(async () => {
@@ -60,44 +60,32 @@ const CardNftImageOnly = ({ mintAddress }: { mintAddress: string }) => {
   return (
     <Card
       bordered={false}
-      style={{
-        cursor: 'pointer',
-        height: SIZE_COLLECTION_IMAGE,
-        width: SIZE_COLLECTION_IMAGE,
-      }}
       bodyStyle={{ padding: 0 }}
       loading={loading}
       className="card-nft-image-only"
+      onClick={() => openNftModal(true)}
     >
-      <Row gutter={[8, 8]}>
-        <Col span={24}>
-          <LazyLoad height={SIZE_COLLECTION_IMAGE}>
-            <Image
-              src={nftImg}
-              preview={false}
-              style={{ borderRadius: 4 }}
-              width={SIZE_COLLECTION_IMAGE}
-              height={SIZE_COLLECTION_IMAGE}
-              className="nft-image"
-            />
-          </LazyLoad>
-        </Col>
-      </Row>
+      <Image
+        src={nftImg}
+        preview={false}
+        style={{ borderRadius: 4 }}
+        width={SIZE_COLLECTION_IMAGE}
+        height={SIZE_COLLECTION_IMAGE}
+        className="nft-image"
+      />
     </Card>
   )
 }
 
 const ModalNftCollection = ({
-  visible,
-  setVisible,
   onSelect,
+  mintAddress,
 }: ModalNftCollectionProps) => {
+  const [visible, setVisible] = useState(false)
   const [listCollectionNFTs, setListCollectionNFTs] =
     useState<Record<string, MetadataDataType[]>>()
   const [searchText, setSearchText] = useState<string>('')
   const [loading, setLoading] = useState(false)
-  const initDao = useSelector((state: AppState) => state.daos.initDao)
-  const { mintAddress } = initDao
 
   const {
     wallet: { address: walletAddress },
@@ -147,37 +135,31 @@ const ModalNftCollection = ({
   }, [getCollectionNFTs])
 
   return (
-    <Row>
-      <Col onClick={() => setVisible(true)}>
-        {!mintAddress ? (
-          <Card
-            className="btn-select-nft"
-            style={{
-              background: `url(${BG_BTN})`,
-            }}
-            bodyStyle={{ padding: 10 }}
-            onClick={() => setVisible(true)}
-          >
-            <Space
-              direction="vertical"
-              style={{ width: '100%' }}
-              align="center"
-            >
-              <Typography.Text style={{ color: '#f9deb0' }}>
-                Select
-              </Typography.Text>
-              <Typography.Text style={{ color: '#f9deb0' }}>
-                a NFT
-              </Typography.Text>
-              <Typography.Text style={{ color: '#f9deb0' }}>
-                collection
-              </Typography.Text>
-            </Space>
-          </Card>
-        ) : (
-          <CardNftImageOnly mintAddress={mintAddress} />
-        )}
-      </Col>
+    <Fragment>
+      {!mintAddress ? (
+        <Card
+          className="btn-select-nft"
+          style={{
+            background: `url(${BG_BTN})`,
+          }}
+          bodyStyle={{ padding: 10 }}
+          onClick={() => setVisible(true)}
+        >
+          <Space direction="vertical" style={{ width: '100%' }} align="center">
+            <Typography.Text style={{ color: '#f9deb0' }}>
+              Select
+            </Typography.Text>
+            <Typography.Text style={{ color: '#f9deb0' }}>
+              a NFT
+            </Typography.Text>
+            <Typography.Text style={{ color: '#f9deb0' }}>
+              collection
+            </Typography.Text>
+          </Space>
+        </Card>
+      ) : (
+        <CardNftImageOnly openNftModal={setVisible} mintAddress={mintAddress} />
+      )}
 
       <Modal
         className="modal-nft-selection"
@@ -225,7 +207,7 @@ const ModalNftCollection = ({
           </Col>
         </Row>
       </Modal>
-    </Row>
+    </Fragment>
   )
 }
 

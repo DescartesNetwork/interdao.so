@@ -36,10 +36,9 @@ const ButtonMultisigDao = () => {
 }
 
 const ConfirmButton = () => {
-  const initMetadata = useSelector(
-    (state: AppState) => state.metadata.initMetadata,
+  const daoType = useSelector(
+    (state: AppState) => state.createDao.data.metadata.daoType,
   )
-  const { daoType } = initMetadata
   if (daoType === 'flexible-dao') return <ButtonFlexDao />
 
   return <ButtonMultisigDao />

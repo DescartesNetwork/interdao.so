@@ -1,13 +1,10 @@
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { Col, Row, Space, Tooltip, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
-import ModalNftCollection from '../../../components/modalNftCollection'
+import ModalNftCollection from 'app/view/createDao/components/modalNftCollection'
 
-import { setInitDao } from 'app/model/daos.controller'
-import { AppDispatch, AppState } from 'app/model'
 import { asyncWait, shortenAddress } from 'shared/util'
 
 const Address = ({ address }: { address: string }) => {
@@ -35,21 +32,20 @@ const Address = ({ address }: { address: string }) => {
   )
 }
 
-const VoteNftInput = () => {
-  const [visible, setVisible] = useState(false)
-  const initDao = useSelector((state: AppState) => state.daos.initDao)
-  const dispatch = useDispatch<AppDispatch>()
-  const { mintAddress } = initDao
+type VoteNftInputProps = {
+  mintAddress: string
+  onMintAddressChange: (mintAddress: string) => void
+}
 
-  const onMintAddressChange = (mintAddress: string) => {
-    return dispatch(setInitDao({ ...initDao, mintAddress }))
-  }
+const VoteNftInput = ({
+  mintAddress,
+  onMintAddressChange,
+}: VoteNftInputProps) => {
   return (
     <Row gutter={[24, 24]}>
       <Col>
         <ModalNftCollection
-          visible={visible}
-          setVisible={setVisible}
+          mintAddress={mintAddress}
           onSelect={onMintAddressChange}
         />
       </Col>

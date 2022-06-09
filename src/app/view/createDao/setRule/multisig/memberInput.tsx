@@ -3,7 +3,7 @@ import { ChangeEvent } from 'react'
 import { Button, Col, Input, Row } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
-import { DAOMember } from 'app/model/metadata.controller'
+import { DAOMember } from 'app/model/createDao.controller'
 
 type MemberInputProps = {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void

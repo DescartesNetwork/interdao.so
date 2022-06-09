@@ -1,18 +1,17 @@
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useMemo, useState } from 'react'
 import { CID } from 'ipfs-core'
 
 import { Col, Row } from 'antd'
-import DaoInformation from '../../createDao/daoInfomation'
 import ActionButton from './actionButton'
 
 import IPFS from 'shared/pdb/ipfs'
 import { explorer } from 'shared/util'
 import configs from 'app/configs'
-import { AppDispatch, AppState } from 'app/model'
 import useMetaData from 'app/hooks/useMetaData'
-import { setInitMetadata } from 'app/model/metadata.controller'
 import usePDB from 'app/hooks/usePDB'
+import FormInputDetail from 'app/components/formInputDetail'
+import { DEFAULT_META_DATA } from 'app/model/createDao.controller'
+import { validURL } from 'app/helpers'
 
 const {
   sol: { interDao },
@@ -20,18 +19,16 @@ const {
 
 const Information = ({ daoAddress }: { daoAddress: string }) => {
   const [loading, setLoading] = useState(false)
-  const {
-    metadata: { initMetadata },
-  } = useSelector((state: AppState) => state)
-  const dispatch = useDispatch<AppDispatch>()
   const { metaData } = useMetaData(daoAddress)
+  const [nextMetadata, setNextMetadata] = useState(metaData)
   const pdb = usePDB()
 
   const updateMetaData = async () => {
-    setLoading(true)
+    if (!nextMetadata) return
     try {
+      setLoading(true)
       const ipfs = new IPFS()
-      const cid = await ipfs.set(initMetadata)
+      const cid = await ipfs.set(nextMetadata)
       const {
         multihash: { digest },
       } = CID.parse(cid)
@@ -44,7 +41,7 @@ const Information = ({ daoAddress }: { daoAddress: string }) => {
         onClick: () => window.open(explorer(txId), '_blank'),
       })
 
-      const localMetadata = { ...initMetadata, cid } //update metadata for realtime
+      const localMetadata = { ...nextMetadata, cid } //update metadata for realtime
       return pdb.setItem(daoAddress, localMetadata)
     } catch (er: any) {
       return window.notify({ type: 'error', description: er.message })
@@ -53,20 +50,32 @@ const Information = ({ daoAddress }: { daoAddress: string }) => {
     }
   }
 
+  const validLink = useMemo(() => {
+    if (!nextMetadata) return
+    const { optionals } = nextMetadata
+    if (!optionals.length) return true
+    for (const link of optionals) if (!validURL(link)) return false
+    return true
+  }, [nextMetadata])
+
   useEffect(() => {
-    dispatch(setInitMetadata(metaData))
-  }, [dispatch, metaData])
+    if (!nextMetadata && metaData) setNextMetadata(metaData)
+  }, [metaData, nextMetadata])
 
   return (
     <Row gutter={[32, 32]}>
       <Col span={24}>
-        <DaoInformation />
+        <FormInputDetail
+          metadata={nextMetadata || DEFAULT_META_DATA}
+          setMetadata={setNextMetadata}
+        />
       </Col>
       <Col span={24}>
         <ActionButton
           onSave={updateMetaData}
           daoAddress={daoAddress}
           loading={loading}
+          disabled={!validLink}
         />
       </Col>
     </Row>

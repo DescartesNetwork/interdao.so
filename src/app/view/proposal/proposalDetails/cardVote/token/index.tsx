@@ -22,10 +22,8 @@ const CardVoteToken = ({
   proposalAddress,
   daoAddress,
 }: ProposalChildCardProps) => {
-  const {
-    daos: { daos },
-    voteBid: { amount },
-  } = useSelector((state: AppState) => state)
+  const daos = useSelector((state: AppState) => state.daos)
+  const amount = useSelector((state: AppState) => state.voteBid.amount)
   const dispatch = useDispatch()
   const { mint } = daos[daoAddress] || ({} as DaoData)
   const { balance } = useAccountBalanceByMintAddress(mint?.toBase58())

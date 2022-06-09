@@ -1,12 +1,8 @@
-import { DaoRegimes } from '@interdao/core'
-import { useDispatch, useSelector } from 'react-redux'
+import { DaoRegime, DaoRegimes } from '@interdao/core'
 
 import { Button, Row, Col, Space, Typography, Popover } from 'antd'
-import CardRegime from '../../components/cardRegime'
 import IonIcon from '@sentre/antd-ionicon'
-
-import { AppDispatch, AppState } from 'app/model'
-import { setInitDao } from 'app/model/daos.controller'
+import CardRegime from 'app/view/createDao/components/cardRegime'
 
 export const REGIME_LIST = [
   DaoRegimes.Dictatorial,
@@ -14,12 +10,12 @@ export const REGIME_LIST = [
   DaoRegimes.Autonomous,
 ]
 
-const RegimeInput = () => {
-  const initDao = useSelector((state: AppState) => state.daos.initDao)
-  const dispatch = useDispatch<AppDispatch>()
+type RegimeInputProps = {
+  value: DaoRegime
+  onChangeRegime: (regime: DaoRegime) => void
+}
 
-  const { regime: value } = initDao
-
+const RegimeInput = ({ value, onChangeRegime }: RegimeInputProps) => {
   return (
     <Row gutter={[8, 8]}>
       <Col span={24}>
@@ -64,11 +60,7 @@ const RegimeInput = () => {
       </Col>
       {REGIME_LIST.map((regime, idx) => (
         <Col xs={24} md={8} key={idx}>
-          <CardRegime
-            value={value}
-            regime={regime}
-            onChange={(regime) => dispatch(setInitDao({ ...initDao, regime }))}
-          />
+          <CardRegime value={value} regime={regime} onChange={onChangeRegime} />
         </Col>
       ))}
     </Row>

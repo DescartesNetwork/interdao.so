@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux'
 import { AppState } from 'app/model'
 import { getCID } from 'app/helpers'
 import IPFS from 'shared/pdb/ipfs'
-import { MetaData } from 'app/model/metadata.controller'
 import usePDB from 'app/hooks/usePDB'
+import { MetaData } from 'app/model/createDao.controller'
 
 const ipfs = new IPFS()
 
@@ -14,7 +14,7 @@ export type LocalMetadata = {
 } & MetaData
 
 const MetadataWatcher = () => {
-  const daos = useSelector((state: AppState) => state.daos.daos)
+  const daos = useSelector((state: AppState) => state.daos)
   const pdb = usePDB()
 
   const loadAllMetaData = useCallback(async () => {

@@ -1,9 +1,20 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 
-import { Card, Col, Radio, RadioChangeEvent, Row, Typography } from 'antd'
+import {
+  Button,
+  Card,
+  Col,
+  Radio,
+  RadioChangeEvent,
+  Row,
+  Typography,
+} from 'antd'
 
-import { AppDispatch, AppState } from 'app/model'
-import { setInitMetadata } from 'app/model/metadata.controller'
+import { AppDispatch } from 'app/model'
+import { DaoType, submitStepChooseType } from 'app/model/createDao.controller'
+import configs from 'app/configs'
 
 const DAO_TYPE = [
   {
@@ -11,41 +22,37 @@ const DAO_TYPE = [
     label: 'Flexible DAO',
     description:
       'The Flexible DAO has 3 regimes that allow you to create a DAO customized for your individual requirements, community structure, and governance token setup.',
-    state: 1,
   },
   {
     key: 'multisig-dao',
     label: 'MultiSig DAO',
     description:
       'The Multisig DAO allows you to create an organization for your team members with Autonomous regime and jointly own, manage shared assets such as treasury accounts, NFTs or mints.',
-    state: 0,
   },
 ]
 
+const {
+  manifest: { appId },
+} = configs
+
 const ChooseDaoType = () => {
+  const [daoType, setDaoType] = useState<DaoType>('flexible-dao')
+  const history = useHistory()
   const dispatch = useDispatch<AppDispatch>()
-  const daoType = useSelector(
-    (state: AppState) => state.metadata.initMetadata.daoType,
-  )
 
   const cardBorder = (key: string) =>
     daoType !== key ? { borderColor: 'transparent' } : {}
 
-  const selectDaoType = async (e: RadioChangeEvent) => {
-    const daoType = e.target.value
-    dispatch(setInitMetadata({ daoType }))
-  }
-
   return (
-    <Row>
+    <Row gutter={[32, 32]}>
       <Col span={24}>
         <Radio.Group
           defaultValue={daoType}
-          onChange={selectDaoType}
+          onChange={(e: RadioChangeEvent) => setDaoType(e.target.value)}
           className="btn-radio-card"
         >
           <Row gutter={[24, 24]}>
-            {DAO_TYPE.map(({ key, label, description, state }) => (
+            {DAO_TYPE.map(({ key, label, description }) => (
               <Col xs={24} md={12} key={key}>
                 <Radio.Button value={key} style={{ border: 'none' }}>
                   <Card
@@ -77,6 +84,28 @@ const ChooseDaoType = () => {
             ))}
           </Row>
         </Radio.Group>
+      </Col>
+      <Col span={24}>
+        <Row>
+          <Col flex="auto">
+            <Button
+              type="text"
+              onClick={() => history.push(`/app/${appId}/dao`)}
+              size="large"
+            >
+              Cancel
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              type="primary"
+              onClick={() => dispatch(submitStepChooseType({ daoType }))}
+              size="large"
+            >
+              Continue
+            </Button>
+          </Col>
+        </Row>
       </Col>
     </Row>
   )

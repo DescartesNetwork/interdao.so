@@ -48,11 +48,9 @@ const ProposalInitialization = () => {
   const [loading, setLoading] = useState(false)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const daos = useSelector((state: AppState) => state.daos)
+  const { tx, templateName } = useSelector((state: AppState) => state.template)
   const { daoAddress } = useParams<{ daoAddress: string }>()
-  const {
-    template: { tx, templateName },
-    daos: { daos },
-  } = useSelector((state: AppState) => state)
   const history = useHistory()
   const dispatch = useDispatch()
   const { metaData: daoMetaData } = useMetaData(daoAddress)

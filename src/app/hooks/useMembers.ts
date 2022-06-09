@@ -3,18 +3,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 
 import { AppDispatch, AppState } from 'app/model'
-import { getTokenHolders } from 'app/model/metadata.controller'
+import { getTokenHolders } from 'app/model/tokenHolder.controller'
 
 const useMembers = (daoAddress: string) => {
   const dispatch = useDispatch<AppDispatch>()
-  const {
-    metadata: { tokenHolders },
-    daos: { daos },
-  } = useSelector((state: AppState) => state)
+  const daos = useSelector((state: AppState) => state.daos)
+  const tokenHolder = useSelector((state: AppState) => state.tokenHolder)
 
   const amountHolder = useMemo(
-    () => tokenHolders[daoAddress],
-    [daoAddress, tokenHolders],
+    () => tokenHolder[daoAddress],
+    [daoAddress, tokenHolder],
   )
   const isExistDao = useMemo(() => {
     return !!Object.keys(daos).length

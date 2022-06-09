@@ -12,17 +12,25 @@ const MAX_WIDTH_RATIO = 24 / 16
 const PAGE_SPACING = 24
 const HEIGHT_RATIO = 1.777777
 
-const ReviewAndCreate = () => {
-  const {
-    daos: { initDao },
-    metadata: { initMetadata },
-  } = useSelector((state: AppState) => state)
+const FlexibleDaoReview = () => {
+  const regime = useSelector((state: AppState) => state.createDao.data.regime)
+  const mintAddress = useSelector(
+    (state: AppState) => state.createDao.data.mintAddress,
+  )
+  const supply = useSelector((state: AppState) => state.createDao.data.supply)
+  const daoName = useSelector(
+    (state: AppState) => state.createDao.data.metadata.daoName,
+  )
+  const description = useSelector(
+    (state: AppState) => state.createDao.data.metadata.description,
+  )
+  const image = useSelector(
+    (state: AppState) => state.createDao.data.metadata.image,
+  )
   const {
     ui: { width },
   } = useUI()
 
-  const { regime, mintAddress, supply } = initDao
-  const { daoName, description, image } = initMetadata
   const isMobile = width < 768
   const desktopWidth = width > 992 ? width / MAX_WIDTH_RATIO : width
   const logoSize = isMobile
@@ -87,4 +95,4 @@ const ReviewAndCreate = () => {
   )
 }
 
-export default ReviewAndCreate
+export default FlexibleDaoReview

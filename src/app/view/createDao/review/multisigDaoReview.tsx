@@ -11,14 +11,23 @@ const PAGE_SPACING = 24
 const HEIGHT_RATIO = 1.777777
 const MAX_WIDTH_RATIO = 24 / 16
 
-const ReviewAndCreate = () => {
-  const {
-    daos: { initDao },
-    metadata: { initMetadata },
-  } = useSelector((state: AppState) => state)
-  const { regime, isPublic } = initDao
-  const { image, description, daoName, members } = initMetadata
-
+const MultisigDAOReview = () => {
+  const regime = useSelector((state: AppState) => state.createDao.data.regime)
+  const isPublic = useSelector(
+    (state: AppState) => state.createDao.data.isPublic,
+  )
+  const daoName = useSelector(
+    (state: AppState) => state.createDao.data.metadata.daoName,
+  )
+  const description = useSelector(
+    (state: AppState) => state.createDao.data.metadata.description,
+  )
+  const image = useSelector(
+    (state: AppState) => state.createDao.data.metadata.image,
+  )
+  const members = useSelector(
+    (state: AppState) => state.createDao.data.metadata.members,
+  )
   const {
     ui: { width },
   } = useUI()
@@ -102,4 +111,4 @@ const ReviewAndCreate = () => {
   )
 }
 
-export default ReviewAndCreate
+export default MultisigDAOReview

@@ -18,11 +18,9 @@ const {
 
 const useFlexibleDao = () => {
   const [loading, setLoading] = useState(false)
-  const initDao = useSelector((state: AppState) => state.daos.initDao)
-  const initMetadata = useSelector(
-    (state: AppState) => state.metadata.initMetadata,
-  )
-  const { mintAddress } = initDao
+  const createDaoData = useSelector((state: AppState) => state.createDao.data)
+
+  const { mintAddress } = createDaoData
   const decimals = useMintDecimals(mintAddress) || 0
   const pdb = usePDB()
   const history = useHistory()
@@ -30,25 +28,26 @@ const useFlexibleDao = () => {
   const createFlexDAO = useCallback(async () => {
     try {
       setLoading(true)
-      const { mintAddress, supply, regime, isPublic, isNft } = initDao
+      const { mintAddress, supply, regime, isPublic, isNft, metadata } =
+        createDaoData
       const ipfs = new IPFS()
-      const cid = await ipfs.set(initMetadata)
+      const cid = await ipfs.set(metadata)
       const {
         multihash: { digest },
       } = CID.parse(cid)
-      const metadata = Buffer.from(digest)
+      const metadataBuff = Buffer.from(digest)
       const totalSupply = supply.mul(new BN(10).pow(new BN(decimals)))
 
       const { txId, daoAddress } = await interDao.initializeDao(
         mintAddress,
         totalSupply,
-        metadata,
+        metadataBuff,
         undefined, // Optional DAO's keypair
         regime,
         isNft,
         isPublic,
       )
-      const localMetadata = { ...initMetadata, cid }
+      const localMetadata = { ...metadata, cid }
       await pdb.setItem(daoAddress, localMetadata) // to realtime
       window.notify({
         type: 'success',
@@ -61,7 +60,7 @@ const useFlexibleDao = () => {
     } finally {
       setLoading(false)
     }
-  }, [initDao, initMetadata, decimals, pdb, history])
+  }, [createDaoData, decimals, pdb, history])
 
   return { createFlexDAO, loading }
 }

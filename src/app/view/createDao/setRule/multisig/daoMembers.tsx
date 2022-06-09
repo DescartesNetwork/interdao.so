@@ -1,5 +1,4 @@
 import { ChangeEvent, useCallback, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { useWallet } from '@senhub/providers'
 import isEqual from 'react-fast-compare'
 
@@ -7,30 +6,28 @@ import { Button, Col, Row, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import MemberInput from './memberInput'
 
-import { AppDispatch, AppState } from 'app/model'
-import { setInitMetadata } from 'app/model/metadata.controller'
+import { DAOMember } from 'app/model/createDao.controller'
 
 const MY_INDEX = 0
-const DAOMembers = () => {
+type DAOMembersProps = {
+  members: DAOMember[]
+  setMember: (members: DAOMember[]) => void
+}
+const DAOMembers = ({ members, setMember }: DAOMembersProps) => {
   const {
     wallet: { address: myAddress },
   } = useWallet()
-  const {
-    metadata: { initMetadata },
-  } = useSelector((state: AppState) => state)
-  const dispatch = useDispatch<AppDispatch>()
-  const { members } = initMetadata
 
   const setDefaultValue = useCallback(() => {
     if (members.length) return
     const DEFAULT_MEMBER = [{ name: '', walletAddress: myAddress }]
-    return dispatch(setInitMetadata({ members: DEFAULT_MEMBER }))
-  }, [dispatch, members.length, myAddress])
+    return setMember(DEFAULT_MEMBER)
+  }, [members.length, myAddress, setMember])
 
   const addMember = () => {
     const nextMembers = [...members]
     nextMembers.push({ name: '', walletAddress: '' })
-    return dispatch(setInitMetadata({ members: nextMembers }))
+    return setMember(nextMembers)
   }
 
   const onChangeMember = (e: ChangeEvent<HTMLInputElement>, index: number) => {
@@ -46,19 +43,19 @@ const DAOMembers = () => {
       ...nextMembers[index],
       [e.target.name]: e.target.value,
     }
-    return dispatch(setInitMetadata({ members: nextMembers }))
+    return setMember(nextMembers)
   }
 
   const onChangeMyName = (e: ChangeEvent<HTMLInputElement>) => {
     const nextMembers = [...members]
     nextMembers[MY_INDEX] = { ...nextMembers[MY_INDEX], name: e.target.value }
-    return dispatch(setInitMetadata({ members: nextMembers }))
+    return setMember(nextMembers)
   }
 
   const remove = (index: number) => {
     const nextMembers = [...members]
     nextMembers.splice(index, 1)
-    return dispatch(setInitMetadata({ members: nextMembers }))
+    return setMember(nextMembers)
   }
 
   useEffect(() => {
