@@ -13,6 +13,7 @@ import configs from 'app/configs'
 import { AppState } from 'app/model'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import { explorer } from 'shared/util'
+import util from '@senswap/sen-js/dist/utils'
 
 const {
   sol: { interDao },
@@ -30,7 +31,7 @@ const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
   const updateRegime = async () => {
     if (!nextRegime || isEqual(nextRegime, regime)) return
     try {
-      const { txId } = await interDao.updateDaoRegime(regime, daoAddress)
+      const { txId } = await interDao.updateDaoRegime(nextRegime, daoAddress)
       return window.notify({
         type: 'success',
         description: 'Update regime successfully. Click here to view details',
@@ -42,11 +43,12 @@ const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
   }
 
   const updateSupply = async () => {
-    const supplyDecimal = supply.mul(new BN(10).pow(new BN(decimals)))
-    if (!nextSupply || isEqual(supplyDecimal, supply)) return
+    if (!nextSupply) return
+    const supplyDecimal = util.decimalize(nextSupply, decimals).toString()
+    if (isEqual(new BN(supplyDecimal), supply)) return
     try {
       const { txId: txIdSupply } = await interDao.updateDaoSupply(
-        supplyDecimal,
+        new BN(supplyDecimal),
         daoAddress,
       )
       return window.notify({

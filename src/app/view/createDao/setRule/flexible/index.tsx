@@ -31,7 +31,13 @@ const FlexibleDaoRule = () => {
   const onNextStep = () => {
     return dispatch(
       submitStepSetRule({
-        rule: { isNft, regime, supply: new BN(supply), isPublic, mintAddress },
+        rule: {
+          isNft: nextIsNft,
+          regime: nextRegime,
+          supply: new BN(nextSupply),
+          isPublic: nextIsPublic,
+          mintAddress: nextMintAddress,
+        },
       }),
     )
   }
