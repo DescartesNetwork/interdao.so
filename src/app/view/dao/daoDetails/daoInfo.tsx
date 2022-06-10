@@ -48,9 +48,9 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
     <Card bordered={false} loading={loading}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Row>
-            <Col flex="auto">
-              <Row gutter={[16, 16]}>
+          <Row justify="space-between" wrap={false}>
+            <Col>
+              <Row gutter={[16, 16]} wrap={false}>
                 <Col>
                   {!metaData?.image ? (
                     <GradientAvatar

@@ -64,13 +64,7 @@ const ChooseDaoType = () => {
                   >
                     <Row gutter={[12, 12]}>
                       <Col span={24}>
-                        <Row>
-                          <Col flex="auto">
-                            <Typography.Title level={4}>
-                              {label}
-                            </Typography.Title>
-                          </Col>
-                        </Row>
+                        <Typography.Title level={4}>{label}</Typography.Title>
                       </Col>
                       <Col span={24}>
                         <Typography.Text type="secondary">

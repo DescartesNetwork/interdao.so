@@ -90,13 +90,15 @@ const ProposalCard = ({
         </Col>
 
         <Col span={24}>
-          <Typography.Paragraph
-            style={{ margin: 0 }}
-            type="secondary"
-            ellipsis={{ rows: 2 }}
-          >
-            {metaData?.description}
-          </Typography.Paragraph>
+          <Skeleton loading={loadingProposalMetadata} paragraph={{ rows: 1 }}>
+            <Typography.Paragraph
+              style={{ margin: 0 }}
+              type="secondary"
+              ellipsis={{ rows: 2 }}
+            >
+              {metaData?.description}
+            </Typography.Paragraph>
+          </Skeleton>
         </Col>
       </Row>
     </Card>
