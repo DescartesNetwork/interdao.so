@@ -40,6 +40,7 @@
     "react-scripts": "^5.0.1",
     "remarkable": "^2.0.1",
     "sen-idl-parser": "^1.0.3",
+    "sentre-web3": "^0.0.6",
     "swiper": "^7.2.0",
     "tweetnacl": "^1.0.3",
     "web-vitals": "^2.1.1"
