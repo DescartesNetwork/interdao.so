@@ -7,7 +7,7 @@ import { DAOMember } from 'app/model/createDao.controller'
 
 type MemberInputProps = {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void
-  disabledBtn?: boolean
+  disabledRemove?: boolean
   disabledWalletInput?: boolean
   disabledName?: boolean
   remove?: () => void
@@ -17,7 +17,7 @@ const MemberInput = ({
   name = '',
   walletAddress = '',
   onChange,
-  disabledBtn = false,
+  disabledRemove: disabledBtn = false,
   disabledWalletInput = false,
   disabledName = false,
   remove = () => {},

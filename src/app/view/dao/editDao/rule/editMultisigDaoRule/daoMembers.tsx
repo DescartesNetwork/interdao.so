@@ -76,7 +76,7 @@ const DAOMembers = ({ members, setMember }: DAOMembersProps) => {
                       onChangeMember(e, idx)
                     }
                     remove={() => remove(idx)}
-                    disabledBtn={oldMember.includes(walletAddress)}
+                    disabledRemove={oldMember.includes(walletAddress)}
                     disabledWalletInput={oldMember.includes(walletAddress)}
                     disabledName={oldMember.includes(walletAddress)}
                   />

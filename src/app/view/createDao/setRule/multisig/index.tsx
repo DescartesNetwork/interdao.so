@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DaoRegimes } from '@interdao/core'
 import { account } from '@senswap/sen-js'
+import { useWallet } from '@senhub/providers'
 
 import { Button, Col, Row } from 'antd'
 import Regime from './regime'
@@ -16,26 +17,24 @@ import {
 } from 'app/model/createDao.controller'
 
 const MultiSigDAORule = () => {
-  const [members, setMember] = useState<DAOMember[]>([])
-  const [isPublic, setIsPublic] = useState(false)
+  const dispatch = useDispatch<AppDispatch>()
   const metadata = useSelector(
     (state: AppState) => state.createDao.data.metadata,
   )
-  const dispatch = useDispatch<AppDispatch>()
+  const [members, setMember] = useState<DAOMember[]>([])
+  const [isPublic, setIsPublic] = useState(false)
+  const { address: myAddress } = useWallet().wallet
 
-  const disabled = useMemo(() => {
-    let valid = false
-    for (const member of members) {
-      const { name, walletAddress } = member
-      if (!name || !account.isAddress(walletAddress)) {
-        valid = true
-        break
-      }
-    }
-    return valid
-  }, [members])
+  const setDefaultValue = useCallback(() => {
+    if (members.length) return
+    const DEFAULT_MEMBER = [{ name: '', walletAddress: myAddress }]
+    return setMember(DEFAULT_MEMBER)
+  }, [members.length, myAddress, setMember])
+  useEffect(() => {
+    setDefaultValue()
+  }, [setDefaultValue])
 
-  const onNextStep = () => {
+  const onSubmit = () => {
     const nextMetadata = { ...metadata, members }
     return dispatch(
       submitStepSetRule({
@@ -43,6 +42,14 @@ const MultiSigDAORule = () => {
       }),
     )
   }
+
+  const disabled = useMemo(() => {
+    for (const member of members) {
+      const { name, walletAddress } = member
+      if (!name || !account.isAddress(walletAddress)) return true
+    }
+    return false
+  }, [members])
 
   return (
     <Row gutter={[32, 32]}>
@@ -75,7 +82,7 @@ const MultiSigDAORule = () => {
               type="primary"
               size="large"
               disabled={disabled}
-              onClick={onNextStep}
+              onClick={onSubmit}
             >
               Continue
             </Button>

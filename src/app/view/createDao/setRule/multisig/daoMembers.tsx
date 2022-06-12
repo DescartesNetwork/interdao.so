@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect } from 'react'
+import { ChangeEvent } from 'react'
 import { useWallet } from '@senhub/providers'
 import isEqual from 'react-fast-compare'
 
@@ -8,30 +8,30 @@ import MemberInput from './memberInput'
 
 import { DAOMember } from 'app/model/createDao.controller'
 
-const MY_INDEX = 0
 type DAOMembersProps = {
   members: DAOMember[]
   setMember: (members: DAOMember[]) => void
 }
+
 const DAOMembers = ({ members, setMember }: DAOMembersProps) => {
   const {
     wallet: { address: myAddress },
   } = useWallet()
 
-  const setDefaultValue = useCallback(() => {
-    if (members.length) return
-    const DEFAULT_MEMBER = [{ name: '', walletAddress: myAddress }]
-    return setMember(DEFAULT_MEMBER)
-  }, [members.length, myAddress, setMember])
-
-  const addMember = () => {
+  const onAddNew = () => {
     const nextMembers = [...members]
     nextMembers.push({ name: '', walletAddress: '' })
     return setMember(nextMembers)
   }
 
-  const onChangeMember = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+  const onRemove = (index: number) => {
     const nextMembers = [...members]
+    nextMembers.splice(index, 1)
+    return setMember(nextMembers)
+  }
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    // Valid input value
     for (const { walletAddress } of members) {
       if (isEqual(walletAddress, e.target.value))
         return window.notify({
@@ -39,28 +39,14 @@ const DAOMembers = ({ members, setMember }: DAOMembersProps) => {
           description: 'This wallet address already exists',
         })
     }
+    // Update member data
+    const nextMembers = [...members]
     nextMembers[index] = {
       ...nextMembers[index],
       [e.target.name]: e.target.value,
     }
     return setMember(nextMembers)
   }
-
-  const onChangeMyName = (e: ChangeEvent<HTMLInputElement>) => {
-    const nextMembers = [...members]
-    nextMembers[MY_INDEX] = { ...nextMembers[MY_INDEX], name: e.target.value }
-    return setMember(nextMembers)
-  }
-
-  const remove = (index: number) => {
-    const nextMembers = [...members]
-    nextMembers.splice(index, 1)
-    return setMember(nextMembers)
-  }
-
-  useEffect(() => {
-    setDefaultValue()
-  }, [setDefaultValue])
 
   return (
     <Row gutter={[16, 16]}>
@@ -71,39 +57,27 @@ const DAOMembers = ({ members, setMember }: DAOMembersProps) => {
       </Col>
       <Col span={24}>
         <Row gutter={[12, 12]}>
-          <Col span={24} key={myAddress}>
-            {members.length && (
-              <MemberInput
-                name={members[MY_INDEX].name}
-                walletAddress={myAddress}
-                onChange={onChangeMyName}
-                disabledBtn={true}
-                disabledWalletInput={true}
-              />
-            )}
-          </Col>
-          {members.length &&
-            members.map(({ name, walletAddress }, idx) => {
-              if (walletAddress === myAddress) return null
-              return (
-                <Col span={24} key={idx}>
-                  <MemberInput
-                    name={name}
-                    walletAddress={walletAddress}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      onChangeMember(e, idx)
-                    }
-                    remove={() => remove(idx)}
-                  />
-                </Col>
-              )
-            })}
+          {members.map(({ name, walletAddress }, idx) => {
+            const disabled = walletAddress === myAddress
+            return (
+              <Col span={24} key={idx}>
+                <MemberInput
+                  name={name}
+                  walletAddress={walletAddress}
+                  onChange={(e) => onChange(e, idx)}
+                  remove={() => onRemove(idx)}
+                  disabledRemove={disabled}
+                  disabledWalletInput={disabled}
+                />
+              </Col>
+            )
+          })}
           <Col span={4}>
             <Button
               block
               type="dashed"
               icon={<IonIcon name="add-outline" />}
-              onClick={addMember}
+              onClick={onAddNew}
             >
               Add
             </Button>
