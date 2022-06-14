@@ -2,11 +2,9 @@ import { useState } from 'react'
 
 import { Space, Modal, Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
-import ReadmeLoader from 'os/components/readmeLoader'
+import AppReadme from 'os/components/appReadme'
 
-export type AppReadmeProps = { appId: string }
-
-const AppReadme = ({ appId }: AppReadmeProps) => {
+const ReadMe = ({ appId }: { appId: string }) => {
   const [visible, setVisible] = useState(false)
 
   return (
@@ -28,10 +26,10 @@ const AppReadme = ({ appId }: AppReadmeProps) => {
         footer={null}
         centered
       >
-        <ReadmeLoader appId={appId} />
+        <AppReadme appId={appId} />
       </Modal>
     </Space>
   )
 }
 
-export default AppReadme
+export default ReadMe

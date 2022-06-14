@@ -50,7 +50,7 @@ const UIContextProvider = ({
   antd?: boolean | ConfigProviderProps
 }) => {
   const dispatch = useRootDispatch<RootDispatch>()
-  const ui = useRootSelector((state: RootState) => state.ui)
+  const { ui } = useRootSelector((state: RootState) => state)
   const setBackground = useCallback(
     async (...args: Parameters<typeof _setBackground>) =>
       await dispatch(_setBackground(...args)).unwrap(),

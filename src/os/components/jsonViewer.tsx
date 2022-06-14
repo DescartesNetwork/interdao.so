@@ -6,7 +6,9 @@ import { useRootSelector, RootState } from 'os/store'
 export type JsonViewerProps = { value?: object }
 
 const JsonViewer = ({ value = {} }: JsonViewerProps) => {
-  const theme = useRootSelector((state: RootState) => state.ui.theme)
+  const {
+    ui: { theme },
+  } = useRootSelector((state: RootState) => state)
 
   return (
     <Card bordered={false}>

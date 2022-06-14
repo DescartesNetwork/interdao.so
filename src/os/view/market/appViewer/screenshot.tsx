@@ -1,5 +1,3 @@
-import { useCallback } from 'react'
-
 import { Col, Image, Row } from 'antd'
 import { SwiperSlide } from 'swiper/react'
 import { SwiperOs } from 'os/components/swiperOS'
@@ -15,11 +13,11 @@ const PADDING_PAGE = 39 // padding 24 + width scroll bar 15
 const ScreenShot = ({ appId }: { appId: string }) => {
   const width = useRootSelector((state: RootState) => state.ui.width)
 
-  const calculatePerCard = useCallback(() => {
+  const calculatePerCard = () => {
     if (width < 768) return 1
     return 2
-  }, [width])
-  const calculateHeightImage = useCallback(() => {
+  }
+  const calculateHeightImage = () => {
     if (width > 991)
       return (
         (3 *
@@ -30,7 +28,7 @@ const ScreenShot = ({ appId }: { appId: string }) => {
     if (width <= 767)
       return (3 * (width - PADDING_PAGE - PADDING_CARD - PADDING_CARD)) / 4
     return (3 * ((width - PADDING_PAGE - PADDING_CARD) / 2 - PADDING_CARD)) / 4
-  }, [width])
+  }
 
   return (
     <Row gutter={[24, 24]} justify="center" className="app-detail-carousel">

@@ -4,9 +4,7 @@ import { Button, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import ShareModal from './shareModal'
 
-export type AppShareProps = { appId: string }
-
-const AppShare = ({ appId }: AppShareProps) => {
+const AppShare = ({ appId }: { appId: string }) => {
   const [shareWith, setShareWith] = useState('')
   const [visible, setVisible] = useState(false)
 

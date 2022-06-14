@@ -3,21 +3,20 @@ import * as nacl from 'tweetnacl'
 import { account, SignedMessage } from '@senswap/sen-js'
 
 import BaseWallet from './baseWallet'
-import { collectFee, collectFees } from './decorators'
 
 class CloverWallet extends BaseWallet {
   constructor() {
     super('Clover')
   }
 
-  async getProvider() {
+  getProvider = async () => {
     const { clover_solana } = window
     if (!clover_solana?.isCloverWallet)
       throw new Error('Wallet is not connected')
     return clover_solana
   }
 
-  async getAddress(): Promise<string> {
+  getAddress = async (): Promise<string> => {
     const provider = await this.getProvider()
     const address = await provider.getAccount()
     if (!account.isAddress(address))
@@ -25,8 +24,7 @@ class CloverWallet extends BaseWallet {
     return address
   }
 
-  @collectFee
-  async signTransaction(transaction: Transaction): Promise<Transaction> {
+  signTransaction = async (transaction: Transaction): Promise<Transaction> => {
     const provider = await this.getProvider()
     const address = await this.getAddress()
     const publicKey = account.fromAddress(address)
@@ -34,10 +32,9 @@ class CloverWallet extends BaseWallet {
     return await provider.signTransaction(transaction)
   }
 
-  @collectFees
-  async signAllTransactions(
+  signAllTransactions = async (
     transactions: Transaction[],
-  ): Promise<Transaction[]> {
+  ): Promise<Transaction[]> => {
     const provider = await this.getProvider()
     const address = await this.getAddress()
     const publicKey = account.fromAddress(address)
@@ -47,7 +44,7 @@ class CloverWallet extends BaseWallet {
     return await provider.signAllTransactions(transactions)
   }
 
-  async signMessage(message: string) {
+  signMessage = async (message: string) => {
     if (!message) throw new Error('Message must be a non-empty string')
     const provider = await this.getProvider()
     const address = await this.getAddress()
@@ -58,7 +55,11 @@ class CloverWallet extends BaseWallet {
     return data as SignedMessage
   }
 
-  async verifySignature(signature: string, message: string, address?: string) {
+  verifySignature = async (
+    signature: string,
+    message: string,
+    address?: string,
+  ) => {
     address = address || (await this.getAddress())
     const publicKey = account.fromAddress(address)
     const bufSig = Buffer.from(signature, 'hex')

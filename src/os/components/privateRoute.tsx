@@ -9,9 +9,9 @@ export type PrivateRouteProps = {
 } & ComponentProps<typeof Route>
 
 const PrivateRoute = ({ component: Component, ...rest }: PrivateRouteProps) => {
-  const walletAddress = useRootSelector(
-    (state: RootState) => state.wallet.address,
-  )
+  const {
+    wallet: { address: walletAddress },
+  } = useRootSelector((state: RootState) => state)
 
   const render = useCallback(
     (props) => {

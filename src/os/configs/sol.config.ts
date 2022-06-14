@@ -12,7 +12,6 @@ type Conf = {
   node: string
   swapAddress: string
   taxmanAddress: string
-  platformFee: number
 } & typeof SOLVARS
 
 const conf: Record<Net, Conf> = {
@@ -24,7 +23,6 @@ const conf: Record<Net, Conf> = {
     node: rpc,
     swapAddress: '4erFSLP7oBFSVC1t35jdxmbfxEhYCKfoM6XdG2BLR3UF',
     taxmanAddress: '8UaZw2jDhJzv5V53569JbCd3bD4BnyCfBH3sjwgajGS9',
-    platformFee: 5000,
   },
 
   /**
@@ -35,7 +33,6 @@ const conf: Record<Net, Conf> = {
     node: rpc,
     swapAddress: '4erFSLP7oBFSVC1t35jdxmbfxEhYCKfoM6XdG2BLR3UF',
     taxmanAddress: '8UaZw2jDhJzv5V53569JbCd3bD4BnyCfBH3sjwgajGS9',
-    platformFee: 5000,
   },
 
   /**
@@ -46,7 +43,6 @@ const conf: Record<Net, Conf> = {
     node: rpc,
     swapAddress: 'SSW7ooZ1EbEognq5GosbygA3uWW1Hq1NsFq6TsftCFV',
     taxmanAddress: '9doo2HZQEmh2NgfT3Yx12M89aoBheycYqH1eaR5gKb3e',
-    platformFee: 5000,
   },
 }
 

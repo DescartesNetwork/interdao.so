@@ -3,20 +3,19 @@ import { account, SignedMessage } from '@senswap/sen-js'
 import { decode } from 'bs58'
 
 import BaseWallet from './baseWallet'
-import { collectFee, collectFees } from './decorators'
 
 class Coin98Wallet extends BaseWallet {
   constructor() {
     super('Coin98')
   }
 
-  async getProvider() {
+  getProvider = async () => {
     const { sol } = window?.coin98 || {}
     if (!sol) throw new Error('Wallet is not connected')
     return sol
   }
 
-  async getAddress(): Promise<string> {
+  getAddress = async (): Promise<string> => {
     const provider = await this.getProvider()
     const [address] = (await provider.request({ method: 'sol_accounts' })) || []
     if (!account.isAddress(address))
@@ -24,8 +23,7 @@ class Coin98Wallet extends BaseWallet {
     return address
   }
 
-  @collectFee
-  async signTransaction(transaction: Transaction): Promise<Transaction> {
+  signTransaction = async (transaction: Transaction): Promise<Transaction> => {
     const provider = await this.getProvider()
     const address = await this.getAddress()
     const publicKey = account.fromAddress(address)
@@ -39,10 +37,9 @@ class Coin98Wallet extends BaseWallet {
     return transaction
   }
 
-  @collectFees
-  async signAllTransactions(
+  signAllTransactions = async (
     transactions: Transaction[],
-  ): Promise<Transaction[]> {
+  ): Promise<Transaction[]> => {
     const provider = await this.getProvider()
     const address = await this.getAddress()
     const publicKey = account.fromAddress(address)
@@ -60,7 +57,7 @@ class Coin98Wallet extends BaseWallet {
     return transactions
   }
 
-  async signMessage(message: string) {
+  signMessage = async (message: string) => {
     if (!message) throw new Error('Message must be a non-empty string')
     const provider = await this.getProvider()
     const data = await provider.request({
@@ -70,7 +67,11 @@ class Coin98Wallet extends BaseWallet {
     return data as SignedMessage
   }
 
-  async verifySignature(signature: string, message: string, address?: string) {
+  verifySignature = async (
+    signature: string,
+    message: string,
+    address?: string,
+  ) => {
     address = address || (await this.getAddress())
     const valid = await account.verifySignature(address, signature, message)
     return valid as boolean

@@ -5,7 +5,6 @@ import { account, Provider } from '@senswap/sen-js'
 import BaseWallet from './baseWallet'
 import session from 'shared/session'
 import storage from 'shared/storage'
-import { collectFee, collectFees } from './decorators'
 
 type ExpanedProvider = Provider & { keypair: Keypair }
 
@@ -16,10 +15,10 @@ class SecretKeyWallet extends BaseWallet {
     SecretKeyWallet.setSecretKey(secretKey, password)
   }
 
-  static xor(
+  static xor = (
     a: Buffer | Uint8Array,
     b: Buffer | Uint8Array,
-  ): Buffer | Uint8Array {
+  ): Buffer | Uint8Array => {
     if (a.length !== b.length)
       throw new Error('Cannot XOR two different-length buffers')
     const r = Buffer.alloc(a.length)
@@ -27,7 +26,7 @@ class SecretKeyWallet extends BaseWallet {
     return r
   }
 
-  static getPassword(): string {
+  static getPassword = (): string => {
     let pwd = session.get('Password')
     if (!pwd) pwd = window.prompt('Input the password:')
     if (!pwd) throw new Error('User rejects to sign the transaction')
@@ -35,7 +34,7 @@ class SecretKeyWallet extends BaseWallet {
     return pwd
   }
 
-  static setSecretKey(secretKeyString: string, pwd?: string): void {
+  static setSecretKey = (secretKeyString: string, pwd?: string): void => {
     const { secretKey } = account.fromSecretKey(secretKeyString) || {}
     if (!secretKey) throw new Error('Invalid secret key')
     pwd = pwd || SecretKeyWallet.getPassword()
@@ -44,7 +43,7 @@ class SecretKeyWallet extends BaseWallet {
     storage.set('SecretKey', confusedSecretKey.toString('hex'))
   }
 
-  static getSecretKey(pwd?: string): string {
+  static getSecretKey = (pwd?: string): string => {
     pwd = pwd || SecretKeyWallet.getPassword()
     const seed = hash(Buffer.from(pwd))
     const confusedSecretKey = storage.get('SecretKey')
@@ -56,7 +55,7 @@ class SecretKeyWallet extends BaseWallet {
     return secretKey.toString('hex')
   }
 
-  async getProvider(): Promise<ExpanedProvider> {
+  getProvider = async (): Promise<ExpanedProvider> => {
     const secretKey = SecretKeyWallet.getSecretKey()
     const keypair = account.fromSecretKey(secretKey)
     if (!keypair) throw new Error('Cannot get the keystore-based provider')
@@ -67,13 +66,12 @@ class SecretKeyWallet extends BaseWallet {
     return provider
   }
 
-  async getAddress(): Promise<string> {
+  getAddress = async (): Promise<string> => {
     const { keypair } = await this.getProvider()
     return keypair.publicKey.toBase58()
   }
 
-  @collectFee
-  async signTransaction(transaction: Transaction): Promise<Transaction> {
+  signTransaction = async (transaction: Transaction): Promise<Transaction> => {
     const confirmed = window.confirm('Please confirm to sign the transaction!')
     if (!confirmed) throw new Error('User rejects to sign the transaction')
     const { keypair } = await this.getProvider()
@@ -85,10 +83,9 @@ class SecretKeyWallet extends BaseWallet {
     return transaction
   }
 
-  @collectFees
-  async signAllTransactions(
+  signAllTransactions = async (
     transactions: Transaction[],
-  ): Promise<Transaction[]> {
+  ): Promise<Transaction[]> => {
     const confirmed = window.confirm('Please confirm to sign the transactions!')
     if (!confirmed) throw new Error('User rejects to sign the transactions')
     const { keypair } = await this.getProvider()
@@ -104,7 +101,7 @@ class SecretKeyWallet extends BaseWallet {
     return txs
   }
 
-  async signMessage(message: string) {
+  signMessage = async (message: string) => {
     if (!message) throw new Error('Message must be a non-empty string')
     const confirmed = window.confirm(
       `Please confirm to sign the message! Message: ${message}`,
@@ -116,7 +113,11 @@ class SecretKeyWallet extends BaseWallet {
     return { ...data }
   }
 
-  async verifySignature(signature: string, message: string, address?: string) {
+  verifySignature = async (
+    signature: string,
+    message: string,
+    address?: string,
+  ) => {
     address = address || (await this.getAddress())
     const valid = account.verifySignature(address, signature, message)
     return valid as boolean

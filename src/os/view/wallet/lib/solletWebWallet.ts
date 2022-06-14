@@ -5,32 +5,33 @@ import WalletAdapter from '@project-serum/sol-wallet-adapter'
 
 import BaseWallet from './baseWallet'
 import configs from 'os/configs'
-import { collectFee, collectFees } from './decorators'
 
-const {
-  sol: { node },
-} = configs
 const PROVIDER_URL = 'https://www.sollet.io'
-const PROVIDER: WalletAdapter & Provider = new WalletAdapter(PROVIDER_URL, node)
 
 class SolletWallet extends BaseWallet {
+  private provider: WalletAdapter & Provider
+
   constructor() {
     super('SolletWeb')
+
+    const {
+      sol: { node },
+    } = configs
+    this.provider = new WalletAdapter(PROVIDER_URL, node)
   }
 
-  async getProvider() {
-    if (!PROVIDER.connected) await PROVIDER.connect()
-    return PROVIDER
+  getProvider = async () => {
+    if (!this.provider.connected) await this.provider.connect()
+    return this.provider
   }
 
-  async getAddress(): Promise<string> {
+  getAddress = async (): Promise<string> => {
     const provider = await this.getProvider()
     if (!provider.publicKey) throw new Error('Cannot connect to Sollet Web')
     return provider.publicKey.toBase58()
   }
 
-  @collectFee
-  async signTransaction(transaction: Transaction): Promise<Transaction> {
+  signTransaction = async (transaction: Transaction): Promise<Transaction> => {
     const provider = await this.getProvider()
     const address = await this.getAddress()
     const publicKey = account.fromAddress(address)
@@ -38,10 +39,9 @@ class SolletWallet extends BaseWallet {
     return await provider.signTransaction(transaction)
   }
 
-  @collectFees
-  async signAllTransactions(
+  signAllTransactions = async (
     transactions: Transaction[],
-  ): Promise<Transaction[]> {
+  ): Promise<Transaction[]> => {
     const provider = await this.getProvider()
     const address = await this.getAddress()
     const publicKey = account.fromAddress(address)
@@ -51,7 +51,7 @@ class SolletWallet extends BaseWallet {
     return await provider.signAllTransactions(transactions)
   }
 
-  async signMessage(message: string) {
+  signMessage = async (message: string) => {
     if (!message) throw new Error('Message must be a non-empty string')
     const provider = await this.getProvider()
     const address = await this.getAddress()
@@ -62,7 +62,11 @@ class SolletWallet extends BaseWallet {
     return data as SignedMessage
   }
 
-  async verifySignature(signature: string, message: string, address?: string) {
+  verifySignature = async (
+    signature: string,
+    message: string,
+    address?: string,
+  ) => {
     address = address || (await this.getAddress())
     const publicKey = account.fromAddress(address)
     const bufSig = Buffer.from(signature, 'hex')

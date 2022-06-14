@@ -1,16 +1,15 @@
-import { useMemo } from 'react'
 import { account } from '@senswap/sen-js'
 
 import { Row, Col, Typography, Space } from 'antd'
 import AppIcon from 'os/components/appIcon'
 import Verification from 'os/components/verification'
-import InstalledApp from './installedApp'
+import AppInstall from './appInstall'
 import AppTags from './appTags'
 import AppAuthor from './appAuthor'
 import AppReadMe from './appReadMe'
-import AppShare from './appShare'
 
 import { useRootSelector, RootState } from 'os/store'
+import AppShare from './appShare'
 
 const AppDetails = ({ appId }: { appId: string }) => {
   const infix = useRootSelector((state: RootState) => state.ui.infix)
@@ -20,19 +19,10 @@ const AppDetails = ({ appId }: { appId: string }) => {
     (state: RootState) => state.wallet.address,
   )
 
-  const { description, author, name, tags, verified } = useMemo(
-    () => register[appId] || ({} as ComponentManifest),
-    [register, appId],
-  )
-  const isMobile = useMemo(() => infix === 'xs' || infix === 'sm', [infix])
-  const floatSocialButton = useMemo(
-    () => (isMobile ? 'start' : 'end'),
-    [isMobile],
-  )
-  const installed = useMemo(
-    () => account.isAddress(walletAddress) && appIds.includes(appId),
-    [walletAddress, appIds, appId],
-  )
+  const { description, author, name, tags, verified } = register[appId] || {}
+  const isMobile = infix === 'xs' || infix === 'sm'
+  const floatSocialButton = isMobile ? 'start' : 'end'
+  const installed = account.isAddress(walletAddress) && appIds.includes(appId)
 
   return (
     <Row gutter={[16, 16]}>
@@ -57,7 +47,7 @@ const AppDetails = ({ appId }: { appId: string }) => {
           <Col span={isMobile ? 24 : 10}>
             <Row gutter={[16, 16]} justify={floatSocialButton}>
               <Col span={24}>
-                <InstalledApp appId={appId} installed={installed} />
+                <AppInstall appId={appId} installed={installed} />
               </Col>
               <Col>
                 <Space>
