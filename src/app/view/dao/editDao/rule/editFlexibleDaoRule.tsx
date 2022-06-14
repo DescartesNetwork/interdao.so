@@ -1,42 +1,37 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { SystemProgram } from '@solana/web3.js'
 import BN from 'bn.js'
 import { DaoRegime } from '@interdao/core'
 import isEqual from 'react-fast-compare'
 
 import { Col, Row } from 'antd'
-import DaoRule from '../../../createDao/flexibleDAO/daoRule'
 import ActionButton from '../actionButton'
+import RegimeInput from 'app/view/createDao/setRule/flexible/regimeInput'
+import CirculatingSupply from 'app/view/createDao/setRule/flexible/circulatingSupply'
 
 import configs from 'app/configs'
 import { AppState } from 'app/model'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import { explorer } from 'shared/util'
+import util from '@senswap/sen-js/dist/utils'
 
 const {
   sol: { interDao },
 } = configs
 
 const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
-  const [loading, setLoading] = useState(false)
-  const [oldRegime, setOldRegime] = useState<DaoRegime>()
-  const [oldSupply, setOldSupply] = useState<BN>(new BN(0))
-  const {
-    daos: { daos, initDao },
-  } = useSelector((state: AppState) => state)
-  const { mint, regime, supply } = daos?.[daoAddress] || {
-    regime: {},
-    supply: new BN(0),
-    mint: SystemProgram.programId,
-  }
+  const { isNft, mint, regime, supply } = useSelector(
+    (state: AppState) => state.daos[daoAddress],
+  )
   const decimals = useMintDecimals(mint.toBase58()) || 0
+  const [loading, setLoading] = useState(false)
+  const [nextRegime, setRegime] = useState<DaoRegime>(regime)
+  const [nextSupply, setSupply] = useState('0')
 
   const updateRegime = async () => {
-    const { regime } = initDao
-    if (!regime || isEqual(regime, oldRegime)) return
+    if (!nextRegime || isEqual(nextRegime, regime)) return
     try {
-      const { txId } = await interDao.updateDaoRegime(regime, daoAddress)
+      const { txId } = await interDao.updateDaoRegime(nextRegime, daoAddress)
       return window.notify({
         type: 'success',
         description: 'Update regime successfully. Click here to view details',
@@ -48,12 +43,12 @@ const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
   }
 
   const updateSupply = async () => {
-    const { supply } = initDao
-    const supplyDecimal = supply.mul(new BN(10).pow(new BN(decimals)))
-    if (!supply || isEqual(supplyDecimal, oldSupply)) return
+    if (!nextSupply) return
+    const supplyDecimal = util.decimalize(nextSupply, decimals).toString()
+    if (isEqual(new BN(supplyDecimal), supply)) return
     try {
       const { txId: txIdSupply } = await interDao.updateDaoSupply(
-        supplyDecimal,
+        new BN(supplyDecimal),
         daoAddress,
       )
       return window.notify({
@@ -73,20 +68,27 @@ const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
     return setLoading(false)
   }
 
-  const setDefaultValue = useCallback(() => {
-    if (oldSupply && oldRegime) return
-    setOldSupply(supply)
-    setOldRegime(regime)
-  }, [oldRegime, oldSupply, regime, supply])
-
   useEffect(() => {
-    setDefaultValue()
-  }, [setDefaultValue])
+    const defaultSupply = supply.div(new BN(10 ** decimals))
+    if (defaultSupply) setSupply(defaultSupply.toString())
+  }, [decimals, supply])
 
   return (
     <Row gutter={[32, 32]}>
       <Col span={24}>
-        <DaoRule />
+        <Row gutter={[24, 24]}>
+          <Col span={24}>
+            <RegimeInput value={nextRegime} onChangeRegime={setRegime} />
+          </Col>
+          <Col span={24}>
+            <CirculatingSupply
+              isNft={isNft}
+              mintAddress={mint.toBase58()}
+              supply={nextSupply}
+              onChangeSupply={setSupply}
+            />
+          </Col>
+        </Row>
       </Col>
       <Col span={24}>
         <ActionButton

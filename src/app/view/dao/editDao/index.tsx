@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 
 import { Card, Col, Row, Tabs, Typography } from 'antd'
-import Information from './information'
+import Information from './editDaoDetail'
 import Rule from './rule'
 import TransferAuthority from './transferAuthority'
 

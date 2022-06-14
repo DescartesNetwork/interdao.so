@@ -8,9 +8,15 @@ const Banner = () => {
           <Typography.Title
             level={1}
             style={{ fontSize: 72, textAlign: 'center' }}
+          >
+            Let’s build
+          </Typography.Title>
+          <Typography.Title
+            level={1}
+            style={{ fontSize: 72, textAlign: 'center' }}
             className="title-underline"
           >
-            Let’s build YOUR OWN DAO.
+            YOUR OWN DAO.
           </Typography.Title>
         </Space>
       </Col>

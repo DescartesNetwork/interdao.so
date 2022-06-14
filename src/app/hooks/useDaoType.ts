@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { AppState } from 'app/model'
-import { MetaData } from 'app/model/metadata.controller'
 import usePDB from './usePDB'
+import { MetaData } from 'app/model/createDao.controller'
 
 const useDaoType = (type: string) => {
-  const daos = useSelector((state: AppState) => state.daos.daos)
+  const daos = useSelector((state: AppState) => state.daos)
   const [daoAddresses, setDaoAddresses] = useState<string[]>([])
   const pdb = usePDB()
 

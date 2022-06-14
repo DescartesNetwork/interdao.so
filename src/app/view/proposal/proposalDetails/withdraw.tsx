@@ -27,7 +27,7 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
   const [loading, setLoading] = useState(false)
   const [listReceipt, setListReceipt] = useState<Receipt[]>([])
   const { receipts } = useReceipts({ proposalAddress })
-  const { daos } = useSelector((state: AppState) => state.daos)
+  const daos = useSelector((state: AppState) => state.daos)
   const { isNft } = daos[daoAddress] || ({} as DaoData)
   const {
     wallet: { address: walletAddress },
@@ -56,10 +56,14 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
       render: (_: any, receipt: ReceiptData) => <ColumnType record={receipt} />,
     },
     {
-      title: '',
-      dataIndex: '',
-      render: (_: any, receipt: Receipt) => (
-        <Button type="primary" onClick={() => onWithdraw(receipt)} size="small">
+      title: 'ACTION',
+      dataIndex: 'address',
+      render: (receiptAddress: string) => (
+        <Button
+          type="primary"
+          onClick={() => onWithdraw(receiptAddress)}
+          size="small"
+        >
           Withdraw
         </Button>
       ),
@@ -80,8 +84,7 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
   }, [receipts, walletAddress])
 
   const onWithdraw = useCallback(
-    async (receiptData: Receipt) => {
-      const receiptAddress = receiptData.address
+    async (receiptAddress: string) => {
       if (!receiptAddress.length) return
       setLoading(true)
       try {
@@ -137,7 +140,7 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
           <Col span={24}>
             <Typography.Title level={4}>Withdraw</Typography.Title>
           </Col>
-          <Col span={24}>
+          <Col span={24} style={{ maxHeight: 500 }} className="scrollbar">
             <Table
               columns={COLUMNS}
               dataSource={listReceipt}
@@ -145,7 +148,6 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
               rowKey={({ index, lockedDate }) =>
                 index.toNumber() + lockedDate.toNumber()
               }
-              scroll={{ y: 300 }}
               loading={loading}
             />
           </Col>

@@ -1,4 +1,4 @@
-import { MetaData } from 'app/model/metadata.controller'
+import { MetaData } from 'app/model/createDao.controller'
 import lunr, { Index } from 'lunr'
 
 export type SearchData = { daoAddress: string } & MetaData

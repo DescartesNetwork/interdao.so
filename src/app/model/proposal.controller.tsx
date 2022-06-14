@@ -47,7 +47,7 @@ export const getProposal = createAsyncThunk<
 >(`${NAME}/getProposal`, async ({ address, force }, { getState }) => {
   if (!account.isAddress(address)) throw new Error('Invalid address')
   const {
-    dao: { [address]: data },
+    daos: { [address]: data },
   } = getState()
   if (data && !force) return { [address]: data }
   const raw = await interDao.getProposalData(address)

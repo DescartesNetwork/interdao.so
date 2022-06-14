@@ -1,4 +1,7 @@
+import { useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { DaoData } from '@interdao/core'
 
 import { Button, Col, Row } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -6,9 +9,10 @@ import ProposalList from './proposalList'
 import DaoDetails from '../dao/daoDetails'
 
 import configs from 'app/configs'
-import './index.less'
-import { useEffect } from 'react'
 import useDaoMemberOnly from 'app/hooks/dao/useDaoMemberOnly'
+import { AppState } from 'app/model'
+
+import './index.less'
 
 const {
   manifest: { appId },
@@ -17,17 +21,20 @@ const {
 const Proposal = () => {
   const history = useHistory()
   const { daoAddress } = useParams<{ daoAddress: string }>()
-  const { isMemberOnly, loading: loadingDaoMetadata } =
-    useDaoMemberOnly(daoAddress)
+  const daoData = useSelector((state: AppState) => state.daos[daoAddress])
+  const { isPublic } = daoData || ({} as DaoData)
+  const { validMember, checking } = useDaoMemberOnly(daoAddress)
+
   useEffect(() => {
-    if (!isMemberOnly && !loadingDaoMetadata) {
+    if (checking) return
+    if (!validMember && !isPublic) {
       window.notify({
         type: 'warning',
         description: 'You are not a member of this DAO',
       })
       return history.push(`/app/${appId}/dao`)
     }
-  }, [daoAddress, history, isMemberOnly, loadingDaoMetadata])
+  }, [checking, daoAddress, history, isPublic, validMember])
 
   return (
     <Row gutter={[24, 24]} justify="center" align="middle">

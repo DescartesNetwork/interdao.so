@@ -8,7 +8,7 @@ import { AppState } from 'app/model'
 import { ProposalChildCardProps } from '../index'
 
 const CardVote = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
-  const daos = useSelector((state: AppState) => state.daos.daos)
+  const daos = useSelector((state: AppState) => state.daos)
 
   const { isNft } = daos?.[daoAddress] || ({} as DaoData)
 

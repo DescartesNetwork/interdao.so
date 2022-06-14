@@ -13,7 +13,7 @@ import IMAGE_DEFAULT from 'app/static/images/system/avatar.png'
 
 const NftTreasury = ({ daoAddress }: { daoAddress: string }) => {
   const [listNFTs, setListNFTs] = useState<MetadataDataType[]>()
-  const daos = useSelector((state: AppState) => state.daos.daos)
+  const daos = useSelector((state: AppState) => state.daos)
 
   const daoMasterAddress = useMemo(() => {
     const { master } = daos[daoAddress] || {}

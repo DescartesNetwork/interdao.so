@@ -88,16 +88,16 @@ const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
   const [dstAddress, setDstAddress] = useState('')
 
   const [amount, setAmount] = useState('')
-  const listDAO = useSelector((state: AppState) => state.daos.daos)
+  const daos = useSelector((state: AppState) => state.daos)
   const decimals = useMintDecimals(mintAddress)
   const dispatch = useDispatch<AppDispatch>()
   const history = useHistory()
   const { metaData: daoMetaData } = useMetaData(daoAddress)
 
   const senderAddress = useMemo(() => {
-    const { master } = listDAO[daoAddress] || {}
+    const { master } = daos[daoAddress] || {}
     return master?.toBase58() || ''
-  }, [listDAO, daoAddress])
+  }, [daos, daoAddress])
 
   const valid = useMemo(() => {
     return Boolean(

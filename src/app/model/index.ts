@@ -2,7 +2,8 @@ import { configureStore } from '@reduxjs/toolkit'
 import { devTools, bigintSerializationMiddleware } from 'app/model/devTools'
 
 import daos from 'app/model/daos.controller'
-import metadata from 'app/model/metadata.controller'
+import createDao from 'app/model/createDao.controller'
+import tokenHolder from 'app/model/tokenHolder.controller'
 import proposal from 'app/model/proposal.controller'
 import receipt from 'app/model/receipt.controller'
 import voteBid from 'app/model/voteBid.controller'
@@ -16,8 +17,9 @@ const model = configureStore({
     getDefaultMiddleware(bigintSerializationMiddleware),
   devTools: devTools(process.env.REACT_APP_ID as string),
   reducer: {
+    createDao,
     daos,
-    metadata,
+    tokenHolder,
     proposal,
     receipt,
     voteBid,
