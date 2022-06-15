@@ -62,7 +62,7 @@ const FlexibleDaoRule = () => {
           </Col>
           <Col span={24}>
             <CirculatingSupply
-              isNft={isNft}
+              isNft={nextIsNft}
               mintAddress={nextMintAddress}
               supply={nextSupply}
               onChangeSupply={setSupply}
