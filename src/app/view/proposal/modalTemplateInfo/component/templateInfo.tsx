@@ -4,6 +4,7 @@ import { decodeSplInstruction } from 'sen-idl-parser'
 import BN from 'bn.js'
 
 import TemplateTransfer, { TransferType } from '../transferInfo'
+import TemplateApprove from '../ approveInfo'
 
 import useProposal from 'app/hooks/proposal/useProposal'
 import { ProposalChildCardProps } from '../../proposalDetails/index'
@@ -31,7 +32,7 @@ const TemplateInfo = ({
     )
     if (!info) return
     setTemplateName(info.name)
-    if (info.name === 'transfer') {
+    if (info.name === 'transfer' || info.name === 'approve') {
       const { splt } = window.sentre
       const sourceAssociated =
         info.accounts.get('source')?.pubkey.toBase58() || ''
@@ -64,6 +65,14 @@ const TemplateInfo = ({
   if (templateName === 'transfer')
     return (
       <TemplateTransfer
+        isProposalDetail={isProposalDetail}
+        transferInfo={transferInfo}
+        endTime={endTime}
+      />
+    )
+  if (templateName === 'approve')
+    return (
+      <TemplateApprove
         isProposalDetail={isProposalDetail}
         transferInfo={transferInfo}
         endTime={endTime}

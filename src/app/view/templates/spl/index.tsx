@@ -3,6 +3,8 @@ import IonIcon from '@sentre/antd-ionicon'
 import TransferSplPlugin from './transfer'
 
 import SOLANA_LOGO from 'app/static/images/templates/solana.svg'
+import { useState } from 'react'
+import ApproveSplPlugin from './approve'
 
 type CardOptionProps = {
   label: string
@@ -30,7 +32,13 @@ const CardOption = ({ label, description, icon }: CardOptionProps) => {
   )
 }
 
+enum Template {
+  Transfer,
+  Approve,
+}
 const SPL = ({ daoAddress }: { daoAddress: string }) => {
+  const [template, setTemplate] = useState(Template.Transfer)
+
   return (
     <Row>
       <Col xs={24} md={16} className="wrap-spl-info">
@@ -65,13 +73,14 @@ const SPL = ({ daoAddress }: { daoAddress: string }) => {
             <Space direction="vertical" style={{ width: '100%' }}>
               <Typography.Text>Templates</Typography.Text>
               <Radio.Group
-                value="transfer"
+                value={template}
                 style={{ width: '100%' }}
                 className="select-spl-option"
+                onChange={(e) => setTemplate(e.target.value)}
               >
                 <Row gutter={[24, 24]}>
                   <Col xs={24} sm={12} md={12} lg={12}>
-                    <Radio.Button value="transfer">
+                    <Radio.Button value={Template.Transfer}>
                       <CardOption
                         label="Transfer"
                         description="Transfer token to another wallet address"
@@ -80,7 +89,7 @@ const SPL = ({ daoAddress }: { daoAddress: string }) => {
                     </Radio.Button>
                   </Col>
                   <Col xs={24} sm={12} md={12} lg={12}>
-                    <Radio.Button value="approve" disabled>
+                    <Radio.Button value={Template.Approve}>
                       <CardOption
                         label="Approve"
                         description="Coming soon"
@@ -95,7 +104,12 @@ const SPL = ({ daoAddress }: { daoAddress: string }) => {
         </Row>
       </Col>
       <Col xs={24} md={8} className="spl-option-transfer">
-        <TransferSplPlugin daoAddress={daoAddress} />
+        {template === Template.Approve && (
+          <ApproveSplPlugin daoAddress={daoAddress} />
+        )}
+        {template === Template.Transfer && (
+          <TransferSplPlugin daoAddress={daoAddress} />
+        )}
       </Col>
     </Row>
   )
