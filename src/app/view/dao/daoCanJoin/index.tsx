@@ -8,7 +8,6 @@ import useDaoCanJoin from 'app/hooks/daos/useDaoCanJoin'
 
 const DaoCanJoin = () => {
   const daosCanJoin = useDaoCanJoin()
-  console.log(daosCanJoin)
   const daos = useMemo(() => Object.keys(daosCanJoin), [daosCanJoin])
 
   if (!daos.length) return <Empty />
