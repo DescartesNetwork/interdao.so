@@ -5,6 +5,7 @@ import IonIcon from '@sentre/antd-ionicon'
 import Hero from './hero'
 import CommunityDaos from './communityDaos'
 import YourDaos from './communityDaos/yourDao'
+import DaoCanJoin from './daoCanJoin'
 
 import configs from 'app/configs'
 
@@ -43,6 +44,9 @@ const Dao = () => {
               </Tabs.TabPane>
               <Tabs.TabPane tab="Your DAOs" key="your-daos">
                 <YourDaos />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="DAOs can join" key="daos-can-join">
+                <DaoCanJoin />
               </Tabs.TabPane>
             </Tabs>
           </Col>
