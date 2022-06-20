@@ -119,7 +119,7 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
                   title="Vote by"
                   value={
                     isNft ? (
-                      'NFT'
+                      <AvatarNFT mintAddress={mint.toBase58()} />
                     ) : (
                       <Space>
                         <MintAvatar mintAddress={mint.toBase58()} />
