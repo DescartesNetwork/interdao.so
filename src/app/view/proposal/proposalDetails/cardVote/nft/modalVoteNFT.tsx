@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react'
-import LazyLoad from '@sentre/react-lazyload'
 import { account } from '@senswap/sen-js'
 
 import { Button, Col, Modal, Row, Space, Typography } from 'antd'
@@ -35,6 +34,7 @@ const ModalVoteNFT = ({
   const [nftVoting, setNftVoting] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const proposalFee = useProposalFee({ daoAddress })
+  console.log('Collection: ', collection)
 
   const onVoteNftFor = useCallback(async () => {
     setLoading(true)
@@ -105,7 +105,6 @@ const ModalVoteNFT = ({
       visible={visible}
       footer={false}
       onCancel={() => setVisible(false)}
-      destroyOnClose={true}
     >
       <Row gutter={[24, 24]}>
         <Col span={24}>
@@ -123,13 +122,11 @@ const ModalVoteNFT = ({
                 key={metadata.mint}
                 style={{ textAlign: 'center' }}
               >
-                <LazyLoad height={198}>
-                  <CardNFT
-                    mintAddress={metadata.mint}
-                    isSelected={nftVoting === metadata.mint}
-                    onSelect={setNftVoting}
-                  />
-                </LazyLoad>
+                <CardNFT
+                  mintAddress={metadata.mint}
+                  isSelected={nftVoting === metadata.mint}
+                  onSelect={setNftVoting}
+                />
               </Col>
             ))}
           </Row>

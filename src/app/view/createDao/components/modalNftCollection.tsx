@@ -1,6 +1,5 @@
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { useWallet } from '@senhub/providers'
-import LazyLoad from '@sentre/react-lazyload'
 import { account } from '@senswap/sen-js'
 import axios from 'axios'
 
@@ -190,12 +189,10 @@ const ModalNftCollection = ({
               Object.keys(listCollectionNFTs).length > 0 ? (
                 Object.keys(listCollectionNFTs).map((collectionAddress) => (
                   <Col xs={12} md={8} key={collectionAddress}>
-                    <LazyLoad height={198}>
-                      <CardNFT
-                        mintAddress={collectionAddress}
-                        onSelect={onSelectNFT}
-                      />
-                    </LazyLoad>
+                    <CardNFT
+                      mintAddress={collectionAddress}
+                      onSelect={onSelectNFT}
+                    />
                   </Col>
                 ))
               ) : (
