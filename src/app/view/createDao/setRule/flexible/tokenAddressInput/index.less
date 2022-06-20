@@ -1,7 +1,11 @@
 .card-regime {
+  --webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
   border: 1px solid transparent;
   &.active {
     border-color: #1a1311;
+    --webkit-filter: none;
+    filter: none;
   }
   .interdao-image {
     width: 100%;
