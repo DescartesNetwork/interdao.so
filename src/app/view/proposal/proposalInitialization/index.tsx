@@ -17,7 +17,7 @@ import ProposalPreview from './proposalPreview'
 
 import configs from 'app/configs'
 import { explorer } from 'shared/util'
-import IPFS from 'shared/pdb/ipfs'
+import IPFS from 'app/helpers/ipfs'
 import { AppState } from 'app/model'
 import { clearTx } from 'app/model/template.controller'
 import useMetaData from 'app/hooks/useMetaData'

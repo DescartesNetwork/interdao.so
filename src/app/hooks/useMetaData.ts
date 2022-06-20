@@ -4,7 +4,7 @@ import { account } from '@senswap/sen-js'
 import { DaoData } from '@interdao/core'
 
 import usePDB from './usePDB'
-import IPFS from 'shared/pdb/ipfs'
+import IPFS from 'app/helpers/ipfs'
 import { AppState } from 'app/model'
 import { getCID } from 'app/helpers'
 import { LocalMetadata } from 'app/watcher/metadata.watcher'
