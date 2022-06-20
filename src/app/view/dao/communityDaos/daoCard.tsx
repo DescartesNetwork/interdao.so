@@ -11,6 +11,7 @@ import {
   Image,
   Row,
   Space,
+  Spin,
   Tag,
   Tooltip,
   Typography,
@@ -102,98 +103,102 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
         <RegimeTag regime={regime} special />
       </Col>
       <Col span={24}>
-        <Card bordered={false} loading={loading}>
-          <Row gutter={[20, 20]}>
-            <Col span={24} style={{ minHeight: 88 }}>
-              <Row gutter={[16, 16]} wrap={false} align="top">
-                <Col>
-                  {!metaData?.image ? (
-                    <GradientAvatar
-                      seed={daoAddress}
-                      avatarProps={{ shape: 'square', size: 68 }}
-                    />
-                  ) : (
-                    <Avatar shape="square" size={68} src={metaData?.image} />
-                  )}
-                </Col>
-                <Col flex="auto">
-                  <Space direction="vertical" size={0}>
-                    <Tooltip
-                      title={metaData?.daoName ? metaData.daoName : daoAddress}
-                    >
-                      <Typography.Title
-                        style={{ marginTop: -6 }}
-                        level={4}
-                        ellipsis={{ rows: 2 }}
+        <Spin spinning={loading} tip="Loading...">
+          <Card bordered={false}>
+            <Row gutter={[20, 20]}>
+              <Col span={24} style={{ minHeight: 88 }}>
+                <Row gutter={[16, 16]} wrap={false} align="top">
+                  <Col>
+                    {!metaData?.image ? (
+                      <GradientAvatar
+                        seed={daoAddress}
+                        avatarProps={{ shape: 'square', size: 68 }}
+                      />
+                    ) : (
+                      <Avatar shape="square" size={68} src={metaData?.image} />
+                    )}
+                  </Col>
+                  <Col flex="auto">
+                    <Space direction="vertical" size={0}>
+                      <Tooltip
+                        title={
+                          metaData?.daoName ? metaData.daoName : daoAddress
+                        }
                       >
-                        {metaData?.daoName
-                          ? metaData.daoName
-                          : shortenAddress(daoAddress)}
-                      </Typography.Title>
-                    </Tooltip>
-                    <Tag className="dao-tag" style={{ margin: 0 }}>
-                      {isPublic ? 'Public' : 'Member only'}
-                    </Tag>
-                    <Space size={2} style={{ marginLeft: -3 }}>
-                      {metaData?.optionals?.map(
-                        (url, idx) =>
-                          validURL(url) && (
-                            <Button
-                              size="small"
-                              type="text"
-                              onClick={() => window.open(url, '_blank')}
-                              icon={<IonIcon name={getIcon(url)} />}
-                              key={idx}
-                            />
-                          ),
-                      )}
+                        <Typography.Title
+                          style={{ marginTop: -6 }}
+                          level={4}
+                          ellipsis={{ rows: 2 }}
+                        >
+                          {metaData?.daoName
+                            ? metaData.daoName
+                            : shortenAddress(daoAddress)}
+                        </Typography.Title>
+                      </Tooltip>
+                      <Tag className="dao-tag" style={{ margin: 0 }}>
+                        {isPublic ? 'Public' : 'Member only'}
+                      </Tag>
+                      <Space size={2} style={{ marginLeft: -3 }}>
+                        {metaData?.optionals?.map(
+                          (url, idx) =>
+                            validURL(url) && (
+                              <Button
+                                size="small"
+                                type="text"
+                                onClick={() => window.open(url, '_blank')}
+                                icon={<IonIcon name={getIcon(url)} />}
+                                key={idx}
+                              />
+                            ),
+                        )}
+                      </Space>
                     </Space>
-                  </Space>
-                </Col>
-              </Row>
-            </Col>
-            <Col span={24}>
-              <Row gutter={[16, 16]}>
-                <Col span={8}>
-                  <StatisticCard
-                    title="Vote by"
-                    value={
-                      isNft ? (
-                        <AvatarNFT mintAddress={mint.toBase58()} />
-                      ) : (
-                        <Space>
-                          <MintAvatar mintAddress={mint.toBase58()} />
-                          <MintSymbol mintAddress={mint.toBase58()} />
-                        </Space>
-                      )
-                    }
-                  />
-                </Col>
-                <Col span={8}>
-                  <StatisticCard
-                    title="Proposals"
-                    value={numeric(Number(nonce)).format('0,0')}
-                  />
-                </Col>
-                <Col span={8}>
-                  <StatisticCard
-                    title="Members"
-                    value={numeric(members).format('0,0')}
-                  />
-                </Col>
-              </Row>
-            </Col>
-            <Col span={24} style={{ minHeight: 44 }}>
-              <Typography.Paragraph
-                style={{ margin: 0 }}
-                type="secondary"
-                ellipsis={{ rows: 2 }}
-              >
-                {metaData?.description}
-              </Typography.Paragraph>
-            </Col>
-          </Row>
-        </Card>
+                  </Col>
+                </Row>
+              </Col>
+              <Col span={24}>
+                <Row gutter={[16, 16]}>
+                  <Col span={8}>
+                    <StatisticCard
+                      title="Vote by"
+                      value={
+                        isNft ? (
+                          <AvatarNFT mintAddress={mint.toBase58()} />
+                        ) : (
+                          <Space>
+                            <MintAvatar mintAddress={mint.toBase58()} />
+                            <MintSymbol mintAddress={mint.toBase58()} />
+                          </Space>
+                        )
+                      }
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <StatisticCard
+                      title="Proposals"
+                      value={numeric(Number(nonce)).format('0,0')}
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <StatisticCard
+                      title="Members"
+                      value={numeric(members).format('0,0')}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+              <Col span={24} style={{ minHeight: 44 }}>
+                <Typography.Paragraph
+                  style={{ margin: 0 }}
+                  type="secondary"
+                  ellipsis={{ rows: 2 }}
+                >
+                  {metaData?.description}
+                </Typography.Paragraph>
+              </Col>
+            </Row>
+          </Card>
+        </Spin>
       </Col>
     </Row>
   )
