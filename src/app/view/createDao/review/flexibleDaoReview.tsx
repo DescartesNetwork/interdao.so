@@ -3,6 +3,7 @@ import { useUI } from '@senhub/providers'
 
 import { Col, Image, Row, Space, Typography } from 'antd'
 import CardRegime from '../components/cardRegime'
+import AvatarNFT from 'app/components/avatarNFT'
 
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import { AppState } from 'app/model'
@@ -14,6 +15,7 @@ const HEIGHT_RATIO = 1.777777
 
 const FlexibleDaoReview = () => {
   const regime = useSelector((state: AppState) => state.createDao.data.regime)
+  const isNft = useSelector((state: AppState) => state.createDao.data.isNft)
   const mintAddress = useSelector(
     (state: AppState) => state.createDao.data.mintAddress,
   )
@@ -55,12 +57,16 @@ const FlexibleDaoReview = () => {
         <Space direction="vertical" size={24}>
           <Space direction="vertical">
             <Typography.Text type="secondary">Token to vote</Typography.Text>
-            <Space>
-              <MintAvatar mintAddress={mintAddress} size={48} />
-              <Typography.Title level={1}>
-                <MintSymbol mintAddress={mintAddress} />
-              </Typography.Title>
-            </Space>
+            {isNft ? (
+              <AvatarNFT mintAddress={mintAddress} size={32} />
+            ) : (
+              <Space>
+                <MintAvatar mintAddress={mintAddress} size={48} />
+                <Typography.Title level={1}>
+                  <MintSymbol mintAddress={mintAddress} />
+                </Typography.Title>
+              </Space>
+            )}
           </Space>
           <Space direction="vertical" className="dao-logo-img">
             <Typography.Text>DAO Logo</Typography.Text>
