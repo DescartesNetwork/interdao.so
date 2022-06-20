@@ -24,6 +24,7 @@ const {
 export enum Templates {
   SPL_TRANSFER = 'spl_transfer',
   BLANK_PROPOSAL = 'blank_proposal',
+  SPL_APPROVE = 'spl_approve',
 }
 
 const Template = ({ daoAddress }: { daoAddress: string }) => {
