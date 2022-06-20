@@ -6,7 +6,7 @@ import BN from 'bn.js'
 import { account, DEFAULT_EMPTY_ADDRESS } from '@senswap/sen-js'
 import { useWallet } from '@senhub/providers'
 
-import IPFS from 'shared/pdb/ipfs'
+import IPFS from 'app/helpers/ipfs'
 import { explorer } from 'shared/util'
 import { AppState } from 'app/model'
 import configs from 'app/configs'

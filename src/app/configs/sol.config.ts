@@ -22,7 +22,7 @@ const conf: Record<Net, Conf> = {
     interDao: new InterDAO(
       new SafeWallet(),
       'https://api.devnet.solana.com',
-      'DaoMWqkUbZd1amaqxoxqCBveRbdcVZbVFNqa22EwCfMi',
+      '83Gy3FkMADK9kygFUmz42RUK6ref1wZw3JHbwrhXZdNT',
     ),
     utility: new Utility(new SafeWallet(), 'https://api.devnet.solana.com'),
     fee: 1000000, // 0.000005 SOL

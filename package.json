@@ -38,7 +38,7 @@
     "react-scripts": "^5.0.1",
     "remarkable": "^2.0.1",
     "sen-idl-parser": "^1.0.3",
-    "sentre-web3": "^0.0.6",
+    "sentre-web3": "^0.1.0",
     "swiper": "^7.2.0",
     "tweetnacl": "^1.0.3",
     "web-vitals": "^2.1.1"
@@ -87,6 +87,7 @@
     "gh-pages": "^3.2.3",
     "prettier": "2.5.0",
     "serve": "^12.0.1",
-    "typescript": "^4.5.2"
+    "typescript": "^4.5.2",
+    "web3.storage": "^4.2.0"
   }
 }

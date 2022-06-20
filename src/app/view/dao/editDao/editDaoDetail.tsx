@@ -4,7 +4,7 @@ import { CID } from 'ipfs-core'
 import { Col, Row } from 'antd'
 import ActionButton from './actionButton'
 
-import IPFS from 'shared/pdb/ipfs'
+import IPFS from 'app/helpers/ipfs'
 import { explorer } from 'shared/util'
 import configs from 'app/configs'
 import useMetaData from 'app/hooks/useMetaData'

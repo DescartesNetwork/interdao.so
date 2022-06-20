@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { AppState } from 'app/model'
 import { getCID } from 'app/helpers'
 import { ProposalMetaData } from 'app/view/proposal/proposalInitialization'
-import IPFS from 'shared/pdb/ipfs'
+import IPFS from 'app/helpers/ipfs'
 
 const useProposalMetaData = (proposalAddress: string) => {
   const [metaData, setMetaData] = useState<ProposalMetaData>()
@@ -18,7 +18,7 @@ const useProposalMetaData = (proposalAddress: string) => {
     const cid = getCID(digest)
     const ipfs = new IPFS()
     try {
-      const data = await ipfs.get(cid)
+      const data = await ipfs.get<any>(cid)
       return setMetaData(data)
     } catch (er: any) {
       return window.notify({ type: 'error', description: er.message })

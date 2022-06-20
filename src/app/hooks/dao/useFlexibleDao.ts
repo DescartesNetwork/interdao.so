@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { CID } from 'ipfs-core'
 import BN from 'bn.js'
 
-import IPFS from 'shared/pdb/ipfs'
+import IPFS from 'app/helpers/ipfs'
 import { explorer } from 'shared/util'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import configs from 'app/configs'
