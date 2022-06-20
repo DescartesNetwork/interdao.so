@@ -26,7 +26,6 @@ const useCommunityDaos = (
       const { isPublic, mint, regime } = daoData
       let valid = true
       // Validate vote token
-      console.log('isPublic', isPublic)
       if (!isPublic) {
         const tokenAccount = await utils.token.associatedAddress({
           mint,
@@ -49,7 +48,7 @@ const useCommunityDaos = (
       if (valid) filteredDaos[addr] = daoData
     }
     return setFilteredDaos(filteredDaos)
-  }, [daos, daoType, mechanismsType, wallet.address, accounts, pdb])
+  }, [accounts, daoType, daos, mechanismsType, pdb, wallet.address])
 
   useEffect(() => {
     filterDaos()

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import LazyLoad from '@sentre/react-lazyload'
 
 import { Col, Empty, Row } from 'antd'
@@ -18,10 +18,8 @@ const CommunityDaos = () => {
   const [type, setType] = useState('all')
   const communityDaos = useCommunityDaos(type, mechanisms)
 
-  const { searchData, loading } = useSearchDao(
-    searchKey,
-    Object.keys(communityDaos),
-  )
+  const daos = useMemo(() => Object.keys(communityDaos), [communityDaos])
+  const { searchData, loading } = useSearchDao(searchKey, daos)
 
   return (
     <Row gutter={[24, 16]}>
