@@ -17,31 +17,32 @@ const useDaoCanJoin = () => {
 
   const filterDaos = useCallback(async () => {
     const filteredDaos: DaoState = {}
+    try {
+      for (const addr in daos) {
+        const daoData = daos[addr]
+        const { mint } = daoData
+        let valid = true
 
-    for (const addr in daos) {
-      const daoData = daos[addr]
-      const { mint } = daoData
-      let valid = true
+        // Validate MultisigDAO
+        const { daoType, members } = (await pdb.getItem(addr)) as MetaData
 
-      // Validate MultisigDAO
-      const { daoType, members } = (await pdb.getItem(addr)) as MetaData
+        if (daoType === 'multisig-dao') {
+          const listMember = members.map(({ walletAddress }) => walletAddress)
+          if (!listMember.includes(wallet.address)) valid = false
+        }
 
-      if (daoType === 'multisig-dao') {
-        const listMember = members.map(({ walletAddress }) => walletAddress)
-        if (!listMember.includes(wallet.address)) valid = false
+        if (daoType === 'flexible-dao') {
+          const tokenAccount = await utils.token.associatedAddress({
+            mint,
+            owner: new web3.PublicKey(wallet.address),
+          })
+          const amount = accounts[tokenAccount.toBase58()]?.amount
+          if (!amount || !(Number(amount.toString()) > 0)) valid = false
+        }
+
+        if (valid) filteredDaos[addr] = daoData
       }
-
-      if (daoType === 'flexible-dao') {
-        const tokenAccount = await utils.token.associatedAddress({
-          mint,
-          owner: new web3.PublicKey(wallet.address),
-        })
-        const amount = accounts[tokenAccount.toBase58()]?.amount
-        if (!amount || !(Number(amount.toString()) > 0)) valid = false
-      }
-
-      if (valid) filteredDaos[addr] = daoData
-    }
+    } catch (error) {}
     return setFilteredDaos(filteredDaos)
   }, [accounts, daos, pdb, wallet.address])
 
