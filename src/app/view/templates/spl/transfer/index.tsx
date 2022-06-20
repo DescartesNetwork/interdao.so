@@ -22,13 +22,11 @@ import {
 import configs from 'app/configs'
 import NumericInput from 'shared/antd/numericInput'
 import useMetaData from 'app/hooks/useMetaData'
-import { Templates } from '../..'
+import { Templates } from '../../index'
 
 const {
   manifest: { appId },
 } = configs
-
-export const NAME = 'spl/transfer'
 
 export const toData = (amount = new BN(0)) => {
   const schema = [
@@ -49,7 +47,7 @@ export const buildTransferSplvalue = (
   payer: string,
 ) => {
   const value: ProposalReturnType = {
-    name: NAME,
+    name: Templates.SPL_TRANSFER,
     data: toData(new BN(amount)),
     accounts: {
       src: {
