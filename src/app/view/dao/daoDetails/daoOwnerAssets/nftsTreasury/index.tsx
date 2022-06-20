@@ -9,7 +9,7 @@ import useNftMetaData from 'app/hooks/useNftMetaData'
 import { fetchYourOwnerNTFs, MetadataDataType } from 'app/helpers/metaplex'
 import { AppState } from 'app/model'
 
-import IMAGE_DEFAULT from 'app/static/images/system/avatar.png'
+import IMAGE_DEFAULT from 'app/static/images/system/nft.jpeg'
 
 const NftTreasury = ({ daoAddress }: { daoAddress: string }) => {
   const [listNFTs, setListNFTs] = useState<MetadataDataType[]>()

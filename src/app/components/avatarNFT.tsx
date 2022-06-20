@@ -4,7 +4,7 @@ import { Avatar, Space, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import useNftMetaData from 'app/hooks/useNftMetaData'
-import IMAGE_DEFAULT from 'app/static/images/nft.jpeg'
+import IMAGE_DEFAULT from 'app/static/images/system/nft.jpeg'
 
 type AvatarNFTProps = {
   mintAddress: string

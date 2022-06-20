@@ -15,7 +15,7 @@ import {
 import useNftMetaData from 'app/hooks/useNftMetaData'
 
 import BG_BTN from 'app/static/images/system/select-dao.png'
-import IMAGE_DEFAULT from 'app/static/images/system/avatar.png'
+import IMAGE_DEFAULT from 'app/static/images/system/nft.jpeg'
 
 const SIZE_COLLECTION_IMAGE = 88
 

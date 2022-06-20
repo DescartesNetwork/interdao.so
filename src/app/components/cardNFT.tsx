@@ -7,7 +7,7 @@ import { Card, Row, Col, Typography, Image } from 'antd'
 import useNftMetaData from 'app/hooks/useNftMetaData'
 import IonIcon from '@sentre/antd-ionicon'
 
-import IMAGE_DEFAULT from 'app/static/images/system/avatar.png'
+import IMAGE_DEFAULT from 'app/static/images/system/nft.jpeg'
 
 export type CardNFTProps = {
   mintAddress: string
