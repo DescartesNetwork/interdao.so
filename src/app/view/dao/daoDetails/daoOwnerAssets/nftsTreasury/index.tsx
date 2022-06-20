@@ -9,7 +9,7 @@ import useNftMetaData from 'app/hooks/useNftMetaData'
 import { fetchYourOwnerNTFs, MetadataDataType } from 'app/helpers/metaplex'
 import { AppState } from 'app/model'
 
-import IMAGE_DEFAULT from 'app/static/images/system/avatar.png'
+import IMAGE_DEFAULT from 'app/static/images/system/nft.jpeg'
 
 const NftTreasury = ({ daoAddress }: { daoAddress: string }) => {
   const [listNFTs, setListNFTs] = useState<MetadataDataType[]>()
@@ -49,7 +49,7 @@ const CardNFT = ({ mintAddress }: { mintAddress: string }) => {
   const [nftImg, setNftImg] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const metadata = useNftMetaData(mintAddress)
+  const { metadata } = useNftMetaData(mintAddress)
 
   const getNftInfoFromURI = useCallback(async () => {
     if (!metadata) return setNftImg(IMAGE_DEFAULT)

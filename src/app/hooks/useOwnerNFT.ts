@@ -3,6 +3,7 @@ import { useAccount } from '@senhub/providers'
 import { utils, web3, BN } from '@project-serum/anchor'
 
 import { fetchYourOwnerNTFs, MetadataDataType } from 'app/helpers/metaplex'
+import { DataLoader } from 'shared/dataloader'
 
 const useOwnerNFT = (ownerPublickey: string) => {
   const [nfts, setNfts] = useState<MetadataDataType[]>([])
@@ -11,7 +12,10 @@ const useOwnerNFT = (ownerPublickey: string) => {
 
   const fetchNFTs = useCallback(async () => {
     if (!ownerPublickey) return setNfts([])
-    const nftsFetching = await fetchYourOwnerNTFs(ownerPublickey)
+    const nftsFetching = await DataLoader.load(
+      'fetchYourOwnerNTFs' + ownerPublickey,
+      () => fetchYourOwnerNTFs(ownerPublickey),
+    )
     setNfts(nftsFetching)
   }, [ownerPublickey])
 

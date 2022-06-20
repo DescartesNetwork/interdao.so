@@ -1,13 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useUI } from '@senhub/providers'
-import axios from 'axios'
 
 import { Card, Row, Col, Typography, Image } from 'antd'
 
 import useNftMetaData from 'app/hooks/useNftMetaData'
 import IonIcon from '@sentre/antd-ionicon'
 
-import IMAGE_DEFAULT from 'app/static/images/system/avatar.png'
+import IMAGE_DEFAULT from 'app/static/images/system/nft.jpeg'
 
 export type CardNFTProps = {
   mintAddress: string
@@ -19,8 +18,6 @@ const SIZE_DESKTOP = 198
 const SIZE_MOBILE = 150
 
 const CardNFT = ({ mintAddress, onSelect, isSelected }: CardNFTProps) => {
-  const [nftImg, setNftImg] = useState('')
-  const [loading, setLoading] = useState(false)
   const {
     ui: { width },
   } = useUI()
@@ -30,29 +27,7 @@ const CardNFT = ({ mintAddress, onSelect, isSelected }: CardNFTProps) => {
     return SIZE_DESKTOP
   }, [width])
 
-  const metadata = useNftMetaData(mintAddress)
-  const metadataData = metadata?.data.data
-
-  const getNftInfoFromURI = useCallback(async () => {
-    if (!metadata) return setNftImg(IMAGE_DEFAULT)
-    try {
-      setLoading(true)
-      const url = metadata.data.data.uri
-      if (!url) return setNftImg(IMAGE_DEFAULT)
-
-      const response = await axios.get(url)
-      const img = response.data.image
-      return setNftImg(img)
-    } catch (er: any) {
-      return window.notify({ type: 'error', description: er.message })
-    } finally {
-      setLoading(false)
-    }
-  }, [metadata])
-
-  useEffect(() => {
-    getNftInfoFromURI()
-  }, [getNftInfoFromURI])
+  const { nftInfo, loading } = useNftMetaData(mintAddress)
 
   return (
     <Card
@@ -77,7 +52,7 @@ const CardNFT = ({ mintAddress, onSelect, isSelected }: CardNFTProps) => {
         )}
         <Col span={24} style={{ textAlign: 'center', width: imageSize }}>
           <Image
-            src={nftImg}
+            src={nftInfo?.image || IMAGE_DEFAULT}
             preview={false}
             style={{ borderRadius: 4 }}
             width={imageSize}
@@ -85,7 +60,7 @@ const CardNFT = ({ mintAddress, onSelect, isSelected }: CardNFTProps) => {
           />
         </Col>
         <Col span={24} style={{ textAlign: 'center', paddingTop: '8px' }}>
-          <Typography.Text>{metadataData?.name}</Typography.Text>
+          <Typography.Text>{nftInfo?.name}</Typography.Text>
         </Col>
       </Row>
     </Card>

@@ -7,6 +7,7 @@ import { PublicKey } from '@solana/web3.js'
 import { AppDispatch } from 'app/model'
 import configs from 'app/configs'
 import { getDao, getDaos } from 'app/model/daos.controller'
+import { addLoading, clearLoading } from 'app/model/loading.controller'
 
 const {
   sol: { interDao },
@@ -44,6 +45,12 @@ const DaoWatcher = () => {
 
   // First-time fetching
   const fetchData = useCallback(async () => {
+    dispatch(
+      addLoading({
+        id: 'fetch-daos',
+        message: 'Welcome to InterDAO. The application is loading...',
+      }),
+    )
     try {
       if (!account.isAddress(walletAddress)) return
       await dispatch(getDaos()).unwrap()
@@ -52,6 +59,10 @@ const DaoWatcher = () => {
         type: 'error',
         description: 'Cannot fetch data of DAOs',
       })
+    } finally {
+      setTimeout(() => {
+        dispatch(clearLoading('fetch-daos'))
+      }, 2000)
     }
   }, [dispatch, walletAddress])
   // Watch dao events

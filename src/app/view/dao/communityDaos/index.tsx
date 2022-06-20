@@ -8,9 +8,9 @@ import Mechanisms from './mechanisms'
 import TypeOfDAO from './typeOfDao'
 
 import useSearchDao from 'app/hooks/useSearchDao'
+import useCommunityDaos from 'app/hooks/daos/useCommunityDaos'
 
 import './index.less'
-import useCommunityDaos from 'app/hooks/daos/useCommunityDaos'
 
 const CommunityDaos = () => {
   const [mechanisms, setMechanisms] = useState('all')
