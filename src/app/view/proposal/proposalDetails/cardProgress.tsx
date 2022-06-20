@@ -14,11 +14,7 @@ import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
 import useProposalStatus from 'app/hooks/proposal/useProposalStatus'
 import useProposal from 'app/hooks/proposal/useProposal'
-
-const STROKE_COLOR = {
-  dark: { default: '#312B29', for: '#698033', against: '#F9575E' },
-  light: { default: '#F2EFE9', for: '#F9DEB0', against: '#F9575E' },
-}
+import { STROKE_COLOR } from 'app/constant'
 
 const CardProgress = ({
   proposalAddress,
@@ -33,7 +29,7 @@ const CardProgress = ({
   )
   const { mint } = daos[daoAddress] || ({} as DaoData)
   const mintDecimal = useMintDecimals(mint?.toBase58()) || 0
-  const { actualSupply } = useProposalStatus(proposalAddress)
+  const { status, actualSupply } = useProposalStatus(proposalAddress)
   const {
     ui: { theme },
   } = useUI()
@@ -108,6 +104,22 @@ const CardProgress = ({
     return setSuccessColor(STROKE_COLOR[theme].for)
   }, [percentNo, percentYes, theme])
 
+  const quorumText = useMemo(() => {
+    switch (status) {
+      case 'Failed':
+        return 'The proposal has been failed'
+      case 'Succeeded':
+        return 'The proposal has been approved'
+      default:
+        return `${numeric(
+          utils.undecimalize(
+            BigInt(powerRequire.add(new BN(1)).toString()),
+            mintDecimal,
+          ),
+        ).format('0,0.[0000]')} more Vote For required`
+    }
+  }, [mintDecimal, powerRequire, status])
+
   useEffect(() => {
     getColors()
   }, [getColors])
@@ -121,15 +133,7 @@ const CardProgress = ({
         <Col span={24}>
           <Space size={0} style={{ width: '100%' }} direction="vertical">
             <Typography.Text type="secondary">Quorum</Typography.Text>
-            <Typography.Text>
-              {numeric(
-                utils.undecimalize(
-                  BigInt(powerRequire.toString()),
-                  mintDecimal,
-                ),
-              ).format('0,0.[0000]')}{' '}
-              more Yes votes required
-            </Typography.Text>
+            <Typography.Text>{quorumText}</Typography.Text>
             <Progress
               percent={100}
               strokeColor={STROKE_COLOR[theme].default}
