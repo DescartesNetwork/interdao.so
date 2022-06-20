@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/static/js/main.3aea879a.js",
+    "main.js": "/static/js/main.6c1399ab.js",
     "interdao.js": "/index.js",
     "static/css/src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.eee6c252.chunk.css": "/static/css/src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.eee6c252.chunk.css",
     "static/js/src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.f0d5b76b.chunk.js": "/static/js/src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.f0d5b76b.chunk.js",
@@ -10,8 +10,8 @@
     "static/js/node_modules_babel_runtime_regenerator_index_js.e0f6cd0a.chunk.js": "/static/js/node_modules_babel_runtime_regenerator_index_js.e0f6cd0a.chunk.js",
     "static/js/node_modules_prop-types_index_js-node_modules_react-router-dom_esm_react-router-dom_js.f78469c9.chunk.js": "/static/js/node_modules_prop-types_index_js-node_modules_react-router-dom_esm_react-router-dom_js.f78469c9.chunk.js",
     "static/js/node_modules_react_index_js.b231be6d.chunk.js": "/static/js/node_modules_react_index_js.b231be6d.chunk.js",
-    "static/css/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.abbf24ff.chunk.css": "/static/css/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.abbf24ff.chunk.css",
-    "static/js/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.5c2bd14c.chunk.js": "/static/js/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.5c2bd14c.chunk.js",
+    "static/css/src_app_bootstrap_app_tsx-src_app_static_images_system_bg-autonomous_png-src_app_static_image-3fea2f.a019b240.chunk.css": "/static/css/src_app_bootstrap_app_tsx-src_app_static_images_system_bg-autonomous_png-src_app_static_image-3fea2f.a019b240.chunk.css",
+    "static/js/src_app_bootstrap_app_tsx-src_app_static_images_system_bg-autonomous_png-src_app_static_image-3fea2f.441e7987.chunk.js": "/static/js/src_app_bootstrap_app_tsx-src_app_static_images_system_bg-autonomous_png-src_app_static_image-3fea2f.441e7987.chunk.js",
     "static/js/vendors-node_modules_react-dom_index_js.8e44dcc3.chunk.js": "/static/js/vendors-node_modules_react-dom_index_js.8e44dcc3.chunk.js",
     "static/js/node_modules_react-router-dom_esm_react-router-dom_js.8f0d6984.chunk.js": "/static/js/node_modules_react-router-dom_esm_react-router-dom_js.8f0d6984.chunk.js",
     "static/js/src_os_store_context_ts-_3b661.413283b5.chunk.js": "/static/js/src_os_store_context_ts-_3b661.413283b5.chunk.js",
@@ -20,7 +20,7 @@
     "static/js/vendors-node_modules_chainsafe_libp2p-noise_dist_src_noise_js-node_modules_senswap_sen-js_dis-88f19a.ac1b573c.chunk.js": "/static/js/vendors-node_modules_chainsafe_libp2p-noise_dist_src_noise_js-node_modules_senswap_sen-js_dis-88f19a.ac1b573c.chunk.js",
     "static/js/vendors-node_modules_ant-design_icons_es_icons_LoadingOutlined_js-node_modules_copy-to-clipbo-f41099.acc42072.chunk.js": "/static/js/vendors-node_modules_ant-design_icons_es_icons_LoadingOutlined_js-node_modules_copy-to-clipbo-f41099.acc42072.chunk.js",
     "static/js/vendors-node_modules_react-router_esm_react-router_js.3cc5ea8d.chunk.js": "/static/js/vendors-node_modules_react-router_esm_react-router_js.3cc5ea8d.chunk.js",
-    "static/js/vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-b1e79b.0685ed7a.chunk.js": "/static/js/vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-b1e79b.0685ed7a.chunk.js",
+    "static/js/vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-b1e79b.1de965d5.chunk.js": "/static/js/vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-b1e79b.1de965d5.chunk.js",
     "static/js/vendors-node_modules_antd_es_index_js.e798589d.chunk.js": "/static/js/vendors-node_modules_antd_es_index_js.e798589d.chunk.js",
     "static/js/vendors-node_modules_senswap_sen-js_dist_utils_js-node_modules_base64-js_index_js-node_module-343e97.698453ea.chunk.js": "/static/js/vendors-node_modules_senswap_sen-js_dist_utils_js-node_modules_base64-js_index_js-node_module-343e97.698453ea.chunk.js",
     "static/js/vendors-node_modules_react-redux_es_index_js.36eaa414.chunk.js": "/static/js/vendors-node_modules_react-redux_es_index_js.36eaa414.chunk.js",
@@ -42,6 +42,7 @@
     "static/media/helvetica-neue-bold.ttf": "/static/media/helvetica-neue-bold.e1d6112f8c98f3bd8170.ttf",
     "static/media/store-panel3.png": "/static/media/store-panel3.2de28bf3c1313112bde8.png",
     "static/media/store-panel2.png": "/static/media/store-panel2.e277d27407b69114b5aa.png",
+    "static/media/nft.jpeg": "/static/media/nft.ee2194bbdc0a4d0de283.jpeg",
     "static/media/light-bg-welcome.png": "/static/media/light-bg-welcome.59d39f87387a25224ddb.png",
     "static/media/bg-join-dao.png": "/static/media/bg-join-dao.3d592df6b487d75d869b.png",
     "static/media/multisig-dao.png": "/static/media/multisig-dao.acace5673428fba1a129.png",
@@ -50,7 +51,6 @@
     "static/media/flexible-dao.png": "/static/media/flexible-dao.b2c9c784f7d3db262647.png",
     "static/media/bg-dictatorial.png": "/static/media/bg-dictatorial.7c0cb9d397f1639d2aab.png",
     "static/media/bg-democratic.png": "/static/media/bg-democratic.ff82ee54c8a9b2fcae9a.png",
-    "static/media/avatar.png": "/static/media/avatar.4c278581bf4b15ddace9.png",
     "static/media/bg-autonomous.png": "/static/media/bg-autonomous.4bdc5f8d71be9e7c25a1.png",
     "static/media/dark-bg.png": "/static/media/dark-bg.e0ce57639fdc13a3bdb0.png",
     "static/media/phantom.png": "/static/media/phantom.1078280bdfb21865925d.png",
@@ -82,7 +82,7 @@
     "static/media/icon-telegram.svg": "/static/media/icon-telegram.2450489f40d03000fe65fc1c6f238d85.svg",
     "static.app.tsx": "/interdao-asset-senhub.json",
     "static/media/README.md": "/static/media/README.cc06a5f56da5ba785b81.md",
-    "main.3aea879a.js.map": "/static/js/main.3aea879a.js.map",
+    "main.6c1399ab.js.map": "/static/js/main.6c1399ab.js.map",
     "index.js.map": "/index.js.map",
     "src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.eee6c252.chunk.css.map": "/static/css/src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.eee6c252.chunk.css.map",
     "src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.f0d5b76b.chunk.js.map": "/static/js/src_bootstrap_tsx-src_os_static_images_bg_dark-bg_png-src_os_static_images_bg_light-bg_png-sr-b81640.f0d5b76b.chunk.js.map",
@@ -92,8 +92,8 @@
     "node_modules_babel_runtime_regenerator_index_js.e0f6cd0a.chunk.js.map": "/static/js/node_modules_babel_runtime_regenerator_index_js.e0f6cd0a.chunk.js.map",
     "node_modules_prop-types_index_js-node_modules_react-router-dom_esm_react-router-dom_js.f78469c9.chunk.js.map": "/static/js/node_modules_prop-types_index_js-node_modules_react-router-dom_esm_react-router-dom_js.f78469c9.chunk.js.map",
     "node_modules_react_index_js.b231be6d.chunk.js.map": "/static/js/node_modules_react_index_js.b231be6d.chunk.js.map",
-    "src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.abbf24ff.chunk.css.map": "/static/css/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.abbf24ff.chunk.css.map",
-    "src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.5c2bd14c.chunk.js.map": "/static/js/src_app_bootstrap_app_tsx-src_app_static_images_system_avatar_png-src_app_static_images_syste-bf26d4.5c2bd14c.chunk.js.map",
+    "src_app_bootstrap_app_tsx-src_app_static_images_system_bg-autonomous_png-src_app_static_image-3fea2f.a019b240.chunk.css.map": "/static/css/src_app_bootstrap_app_tsx-src_app_static_images_system_bg-autonomous_png-src_app_static_image-3fea2f.a019b240.chunk.css.map",
+    "src_app_bootstrap_app_tsx-src_app_static_images_system_bg-autonomous_png-src_app_static_image-3fea2f.441e7987.chunk.js.map": "/static/js/src_app_bootstrap_app_tsx-src_app_static_images_system_bg-autonomous_png-src_app_static_image-3fea2f.441e7987.chunk.js.map",
     "vendors-node_modules_react-dom_index_js.8e44dcc3.chunk.js.map": "/static/js/vendors-node_modules_react-dom_index_js.8e44dcc3.chunk.js.map",
     "node_modules_react-router-dom_esm_react-router-dom_js.8f0d6984.chunk.js.map": "/static/js/node_modules_react-router-dom_esm_react-router-dom_js.8f0d6984.chunk.js.map",
     "src_os_store_context_ts-_3b661.413283b5.chunk.js.map": "/static/js/src_os_store_context_ts-_3b661.413283b5.chunk.js.map",
@@ -102,7 +102,7 @@
     "vendors-node_modules_chainsafe_libp2p-noise_dist_src_noise_js-node_modules_senswap_sen-js_dis-88f19a.ac1b573c.chunk.js.map": "/static/js/vendors-node_modules_chainsafe_libp2p-noise_dist_src_noise_js-node_modules_senswap_sen-js_dis-88f19a.ac1b573c.chunk.js.map",
     "vendors-node_modules_ant-design_icons_es_icons_LoadingOutlined_js-node_modules_copy-to-clipbo-f41099.acc42072.chunk.js.map": "/static/js/vendors-node_modules_ant-design_icons_es_icons_LoadingOutlined_js-node_modules_copy-to-clipbo-f41099.acc42072.chunk.js.map",
     "vendors-node_modules_react-router_esm_react-router_js.3cc5ea8d.chunk.js.map": "/static/js/vendors-node_modules_react-router_esm_react-router_js.3cc5ea8d.chunk.js.map",
-    "vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-b1e79b.0685ed7a.chunk.js.map": "/static/js/vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-b1e79b.0685ed7a.chunk.js.map",
+    "vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-b1e79b.1de965d5.chunk.js.map": "/static/js/vendors-node_modules_project-serum_sol-wallet-adapter_dist_esm_index_js-node_modules_solana_s-b1e79b.1de965d5.chunk.js.map",
     "vendors-node_modules_antd_es_index_js.e798589d.chunk.js.map": "/static/js/vendors-node_modules_antd_es_index_js.e798589d.chunk.js.map",
     "vendors-node_modules_senswap_sen-js_dist_utils_js-node_modules_base64-js_index_js-node_module-343e97.698453ea.chunk.js.map": "/static/js/vendors-node_modules_senswap_sen-js_dist_utils_js-node_modules_base64-js_index_js-node_module-343e97.698453ea.chunk.js.map",
     "vendors-node_modules_react-redux_es_index_js.36eaa414.chunk.js.map": "/static/js/vendors-node_modules_react-redux_es_index_js.36eaa414.chunk.js.map",
@@ -113,6 +113,6 @@
     "src_os_store_index_ts-src_shared_dataloader_index_ts.59a2f04f.chunk.js.map": "/static/js/src_os_store_index_ts-src_shared_dataloader_index_ts.59a2f04f.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.3aea879a.js"
+    "static/js/main.6c1399ab.js"
   ]
 }
