@@ -32,7 +32,7 @@ const Proposal = () => {
         type: 'warning',
         description: 'You are not a member of this DAO',
       })
-      // return history.push(`/app/${appId}/dao`)
+      return history.push(`/app/${appId}/dao`)
     }
   }, [checking, daoAddress, history, isPublic, validMember])
 
