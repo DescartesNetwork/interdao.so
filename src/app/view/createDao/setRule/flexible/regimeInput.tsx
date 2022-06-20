@@ -64,7 +64,7 @@ const RegimeInput = ({ value, onChangeRegime }: RegimeInputProps) => {
             value={value}
             regime={regime}
             onChange={onChangeRegime}
-            isCheckActive={true}
+            inactive={false}
           />
         </Col>
       ))}
