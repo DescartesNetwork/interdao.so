@@ -1,40 +1,27 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import LazyLoad from '@sentre/react-lazyload'
 
 import { Col, Empty, Row } from 'antd'
 import DaoCard from './daoCard'
 import SearchDao from './search'
-import SortDao from './sortDao'
+import Mechanisms from './mechanisms'
 import TypeOfDAO from './typeOfDao'
 
 import useSearchDao from 'app/hooks/useSearchDao'
-import useDaoType from 'app/hooks/useDaoType'
 
 import './index.less'
 import useCommunityDaos from 'app/hooks/daos/useCommunityDaos'
 
 const CommunityDaos = () => {
-  const [mechanisms, setMechanisms] = useState('all-regime')
-  const [type, setType] = useState('all-type')
+  const [mechanisms, setMechanisms] = useState('all')
   const [searchKey, setSearchKey] = useState('')
-  const communityDaos = useCommunityDaos()
+  const [type, setType] = useState('all')
+  const communityDaos = useCommunityDaos(type, mechanisms)
 
-  const listDaoByType = useDaoType(type)
-
-  const filterDaoAddress = useMemo(() => {
-    if (!listDaoByType.length) return []
-    if (mechanisms === 'all-regime') return listDaoByType
-
-    const filteredAddress = []
-    for (const daoAddress of listDaoByType) {
-      const { regime } = communityDaos[daoAddress]
-      const parseRegime = Object.keys(regime)[0]
-      if (mechanisms === parseRegime) filteredAddress.push(daoAddress)
-    }
-    return filteredAddress
-  }, [listDaoByType, communityDaos, mechanisms])
-
-  const { searchData, loading } = useSearchDao(searchKey, filterDaoAddress)
+  const { searchData, loading } = useSearchDao(
+    searchKey,
+    Object.keys(communityDaos),
+  )
 
   return (
     <Row gutter={[24, 16]}>
@@ -44,7 +31,7 @@ const CommunityDaos = () => {
             <TypeOfDAO value={type} setType={setType} />
           </Col>
           <Col xs={12} md={6}>
-            <SortDao onSort={setMechanisms} value={mechanisms} />
+            <Mechanisms onSort={setMechanisms} value={mechanisms} />
           </Col>
           <Col xs={24} md={12}>
             <SearchDao onSearch={setSearchKey} loading={loading} />
@@ -57,7 +44,7 @@ const CommunityDaos = () => {
           <Empty />
         </Col>
       ) : (
-        (searchData || filterDaoAddress).map((daoAddress) => (
+        (searchData || Object.keys(communityDaos)).map((daoAddress) => (
           <Col key={daoAddress} xs={24} md={12} xl={8}>
             <LazyLoad height={479.75} offset={2}>
               <DaoCard daoAddress={daoAddress} />
