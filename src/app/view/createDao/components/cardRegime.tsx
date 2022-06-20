@@ -18,10 +18,12 @@ const CardRegime = ({
   value,
   regime,
   onChange = () => {},
+  isCheckActive = false,
 }: {
   value?: DaoRegime
   regime: DaoRegime
   onChange?: (regime: DaoRegime) => void
+  isCheckActive?: boolean
 }) => {
   return (
     <Card
@@ -29,7 +31,9 @@ const CardRegime = ({
       style={{ overflow: 'hidden', cursor: 'pointer' }}
       bodyStyle={{ padding: 0 }}
       onClick={() => onChange(regime)}
-      className={`card-regime ${isEqual(value, regime) ? 'active' : ''}`}
+      className={`card-regime ${
+        isEqual(value, regime) || !isCheckActive ? 'active' : ''
+      }`}
     >
       <Image
         src={DAO_CARD_BG[Object.keys(regime)[0] as DaoCardBackground]}

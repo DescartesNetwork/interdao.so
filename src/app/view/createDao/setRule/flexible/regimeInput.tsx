@@ -60,7 +60,12 @@ const RegimeInput = ({ value, onChangeRegime }: RegimeInputProps) => {
       </Col>
       {REGIME_LIST.map((regime, idx) => (
         <Col xs={24} md={8} key={idx}>
-          <CardRegime value={value} regime={regime} onChange={onChangeRegime} />
+          <CardRegime
+            value={value}
+            regime={regime}
+            onChange={onChangeRegime}
+            isCheckActive={true}
+          />
         </Col>
       ))}
     </Row>
