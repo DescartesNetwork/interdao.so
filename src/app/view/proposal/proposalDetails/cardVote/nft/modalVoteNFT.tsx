@@ -34,7 +34,6 @@ const ModalVoteNFT = ({
   const [nftVoting, setNftVoting] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const proposalFee = useProposalFee({ daoAddress })
-  console.log('Collection: ', collection)
 
   const onVoteNftFor = useCallback(async () => {
     setLoading(true)
