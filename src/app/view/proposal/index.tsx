@@ -9,7 +9,7 @@ import ProposalList from './proposalList'
 import DaoDetails from '../dao/daoDetails'
 
 import configs from 'app/configs'
-import useDaoMemberOnly from 'app/hooks/dao/useDaoMemberOnly'
+import useValidDaoMember from 'app/hooks/dao/useValidDaoMember'
 import { AppState } from 'app/model'
 
 import './index.less'
@@ -23,7 +23,7 @@ const Proposal = () => {
   const { daoAddress } = useParams<{ daoAddress: string }>()
   const daoData = useSelector((state: AppState) => state.daos[daoAddress])
   const { isPublic } = daoData || ({} as DaoData)
-  const { validMember, checking } = useDaoMemberOnly(daoAddress)
+  const { validMember, checking } = useValidDaoMember(daoAddress)
 
   useEffect(() => {
     if (checking) return

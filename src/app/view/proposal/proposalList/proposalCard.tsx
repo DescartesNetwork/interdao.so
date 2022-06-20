@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { SystemProgram } from '@solana/web3.js'
 import BN from 'bn.js'
 
-import { Card, Col, Row, Skeleton, Typography } from 'antd'
+import { Card, Col, Row, Spin, Typography } from 'antd'
 import ProposalStatus from 'app/components/proposalStatus'
 import TemplateInfo from '../modalTemplateInfo/component/templateInfo'
 
@@ -39,58 +39,51 @@ const ProposalCard = ({
   }
   const { status } = useProposalStatus(proposalAddress)
   const history = useHistory()
-  const { metaData, loading: loadingProposalMetadata } =
-    useProposalMetaData(proposalAddress)
-  const endTime = Number(endDate) * 1000
+  const { metaData, loading } = useProposalMetaData(proposalAddress)
 
   return (
-    <Card
-      bordered={false}
-      onClick={() =>
-        history.push(
-          `/app/${appId}/dao/${dao.toBase58()}/proposal/${proposalAddress}`,
-        )
-      }
-      className="proposal-card"
-      style={{
-        background: !metaData
-          ? 'unset'
-          : `url(${BG_PROPOSAL[metaData.templateName]})`,
-      }}
-      bodyStyle={{ padding: '24px 0' }}
-      hoverable
-    >
-      <Row gutter={[8, 8]}>
-        <Col span={24}>
-          <Row>
-            <Col flex="auto">
-              <Skeleton
-                loading={loadingProposalMetadata}
-                paragraph={{ rows: 0 }}
-              >
+    <Spin spinning={loading} tip="Loading...">
+      <Card
+        bordered={false}
+        onClick={() =>
+          history.push(
+            `/app/${appId}/dao/${dao.toBase58()}/proposal/${proposalAddress}`,
+          )
+        }
+        className="proposal-card"
+        style={{
+          background: !metaData
+            ? 'unset'
+            : `url(${BG_PROPOSAL[metaData.templateName]})`,
+        }}
+        bodyStyle={{ padding: '24px 0' }}
+        hoverable
+      >
+        <Row gutter={[8, 8]}>
+          <Col span={24}>
+            <Row>
+              <Col flex="auto">
                 <Typography.Title level={4}>
                   {metaData?.title
                     ? metaData.title
                     : shortenAddress(proposalAddress)}
                 </Typography.Title>
-              </Skeleton>
-            </Col>
-            <Col>
-              <ProposalStatus status={status} />
-            </Col>
-          </Row>
-        </Col>
-        <Col xs={24} md={20}>
-          <TemplateInfo
-            isProposalDetail={false}
-            proposalAddress={proposalAddress}
-            daoAddress={daoAddress}
-            endTime={endTime}
-          />
-        </Col>
+              </Col>
+              <Col>
+                <ProposalStatus status={status} />
+              </Col>
+            </Row>
+          </Col>
+          <Col xs={24} md={20}>
+            <TemplateInfo
+              isProposalDetail={false}
+              proposalAddress={proposalAddress}
+              daoAddress={daoAddress}
+              endTime={Number(endDate) * 1000}
+            />
+          </Col>
 
-        <Col span={24}>
-          <Skeleton loading={loadingProposalMetadata} paragraph={{ rows: 1 }}>
+          <Col span={24}>
             <Typography.Paragraph
               style={{ margin: 0 }}
               type="secondary"
@@ -98,10 +91,10 @@ const ProposalCard = ({
             >
               {metaData?.description}
             </Typography.Paragraph>
-          </Skeleton>
-        </Col>
-      </Row>
-    </Card>
+          </Col>
+        </Row>
+      </Card>
+    </Spin>
   )
 }
 
