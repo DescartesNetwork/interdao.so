@@ -3,6 +3,7 @@ import { account } from '@senswap/sen-js'
 import { utils } from '@project-serum/anchor'
 
 import configs from 'app/configs'
+import { DataLoader } from 'shared/dataloader'
 
 const {
   sol: { interDao },
@@ -44,13 +45,16 @@ export const getTokenHolders = createAsyncThunk<
   const {
     provider: { connection },
   } = interDao.program
-  const accounts = await connection.getProgramAccounts(
-    utils.token.TOKEN_PROGRAM_ID,
-    {
-      filters: [
-        { dataSize: 165 },
-        { memcmp: { bytes: mintAddress, offset: 0 } },
-      ],
+
+  const accounts = await DataLoader.load(
+    'getTokenHolders' + mintAddress,
+    () => {
+      return connection.getProgramAccounts(utils.token.TOKEN_PROGRAM_ID, {
+        filters: [
+          { dataSize: 165 },
+          { memcmp: { bytes: mintAddress, offset: 0 } },
+        ],
+      })
     },
   )
   return { [daoAddress]: accounts.length }

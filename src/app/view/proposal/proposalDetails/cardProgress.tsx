@@ -70,13 +70,17 @@ const CardProgress = ({
     const mechanismQuorum = Object.keys(consensusQuorum)[0]
 
     if (mechanismQuorum === 'half')
-      return actualSupply.div(new BN(2)).sub(actualYesVote)
+      return actualSupply.div(new BN(2)).sub(actualYesVote).add(new BN(1))
 
     if (mechanismQuorum === 'oneThird')
-      return actualSupply.div(new BN(3)).sub(actualYesVote)
+      return actualSupply.div(new BN(3)).sub(actualYesVote).add(new BN(1))
 
     if (mechanismQuorum === 'twoThird')
-      return actualSupply.mul(new BN(2)).div(new BN(3)).sub(actualYesVote)
+      return actualSupply
+        .mul(new BN(2))
+        .div(new BN(3))
+        .sub(actualYesVote)
+        .add(new BN(1))
     return new BN(0)
   }, [
     actualSupply,
@@ -120,7 +124,7 @@ const CardProgress = ({
             <Typography.Text>
               {numeric(
                 utils.undecimalize(
-                  BigInt(powerRequire.add(new BN(1)).toString()),
+                  BigInt(powerRequire.toString()),
                   mintDecimal,
                 ),
               ).format('0,0.[0000]')}{' '}

@@ -60,7 +60,9 @@ const DaoWatcher = () => {
         description: 'Cannot fetch data of DAOs',
       })
     } finally {
-      dispatch(clearLoading('fetch-daos'))
+      setTimeout(() => {
+        dispatch(clearLoading('fetch-daos'))
+      }, 2000)
     }
   }, [dispatch, walletAddress])
   // Watch dao events

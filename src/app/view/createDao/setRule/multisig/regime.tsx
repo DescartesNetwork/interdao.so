@@ -14,7 +14,7 @@ const Regime = ({ regime }: RegimeProps) => {
         <Typography.Text>DAO Regime</Typography.Text>
       </Col>
       <Col xs={24} md={8}>
-        <CardRegime value={regime} regime={regime} />
+        <CardRegime regime={regime} />
       </Col>
     </Row>
   )
