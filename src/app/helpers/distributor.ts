@@ -1,7 +1,7 @@
 import { BN, utils, web3 } from '@project-serum/anchor'
 import { PublicKey } from '@solana/web3.js'
 import { Leaf, MerkleDistributor } from '@sentre/utility'
-import IPFS from 'shared/pdb/ipfs'
+import IPFS from 'app/helpers/ipfs'
 import { CID } from 'ipfs-core'
 
 import configs from 'app/configs'
@@ -118,7 +118,7 @@ class Distributor {
       distributorAddress,
     )
     const cid = await getCID(distributor.metadata)
-    const data = await ipfs.get(cid)
+    const data = await ipfs.get<any>(cid)
     const merkleDistributor = MerkleDistributor.fromBuffer(Buffer.from(data))
     return merkleDistributor
   }

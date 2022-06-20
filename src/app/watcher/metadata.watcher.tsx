@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import { AppState } from 'app/model'
 import { getCID } from 'app/helpers'
-import IPFS from 'shared/pdb/ipfs'
+import IPFS from 'app/helpers/ipfs'
 import usePDB from 'app/hooks/usePDB'
 import { MetaData } from 'app/model/createDao.controller'
 

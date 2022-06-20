@@ -87,6 +87,7 @@
     "gh-pages": "^3.2.3",
     "prettier": "2.5.0",
     "serve": "^12.0.1",
-    "typescript": "^4.5.2"
+    "typescript": "^4.5.2",
+    "web3.storage": "^4.2.0"
   }
 }
