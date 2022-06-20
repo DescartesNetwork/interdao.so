@@ -1,36 +1,31 @@
 import { useSelector } from 'react-redux'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAccount, useMint, useWallet } from '@senhub/providers'
+import { useAccount, useWallet } from '@senhub/providers'
 import { DaoData } from '@interdao/core'
 
 import { AppState } from 'app/model'
-import { isNftBelongsToCollection } from 'app/helpers/metaplex'
 import useMetaData from 'app/hooks/useMetaData'
+import useOwnerNFT from '../useOwnerNFT'
 
-const useDaoMemberOnly = (daoAddress: string) => {
+const useValidDaoMember = (daoAddress: string) => {
   const daos = useSelector((state: AppState) => state.daos)
-  const { mint: daoMint, isNft } = daos[daoAddress] || ({} as DaoData)
   const { accounts } = useAccount()
+
+  const { mint: daoMint, isNft } = daos[daoAddress] || ({} as DaoData)
   const { metaData } = useMetaData(daoAddress)
   const [validMember, setValidMember] = useState(false)
   const [checking, setChecking] = useState(true)
   const {
     wallet: { address: myAddress },
   } = useWallet()
-  const { getDecimals } = useMint()
+  const { nfts } = useOwnerNFT(myAddress)
 
   const checkMemberOnlyNFT = useCallback(async () => {
-    for (const { mint: mintAddress } of Object.values(accounts)) {
-      const decimals = await getDecimals(mintAddress)
-      if (decimals) continue
-      const isMemberOnly = await isNftBelongsToCollection(
-        mintAddress,
-        daoMint.toBase58(),
-      )
-      if (isMemberOnly) return isMemberOnly
-    }
+    if (!nfts) return false
+    for (const nft of nfts)
+      if (nft.collection?.key === daoMint.toBase58()) return true
     return false
-  }, [accounts, daoMint, getDecimals])
+  }, [daoMint, nfts])
 
   const isMemberTokenDAO = useMemo(() => {
     if (!daoMint) return false
@@ -79,4 +74,4 @@ const useDaoMemberOnly = (daoAddress: string) => {
   return { validMember, checking }
 }
 
-export default useDaoMemberOnly
+export default useValidDaoMember
