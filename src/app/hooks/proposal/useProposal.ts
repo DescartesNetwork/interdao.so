@@ -6,7 +6,7 @@ import { ProposalData } from '@interdao/core'
 import { AppDispatch, AppState } from 'app/model'
 import { getProposal } from 'app/model/proposal.controller'
 
-const useProposal = (proposalAddress: string, daoAddress: string) => {
+const useProposal = (proposalAddress: string, daoAddress?: string) => {
   const dispatch = useDispatch<AppDispatch>()
   const proposals = useSelector((state: AppState) => state.proposal)
 

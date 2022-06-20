@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { AccountMeta } from '@solana/web3.js'
 import { decodeSplInstruction } from 'sen-idl-parser'
+import { account, utils } from '@senswap/sen-js'
+import { useMint } from '@senhub/providers'
 import BN from 'bn.js'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
@@ -14,7 +16,6 @@ import useProposalStatus from 'app/hooks/proposal/useProposalStatus'
 import useProposalMetaData from 'app/hooks/proposal/useProposalMetaData'
 import useReceipts from 'app/hooks/proposal/useReceipts'
 import configs from 'app/configs'
-// import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { AppState } from 'app/model'
 import useProposal from 'app/hooks/proposal/useProposal'
 
@@ -28,44 +29,60 @@ const {
 
 const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
   const { proposal } = useSelector((state: AppState) => state)
+  const { daos } = useSelector((state: AppState) => state)
   const [loading, setLoading] = useState(false)
-  const [mintAddress, setMintAddress] = useState('')
+  const [isSufficientBalance, setIsSufficientBalance] = useState(false)
   const { status } = useProposalStatus(proposalAddress)
   const { metaData } = useProposalMetaData(proposalAddress)
-  const { accounts, data } = useProposal(
-    proposalAddress,
-    proposal[proposalAddress].dao.toBase58(),
-  )
-  // const { balance } = useAccountBalanceByMintAddress(mintAddress)
+  const { accounts, data } = useProposal(proposalAddress)
+  const { getDecimals } = useMint()
 
-  const getAssociatedAddress = useCallback(async () => {
+  const checkSufficientBalance = useCallback(async () => {
     if (!accounts || !data) return 0
     const info = decodeSplInstruction<{ amount: BN }>(
       accounts as AccountMeta[],
       data as Buffer,
     )
     if (!info) return 0
-    console.log('info:', info.data.amount.toNumber())
     const sourceAssociated =
       info.accounts.get('source')?.pubkey.toBase58() || ''
 
     try {
       const { mint } = await splt.getAccountData(sourceAssociated)
-
-      const associatedAddress = await splt.deriveAssociatedAddress(
-        proposal[proposalAddress].dao.toBase58(),
-        mint,
+      const decimals = await getDecimals(mint)
+      const transferAmount = utils.undecimalize(
+        BigInt(info.data.amount.toString()),
+        decimals,
       )
-      setMintAddress(associatedAddress)
+      const daoAddress = proposal[proposalAddress].dao.toBase58()
+      const ownerPublicKey = account.fromAddress(
+        daos[daoAddress].master.toBase58(),
+      )
+      const { value } = await splt.connection.getTokenAccountsByOwner(
+        ownerPublicKey,
+        { programId: splt.spltProgramId },
+      )
+
+      await Promise.all(
+        value.map(async ({ account: { data: buf } }) => {
+          const data = splt.parseAccountData(buf)
+          if (data.mint === mint) {
+            const mintBalance = Number(
+              utils.undecimalize(data.amount, decimals),
+            )
+            if (mintBalance > Number(transferAmount))
+              setIsSufficientBalance(true)
+          }
+        }),
+      )
     } catch (error) {
-      console.log(error)
-      setMintAddress('')
+      setIsSufficientBalance(false)
     }
-  }, [accounts, data, proposal, proposalAddress])
+  }, [accounts, daos, data, getDecimals, proposal, proposalAddress])
 
   useEffect(() => {
-    getAssociatedAddress()
-  }, [getAssociatedAddress])
+    checkSufficientBalance()
+  }, [checkSufficientBalance])
 
   const { receipts } = useReceipts({ proposalAddress })
 
@@ -129,16 +146,18 @@ const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
                       />
                       <Typography.Text>Member: {members}</Typography.Text>
                     </Col>
-                    <Col span={24}>
-                      <IonIcon
-                        name="warning-outline"
-                        style={{ marginRight: 5, color: '#F9575E' }}
-                      />
-                      <Typography.Text style={{ color: '#F9575E' }}>
-                        The treasury balance is not enough to execute this
-                        proposal
-                      </Typography.Text>
-                    </Col>
+                    {!isSufficientBalance && (
+                      <Col span={24}>
+                        <IonIcon
+                          name="warning-outline"
+                          style={{ marginRight: 5, color: '#F9575E' }}
+                        />
+                        <Typography.Text style={{ color: '#F9575E' }}>
+                          The treasury balance is not enough to execute this
+                          proposal
+                        </Typography.Text>
+                      </Col>
+                    )}
                   </Row>
                 </Space>
               </Space>
