@@ -1,7 +1,6 @@
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { useWallet } from '@senhub/providers'
 import { account } from '@senswap/sen-js'
-import axios from 'axios'
 
 import { Card, Col, Empty, Image, Modal, Row, Space, Typography } from 'antd'
 import CardNFT from 'app/components/cardNFT'
@@ -31,30 +30,7 @@ const CardNftImageOnly = ({
   mintAddress: string
   openNftModal: (visible: boolean) => void
 }) => {
-  const [nftImg, setNftImg] = useState('')
-  const [loading, setLoading] = useState(false)
-  const { metadata } = useNftMetaData(mintAddress)
-
-  const getNftInfoFromURI = useCallback(async () => {
-    if (!metadata) return setNftImg(IMAGE_DEFAULT)
-    try {
-      setLoading(true)
-      const url = metadata.data.data.uri
-      if (!url) return setNftImg(IMAGE_DEFAULT)
-
-      const response = await axios.get(url)
-      const img = response.data.image
-      return setNftImg(img)
-    } catch (er: any) {
-      return window.notify({ type: 'error', description: er.message })
-    } finally {
-      setLoading(false)
-    }
-  }, [metadata])
-
-  useEffect(() => {
-    getNftInfoFromURI()
-  }, [getNftInfoFromURI])
+  const { nftInfo, loading } = useNftMetaData(mintAddress)
 
   return (
     <Card
@@ -65,7 +41,7 @@ const CardNftImageOnly = ({
       onClick={() => openNftModal(true)}
     >
       <Image
-        src={nftImg}
+        src={nftInfo?.image || IMAGE_DEFAULT}
         preview={false}
         style={{ borderRadius: 4 }}
         width={SIZE_COLLECTION_IMAGE}
