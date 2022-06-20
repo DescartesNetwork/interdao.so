@@ -1,3 +1,4 @@
+import isEqual from 'react-fast-compare'
 import { DaoRegime, DaoRegimes } from '@interdao/core'
 
 import { Button, Row, Col, Space, Typography, Popover } from 'antd'
@@ -61,10 +62,9 @@ const RegimeInput = ({ value, onChangeRegime }: RegimeInputProps) => {
       {REGIME_LIST.map((regime, idx) => (
         <Col xs={24} md={8} key={idx}>
           <CardRegime
-            value={value}
             regime={regime}
             onChange={onChangeRegime}
-            inactive={true}
+            active={isEqual(value, regime)}
           />
         </Col>
       ))}

@@ -1,4 +1,3 @@
-import isEqual from 'react-fast-compare'
 import { DaoRegime } from '@interdao/core'
 
 import { Card, Image, Typography } from 'antd'
@@ -15,15 +14,13 @@ const DAO_CARD_BG = {
 }
 
 const CardRegime = ({
-  value,
   regime,
   onChange = () => {},
-  inactive = false,
+  active = true,
 }: {
-  value?: DaoRegime
   regime: DaoRegime
   onChange?: (regime: DaoRegime) => void
-  inactive?: boolean
+  active?: boolean
 }) => {
   return (
     <Card
@@ -31,9 +28,7 @@ const CardRegime = ({
       style={{ overflow: 'hidden', cursor: 'pointer' }}
       bodyStyle={{ padding: 0 }}
       onClick={() => onChange(regime)}
-      className={`card-regime ${
-        isEqual(value, regime) || !inactive ? 'active' : ''
-      }`}
+      className={`card-regime ${active ? 'active' : ''}`}
     >
       <Image
         src={DAO_CARD_BG[Object.keys(regime)[0] as DaoCardBackground]}
