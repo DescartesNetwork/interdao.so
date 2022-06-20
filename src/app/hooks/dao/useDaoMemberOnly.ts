@@ -21,16 +21,13 @@ const useDaoMemberOnly = (daoAddress: string) => {
 
   const checkMemberOnlyNFT = useCallback(async () => {
     for (const { mint: mintAddress } of Object.values(accounts)) {
-      try {
-        const decimals = await getDecimals(mintAddress)
-        if (decimals) continue
-      } catch (error) {
-        const isMemberOnly = await isNftBelongsToCollection(
-          mintAddress,
-          daoMint.toBase58(),
-        )
-        if (isMemberOnly) return isMemberOnly
-      }
+      const decimals = await getDecimals(mintAddress)
+      if (decimals) continue
+      const isMemberOnly = await isNftBelongsToCollection(
+        mintAddress,
+        daoMint.toBase58(),
+      )
+      if (isMemberOnly) return isMemberOnly
     }
     return false
   }, [accounts, daoMint, getDecimals])
@@ -64,17 +61,15 @@ const useDaoMemberOnly = (daoAddress: string) => {
 
     if (daoType === 'multisig-dao') valid = isMemberMultisig
 
-    console.log('daoAddress: ', metaData.daoName, valid)
-
     setValidMember(valid)
     setChecking(false)
   }, [
-    metaData,
     daoMint,
+    metaData,
     isNft,
-    checkMemberOnlyNFT,
     isMemberTokenDAO,
     isMemberMultisig,
+    checkMemberOnlyNFT,
   ])
 
   useEffect(() => {
