@@ -90,10 +90,10 @@ const ModalVoteNFT = ({
 
   const onConfirm = () => {
     switch (votingType) {
-      case VotingType.Agree:
+      case VotingType.For:
         onVoteNftFor()
         break
-      case VotingType.Disagree:
+      case VotingType.Against:
         onVoteNftAgainst()
         break
     }

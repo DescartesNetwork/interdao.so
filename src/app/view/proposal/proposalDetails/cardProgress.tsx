@@ -16,8 +16,8 @@ import useProposalStatus from 'app/hooks/proposal/useProposalStatus'
 import useProposal from 'app/hooks/proposal/useProposal'
 
 const STROKE_COLOR = {
-  dark: { default: '#312B29', agree: '#698033', disagree: '#F9575E' },
-  light: { default: '#F2EFE9', agree: '#F9DEB0', disagree: '#F9575E' },
+  dark: { default: '#312B29', for: '#698033', against: '#F9575E' },
+  light: { default: '#F2EFE9', for: '#F9DEB0', against: '#F9575E' },
 }
 
 const CardProgress = ({
@@ -96,12 +96,12 @@ const CardProgress = ({
     if (!percentNo && !percentYes)
       return setBackGroundColor(STROKE_COLOR[theme].default)
     if (!percentNo && percentYes)
-      return setSuccessColor(STROKE_COLOR[theme].agree)
+      return setSuccessColor(STROKE_COLOR[theme].for)
     if (percentNo && !percentYes)
-      return setBackGroundColor(STROKE_COLOR[theme].disagree)
+      return setBackGroundColor(STROKE_COLOR[theme].against)
 
-    setBackGroundColor(STROKE_COLOR[theme].disagree)
-    return setSuccessColor(STROKE_COLOR[theme].agree)
+    setBackGroundColor(STROKE_COLOR[theme].against)
+    return setSuccessColor(STROKE_COLOR[theme].for)
   }, [percentNo, percentYes, theme])
 
   useEffect(() => {
@@ -131,7 +131,7 @@ const CardProgress = ({
               strokeColor={STROKE_COLOR[theme].default}
               success={{
                 percent: currentPower.toNumber(),
-                strokeColor: STROKE_COLOR[theme].agree,
+                strokeColor: STROKE_COLOR[theme].for,
               }}
               showInfo={false}
             />
@@ -141,7 +141,7 @@ const CardProgress = ({
           <Row gutter={[4, 4]}>
             <Col flex="auto">
               <RowSpaceVertical
-                label="Agree"
+                label="Voted For"
                 size={0}
                 value={
                   <Typography.Title level={4}>
@@ -154,7 +154,7 @@ const CardProgress = ({
             </Col>
             <Col>
               <RowSpaceVertical
-                label="Disagree"
+                label="Voted Against"
                 size={0}
                 align="end"
                 value={
