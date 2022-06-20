@@ -43,7 +43,7 @@ export type MetaData = {
   description: string
   image: string | ArrayBuffer | null
   optionals: string[]
-  daoType: 'flexible-dao' | 'multisig-dao'
+  daoType: DaoType
   members: DAOMember[]
   distributorAddress: string
 }

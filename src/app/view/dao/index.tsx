@@ -3,8 +3,8 @@ import { useHistory } from 'react-router-dom'
 import { Row, Col, Button, Tabs } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import Hero from './hero'
-import DaoList from './daoList'
-import YourDaos from './daoList/yourDao'
+import CommunityDaos from './communityDaos'
+import YourDaos from './communityDaos/yourDao'
 
 import configs from 'app/configs'
 
@@ -39,7 +39,7 @@ const Dao = () => {
               }
             >
               <Tabs.TabPane tab="Community DAOs" key="community-daos">
-                <DaoList />
+                <CommunityDaos />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Your DAOs" key="your-daos">
                 <YourDaos />

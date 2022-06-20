@@ -89,16 +89,3 @@ export const getListAccountNFTsBelongToCollection = async (
   )
   return accounts
 }
-
-export const isNftBelongsToCollection = async (
-  mintNftAddress: string,
-  collectionAddress: string,
-) => {
-  try {
-    const tokenMetadata = await Metadata.findByMint(connection, mintNftAddress)
-    if (tokenMetadata.data.collection?.key === collectionAddress) return true
-    return false
-  } catch (err: any) {
-    return false
-  }
-}
