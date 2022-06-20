@@ -30,7 +30,7 @@ const CardNFT = ({ mintAddress, onSelect, isSelected }: CardNFTProps) => {
     return SIZE_DESKTOP
   }, [width])
 
-  const metadata = useNftMetaData(mintAddress)
+  const { metadata } = useNftMetaData(mintAddress)
   const metadataData = metadata?.data.data
 
   const getNftInfoFromURI = useCallback(async () => {

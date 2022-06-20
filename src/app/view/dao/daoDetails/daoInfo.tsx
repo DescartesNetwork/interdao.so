@@ -8,6 +8,7 @@ import { Avatar, Button, Card, Col, Row, Space, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import StatisticCard from 'app/components/statisticCard'
 import RegimeTag from 'app/components/regimeTag'
+import AvatarNFT from 'app/components/avatarNFT'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import GradientAvatar from 'app/components/gradientAvatar'
 import AmountMembers from './members'
@@ -117,7 +118,7 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
                 title="Vote by"
                 value={
                   isNft ? (
-                    'NFT'
+                    <AvatarNFT mintAddress={mint.toBase58()} />
                   ) : (
                     <Space>
                       <MintAvatar mintAddress={mint.toBase58()} />

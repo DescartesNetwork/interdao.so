@@ -49,7 +49,7 @@ const CardNFT = ({ mintAddress }: { mintAddress: string }) => {
   const [nftImg, setNftImg] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const metadata = useNftMetaData(mintAddress)
+  const { metadata } = useNftMetaData(mintAddress)
 
   const getNftInfoFromURI = useCallback(async () => {
     if (!metadata) return setNftImg(IMAGE_DEFAULT)
