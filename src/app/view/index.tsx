@@ -9,6 +9,8 @@ import ProposalInitialization from './proposal/proposalInitialization'
 import CreateDao from './createDao'
 import ProposalDetails from './proposal/proposalDetails'
 import EditDAO from './dao/editDao'
+import Loading from 'app/components/loading'
+
 import DaoWatcher from '../watcher/dao.watcher'
 import ProposalWatcher from '../watcher/proposal.watcher'
 import ReceiptWatcher from '../watcher/receipt.watcher'
@@ -70,6 +72,7 @@ const View = () => {
       <ProposalWatcher />
       <ReceiptWatcher />
       <MetadataWatcher />
+      <Loading />
     </Row>
   )
 }

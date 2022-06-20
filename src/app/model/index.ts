@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { devTools, bigintSerializationMiddleware } from 'app/model/devTools'
 
+import loading from 'app/model/loading.controller'
 import daos from 'app/model/daos.controller'
 import createDao from 'app/model/createDao.controller'
 import tokenHolder from 'app/model/tokenHolder.controller'
@@ -24,6 +25,7 @@ const model = configureStore({
     receipt,
     voteBid,
     template,
+    loading,
   },
 })
 
