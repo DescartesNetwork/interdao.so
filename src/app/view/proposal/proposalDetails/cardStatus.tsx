@@ -69,7 +69,8 @@ const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
         const data = splt.parseAccountData(buf)
         if (data.mint === mint) {
           const mintBalance = Number(utils.undecimalize(data.amount, decimals))
-          if (mintBalance > Number(transferAmount)) setIsSufficientBalance(true)
+          if (mintBalance > Number(transferAmount))
+            return setIsSufficientBalance(true)
         }
       }
     } catch (error) {
