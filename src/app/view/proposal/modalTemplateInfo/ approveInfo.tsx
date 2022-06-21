@@ -63,7 +63,7 @@ const InfoApproveInProposal = ({
       </Col>
       <Col span={24}>
         <RowSpaceBetween
-          label="Source wallet address"
+          label="Provider wallet address"
           value={
             <Space size={10}>
               <Typography.Text

@@ -199,11 +199,11 @@ const ApproveSplPlugin = ({ daoAddress = '' }: ApproveSplPluginProps) => {
       <Col span={24}>
         <Space direction="vertical" size={4} style={{ width: '100%' }}>
           <Typography.Text type="secondary">
-            Source wallet address
+            Provider wallet address
           </Typography.Text>
           <Input
             className="border-less"
-            placeholder="Input source wallet address"
+            placeholder="Input provider wallet address"
             value={senderAddress}
             disabled={daoMetaData?.daoType === 'multisig-dao'}
           />
