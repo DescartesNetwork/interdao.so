@@ -1,20 +1,19 @@
 import { useCallback, useEffect, useState } from 'react'
-
 import useProposalMetaData from 'app/hooks/proposal/useProposalMetaData'
-import { TemplateNames } from '../index'
 
-export const useTemplateWithProposal = (proposalAddress: string) => {
-  const [templateName, setTemplateName] = useState<TemplateNames>()
+export const useTemplateDataWithProposal = <T>(proposalAddress: string) => {
+  const [templateData, setTemplateData] = useState<T>({} as T)
   const { metaData, loading } = useProposalMetaData(proposalAddress)
 
   const getTemplateName = useCallback(() => {
-    if (!metaData || loading) return setTemplateName(undefined)
-    // @ts-ignore
-    return setTemplateName(metaData.templateName)
+    if (!metaData || loading || !metaData.templateData)
+      return setTemplateData({} as T)
+    return setTemplateData(metaData.templateData)
   }, [loading, metaData])
+
   useEffect(() => {
     getTemplateName()
   }, [getTemplateName])
 
-  return templateName
+  return templateData
 }

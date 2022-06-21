@@ -19,7 +19,7 @@ export type PropsCreateComponent = {
 export type TemplateIdl = {
   name: string
   accounts: (TemplateAccount | TemplateAccountWithRule)[]
-  args: TemplateArg[]
+  args: (TemplateArg | TemplateArgWithRule)[]
   programId: string
 }
 
@@ -29,11 +29,7 @@ export type TemplateAccount = {
   isSigner: boolean
   isMaster: boolean
 }
-export type TemplateAccountWithRule = {
-  name: string
-  isMut: boolean
-  isSigner: boolean
-  isMaster: boolean
+export type TemplateAccountWithRule = TemplateAccount & {
   rule: {
     name: RulesName
     configs: RulesData[TemplateAccountWithRule['rule']['name']]
@@ -49,4 +45,16 @@ export const isTemplateAccountWithRule = (
 export type TemplateArg = {
   name: string
   type: 'u8' | 'u64'
+}
+export type TemplateArgWithRule = TemplateArg & {
+  rule: {
+    name: RulesName
+    configs: RulesData[TemplateAccountWithRule['rule']['name']]
+  }
+}
+export const isTemplateArgWithRule = (
+  idlArg: TemplateArg | TemplateArgWithRule,
+): idlArg is TemplateArgWithRule => {
+  // @ts-ignore
+  return idlArg.rule !== undefined
 }

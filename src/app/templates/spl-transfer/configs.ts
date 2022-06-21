@@ -1,4 +1,5 @@
 import { utils } from '@project-serum/anchor'
+import { RulesName } from '../core/rule'
 import { TemplateIdl } from './../index'
 
 export enum SplTransferIds {
@@ -22,7 +23,7 @@ export const SplTransferIdl: TemplateIdl = {
       isSigner: false,
       isMaster: false,
       rule: {
-        name: 'token-account',
+        name: RulesName.tokenAccount,
         configs: { mint: SplTransferIds.mint, owner: SplTransferIds.source },
       },
     },
@@ -32,7 +33,7 @@ export const SplTransferIdl: TemplateIdl = {
       isSigner: false,
       isMaster: false,
       rule: {
-        name: 'token-account',
+        name: RulesName.tokenAccount,
         configs: {
           mint: SplTransferIds.mint,
           owner: SplTransferIds.destination,
@@ -48,7 +49,17 @@ export const SplTransferIdl: TemplateIdl = {
   ],
   args: [
     { name: SplTransferIds.code, type: 'u8' },
-    { name: SplTransferIds.amount, type: 'u64' },
+    {
+      name: SplTransferIds.amount,
+      type: 'u64',
+      rule: {
+        name: RulesName.decimalize,
+        configs: {
+          amount: SplTransferIds.amount,
+          mint: SplTransferIds.mint,
+        },
+      },
+    },
   ],
   programId: utils.token.TOKEN_PROGRAM_ID.toBase58(),
 }

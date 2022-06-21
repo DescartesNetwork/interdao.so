@@ -7,45 +7,36 @@ import { NumberInput, MintInput, AddressInput } from 'app/templates/components'
 import { AppDispatch, AppState } from 'app/model'
 import { setTemplateData } from 'app/model/template.controller'
 import useMetaData from 'app/hooks/useMetaData'
-import { useParser } from '../hooks/useParser'
 import { SplTransferIdl, SplTransferIds } from '../spl-transfer/configs'
 import { PropsCreateComponent } from '../index'
+import { useConfirmIdl } from '../hooks/useConfirmIdl'
 
 const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
   const dispatch = useDispatch<AppDispatch>()
   const daoData = useSelector((state: AppState) => state.daos[daoAddress])
   const { metaData: daoMetaData } = useMetaData(daoAddress)
-  const { parserIxDataNoPrefix } = useParser()
+  const { confirm, close } = useConfirmIdl()
 
   const generateData = useCallback(async () => {
-    dispatch(
-      setTemplateData({
+    const defaults = [
+      {
         id: SplTransferIds.authority,
         value: daoData.master.toBase58(),
-      }),
-    )
-    dispatch(
-      setTemplateData({
+      },
+      {
         id: SplTransferIds.code,
         value: '3',
-      }),
-    )
+      },
+      {
+        id: SplTransferIds.source,
+        value: daoData.master.toBase58(),
+      },
+    ]
+    defaults.map((elm) => dispatch(setTemplateData(elm)))
   }, [daoData.master, dispatch])
   useEffect(() => {
     generateData()
   }, [generateData])
-
-  const confirm = useCallback(async () => {
-    try {
-      const ix = await parserIxDataNoPrefix(SplTransferIdl)
-      console.log(
-        'ix',
-        ix.keys.map((e) => e.pubkey.toBase58()),
-      )
-    } catch (error) {
-      console.log('error', error)
-    }
-  }, [parserIxDataNoPrefix])
 
   return (
     <Row gutter={[24, 24]}>
@@ -74,10 +65,14 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
       <Col span={24} />
       <Col span={24} style={{ textAlign: 'right' }}>
         <Space>
-          <Button type="text" onClick={() => {}}>
+          <Button type="text" onClick={close}>
             Close
           </Button>
-          <Button type="primary" onClick={confirm} disabled={false}>
+          <Button
+            type="primary"
+            onClick={() => confirm(SplTransferIdl)}
+            disabled={false}
+          >
             Continue
           </Button>
         </Space>

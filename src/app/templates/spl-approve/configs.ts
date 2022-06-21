@@ -1,4 +1,5 @@
 import { utils } from '@project-serum/anchor'
+import { RulesName } from '../core/rule'
 import { TemplateIdl } from '../index'
 
 export enum SplApproveIds {
@@ -22,7 +23,7 @@ export const SplApproveIdl: TemplateIdl = {
       isSigner: false,
       isMaster: false,
       rule: {
-        name: 'token-account',
+        name: RulesName.tokenAccount,
         configs: { mint: SplApproveIds.mint, owner: SplApproveIds.source },
       },
     },

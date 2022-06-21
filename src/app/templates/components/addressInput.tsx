@@ -19,7 +19,7 @@ const AddressInput = ({
       <Input
         className="border-less"
         placeholder="Input Address"
-        defaultValue={value}
+        value={value}
         onChange={(e) =>
           dispatch(setTemplateData({ id, value: e.target.value }))
         }
