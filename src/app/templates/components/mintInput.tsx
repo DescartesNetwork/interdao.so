@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Space, Typography } from 'antd'
 
 import { AppDispatch, AppState } from 'app/model'
-import { onChangeTemplateData } from 'app/model/template.controller'
+import { setTemplateData } from 'app/model/template.controller'
 import { MintSelection } from 'shared/antd/mint'
 
 const MintInput = ({ id, title }: { id: string; title?: string }) => {
@@ -16,7 +16,7 @@ const MintInput = ({ id, title }: { id: string; title?: string }) => {
       <MintSelection
         value={value}
         onChange={(value) => {
-          dispatch(onChangeTemplateData({ id, value }))
+          dispatch(setTemplateData({ id, value }))
         }}
         style={{ marginLeft: -7 }}
       />

@@ -3,14 +3,19 @@ import { useSelector } from 'react-redux'
 import { AnchorProvider, Program, BN } from '@project-serum/anchor'
 import { Connection, PublicKey } from '@solana/web3.js'
 
-import { AppState } from 'app/model'
-import { TemplateArg, TemplateIdl } from '../index'
-import { TemplateRule } from '../core/rule'
 import { rpc } from 'shared/runtime'
+import { AppState } from 'app/model'
 import SafeWallet from 'app/helpers/safeWallet'
-import { isTemplateAccountWithRule } from './../index'
+import {
+  isTemplateAccountWithRule,
+  TemplateArg,
+  TemplateIdl,
+} from 'app/templates'
+import { TemplateRule } from '../core/rule'
 
 const DEFAULT_IX_NAME = 'ixname'
+const ANCHOR_PREFIX_SIZE = 8
+
 export const useParser = () => {
   const templateData = useSelector((state: AppState) => state.template.data)
 
@@ -43,8 +48,13 @@ export const useParser = () => {
       for (const idlAccount of idlAccounts) {
         // Build pubkey with template rule
         if (isTemplateAccountWithRule(idlAccount)) {
+          const ruleConfig = idlAccount.rule.configs
+          const ruleData = {}
+          for (const key in ruleConfig) // @ts-ignore
+            ruleData[key] = templateData[ruleConfig[key]]
+          // @ts-ignore
           const pubkey = await TemplateRule[idlAccount.rule.name].call({
-            ...idlAccount.rule.data,
+            ...ruleData,
           })
           accounts[idlAccount.name] = pubkey
         } else {
@@ -87,13 +97,11 @@ export const useParser = () => {
       const program = await getProgram(templateIdl)
       const accounts = await parserAccounts(templateIdl)
       const args = await parserArgs(templateIdl)
-      console.log('accounts', accounts)
-      console.log('args', args)
       const ix = await program.methods[DEFAULT_IX_NAME].call(this, ...args)
         .accounts(accounts)
         .instruction()
       // Ignore Anchor Prefix
-      ix.data = ix.data.slice(8, ix.data.length)
+      ix.data = ix.data.slice(ANCHOR_PREFIX_SIZE, ix.data.length)
       return ix
     },
     [getProgram, parserAccounts, parserArgs],

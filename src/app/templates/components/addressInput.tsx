@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { InputProps, Space, Typography, Input } from 'antd'
 
 import { AppDispatch, AppState } from 'app/model'
-import { onChangeTemplateData } from 'app/model/template.controller'
+import { setTemplateData } from 'app/model/template.controller'
 
 const AddressInput = ({
   id,
@@ -21,7 +21,7 @@ const AddressInput = ({
         placeholder="Input Address"
         defaultValue={value}
         onChange={(e) =>
-          dispatch(onChangeTemplateData({ id, value: e.target.value }))
+          dispatch(setTemplateData({ id, value: e.target.value }))
         }
         {...rest}
       />

@@ -54,7 +54,7 @@ export const setTemplateName = createAsyncThunk(
   },
 )
 
-export const onChangeTemplateData = createAsyncThunk(
+export const setTemplateData = createAsyncThunk(
   `${NAME}/onChangeTemplateData`,
   async ({ id, value }: { id: string; value: string }) => {
     return { [id]: value }
@@ -72,7 +72,7 @@ const slice = createSlice({
   extraReducers: (builder) =>
     void builder
       .addCase(
-        onChangeTemplateData.fulfilled,
+        setTemplateData.fulfilled,
         (state, { payload }) => void Object.assign(state.data, payload),
       )
       .addCase(

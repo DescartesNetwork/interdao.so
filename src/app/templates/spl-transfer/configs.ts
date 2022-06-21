@@ -9,7 +9,10 @@ export enum SplTransferIds {
   // Prams
   'code' = 'code',
   'amount' = 'amount',
+  // Context
+  'mint' = 'mint',
 }
+
 export const SplTransferIdl: TemplateIdl = {
   name: 'spl_transfer',
   accounts: [
@@ -18,12 +21,20 @@ export const SplTransferIdl: TemplateIdl = {
       isMut: true,
       isSigner: false,
       isMaster: false,
+      rule: {
+        name: 'token-account',
+        configs: { mint: SplTransferIds.mint, owner: SplTransferIds.src },
+      },
     },
     {
       name: SplTransferIds.dst,
       isMut: true,
       isSigner: false,
       isMaster: false,
+      rule: {
+        name: 'token-account',
+        configs: { mint: SplTransferIds.mint, owner: SplTransferIds.dst },
+      },
     },
     {
       name: SplTransferIds.payer,
@@ -33,7 +44,7 @@ export const SplTransferIdl: TemplateIdl = {
     },
   ],
   args: [
-    { name: SplTransferIds.code, type: 'u8', defaultValue: '3' },
+    { name: SplTransferIds.code, type: 'u8' },
     { name: SplTransferIds.amount, type: 'u64' },
   ],
   programId: utils.token.TOKEN_PROGRAM_ID.toBase58(),

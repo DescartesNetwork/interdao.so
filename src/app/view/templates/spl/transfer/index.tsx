@@ -1,17 +1,10 @@
-import { useCallback, useState, useEffect, useMemo } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
-import { PublicKey } from '@solana/web3.js'
-import { utils } from '@project-serum/anchor'
-import BN from 'bn.js'
-// @ts-ignore
-import * as soproxABI from 'soprox-abi'
-import { account } from '@senswap/sen-js'
 
 import { Button, Col, Row, Space } from 'antd'
 
 import { AppDispatch, AppState } from 'app/model'
-import { onChangeTemplateData } from 'app/model/template.controller'
+import { setTemplateData } from 'app/model/template.controller'
 import configs from 'app/configs'
 import useMetaData from 'app/hooks/useMetaData'
 import NumberInput from 'app/templates/components/numberInput'
@@ -32,27 +25,40 @@ type TransferSplPluginProps = {
 }
 
 const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
-  const { parserIxDataNoPrefix } = useParser()
   const dispatch = useDispatch<AppDispatch>()
   const daoData = useSelector((state: AppState) => state.daos[daoAddress])
-
   const { metaData: daoMetaData } = useMetaData(daoAddress)
-
-  const confirm = useCallback(async () => {
-    const ix = await parserIxDataNoPrefix(SplTransferIdl)
-  }, [parserIxDataNoPrefix])
+  const { parserIxDataNoPrefix } = useParser()
 
   const generateData = useCallback(async () => {
     dispatch(
-      onChangeTemplateData({
+      setTemplateData({
         id: SplTransferIds.payer,
         value: daoData.master.toBase58(),
+      }),
+    )
+    dispatch(
+      setTemplateData({
+        id: SplTransferIds.code,
+        value: '3',
       }),
     )
   }, [daoData.master, dispatch])
   useEffect(() => {
     generateData()
   }, [generateData])
+
+  const confirm = useCallback(async () => {
+    try {
+      const ix = await parserIxDataNoPrefix(SplTransferIdl)
+      console.log(
+        'ix',
+        ix.keys.map((e) => e.pubkey.toBase58()),
+      )
+    } catch (error) {
+      console.log('error', error)
+    }
+  }, [parserIxDataNoPrefix])
 
   return (
     <Row gutter={[24, 24]}>
@@ -63,7 +69,7 @@ const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
         <NumberInput
           id={SplTransferIds.amount}
           title="Transfer"
-          prefix={<MintInput id="mint" />}
+          prefix={<MintInput id={SplTransferIds.mint} />}
         />
       </Col>
       <Col span={24}>

@@ -4,7 +4,7 @@ import { InputProps, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
 
 import { AppDispatch, AppState } from 'app/model'
-import { onChangeTemplateData } from 'app/model/template.controller'
+import { setTemplateData } from 'app/model/template.controller'
 
 const NumberInput = ({
   id,
@@ -21,7 +21,7 @@ const NumberInput = ({
         className="border-less"
         placeholder="Input Amount"
         defaultValue={value}
-        onValue={(value) => dispatch(onChangeTemplateData({ id, value }))}
+        onValue={(value) => dispatch(setTemplateData({ id, value }))}
         {...rest}
       />
     </Space>

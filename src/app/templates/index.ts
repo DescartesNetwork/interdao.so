@@ -21,7 +21,7 @@ export type TemplateAccountWithRule = {
   isMaster: boolean
   rule: {
     name: RulesName
-    data: RulesData[TemplateAccountWithRule['rule']['name']]
+    configs: RulesData[TemplateAccountWithRule['rule']['name']]
   }
 }
 export const isTemplateAccountWithRule = (
@@ -34,9 +34,9 @@ export const isTemplateAccountWithRule = (
 export type TemplateArg = {
   name: string
   type: 'u8' | 'u64'
-  defaultValue?: string
 }
 
-export const Templates = {
+// Config
+export const Templates: Record<string, TemplateIdl> = {
   spl_transfer: SplTransferIdl,
 }
