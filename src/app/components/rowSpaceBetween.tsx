@@ -1,7 +1,6 @@
 import { ReactNode } from 'react'
 
-import { Col, Row, Space, Typography } from 'antd'
-import IonIcon from '@sentre/antd-ionicon'
+import { Col, Row, Typography } from 'antd'
 
 type RowSpaceBetweenProps = {
   label?: string
