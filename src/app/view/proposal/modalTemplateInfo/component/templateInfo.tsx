@@ -22,7 +22,7 @@ const TemplateInfo = ({
   const [transferInfo, setTransferInfo] = useState<TransferType>()
   const [templateName, setTemplateName] = useState('')
 
-  const { accounts, data } = useProposal(proposalAddress, daoAddress)
+  const { accounts, data } = useProposal(proposalAddress)
   const fetchProposalInfo = useCallback(async () => {
     if (!accounts || !data) return
     const info = decodeSplInstruction<{ amount: BN }>(

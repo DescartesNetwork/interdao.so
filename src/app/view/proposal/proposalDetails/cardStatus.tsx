@@ -38,16 +38,16 @@ const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
   const { getDecimals } = useMint()
 
   const checkSufficientBalance = useCallback(async () => {
-    if (!accounts || !data) return 0
-    const info = decodeSplInstruction<{ amount: BN }>(
-      accounts as AccountMeta[],
-      data as Buffer,
-    )
-    if (!info) return 0
-    const sourceAssociated =
-      info.accounts.get('source')?.pubkey.toBase58() || ''
+    if (!accounts || !data) return setIsSufficientBalance(false)
 
     try {
+      const info = decodeSplInstruction<{ amount: BN }>(
+        accounts as AccountMeta[],
+        data as Buffer,
+      )
+      if (!info) return setIsSufficientBalance(false)
+      const sourceAssociated =
+        info.accounts.get('source')?.pubkey.toBase58() || ''
       const { mint } = await splt.getAccountData(sourceAssociated)
       const decimals = await getDecimals(mint)
       const transferAmount = utils.undecimalize(
@@ -55,26 +55,23 @@ const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
         decimals,
       )
       const daoAddress = proposal[proposalAddress].dao.toBase58()
-      const ownerPublicKey = account.fromAddress(
+      const masterPublicKey = account.fromAddress(
         daos[daoAddress].master.toBase58(),
       )
       const { value } = await splt.connection.getTokenAccountsByOwner(
-        ownerPublicKey,
+        masterPublicKey,
         { programId: splt.spltProgramId },
       )
 
-      await Promise.all(
-        value.map(async ({ account: { data: buf } }) => {
-          const data = splt.parseAccountData(buf)
-          if (data.mint === mint) {
-            const mintBalance = Number(
-              utils.undecimalize(data.amount, decimals),
-            )
-            if (mintBalance > Number(transferAmount))
-              setIsSufficientBalance(true)
-          }
-        }),
-      )
+      for (const {
+        account: { data: buf },
+      } of value) {
+        const data = splt.parseAccountData(buf)
+        if (data.mint === mint) {
+          const mintBalance = Number(utils.undecimalize(data.amount, decimals))
+          if (mintBalance > Number(transferAmount)) setIsSufficientBalance(true)
+        }
+      }
     } catch (error) {
       setIsSufficientBalance(false)
     }
@@ -140,22 +137,23 @@ const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
                 <Space>
                   <Row>
                     <Col span={24}>
-                      <IonIcon
-                        name="people-outline"
-                        style={{ marginRight: 5 }}
-                      />
-                      <Typography.Text>Member: {members}</Typography.Text>
+                      <Space size={5}>
+                        <IonIcon name="people-outline" />
+                        <Typography.Text>Member: {members}</Typography.Text>
+                      </Space>
                     </Col>
                     {!isSufficientBalance && (
                       <Col span={24}>
-                        <IonIcon
-                          name="warning-outline"
-                          style={{ marginRight: 5, color: '#F9575E' }}
-                        />
-                        <Typography.Text style={{ color: '#F9575E' }}>
-                          The treasury balance is not enough to execute this
-                          proposal
-                        </Typography.Text>
+                        <Space size={5}>
+                          <IonIcon
+                            name="warning-outline"
+                            style={{ color: '#F9575E' }}
+                          />
+                          <Typography.Text style={{ color: '#F9575E' }}>
+                            The treasury balance is not enough to execute this
+                            proposal
+                          </Typography.Text>
+                        </Space>
                       </Col>
                     )}
                   </Row>

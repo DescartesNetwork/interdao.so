@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { ReceiptData } from '@interdao/core'
 import { useUI } from '@senhub/providers'
 
@@ -6,24 +6,33 @@ import { Typography } from 'antd'
 
 import { STROKE_COLOR } from 'app/constant'
 
+const TYPE = {
+  default: 'DEFAULT',
+  for: 'VOTE FOR',
+  against: 'VOTE AGAINST',
+}
+
 const ColumnType = ({ record }: { record: ReceiptData }) => {
-  const [color, setColor] = useState('')
-  const [type, setType] = useState('')
   const {
     ui: { theme },
   } = useUI()
 
-  useEffect(() => {
+  const type = useMemo(() => {
     const action = Object.keys(record.action || {})[0]
     if (action === 'voteAgainst') {
-      setType('VOTE AGAINST')
-      return setColor(STROKE_COLOR[theme].against)
+      return 'against'
     }
-    setType('VOTE FOR')
-    return setColor(STROKE_COLOR[theme].for)
-  }, [record.action, theme])
+    if (action === 'voteFor') {
+      return 'for'
+    }
+    return 'default'
+  }, [record.action])
 
-  return <Typography.Text style={{ color }}>{type}</Typography.Text>
+  return (
+    <Typography.Text style={{ color: STROKE_COLOR[theme][type] }}>
+      {TYPE[type]}
+    </Typography.Text>
+  )
 }
 
 export default ColumnType

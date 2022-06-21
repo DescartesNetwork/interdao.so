@@ -30,7 +30,7 @@ const CardVoteByNFT = ({
   const daos = useSelector((state: AppState) => state.daos)
   const { mint } = daos[daoAddress] || ({} as DaoData)
   const { status } = useProposalStatus(proposalAddress)
-  const { consensusMechanism } = useProposal(proposalAddress, daoAddress)
+  const { consensusMechanism } = useProposal(proposalAddress)
   const {
     wallet: { address: walletAddress },
   } = useWallet()

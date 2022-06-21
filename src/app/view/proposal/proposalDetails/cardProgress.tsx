@@ -23,10 +23,8 @@ const CardProgress = ({
   const [backGroundColor, setBackGroundColor] = useState('')
   const [successColor, setSuccessColor] = useState('')
   const daos = useSelector((state: AppState) => state.daos)
-  const { votingAgainstPower, votingForPower, consensusQuorum } = useProposal(
-    proposalAddress,
-    daoAddress,
-  )
+  const { votingAgainstPower, votingForPower, consensusQuorum } =
+    useProposal(proposalAddress)
   const { mint } = daos[daoAddress] || ({} as DaoData)
   const mintDecimal = useMintDecimals(mint?.toBase58()) || 0
   const { status, actualSupply } = useProposalStatus(proposalAddress)
@@ -112,10 +110,7 @@ const CardProgress = ({
         return 'The proposal has been approved'
       default:
         return `${numeric(
-          utils.undecimalize(
-            BigInt(powerRequire.add(new BN(1)).toString()),
-            mintDecimal,
-          ),
+          utils.undecimalize(BigInt(powerRequire.toString()), mintDecimal),
         ).format('0,0.[0000]')} more Vote For required`
     }
   }, [mintDecimal, powerRequire, status])
