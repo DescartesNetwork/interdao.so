@@ -23,10 +23,6 @@ const {
   sol: { interDao },
 } = configs
 
-const {
-  sentre: { splt },
-} = window
-
 const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
   const { proposal } = useSelector((state: AppState) => state)
   const { daos } = useSelector((state: AppState) => state)
@@ -39,7 +35,9 @@ const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
 
   const checkSufficientBalance = useCallback(async () => {
     if (!accounts || !data) return setIsSufficientBalance(false)
-
+    const {
+      sentre: { splt },
+    } = window
     try {
       const info = decodeSplInstruction<{ amount: BN }>(
         accounts as AccountMeta[],
