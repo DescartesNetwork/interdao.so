@@ -27,18 +27,20 @@ const MultiSigDAORule = () => {
 
   const setDefaultValue = useCallback(() => {
     if (members.length) return
+    if (metadata.members.length) return setMember(metadata.members)
     const DEFAULT_MEMBER = [{ name: '', walletAddress: myAddress }]
     return setMember(DEFAULT_MEMBER)
-  }, [members.length, myAddress, setMember])
-  useEffect(() => {
-    setDefaultValue()
-  }, [setDefaultValue])
+  }, [members.length, metadata.members, myAddress])
 
   const onSubmit = () => {
     const nextMetadata = { ...metadata, members }
     return dispatch(
       submitStepSetRule({
-        rule: { isPublic, metadata: nextMetadata },
+        rule: {
+          isPublic,
+          metadata: nextMetadata,
+          regime: DaoRegimes.Autonomous,
+        },
       }),
     )
   }
@@ -50,6 +52,10 @@ const MultiSigDAORule = () => {
     }
     return false
   }, [members])
+
+  useEffect(() => {
+    setDefaultValue()
+  }, [setDefaultValue])
 
   return (
     <Row gutter={[32, 32]}>
