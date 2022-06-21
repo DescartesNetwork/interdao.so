@@ -8,229 +8,97 @@ import BN from 'bn.js'
 import * as soproxABI from 'soprox-abi'
 import { account } from '@senswap/sen-js'
 
-import { Button, Col, Input, Row, Space, Typography } from 'antd'
-import { MintSelection } from 'shared/antd/mint'
+import { Button, Col, Row, Space } from 'antd'
 
-import { ProposalReturnType } from 'app/view/templates/types'
 import { AppDispatch, AppState } from 'app/model'
-import useMintDecimals from 'shared/hooks/useMintDecimals'
-import {
-  setTemplateName,
-  setTx,
-  setVisible,
-} from 'app/model/template.controller'
+import { onChangeTemplateData } from 'app/model/template.controller'
 import configs from 'app/configs'
-import NumericInput from 'shared/antd/numericInput'
 import useMetaData from 'app/hooks/useMetaData'
-import { Templates } from '../../index'
+import NumberInput from 'app/templates/components/numberInput'
+import MintInput from 'app/templates/components/mintInput'
+import AddressInput from 'app/templates/components/addressInput'
+import { useParser } from 'app/templates/hooks/useParser'
+import {
+  SplTransferIdl,
+  SplTransferIds,
+} from 'app/templates/spl-transfer/configs'
 
 const {
   manifest: { appId },
 } = configs
-
-export const toData = (amount = new BN(0)) => {
-  const schema = [
-    { key: 'code', type: 'u8' },
-    { key: 'amount', type: 'u64' },
-  ]
-  const buf = new soproxABI.struct(schema, {
-    code: 3,
-    amount: BigInt(amount.toString()),
-  }).toBuffer()
-  return buf
-}
-
-export const buildTransferSplvalue = (
-  amount: string | number | BN,
-  src: string,
-  dst: string,
-  payer: string,
-) => {
-  const value: ProposalReturnType = {
-    name: Templates.SPL_TRANSFER,
-    data: toData(new BN(amount)),
-    accounts: {
-      src: {
-        pubkey: new PublicKey(src),
-        isWritable: true,
-        isSigner: false,
-        isMaster: false,
-      },
-      dst: {
-        pubkey: new PublicKey(dst),
-        isWritable: true,
-        isSigner: false,
-        isMaster: false,
-      },
-      payer: {
-        pubkey: new PublicKey(payer),
-        isWritable: true,
-        isSigner: true,
-        isMaster: true,
-      },
-    },
-    programId: utils.token.TOKEN_PROGRAM_ID,
-  }
-  return value
-}
 
 type TransferSplPluginProps = {
   daoAddress: string
 }
 
 const TransferSplPlugin = ({ daoAddress = '' }: TransferSplPluginProps) => {
-  const [value, setValue] = useState('')
-  const [mintAddress, setMintAddress] = useState('')
-  const [receiverAddress, setReceiverAddress] = useState('')
-  const [srcAddress, setSrcAddress] = useState('')
-  const [dstAddress, setDstAddress] = useState('')
-
-  const [amount, setAmount] = useState('')
-  const daos = useSelector((state: AppState) => state.daos)
-  const decimals = useMintDecimals(mintAddress)
+  const { parserIxDataNoPrefix } = useParser()
   const dispatch = useDispatch<AppDispatch>()
-  const history = useHistory()
+  const daoData = useSelector((state: AppState) => state.daos[daoAddress])
+
   const { metaData: daoMetaData } = useMetaData(daoAddress)
 
-  const senderAddress = useMemo(() => {
-    const { master } = daos[daoAddress] || {}
-    return master?.toBase58() || ''
-  }, [daos, daoAddress])
-
-  const valid = useMemo(() => {
-    return Boolean(
-      amount && account.isAddress(srcAddress) && account.isAddress(dstAddress),
-    )
-  }, [amount, srcAddress, dstAddress])
-
   const confirm = useCallback(async () => {
-    if (!valid) return dispatch(setTx(undefined))
-    const re = buildTransferSplvalue(
-      amount,
-      srcAddress,
-      dstAddress,
-      senderAddress,
+    const ix = await parserIxDataNoPrefix(SplTransferIdl)
+  }, [parserIxDataNoPrefix])
+
+  const generateData = useCallback(async () => {
+    dispatch(
+      onChangeTemplateData({
+        id: SplTransferIds.payer,
+        value: daoData.master.toBase58(),
+      }),
     )
-
-    await dispatch(setTx(re))
-    await dispatch(setTemplateName(Templates.SPL_TRANSFER))
-    await dispatch(setVisible(false))
-    return history.push(`/app/${appId}/dao/${daoAddress}/new-proposal`)
-  }, [
-    valid,
-    dispatch,
-    amount,
-    srcAddress,
-    dstAddress,
-    senderAddress,
-    history,
-    daoAddress,
-  ])
-
-  const close = useCallback(async () => {
-    setValue('')
-    setMintAddress('')
-    setReceiverAddress('')
-    await dispatch(setTx(undefined))
-    return dispatch(setVisible(false))
-  }, [dispatch])
-
-  const setSourceAddress = useCallback(async () => {
-    if (account.isAddress(senderAddress) && account.isAddress(mintAddress)) {
-      const pubkey = await utils.token.associatedAddress({
-        owner: new PublicKey(senderAddress),
-        mint: new PublicKey(mintAddress),
-      })
-      setSrcAddress(pubkey.toBase58())
-    } else setSrcAddress('')
-  }, [mintAddress, senderAddress])
-
-  const setDestinationAddress = useCallback(async () => {
-    if (account.isAddress(receiverAddress) && account.isAddress(mintAddress)) {
-      const pubkey = await utils.token.associatedAddress({
-        owner: new PublicKey(receiverAddress),
-        mint: new PublicKey(mintAddress),
-      })
-      setDstAddress(pubkey.toBase58())
-    } else setDstAddress('')
-  }, [mintAddress, receiverAddress])
-
-  const getAmount = useCallback(() => {
-    if (Number(value) && decimals)
-      setAmount(String(Number(value) * 10 ** decimals))
-    else setAmount('')
-  }, [decimals, value])
-
+  }, [daoData.master, dispatch])
   useEffect(() => {
-    setSourceAddress()
-  }, [setSourceAddress])
-
-  useEffect(() => {
-    setDestinationAddress()
-  }, [setDestinationAddress])
-
-  useEffect(() => {
-    getAmount()
-  }, [getAmount])
+    generateData()
+  }, [generateData])
 
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>
-        <Space direction="vertical" size={4} style={{ width: '100%' }}>
-          <Typography.Text type="secondary">Transfer</Typography.Text>
-          <NumericInput
-            className="border-less"
-            placeholder="Input Amount"
-            value={value}
-            onValue={(value) => setValue(value || '')}
-            prefix={
-              <MintSelection
-                value={mintAddress}
-                onChange={setMintAddress}
-                style={{ marginLeft: -7 }}
-              />
-            }
-          />
-        </Space>
+        <NumberInput id={SplTransferIds.code} title="Code" />
       </Col>
       <Col span={24}>
-        <Space direction="vertical" size={4} style={{ width: '100%' }}>
-          <Typography.Text type="secondary">
-            Sender's Wallet Address
-          </Typography.Text>
-          <Input
-            className="border-less"
-            placeholder="Input Sender's Wallet Address"
-            value={senderAddress}
-            disabled={daoMetaData?.daoType === 'multisig-dao'}
-          />
-        </Space>
+        <NumberInput
+          id={SplTransferIds.amount}
+          title="Transfer"
+          prefix={<MintInput id="mint" />}
+        />
       </Col>
       <Col span={24}>
-        <Space direction="vertical" size={4} style={{ width: '100%' }}>
-          <Typography.Text type="secondary">
-            Receiver's Wallet Address
-          </Typography.Text>
-          <Input
-            className="border-less"
-            placeholder="Input Receiver's Wallet Address"
-            value={receiverAddress}
-            onChange={(e) => setReceiverAddress(e.target.value || '')}
-          />
-        </Space>
+        <AddressInput
+          id={SplTransferIds.src}
+          title="Sender's Wallet Address"
+          placeholder="Input Sender's Wallet Address"
+          disabled={daoMetaData?.daoType === 'multisig-dao'}
+        />
+      </Col>
+      <Col span={24}>
+        <AddressInput
+          id={SplTransferIds.dst}
+          title="Receiver's Wallet Address"
+          placeholder="Input Receiver's Wallet Address"
+        />
+      </Col>
+      <Col span={24}>
+        <AddressInput
+          id={SplTransferIds.payer}
+          title="Payer"
+          placeholder="Input payer's Wallet Address"
+        />
       </Col>
       <Col span={24} />
       <Col span={24} style={{ textAlign: 'right' }}>
         <Space>
-          <Button type="text" onClick={close}>
+          <Button type="text" onClick={() => {}}>
             Close
           </Button>
-          <Button type="primary" onClick={confirm} disabled={!valid}>
+          <Button type="primary" onClick={confirm} disabled={false}>
             Continue
           </Button>
         </Space>
       </Col>
-      {/* <TemplateInfo content="" /> */}
     </Row>
   )
 }

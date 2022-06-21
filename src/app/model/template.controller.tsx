@@ -10,6 +10,7 @@ export type TemplateState = {
   visible: boolean
   tx?: ProposalReturnType
   templateName: string
+  data: Record<string, string>
 }
 
 /**
@@ -21,6 +22,7 @@ const initialState: TemplateState = {
   visible: false,
   tx: undefined,
   templateName: '',
+  data: {},
 }
 
 /**
@@ -52,6 +54,13 @@ export const setTemplateName = createAsyncThunk(
   },
 )
 
+export const onChangeTemplateData = createAsyncThunk(
+  `${NAME}/onChangeTemplateData`,
+  async ({ id, value }: { id: string; value: string }) => {
+    return { [id]: value }
+  },
+)
+
 /**
  * Usual procedure
  */
@@ -62,6 +71,10 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) =>
     void builder
+      .addCase(
+        onChangeTemplateData.fulfilled,
+        (state, { payload }) => void Object.assign(state.data, payload),
+      )
       .addCase(
         setVisible.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
