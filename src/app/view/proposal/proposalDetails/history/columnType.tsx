@@ -6,7 +6,7 @@ import { Typography } from 'antd'
 
 import { STROKE_COLOR } from 'app/constant'
 
-const TYPE = {
+const VOTE_TYPE = {
   default: 'DEFAULT',
   for: 'VOTE FOR',
   against: 'VOTE AGAINST',
@@ -30,7 +30,7 @@ const ColumnType = ({ record }: { record: ReceiptData }) => {
 
   return (
     <Typography.Text style={{ color: STROKE_COLOR[theme][type] }}>
-      {TYPE[type]}
+      {VOTE_TYPE[type]}
     </Typography.Text>
   )
 }

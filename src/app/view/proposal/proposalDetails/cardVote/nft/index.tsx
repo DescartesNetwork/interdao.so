@@ -17,15 +17,15 @@ import useOwnerNftByCollection from 'app/hooks/useOwnerNftByCollection'
 import useProposal from 'app/hooks/proposal/useProposal'
 
 export enum VotingType {
-  For = 'For',
-  Against = 'Against',
+  for = 'For',
+  against = 'Against',
 }
 
 const CardVoteByNFT = ({
   proposalAddress,
   daoAddress,
 }: ProposalChildCardProps) => {
-  const [votingType, setVotingType] = useState<VotingType>(VotingType.For)
+  const [votingType, setVotingType] = useState<VotingType>(VotingType.for)
   const [visible, setVisible] = useState(false)
   const daos = useSelector((state: AppState) => state.daos)
   const { mint } = daos[daoAddress] || ({} as DaoData)
@@ -49,12 +49,12 @@ const CardVoteByNFT = ({
 
   const onVoteNftFor = () => {
     setVisible(true)
-    setVotingType(VotingType.For)
+    setVotingType(VotingType.for)
   }
 
   const onVoteNftAgainst = () => {
     setVisible(true)
-    setVotingType(VotingType.Against)
+    setVotingType(VotingType.against)
   }
 
   return (
