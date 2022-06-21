@@ -1,16 +1,14 @@
 import { Col, Modal, Row, Typography } from 'antd'
-
-import { ProposalChildCardProps } from '../proposalDetails/index'
-import TemplateInfo from './component/templateInfo'
+import { TemplateInfoLoader } from 'app/templates/templateLoader'
 
 type TemplateInfoProps = {
   visible: boolean
   setVisible: (visible: boolean) => void
-} & ProposalChildCardProps
+  proposalAddress: string
+}
 
 const ModalTemplateInfo = ({
   proposalAddress,
-  daoAddress,
   visible,
   setVisible,
 }: TemplateInfoProps) => {
@@ -30,10 +28,7 @@ const ModalTemplateInfo = ({
           <Typography.Title level={4}>Template information</Typography.Title>
         </Col>
         <Col span={24} className="template-info-body">
-          <TemplateInfo
-            proposalAddress={proposalAddress}
-            daoAddress={daoAddress}
-          />
+          <TemplateInfoLoader proposalAddress={proposalAddress} />
         </Col>
       </Row>
     </Modal>

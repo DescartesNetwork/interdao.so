@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { Component, ErrorInfo, lazy, ReactNode, Suspense } from 'react'
 
 import { Skeleton } from 'antd'
 
@@ -15,9 +15,11 @@ export const TemplateCreateLoader = ({
 }: PropsTemplateCreateLoader) => {
   const Component = lazy(() => import(`./${name}/create`))
   return (
-    <Suspense fallback={<Skeleton active />}>
-      <Component daoAddress={daoAddress} />
-    </Suspense>
+    <ErrorBoundary>
+      <Suspense fallback={<Skeleton active />}>
+        <Component daoAddress={daoAddress} />
+      </Suspense>
+    </ErrorBoundary>
   )
 }
 
@@ -26,10 +28,59 @@ export const TemplateProposalLoader = ({
   proposalAddress,
 }: PropsTemplateProposalLoader) => {
   const template = useTemplateWithProposal(proposalAddress)
+  console.log('template', template)
   const Component = lazy(() => import(`./${template}/proposal`))
   return (
-    <Suspense fallback={<Skeleton active />}>
-      <Component proposalAddress={proposalAddress} />
-    </Suspense>
+    <ErrorBoundary>
+      <Suspense fallback={<Skeleton active />}>
+        <Component proposalAddress={proposalAddress} />
+      </Suspense>
+    </ErrorBoundary>
   )
 }
+
+export type PropsTemplateInfoLoader = { proposalAddress: string }
+export const TemplateInfoLoader = ({
+  proposalAddress,
+}: PropsTemplateInfoLoader) => {
+  const template = useTemplateWithProposal(proposalAddress)
+  const Component = lazy(() => import(`./${template}/info`))
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<Skeleton active />}>
+        <Component proposalAddress={proposalAddress} />
+      </Suspense>
+    </ErrorBoundary>
+  )
+}
+
+interface Props {
+  children?: ReactNode
+}
+interface State {
+  hasError: boolean
+}
+class ErrorBoundary extends Component<Props, State> {
+  public state: State = {
+    hasError: false,
+  }
+
+  public static getDerivedStateFromError(_: Error): State {
+    // Update state so the next render will show the fallback UI.
+    return { hasError: true }
+  }
+
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('Uncaught error:', error, errorInfo)
+  }
+
+  public render() {
+    if (this.state.hasError) {
+      return <h1>Sorry.. there was an error</h1>
+    }
+
+    return this.props.children
+  }
+}
+
+export default ErrorBoundary

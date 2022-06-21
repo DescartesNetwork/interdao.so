@@ -97,7 +97,6 @@ export const useParser = () => {
             ...ruleData,
           })
         }
-        console.log('val', val)
         args.push(parserArg(val, arg.type))
       }
       return args
