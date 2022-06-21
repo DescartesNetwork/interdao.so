@@ -28,7 +28,6 @@ export const TemplateProposalLoader = ({
   proposalAddress,
 }: PropsTemplateProposalLoader) => {
   const template = useTemplateWithProposal(proposalAddress)
-  console.log('template', template)
   const Component = lazy(() => import(`./${template}/proposal`))
   return (
     <ErrorBoundary>

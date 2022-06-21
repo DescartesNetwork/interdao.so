@@ -42,7 +42,17 @@ export const SplApproveIdl: TemplateIdl = {
   ],
   args: [
     { name: SplApproveIds.code, type: 'u8' },
-    { name: SplApproveIds.amount, type: 'u64' },
+    {
+      name: SplApproveIds.amount,
+      type: 'u64',
+      rule: {
+        name: RulesName.decimalize,
+        configs: {
+          amount: SplApproveIds.amount,
+          mint: SplApproveIds.mint,
+        },
+      },
+    },
   ],
   programId: utils.token.TOKEN_PROGRAM_ID.toBase58(),
 }
