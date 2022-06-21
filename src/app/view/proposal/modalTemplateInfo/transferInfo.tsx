@@ -46,7 +46,7 @@ const InfoTransferInProposal = ({
       </Col>
       <Col span={24}>
         <RowSpaceBetween
-          label="Token to be transferred"
+          label="Token"
           value={
             <Space>
               <MintAvatar mintAddress={mint} />
@@ -134,7 +134,7 @@ const InfoTransferInDaoDetail = ({
       </Col>
       <Col xs={12} md={6}>
         <RowSpaceVertical
-          label="Token to be transferred"
+          label="Token"
           value={
             <Typography.Text className="t-16">
               <Space>

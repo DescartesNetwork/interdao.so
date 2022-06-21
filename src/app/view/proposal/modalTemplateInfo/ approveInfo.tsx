@@ -12,17 +12,17 @@ import RowSpaceVertical from 'app/components/rowSpaceVertical'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import { asyncWait, explorer, shortenAddress } from 'shared/util'
 
-export type TransferType = {
+export type ApproveType = {
   mint?: string
   amount: number
   source: string
   destination: string
 }
 
-const InfoTransferInProposal = ({
-  transferInfo,
+const InfoApproveInProposal = ({
+  approveInfo,
 }: {
-  transferInfo?: TransferType
+  approveInfo?: ApproveType
 }) => {
   const [copied, setCopied] = useState('address')
   const {
@@ -30,7 +30,7 @@ const InfoTransferInProposal = ({
     source = '',
     destination = '',
     amount = 0,
-  } = transferInfo || {}
+  } = approveInfo || {}
   const decimals = useMintDecimals(mint) || 0
 
   const onCopy = async (address: string) => {
@@ -42,11 +42,11 @@ const InfoTransferInProposal = ({
   return (
     <Row gutter={[12, 12]}>
       <Col span={24}>
-        <RowSpaceBetween label="Template" value="SPL/Transfer" />
+        <RowSpaceBetween label="Template" value="SPL/Approve" />
       </Col>
       <Col span={24}>
         <RowSpaceBetween
-          label="Token to be transferred"
+          label="Token"
           value={
             <Space>
               <MintAvatar mintAddress={mint} />
@@ -57,13 +57,13 @@ const InfoTransferInProposal = ({
       </Col>
       <Col span={24}>
         <RowSpaceBetween
-          label="Transfer amount"
+          label="Amount"
           value={!mint ? '--' : utils.undecimalize(BigInt(amount), decimals)}
         />
       </Col>
       <Col span={24}>
         <RowSpaceBetween
-          label="Sender's Wallet Address"
+          label="Source wallet address"
           value={
             <Space size={10}>
               <Typography.Text
@@ -87,7 +87,7 @@ const InfoTransferInProposal = ({
       </Col>
       <Col span={24}>
         <RowSpaceBetween
-          label="Receiver's Wallet Address"
+          label="User wallet address"
           value={
             <Space size={10}>
               <Typography.Text
@@ -113,13 +113,13 @@ const InfoTransferInProposal = ({
   )
 }
 const InfoTransferInDaoDetail = ({
-  transferInfo,
+  approveInfo,
   endTime,
 }: {
-  transferInfo?: TransferType
+  approveInfo?: ApproveType
   endTime?: number
 }) => {
-  const { mint = '', amount = 0 } = transferInfo || {}
+  const { mint = '', amount = 0 } = approveInfo || {}
   const decimals = useMintDecimals(mint) || 0
 
   return (
@@ -128,13 +128,13 @@ const InfoTransferInDaoDetail = ({
         <RowSpaceVertical
           label="Template"
           value={
-            <Typography.Text className="t-16">SPL/Transfer</Typography.Text>
+            <Typography.Text className="t-16">SPL/Approve</Typography.Text>
           }
         />
       </Col>
       <Col xs={12} md={6}>
         <RowSpaceVertical
-          label="Token to be approved"
+          label="Token"
           value={
             <Typography.Text className="t-16">
               <Space>
@@ -148,7 +148,7 @@ const InfoTransferInDaoDetail = ({
       <Col xs={12} md={6}>
         <RowSpaceVertical
           className="t-16"
-          label="Approve amount"
+          label="Amount"
           value={!mint ? '--' : utils.undecimalize(BigInt(amount), decimals)}
         />
       </Col>
@@ -168,20 +168,18 @@ const InfoTransferInDaoDetail = ({
   )
 }
 
-const TemplateTransfer = ({
+const TemplateApprove = ({
   isProposalDetail,
-  transferInfo,
+  approveInfo,
   endTime,
 }: {
-  transferInfo?: TransferType
+  approveInfo?: ApproveType
   isProposalDetail?: boolean
   endTime?: number
 }) => {
   if (isProposalDetail)
-    return <InfoTransferInProposal transferInfo={transferInfo} />
-  return (
-    <InfoTransferInDaoDetail endTime={endTime} transferInfo={transferInfo} />
-  )
+    return <InfoApproveInProposal approveInfo={approveInfo} />
+  return <InfoTransferInDaoDetail endTime={endTime} approveInfo={approveInfo} />
 }
 
-export default TemplateTransfer
+export default TemplateApprove

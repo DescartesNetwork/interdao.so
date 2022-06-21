@@ -198,10 +198,12 @@ const ApproveSplPlugin = ({ daoAddress = '' }: ApproveSplPluginProps) => {
       </Col>
       <Col span={24}>
         <Space direction="vertical" size={4} style={{ width: '100%' }}>
-          <Typography.Text type="secondary">Wallet Address</Typography.Text>
+          <Typography.Text type="secondary">
+            Source wallet address
+          </Typography.Text>
           <Input
             className="border-less"
-            placeholder="Input Sender's Wallet Address"
+            placeholder="Input source wallet address"
             value={senderAddress}
             disabled={daoMetaData?.daoType === 'multisig-dao'}
           />
@@ -209,10 +211,12 @@ const ApproveSplPlugin = ({ daoAddress = '' }: ApproveSplPluginProps) => {
       </Col>
       <Col span={24}>
         <Space direction="vertical" size={4} style={{ width: '100%' }}>
-          <Typography.Text type="secondary">Delegate Address</Typography.Text>
+          <Typography.Text type="secondary">
+            User wallet address
+          </Typography.Text>
           <Input
             className="border-less"
-            placeholder="Input Delegate Address"
+            placeholder="Input user wallet address"
             value={receiverAddress}
             onChange={(e) => setReceiverAddress(e.target.value || '')}
           />

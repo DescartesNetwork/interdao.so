@@ -74,7 +74,7 @@ const TemplateInfo = ({
     return (
       <TemplateApprove
         isProposalDetail={isProposalDetail}
-        transferInfo={transferInfo}
+        approveInfo={undefined}
         endTime={endTime}
       />
     )
