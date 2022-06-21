@@ -1,6 +1,21 @@
 import { RulesData, RulesName } from './core/rule'
 import { SplTransferIdl } from './spl-transfer/configs'
+import { SplApproveIdl } from './spl-approve/configs'
 
+// Config
+export enum TemplateNames {
+  'SplTransfer' = 'spl-transfer',
+  'SplApprove' = 'spl-approve',
+}
+export const Templates: Record<TemplateNames, TemplateIdl> = {
+  [TemplateNames.SplTransfer]: SplTransferIdl,
+  [TemplateNames.SplApprove]: SplApproveIdl,
+}
+// Component Type
+export type PropsCreateComponent = {
+  daoAddress: string
+}
+// System type
 export type TemplateIdl = {
   name: string
   accounts: (TemplateAccount | TemplateAccountWithRule)[]
@@ -34,9 +49,4 @@ export const isTemplateAccountWithRule = (
 export type TemplateArg = {
   name: string
   type: 'u8' | 'u64'
-}
-
-// Config
-export const Templates: Record<string, TemplateIdl> = {
-  spl_transfer: SplTransferIdl,
 }

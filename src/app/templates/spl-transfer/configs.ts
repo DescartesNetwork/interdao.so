@@ -3,41 +3,44 @@ import { TemplateIdl } from './../index'
 
 export enum SplTransferIds {
   // Accounts
-  'src' = 'src',
-  'dst' = 'dst',
-  'payer' = 'payer',
+  source = 'source',
+  destination = 'destination',
+  authority = 'authority',
   // Prams
-  'code' = 'code',
-  'amount' = 'amount',
+  code = 'code',
+  amount = 'amount',
   // Context
-  'mint' = 'mint',
+  mint = 'mint',
 }
 
 export const SplTransferIdl: TemplateIdl = {
-  name: 'spl_transfer',
+  name: 'spl-transfer',
   accounts: [
     {
-      name: SplTransferIds.src,
+      name: SplTransferIds.source,
       isMut: true,
       isSigner: false,
       isMaster: false,
       rule: {
         name: 'token-account',
-        configs: { mint: SplTransferIds.mint, owner: SplTransferIds.src },
+        configs: { mint: SplTransferIds.mint, owner: SplTransferIds.source },
       },
     },
     {
-      name: SplTransferIds.dst,
+      name: SplTransferIds.destination,
       isMut: true,
       isSigner: false,
       isMaster: false,
       rule: {
         name: 'token-account',
-        configs: { mint: SplTransferIds.mint, owner: SplTransferIds.dst },
+        configs: {
+          mint: SplTransferIds.mint,
+          owner: SplTransferIds.destination,
+        },
       },
     },
     {
-      name: SplTransferIds.payer,
+      name: SplTransferIds.authority,
       isMut: true,
       isSigner: true,
       isMaster: true,

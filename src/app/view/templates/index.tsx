@@ -1,68 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { SystemProgram, PublicKey } from '@solana/web3.js'
-import { useHistory } from 'react-router-dom'
 
 import { Button, Col, Modal, Row, Tabs, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import SPL from './spl'
 
 import { AppDispatch, AppState } from 'app/model'
-import {
-  setTemplateName,
-  setTx,
-  setVisible,
-} from 'app/model/template.controller'
-import { ProposalAccountType, ProposalReturnType } from './types'
-import configs from 'app/configs'
+import { setVisible } from 'app/model/template.controller'
 
 import './index.less'
 
-const {
-  manifest: { appId },
-} = configs
-
-export enum Templates {
-  SPL_TRANSFER = 'spl_transfer',
-  BLANK_PROPOSAL = 'blank_proposal',
-  SPL_APPROVE = 'spl_approve',
-}
-
 const Template = ({ daoAddress }: { daoAddress: string }) => {
   const visible = useSelector((state: AppState) => state.template.visible)
-  const daoData = useSelector((state: AppState) => state.daos[daoAddress])
   const dispatch = useDispatch<AppDispatch>()
-  const history = useHistory()
-
-  const addBlankProposal = async () => {
-    const { master } = daoData
-    const instruction = SystemProgram.transfer({
-      fromPubkey: master,
-      toPubkey: master,
-      lamports: Number(0),
-    })
-
-    const re: ProposalReturnType = {
-      name: Templates.BLANK_PROPOSAL,
-      data: instruction.data,
-      accounts: {
-        src: instruction.keys[1] as ProposalAccountType,
-        dst: instruction.keys[1] as ProposalAccountType,
-        payer: {
-          pubkey: new PublicKey(master),
-          isWritable: true,
-          isSigner: true,
-          isMaster: true,
-        },
-      },
-
-      programId: instruction.programId,
-    }
-
-    await dispatch(setTx(re))
-    await dispatch(setTemplateName(Templates.BLANK_PROPOSAL))
-    await dispatch(setVisible(false))
-    return history.push(`/app/${appId}/dao/${daoAddress}/new-proposal`)
-  }
 
   return (
     <Modal
@@ -79,7 +28,7 @@ const Template = ({ daoAddress }: { daoAddress: string }) => {
         <Col className="template-body" span={24}>
           <Tabs
             tabBarExtraContent={
-              <Button onClick={addBlankProposal} size="small">
+              <Button onClick={() => {}} size="small">
                 New blank proposal
               </Button>
             }

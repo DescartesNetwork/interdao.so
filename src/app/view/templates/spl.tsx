@@ -1,8 +1,10 @@
 import { Button, Col, Image, Radio, Row, Space, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
-import TransferSplPlugin from './transfer'
 
 import SOLANA_LOGO from 'app/static/images/templates/solana.svg'
+import { TemplateLoaderCreate } from 'app/templates/templateLoader'
+import { TemplateNames } from 'app/templates'
+import { useState } from 'react'
 
 type CardOptionProps = {
   label: string
@@ -31,6 +33,7 @@ const CardOption = ({ label, description, icon }: CardOptionProps) => {
 }
 
 const SPL = ({ daoAddress }: { daoAddress: string }) => {
+  const [template, setTemplate] = useState(TemplateNames.SplTransfer)
   return (
     <Row>
       <Col xs={24} md={16} className="wrap-spl-info">
@@ -65,13 +68,14 @@ const SPL = ({ daoAddress }: { daoAddress: string }) => {
             <Space direction="vertical" style={{ width: '100%' }}>
               <Typography.Text>Templates</Typography.Text>
               <Radio.Group
-                value="transfer"
+                value={template}
                 style={{ width: '100%' }}
                 className="select-spl-option"
+                onChange={(e) => setTemplate(e.target.value)}
               >
                 <Row gutter={[24, 24]}>
                   <Col xs={24} sm={12} md={12} lg={12}>
-                    <Radio.Button value="transfer">
+                    <Radio.Button value={TemplateNames.SplTransfer}>
                       <CardOption
                         label="Transfer"
                         description="Transfer token to another wallet address"
@@ -80,7 +84,7 @@ const SPL = ({ daoAddress }: { daoAddress: string }) => {
                     </Radio.Button>
                   </Col>
                   <Col xs={24} sm={12} md={12} lg={12}>
-                    <Radio.Button value="approve" disabled>
+                    <Radio.Button value={TemplateNames.SplApprove}>
                       <CardOption
                         label="Approve"
                         description="Coming soon"
@@ -95,7 +99,7 @@ const SPL = ({ daoAddress }: { daoAddress: string }) => {
         </Row>
       </Col>
       <Col xs={24} md={8} className="spl-option-transfer">
-        <TransferSplPlugin daoAddress={daoAddress} />
+        <TemplateLoaderCreate name={template} daoAddress={daoAddress} />
       </Col>
     </Row>
   )
