@@ -102,7 +102,6 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
         setVisible={setVisible}
         visible={visible}
         proposalAddress={proposalAddress}
-        daoAddress={daoAddress}
       />
     </Card>
   )
