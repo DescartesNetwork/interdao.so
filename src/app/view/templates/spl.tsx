@@ -2,7 +2,7 @@ import { Button, Col, Image, Radio, Row, Space, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import SOLANA_LOGO from 'app/static/images/templates/solana.svg'
-import { TemplateLoaderCreate } from 'app/templates/templateLoader'
+import { TemplateCreateLoader } from 'app/templates/templateLoader'
 import { TemplateNames } from 'app/templates'
 import { useState } from 'react'
 
@@ -99,7 +99,7 @@ const SPL = ({ daoAddress }: { daoAddress: string }) => {
         </Row>
       </Col>
       <Col xs={24} md={8} className="spl-option-transfer">
-        <TemplateLoaderCreate name={template} daoAddress={daoAddress} />
+        <TemplateCreateLoader name={template} daoAddress={daoAddress} />
       </Col>
     </Row>
   )
