@@ -15,6 +15,7 @@ import useProposalMetaData from 'app/hooks/proposal/useProposalMetaData'
 import { ProposalChildCardProps } from '../proposalDetails'
 
 import BG_SOLANA from 'app/static/images/templates/bg-spl.png'
+import BG_BLANK from 'app/static/images/templates/bg-blank.png'
 
 const {
   manifest: { appId },
@@ -24,6 +25,8 @@ export type ProposalCardProps = { proposalAddress: string }
 
 const BG_PROPOSAL: Record<string, string> = {
   spl_transfer: BG_SOLANA,
+  spl_approve: BG_SOLANA,
+  blank_proposal: BG_BLANK,
 }
 
 const currentDate = Math.floor(Number(new Date()) / 1000)

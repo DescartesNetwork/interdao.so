@@ -7,6 +7,7 @@ import TemplateTransfer, { TransferType } from '../transferInfo'
 
 import useProposal from 'app/hooks/proposal/useProposal'
 import { ProposalChildCardProps } from '../../proposalDetails/index'
+import BlankTemplateInfo from '../blankTemplateInfo'
 
 type TemplateInfoProps = {
   isProposalDetail?: boolean
@@ -29,7 +30,7 @@ const TemplateInfo = ({
       accounts as AccountMeta[],
       data as Buffer,
     )
-    if (!info) return
+    if (!info) return setTemplateName('blank')
     setTemplateName(info.name)
     if (info.name === 'transfer') {
       const { splt } = window.sentre
@@ -66,6 +67,13 @@ const TemplateInfo = ({
       <TemplateTransfer
         isProposalDetail={isProposalDetail}
         transferInfo={transferInfo}
+        endTime={endTime}
+      />
+    )
+  if (templateName === 'blank')
+    return (
+      <BlankTemplateInfo
+        isProposalDetail={isProposalDetail}
         endTime={endTime}
       />
     )
