@@ -4,7 +4,7 @@ import { AccountMeta } from '@solana/web3.js'
 import { decodeSplInstruction } from 'sen-idl-parser'
 import { account, utils } from '@senswap/sen-js'
 import { useMint } from '@senhub/providers'
-import BN from 'bn.js'
+import BN, { min } from 'bn.js'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -53,24 +53,18 @@ const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
         decimals,
       )
       const daoAddress = proposal[proposalAddress].dao.toBase58()
-      const masterPublicKey = account.fromAddress(
+      const associatedAddress = await splt.deriveAssociatedAddress(
         daos[daoAddress].master.toBase58(),
-      )
-      const { value } = await splt.connection.getTokenAccountsByOwner(
-        masterPublicKey,
-        { programId: splt.spltProgramId },
+        mint,
       )
 
-      for (const {
-        account: { data: buf },
-      } of value) {
-        const data = splt.parseAccountData(buf)
-        if (data.mint === mint) {
-          const mintBalance = Number(utils.undecimalize(data.amount, decimals))
-          if (mintBalance > Number(transferAmount))
-            return setIsSufficientBalance(true)
-        }
-      }
+      const { value } = await splt.connection.getTokenAccountBalance(
+        account.fromAddress(associatedAddress),
+      )
+      const mintBalance = Number(
+        utils.undecimalize(BigInt(value.amount), decimals),
+      )
+      if (mintBalance > Number(transferAmount)) setIsSufficientBalance(true)
     } catch (error) {
       setIsSufficientBalance(false)
     }
