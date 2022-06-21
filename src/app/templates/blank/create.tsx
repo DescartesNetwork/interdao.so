@@ -45,7 +45,7 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
   }, [generateData])
 
   return (
-    <Button type="primary" onClick={() => confirm(BlankIdl)} disabled={false}>
+    <Button size="small" onClick={() => confirm(BlankIdl)} disabled={false}>
       New blank proposal
     </Button>
   )
