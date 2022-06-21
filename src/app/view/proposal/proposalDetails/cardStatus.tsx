@@ -4,7 +4,7 @@ import { AccountMeta } from '@solana/web3.js'
 import { decodeSplInstruction } from 'sen-idl-parser'
 import { account, utils } from '@senswap/sen-js'
 import { useMint } from '@senhub/providers'
-import BN, { min } from 'bn.js'
+import BN from 'bn.js'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
