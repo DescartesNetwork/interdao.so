@@ -1,15 +1,18 @@
 import { RulesData, RulesName } from './core/rule'
 import { SplTransferIdl } from './spl-transfer/configs'
 import { SplApproveIdl } from './spl-approve/configs'
+import { BlankIdl } from './blank/configs'
 
 // Config
 export enum TemplateNames {
   'SplTransfer' = 'spl-transfer',
   'SplApprove' = 'spl-approve',
+  'BlankTemplate' = 'blank',
 }
 export const Templates: Record<TemplateNames, TemplateIdl> = {
   [TemplateNames.SplTransfer]: SplTransferIdl,
   [TemplateNames.SplApprove]: SplApproveIdl,
+  [TemplateNames.BlankTemplate]: BlankIdl,
 }
 // Component Type
 export type PropsCreateComponent = {

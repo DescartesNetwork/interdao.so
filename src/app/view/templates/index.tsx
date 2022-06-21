@@ -1,9 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Button, Col, Modal, Row, Tabs, Typography } from 'antd'
+import { Col, Modal, Row, Tabs, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
+import { TemplateCreateLoader } from 'app/templates/templateLoader'
 import SPL from './spl'
 
+import { TemplateNames } from 'app/templates'
 import { AppDispatch, AppState } from 'app/model'
 import { setVisible } from 'app/model/template.controller'
 
@@ -28,9 +30,10 @@ const Template = ({ daoAddress }: { daoAddress: string }) => {
         <Col className="template-body" span={24}>
           <Tabs
             tabBarExtraContent={
-              <Button onClick={() => {}} size="small">
-                New blank proposal
-              </Button>
+              <TemplateCreateLoader
+                name={TemplateNames.BlankTemplate}
+                daoAddress={daoAddress}
+              />
             }
           >
             <Tabs.TabPane tab="SPL" key="spl">
