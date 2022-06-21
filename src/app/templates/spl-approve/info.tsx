@@ -8,26 +8,26 @@ import IconCopy from 'app/components/iconCopy'
 
 import { useTemplateDataWithProposal } from '../hooks/useTemplateDataWithProposal'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
-import { SplTransferIds } from './configs'
+import { SplApproveIds } from './configs'
 import { explorer, shortenAddress } from 'shared/util'
 
 const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
   const templateData =
-    useTemplateDataWithProposal<Record<SplTransferIds, string>>(proposalAddress)
+    useTemplateDataWithProposal<Record<SplApproveIds, string>>(proposalAddress)
 
   const mint = templateData.mint
   const decimals = useMintDecimals(mint) || 0
   const source = templateData?.source || ''
-  const destination = templateData?.destination || ''
+  const delegate = templateData?.delegate || ''
 
   return (
     <Row gutter={[12, 12]}>
       <Col span={24}>
-        <RowSpaceBetween label="Template" value="SPL/Transfer" />
+        <RowSpaceBetween label="Template" value="SPL/Approve" />
       </Col>
       <Col span={24}>
         <RowSpaceBetween
-          label="Token to be transferred"
+          label="Token"
           value={
             <Space>
               <MintAvatar mintAddress={mint} />
@@ -38,7 +38,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
       </Col>
       <Col span={24}>
         <RowSpaceBetween
-          label="Transfer amount"
+          label="Amount"
           value={
             !mint
               ? '--'
@@ -48,7 +48,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
       </Col>
       <Col span={24}>
         <RowSpaceBetween
-          label="Sender's Wallet Address"
+          label="Source's Wallet Address"
           value={
             <Space size={10}>
               <Typography.Text
@@ -64,16 +64,16 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
       </Col>
       <Col span={24}>
         <RowSpaceBetween
-          label="Receiver's Wallet Address"
+          label="Delegate's Wallet Address"
           value={
             <Space size={10}>
               <Typography.Text
                 style={{ cursor: 'pointer', textDecoration: 'underline' }}
-                onClick={() => window.open(explorer(destination), '_blank')}
+                onClick={() => window.open(explorer(delegate), '_blank')}
               >
-                {shortenAddress(destination)}
+                {shortenAddress(delegate)}
               </Typography.Text>
-              <IconCopy value={destination} />
+              <IconCopy value={delegate} />
             </Space>
           }
         />
