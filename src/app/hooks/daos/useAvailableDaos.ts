@@ -38,8 +38,7 @@ const useAvailableDaos = () => {
             mint,
             owner: new web3.PublicKey(wallet.address),
           })
-          const amount = accounts[tokenAccount.toBase58()]?.amount
-          if (!amount || !(Number(amount.toString()) > 0)) valid = false
+          if (!accounts[tokenAccount.toBase58()]) valid = false
         }
         if (daoType === 'flexible-dao' && isNft) {
           const myCollections = nfts?.map((nft) => nft.collection?.key)
