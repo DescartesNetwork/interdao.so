@@ -1,7 +1,5 @@
 import { Component, ErrorInfo, lazy, ReactNode, Suspense } from 'react'
 
-import { Skeleton } from 'antd'
-
 import { useTemplateWithProposal } from './hooks/useTemplateWithProposal'
 import { TemplateNames } from './index'
 
