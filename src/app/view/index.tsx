@@ -22,6 +22,7 @@ import configs from 'app/configs'
 
 import 'app/static/styles/dark.less'
 import 'app/static/styles/light.less'
+import EventsWatcher from 'app/watcher/evens.watch'
 
 const {
   manifest: { appId },
@@ -73,6 +74,7 @@ const View = () => {
       <DaoWatcher />
       <ProposalWatcher />
       <ReceiptWatcher />
+      <EventsWatcher />
       <MetadataWatcher />
     </Row>
   )

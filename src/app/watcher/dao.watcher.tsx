@@ -5,29 +5,9 @@ import { useWallet } from '@senhub/providers'
 import { PublicKey } from '@solana/web3.js'
 
 import { AppDispatch } from 'app/model'
-import configs from 'app/configs'
 import { getDao, getDaos } from 'app/model/daos.controller'
 import { addLoading, clearLoading } from 'app/model/loading.controller'
-
-const {
-  sol: { interDao },
-} = configs
-
-// Watch id
-const EVENTS = [
-  'InitializeDAOEvent',
-  'UpdateDaoRegimeEvent',
-  'UpdateSupplyEvent',
-  'TransferAuthorityEvent',
-  'UpdateDaoMetadataEvent',
-]
-const TIME_RECHECK = 500
-
-type WatchState = {
-  id: number
-  interval: NodeJS.Timer
-}
-const watcherState: Record<string, WatchState> = {}
+import { addEventListener } from './evens.watch'
 
 const DaoWatcher = () => {
   const {
@@ -68,34 +48,21 @@ const DaoWatcher = () => {
 
   // Watch dao events
   const watchData = useCallback(async () => {
-    for (const event of EVENTS) {
-      const state = watcherState[event] || {}
-      if (state.interval || state.id) continue
-      state.interval = setInterval(async () => {
-        if (state.id) return clearInterval(state.interval)
-        state.id = await interDao.addListener(event as any, reloadDaoData)
-      }, TIME_RECHECK)
-    }
+    addEventListener(
+      [
+        'InitializeDAOEvent',
+        'UpdateDaoRegimeEvent',
+        'UpdateSupplyEvent',
+        'TransferAuthorityEvent',
+        'UpdateDaoMetadataEvent',
+      ],
+      reloadDaoData,
+    )
   }, [reloadDaoData])
 
   useEffect(() => {
     fetchData()
     watchData()
-    // Unwatch (cancel socket)
-    return () => {
-      ;(async () => {
-        for (const event of EVENTS) {
-          const state = watcherState[event]
-          try {
-            await interDao.removeListener(state.id)
-          } catch (er: any) {
-            console.warn(er.message)
-          } finally {
-            state.id = 0
-          }
-        }
-      })()
-    }
   }, [fetchData, watchData])
 
   return <Fragment />

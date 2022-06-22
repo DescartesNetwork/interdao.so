@@ -74,10 +74,11 @@ export const getReceipt = createAsyncThunk<
 >(`${NAME}/getReceipt`, async ({ address, force }, { getState }) => {
   if (!account.isAddress(address)) throw new Error('Invalid address')
   const {
-    dao: { [address]: data },
+    receipt: { [address]: data },
   } = getState()
   if (data && !force) return { [address]: data }
   const raw = await interDao.getReceiptData(address)
+  console.log('raw', raw)
   return { [address]: raw }
 })
 
