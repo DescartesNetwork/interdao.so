@@ -35,7 +35,7 @@ export const BlankIdl: TemplateIdl = {
     },
   ],
   args: [
-    { name: BlankIds.code, type: 'u8' },
+    { name: BlankIds.code, type: 'u32' },
     {
       name: BlankIds.lamports,
       type: 'u64',
