@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import IonIcon from '@sentre/antd-ionicon'
-import { Button, Col, Modal, Row, Space, Typography, Image } from 'antd'
+import { Button, Col, Modal, Row, Space, Typography } from 'antd'
 import ProposalItem from './proposalItem'
 
 import useWithdrawableReceipt from 'app/hooks/proposal/useWithdrawableReceipt'
 import { AppState } from 'app/model'
 import configs from 'app/configs'
 import { explorer } from 'shared/util'
+
 import BG_JOIN_DAO from 'app/static/images/system/bg-join-dao.png'
-import { url } from 'inspector'
 
 const {
   sol: { interDao },
