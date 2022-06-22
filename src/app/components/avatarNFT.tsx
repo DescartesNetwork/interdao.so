@@ -23,7 +23,10 @@ const AvatarNFT = ({
       <Avatar shape="square" size={size} src={nftInfo?.image || IMAGE_DEFAULT}>
         {icon}
       </Avatar>
-      <Typography.Text> NFT</Typography.Text>
+      <Typography.Text style={{ fontSize: size > 24 ? 38 : undefined }}>
+        {' '}
+        NFT
+      </Typography.Text>
     </Space>
   )
 }
