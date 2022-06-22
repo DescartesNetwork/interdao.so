@@ -45,6 +45,7 @@ const ModalVoteNFT = ({
         nftVoting,
         proposalFee,
       )
+      setNftVoting('')
       return window.notify({
         type: 'success',
         description: 'Voted successfully. Click to view details!',
@@ -71,6 +72,7 @@ const ModalVoteNFT = ({
         nftVoting,
         proposalFee,
       )
+      setNftVoting('')
       return window.notify({
         type: 'success',
         description: 'Voted successfully. Click to view details!',
