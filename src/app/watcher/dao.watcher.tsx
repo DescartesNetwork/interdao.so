@@ -65,6 +65,7 @@ const DaoWatcher = () => {
       }, 2000)
     }
   }, [dispatch, walletAddress])
+
   // Watch dao events
   const watchData = useCallback(async () => {
     for (const event of EVENTS) {
