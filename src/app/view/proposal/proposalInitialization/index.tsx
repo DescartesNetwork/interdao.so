@@ -40,11 +40,7 @@ const ProposalInitialization = () => {
   const { daoAddress } = useParams<{ daoAddress: string }>()
 
   const daos = useSelector((state: AppState) => state.daos)
-  const {
-    tx,
-    templateName,
-    data: templateData,
-  } = useSelector((state: AppState) => state.template)
+  const template = useSelector((state: AppState) => state.template)
 
   const [consensusMechanism, setConsensusMechanism] = useState(
     ConsensusMechanisms.StakedTokenCounter,
@@ -64,10 +60,10 @@ const ProposalInitialization = () => {
     return {
       title,
       description,
-      templateName,
-      templateData,
+      templateName: template.templateName || '',
+      templateData: template.data,
     }
-  }, [description, templateData, templateName, title])
+  }, [description, template, title])
 
   const uploadMetaData = useCallback(async () => {
     const ipfs = new IPFS()
@@ -80,16 +76,15 @@ const ProposalInitialization = () => {
 
   const newProposal = useCallback(async () => {
     const { authority } = daos[daoAddress]
-    if (!tx) return
-
+    if (!template.tx) return
     try {
       setLoading(true)
       const digest = await uploadMetaData()
 
-      const { programId, data, accounts } = tx
-
       const metadata = Buffer.from(digest)
+      const { programId, data, accounts } = template.tx
       const valueAccounts = Object.values(accounts)
+
       const { txId, proposalAddress } = await interDao.initializeProposal(
         daoAddress,
         programId.toBase58(),
@@ -131,20 +126,20 @@ const ProposalInitialization = () => {
       return setLoading(false)
     }
   }, [
-    daos,
-    daoAddress,
-    tx,
-    uploadMetaData,
-    duration,
     consensusMechanism,
     consensusQuorum,
+    daoAddress,
+    daos,
     dispatch,
+    duration,
     history,
+    template.tx,
+    uploadMetaData,
   ])
 
   useEffect(() => {
-    if (!tx) return history.push(`/app/${appId}/dao/${daoAddress}`)
-  }, [daoAddress, history, tx])
+    if (!template.tx) return history.push(`/app/${appId}/dao/${daoAddress}`)
+  }, [daoAddress, history, template.tx])
 
   return (
     <Row gutter={[24, 24]} justify="center">
