@@ -6,6 +6,7 @@ export type ProposalStatusType =
   | 'Preparing'
   | 'Succeeded'
   | 'Executed'
+  | 'Loading'
 
 export type ProposalStatusProps = {
   status: ProposalStatusType
@@ -17,6 +18,7 @@ const STATUS_COLOR: Record<string, string> = {
   Preparing: '#D4B106',
   Executed: '#03A326',
   Voting: '#40A9FF',
+  Loading: '#1a1311',
 }
 
 const ProposalStatus = ({ status }: ProposalStatusProps) => {

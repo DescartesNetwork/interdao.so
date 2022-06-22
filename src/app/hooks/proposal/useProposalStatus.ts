@@ -53,12 +53,13 @@ const useProposalStatus = (proposalAddress: string) => {
   }, [actualSupply, consensusQuorum, votingAgainstPower, votingForPower])
 
   const status: ProposalStatusType = useMemo(() => {
+    if (!proposal) return 'Loading'
     if (currentDate < Number(startDate)) return 'Preparing'
     if (currentDate < Number(endDate)) return 'Voting'
     if (executed) return 'Executed'
     if (isSuccess) return 'Succeeded'
     return 'Failed'
-  }, [endDate, executed, isSuccess, startDate])
+  }, [endDate, executed, isSuccess, proposal, startDate])
 
   return { status, isSuccess, actualSupply }
 }

@@ -43,49 +43,69 @@ const CardProgress = ({
   const totalVote = yesVote + noVote
   const percentYes = (yesVote / totalVote) * 100
   const percentNo = (noVote / totalVote) * 100
+  const defaultRequire = useMemo(
+    () => new BN(utils.decimalize(1, mintDecimal).toString()),
+    [mintDecimal],
+  )
 
   const currentPower = useMemo(() => {
     if (!consensusQuorum) return new BN(0)
     const actualYesVote = votingForPower.sub(votingAgainstPower)
-
     const mechanismQuorum = Object.keys(consensusQuorum)[0]
 
-    if (mechanismQuorum === 'half')
-      return actualYesVote.mul(new BN(200)).div(actualSupply)
+    if (mechanismQuorum === 'half') {
+      const supplyNeed = actualSupply.div(new BN(2)).add(defaultRequire)
+      return actualYesVote.mul(new BN(100)).div(supplyNeed)
+    }
 
-    if (mechanismQuorum === 'oneThird')
-      return actualYesVote.mul(new BN(300)).div(actualSupply)
+    if (mechanismQuorum === 'oneThird') {
+      const supplyNeed = actualSupply.div(new BN(3)).add(defaultRequire)
+      return actualYesVote.mul(new BN(100)).div(supplyNeed)
+    }
 
-    if (mechanismQuorum === 'twoThird')
-      return actualYesVote.mul(new BN(300)).div(actualSupply.mul(new BN(2)))
+    if (mechanismQuorum === 'twoThird') {
+      const supplyNeed = actualSupply
+        .mul(new BN(2))
+        .div(new BN(3))
+        .add(defaultRequire)
+
+      return actualYesVote.mul(new BN(100)).div(supplyNeed)
+    }
 
     return new BN(0)
-  }, [actualSupply, consensusQuorum, votingAgainstPower, votingForPower])
+  }, [
+    actualSupply,
+    consensusQuorum,
+    defaultRequire,
+    votingAgainstPower,
+    votingForPower,
+  ])
 
   const powerRequire = useMemo(() => {
     if (!consensusQuorum || !actualSupply || currentPower.gte(new BN(100)))
       return new BN(0)
     const actualYesVote = votingForPower.sub(votingAgainstPower)
-
     const mechanismQuorum = Object.keys(consensusQuorum)[0]
 
     if (mechanismQuorum === 'half')
-      return actualSupply.div(new BN(2)).sub(actualYesVote).add(new BN(1))
+      return actualSupply.div(new BN(2)).sub(actualYesVote).add(defaultRequire)
 
     if (mechanismQuorum === 'oneThird')
-      return actualSupply.div(new BN(3)).sub(actualYesVote).add(new BN(1))
+      return actualSupply.div(new BN(3)).sub(actualYesVote).add(defaultRequire)
 
     if (mechanismQuorum === 'twoThird')
       return actualSupply
         .mul(new BN(2))
         .div(new BN(3))
+        .add(defaultRequire)
         .sub(actualYesVote)
-        .add(new BN(1))
+
     return new BN(0)
   }, [
     actualSupply,
     consensusQuorum,
     currentPower,
+    defaultRequire,
     votingAgainstPower,
     votingForPower,
   ])
