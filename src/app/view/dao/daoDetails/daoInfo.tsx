@@ -118,7 +118,7 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
               </Col>
               <Col xs={12} sm={6}>
                 <StatisticCard
-                  title="Vote by"
+                  title="Vote By"
                   value={
                     isNft ? (
                       <AvatarNFT mintAddress={mint.toBase58()} />

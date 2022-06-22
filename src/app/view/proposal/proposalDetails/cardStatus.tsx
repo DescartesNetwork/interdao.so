@@ -75,7 +75,7 @@ const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
                     <Col span={24}>
                       <Space size={5}>
                         <IonIcon name="people-outline" />
-                        <Typography.Text>Member: {members}</Typography.Text>
+                        <Typography.Text>Voter(s): {members}</Typography.Text>
                       </Space>
                     </Col>
                   </Row>

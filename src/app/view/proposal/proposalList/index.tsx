@@ -145,7 +145,7 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
               onChange={setStatus}
               style={{ width: '100%', minWidth: 150 }}
             >
-              <Select.Option value="all-status">All status</Select.Option>
+              <Select.Option value="all-status">All Status</Select.Option>
               <Select.Option value="preparing">Preparing</Select.Option>
               <Select.Option value="voting">Voting</Select.Option>
               <Select.Option value="succeeded">Succeeded</Select.Option>

@@ -25,7 +25,7 @@ const DAO_TYPE = [
   },
   {
     key: 'multisig-dao',
-    label: 'MultiSig DAO (Coming soon)',
+    label: 'MultiSig DAO (Coming Soon)',
     description:
       'The Multisig DAO allows you to create an organization for your team members with Autonomous regime and jointly own, manage shared assets such as treasury accounts, NFTs or mints.',
     disabled: true,

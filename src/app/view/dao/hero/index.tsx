@@ -49,7 +49,7 @@ const Hero = () => {
           <Col xs={24} sm={12} lg={8}>
             <InfoCard
               icon={<IonIcon name="thumbs-up-outline" />}
-              title="Total executed proposals"
+              title="Total Executed Proposals"
               value={numeric(executeProposal).format('0,0')}
             />
           </Col>
