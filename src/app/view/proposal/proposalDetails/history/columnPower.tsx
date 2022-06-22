@@ -19,7 +19,7 @@ const ColumnPower = ({ receipt }: { receipt: ReceiptData }) => {
   return (
     <Typography.Text>
       {numeric(
-        utils.undecimalize(BigInt(power.toNumber()), mintDecimal),
+        utils.undecimalize(BigInt(power.toString()), mintDecimal),
       ).format('0,0.[0000]a')}
     </Typography.Text>
   )

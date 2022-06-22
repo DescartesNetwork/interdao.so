@@ -11,7 +11,7 @@ const Privacy = ({ isPublic, setIsPublic }: PrivacyProps) => {
   return (
     <Row gutter={[12, 12]}>
       <Col span={24}>
-        <Typography.Text>DAO privacy</Typography.Text>
+        <Typography.Text>DAO Privacy</Typography.Text>
       </Col>
       <Col>
         <Button

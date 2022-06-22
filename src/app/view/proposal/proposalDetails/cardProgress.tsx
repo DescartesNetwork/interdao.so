@@ -143,7 +143,7 @@ const CardProgress = ({
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Typography.Title level={5}>Current results</Typography.Title>
+          <Typography.Title level={5}>Current Results</Typography.Title>
         </Col>
         <Col span={24}>
           <Space size={0} style={{ width: '100%' }} direction="vertical">

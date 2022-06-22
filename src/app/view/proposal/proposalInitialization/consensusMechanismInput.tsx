@@ -38,11 +38,11 @@ const ConsensusMechanismInput = ({
                 <Col span={24}>
                   <Space direction="vertical">
                     <Typography.Text>
-                      <strong>Staked (Token) Counter.</strong> The power of a
+                      <strong>Staked (Token) Counter:</strong> The power of a
                       vote is only counted based on the number of staked tokens.
                     </Typography.Text>
                     <Typography.Text>
-                      <strong>Locked (Token) Counter.</strong> The power of a
+                      <strong>Locked (Token) Counter:</strong> The power of a
                       vote is the product of the number of staked tokens and the
                       lock time in seconds.
                     </Typography.Text>

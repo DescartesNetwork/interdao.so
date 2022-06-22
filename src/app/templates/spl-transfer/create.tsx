@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { useSelector } from 'react-redux'
+import { isAddress } from '@interdao/core'
 
 import { Button, Col, Row, Space } from 'antd'
 import { NumberInput, MintInput, AddressInput } from 'app/templates/components'
@@ -22,6 +23,11 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
     }
     return confirm(SplTransferIdl, { ...defaultData, ...templateData })
   }, [confirm, daoData.master, templateData])
+
+  const disabled =
+    !templateData[SplTransferIds.amount] ||
+    !isAddress(templateData[SplTransferIds.destination]) ||
+    !templateData[SplTransferIds.mint]
 
   return (
     <Row gutter={[24, 24]}>
@@ -54,7 +60,7 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
           <Button type="text" onClick={close}>
             Close
           </Button>
-          <Button type="primary" onClick={onConfirm} disabled={false}>
+          <Button type="primary" onClick={onConfirm} disabled={disabled}>
             Continue
           </Button>
         </Space>

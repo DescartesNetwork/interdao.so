@@ -58,13 +58,13 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
               value={shortenAddress(proposalAddress, 3)}
             />
             <RowSpaceBetween
-              label="Start time"
+              label="Start Time"
               value={moment(startDate?.toNumber() * 1000).format(
                 'MMM DD,yyyy HH:mm',
               )}
             />
             <RowSpaceBetween
-              label="End time"
+              label="End Time"
               value={moment(endDate?.toNumber() * 1000).format(
                 'MMM DD,yyyy HH:mm',
               )}
@@ -94,7 +94,7 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
               }
             />
             <RowSpaceBetween label="Quorum" value={quorum} />
-            <RowSpaceBetween label="Vote method" value={consensus} />
+            <RowSpaceBetween label="Vote Method" value={consensus} />
           </Space>
         </Col>
       </Row>

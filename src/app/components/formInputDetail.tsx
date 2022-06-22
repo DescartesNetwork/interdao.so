@@ -62,7 +62,7 @@ const FormInputDetail = ({ metadata, setMetadata }: FormInputDetailProps) => {
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Typography.Text>DAO name</Typography.Text>
+          <Typography.Text>DAO Name</Typography.Text>
           <Input
             placeholder="Input DAO name"
             onChange={onChange}
@@ -74,7 +74,7 @@ const FormInputDetail = ({ metadata, setMetadata }: FormInputDetailProps) => {
       </Col>
       <Col span={24}>
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Typography.Text>DAO description</Typography.Text>
+          <Typography.Text>DAO Description</Typography.Text>
           <Input.TextArea
             placeholder="Input DAO description"
             name="description"
@@ -132,7 +132,7 @@ const FormInputDetail = ({ metadata, setMetadata }: FormInputDetailProps) => {
       </Col>
       <Col span={24}>
         <Space direction="vertical" style={{ width: '100%' }}>
-          <Typography.Text>Social media (Optional)</Typography.Text>
+          <Typography.Text>Social Media (Optional)</Typography.Text>
           <Row gutter={[8, 8]}>
             {metadata.optionals.map((social, index) => (
               <Col span={24} key={index}>

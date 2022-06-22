@@ -136,7 +136,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
                         </Typography.Title>
                       </Tooltip>
                       <Tag className="dao-tag" style={{ margin: 0 }}>
-                        {isPublic ? 'Public' : 'Member only'}
+                        {isPublic ? 'Public' : 'Member Only'}
                       </Tag>
                       <Space size={2} style={{ marginLeft: -3 }}>
                         {metaData?.optionals?.map(
@@ -160,7 +160,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
                 <Row gutter={[16, 16]}>
                   <Col span={8}>
                     <StatisticCard
-                      title="Vote by"
+                      title="Vote By"
                       value={
                         isNft ? (
                           <AvatarNFT mintAddress={mint.toBase58()} />

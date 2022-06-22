@@ -148,7 +148,7 @@ const ProposalInitialization = () => {
           <Row gutter={[24, 24]}>
             <Col span={24}>
               <Typography.Title level={1}>
-                Input proposal information
+                Input Proposal Information
               </Typography.Title>
             </Col>
             <Col span={24} />
@@ -216,7 +216,7 @@ const ProposalInitialization = () => {
                 size="large"
                 disabled={disabled}
               >
-                Add a new Proposal
+                Add New Proposal
               </Button>
             </Col>
           </Row>

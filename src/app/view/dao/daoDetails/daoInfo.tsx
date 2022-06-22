@@ -98,8 +98,10 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
                     marginRight: -10,
                     marginTop: -20,
                   }}
-                  icon={<IonIcon name="open-outline" />}
-                />
+                  icon={<IonIcon name="settings-outline" />}
+                >
+                  Settings
+                </Button>
               </Col>
             </Row>
           </Col>
@@ -116,7 +118,7 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
               </Col>
               <Col xs={12} sm={6}>
                 <StatisticCard
-                  title="Vote by"
+                  title="Vote By"
                   value={
                     isNft ? (
                       <AvatarNFT mintAddress={mint.toBase58()} />

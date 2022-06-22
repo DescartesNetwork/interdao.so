@@ -3,9 +3,9 @@ import { useHistory } from 'react-router-dom'
 import { Row, Col, Button, Tabs } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import Hero from './hero'
-import CommunityDaos from './communityDaos'
-import YourDaos from './communityDaos/yourDao'
-import DaoCanJoin from './daoCanJoin'
+import PublicDaos from './publicDaos'
+import YourDaos from './publicDaos/yourDao'
+import AvailableDaos from './availabelDaos'
 import WithdrawNotificationModal from 'app/components/withdrawNotificationModal'
 
 import configs from 'app/configs'
@@ -40,14 +40,14 @@ const Dao = () => {
                 </Button>
               }
             >
-              <Tabs.TabPane tab="Community DAOs" key="community-daos">
-                <CommunityDaos />
+              <Tabs.TabPane tab="Public DAOs" key="public-daos">
+                <PublicDaos />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Available DAOs" key="available-daos">
+                <AvailableDaos />
               </Tabs.TabPane>
               <Tabs.TabPane tab="Your DAOs" key="your-daos">
                 <YourDaos />
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="DAOs can join" key="daos-can-join">
-                <DaoCanJoin />
               </Tabs.TabPane>
             </Tabs>
           </Col>

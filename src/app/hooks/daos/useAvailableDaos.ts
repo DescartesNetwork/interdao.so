@@ -9,7 +9,7 @@ import { DaoState } from 'app/model/daos.controller'
 import { MetaData } from 'app/model/createDao.controller'
 import useOwnerNFT from '../useOwnerNFT'
 
-const useDaoCanJoin = () => {
+const useAvailableDaos = () => {
   const daos = useSelector((state: AppState) => state.daos)
   const [filteredDaos, setFilteredDaos] = useState<DaoState>({})
   const { accounts } = useAccount()
@@ -38,8 +38,7 @@ const useDaoCanJoin = () => {
             mint,
             owner: new web3.PublicKey(wallet.address),
           })
-          const amount = accounts[tokenAccount.toBase58()]?.amount
-          if (!amount || !(Number(amount.toString()) > 0)) valid = false
+          if (!accounts[tokenAccount.toBase58()]) valid = false
         }
         if (daoType === 'flexible-dao' && isNft) {
           const myCollections = nfts?.map((nft) => nft.collection?.key)
@@ -60,4 +59,4 @@ const useDaoCanJoin = () => {
   return filteredDaos
 }
 
-export default useDaoCanJoin
+export default useAvailableDaos
