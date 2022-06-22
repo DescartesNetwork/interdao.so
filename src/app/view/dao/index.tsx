@@ -6,6 +6,7 @@ import Hero from './hero'
 import CommunityDaos from './communityDaos'
 import YourDaos from './communityDaos/yourDao'
 import DaoCanJoin from './daoCanJoin'
+import WithdrawNotificationModal from 'app/components/withdrawNotificationModal'
 
 import configs from 'app/configs'
 
@@ -52,6 +53,7 @@ const Dao = () => {
           </Col>
         </Row>
       </Col>
+      <WithdrawNotificationModal />
     </Row>
   )
 }
