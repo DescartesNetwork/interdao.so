@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Button } from 'antd'
@@ -14,38 +14,19 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
   const daoData = useSelector((state: AppState) => state.daos[daoAddress])
   const { confirm } = useConfirmIdl()
 
-  const generateData = useCallback(async () => {
-    dispatch(
-      setTemplateData({
-        id: BlankIds.source,
-        value: daoData.master.toBase58(),
-      }),
-    )
-    dispatch(
-      setTemplateData({
-        id: BlankIds.destination,
-        value: daoData.master.toBase58(),
-      }),
-    )
-    dispatch(
-      setTemplateData({
-        id: BlankIds.lamports,
-        value: '0',
-      }),
-    )
-    dispatch(
-      setTemplateData({
-        id: BlankIds.code,
-        value: '2',
-      }),
-    )
-  }, [daoData.master, dispatch])
-  useEffect(() => {
-    generateData()
-  }, [generateData])
+  const onConfirm = useCallback(async () => {
+    const defaultData: Record<string, string> = {
+      [BlankIds.code]: '2',
+      [BlankIds.lamports]: '0',
+      [BlankIds.source]: daoData.master.toBase58(),
+      [BlankIds.destination]: daoData.master.toBase58(),
+    }
+    await dispatch(setTemplateData(defaultData))
+    confirm(BlankIdl)
+  }, [confirm, daoData.master, dispatch])
 
   return (
-    <Button size="small" onClick={() => confirm(BlankIdl)} disabled={false}>
+    <Button size="small" onClick={onConfirm} disabled={false}>
       New blank proposal
     </Button>
   )
