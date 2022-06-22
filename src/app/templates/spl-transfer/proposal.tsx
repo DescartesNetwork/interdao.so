@@ -20,7 +20,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
   const templateData =
     useTemplateDataWithProposal<Record<SplTransferIds, string>>(proposalAddress)
 
-  const endTime = proposalData.endDate.toNumber()
+  const endTime = proposalData.endDate.toNumber() * 1000
   const mint = templateData.mint
 
   return (

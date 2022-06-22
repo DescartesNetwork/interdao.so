@@ -5,7 +5,6 @@ import { Button, Col, Row, Space } from 'antd'
 import { NumberInput, MintInput, AddressInput } from 'app/templates/components'
 
 import { AppState } from 'app/model'
-import useMetaData from 'app/hooks/useMetaData'
 import { SplTransferIdl, SplTransferIds } from '../spl-transfer/configs'
 import { PropsCreateComponent } from '../index'
 import { useConfirmIdl } from '../hooks/useConfirmIdl'
@@ -13,7 +12,6 @@ import { useConfirmIdl } from '../hooks/useConfirmIdl'
 const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
   const daoData = useSelector((state: AppState) => state.daos[daoAddress])
   const templateData = useSelector((state: AppState) => state.template.data)
-  const { metaData: daoMetaData } = useMetaData(daoAddress)
   const { confirm, close } = useConfirmIdl()
 
   const onConfirm = useCallback(async () => {
@@ -39,7 +37,7 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
           id={SplTransferIds.source}
           title="Sender's Wallet Address"
           placeholder="Input Sender's Wallet Address"
-          disabled={daoMetaData?.daoType === 'multisig-dao'}
+          disabled
           defaultValue={daoData.master.toBase58()}
         />
       </Col>
