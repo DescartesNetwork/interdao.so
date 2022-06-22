@@ -22,12 +22,14 @@ const useWithdrawable = () => {
     let filteredReceipts: (ReceiptData & { address: string })[] = []
     let filteredProposals: ProposalState = {}
     for (const proposalAddress in proposals) {
-      const receipts = await getReceipts(proposalAddress)
+      let receipts = await getReceipts(proposalAddress)
+
       for (const receipt in receipts) {
         if (
           receipts[receipt].authority.toBase58() === walletAddress &&
           Number(proposals[proposalAddress].endDate) < Date.now() / 1000 &&
-          proposals[proposalAddress]
+          proposals[proposalAddress] &&
+          receipts[receipt].amount.toNumber() > 0
         ) {
           filteredReceipts.push({ ...receipts[receipt], address: receipt })
           const proposalAddress = receipts[receipt].proposal.toBase58()
