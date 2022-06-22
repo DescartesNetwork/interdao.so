@@ -32,7 +32,7 @@ const ProposalPreview = ({ daoAddress }: ProposalPreviewProps) => {
       </Col>
       <Col xs={12} md={5}>
         <StatisticCard
-          title="Token"
+          title="Vote By"
           value={
             <Space>
               <MintAvatar mintAddress={mint.toBase58()} />

@@ -56,7 +56,7 @@ const FlexibleDaoReview = () => {
       <Col xs={24} md={12}>
         <Space direction="vertical" size={24}>
           <Space direction="vertical">
-            <Typography.Text type="secondary">Token to vote</Typography.Text>
+            <Typography.Text type="secondary">Vote By</Typography.Text>
             {isNft ? (
               <AvatarNFT mintAddress={mintAddress} size={32} />
             ) : (
