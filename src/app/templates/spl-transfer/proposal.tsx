@@ -20,7 +20,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
   const templateData =
     useTemplateDataWithProposal<Record<SplTransferIds, string>>(proposalAddress)
 
-  const endTime = proposalData.endDate.toNumber()
+  const endTime = proposalData.endDate.toNumber() * 1000
   const mint = templateData.mint
 
   return (
@@ -56,7 +56,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
           <RowSpaceVertical
             className="t-16"
             label="Transfer amount"
-            value={templateData?.amount || '--'}
+            value={!mint ? '--' : templateData.amount}
           />
         </Col>
         <Col xs={12} md={6}>
