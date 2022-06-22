@@ -5,6 +5,7 @@ import { PublicKey } from '@solana/web3.js'
 import { AppDispatch } from 'app/model'
 import configs from 'app/configs'
 import { getProposal, getProposals } from 'app/model/proposal.controller'
+import { addLoading, clearLoading } from 'app/model/loading.controller'
 
 const {
   sol: { interDao },
@@ -28,8 +29,19 @@ const ProposalWatcher = () => {
 
   const reloadProposalData = useCallback(
     ({ proposal: proposalPublicKey }: { proposal: PublicKey }) => {
-      const proposalAddress = proposalPublicKey.toBase58()
-      return dispatch(getProposal({ address: proposalAddress, force: true }))
+      dispatch(
+        addLoading({
+          id: 'fetch-proposal',
+          message: 'Welcome to InterDAO. Loading Proposals...',
+        }),
+      )
+      try {
+        const proposalAddress = proposalPublicKey.toBase58()
+        return dispatch(getProposal({ address: proposalAddress, force: true }))
+      } catch (error) {
+      } finally {
+        dispatch(clearLoading('fetch-proposal'))
+      }
     },
     [dispatch],
   )

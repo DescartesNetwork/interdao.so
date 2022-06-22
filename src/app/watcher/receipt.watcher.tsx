@@ -7,6 +7,7 @@ import { account } from '@senswap/sen-js'
 import { AppDispatch } from 'app/model'
 import configs from 'app/configs'
 import { getReceipt, getReceipts } from 'app/model/receipt.controller'
+import { addLoading, clearLoading } from 'app/model/loading.controller'
 
 const {
   sol: { interDao },
@@ -31,8 +32,19 @@ const ReceiptWatcher = () => {
 
   const reloadReceiptData = useCallback(
     ({ receipt: receiptPublicKey }: { receipt: PublicKey }) => {
-      const receiptAddress = receiptPublicKey.toBase58()
-      return dispatch(getReceipt({ address: receiptAddress, force: true }))
+      dispatch(
+        addLoading({
+          id: 'fetch-receipt',
+          message: 'Welcome to InterDAO. Loading Receipts...',
+        }),
+      )
+      try {
+        const receiptAddress = receiptPublicKey.toBase58()
+        return dispatch(getReceipt({ address: receiptAddress, force: true }))
+      } catch (error) {
+      } finally {
+        dispatch(clearLoading('fetch-proposal'))
+      }
     },
     [dispatch],
   )
