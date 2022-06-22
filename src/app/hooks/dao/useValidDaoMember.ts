@@ -21,9 +21,10 @@ const useValidDaoMember = (daoAddress: string) => {
   const { nfts } = useOwnerNFT(myAddress)
 
   const isMemberOnlyNFT = useMemo(() => {
-    if (!nfts) return false
+    if (!nfts || !daoMint) return false
     for (const nft of nfts)
       if (nft.collection?.key === daoMint.toBase58()) return true
+
     return false
   }, [daoMint, nfts])
 

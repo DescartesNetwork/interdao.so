@@ -9,7 +9,7 @@ import { DaoState } from 'app/model/daos.controller'
 import { MetaData } from 'app/model/createDao.controller'
 import useOwnerNFT from '../useOwnerNFT'
 
-const useDaoCanJoin = () => {
+const useAvailableDaos = () => {
   const daos = useSelector((state: AppState) => state.daos)
   const [filteredDaos, setFilteredDaos] = useState<DaoState>({})
   const { accounts } = useAccount()
@@ -60,4 +60,4 @@ const useDaoCanJoin = () => {
   return filteredDaos
 }
 
-export default useDaoCanJoin
+export default useAvailableDaos

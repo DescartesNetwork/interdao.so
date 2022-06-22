@@ -8,17 +8,17 @@ import Mechanisms from './mechanisms'
 import TypeOfDAO from './typeOfDao'
 
 import useSearchDao from 'app/hooks/useSearchDao'
-import useCommunityDaos from 'app/hooks/daos/useCommunityDaos'
+import usePublicDaos from 'app/hooks/daos/usePublicDaos'
 
 import './index.less'
 
-const CommunityDaos = () => {
+const PublicDaos = () => {
   const [mechanisms, setMechanisms] = useState('all')
   const [searchKey, setSearchKey] = useState('')
   const [type, setType] = useState('all')
-  const communityDaos = useCommunityDaos(type, mechanisms)
+  const publicDaos = usePublicDaos(type, mechanisms)
 
-  const daos = useMemo(() => Object.keys(communityDaos), [communityDaos])
+  const daos = useMemo(() => Object.keys(publicDaos), [publicDaos])
   const { searchData, loading } = useSearchDao(searchKey, daos)
 
   return (
@@ -42,7 +42,7 @@ const CommunityDaos = () => {
           <Empty />
         </Col>
       ) : (
-        (searchData || Object.keys(communityDaos)).map((daoAddress) => (
+        (searchData || Object.keys(publicDaos)).map((daoAddress) => (
           <Col key={daoAddress} xs={24} md={12} xl={8}>
             <LazyLoad height={479.75} offset={2}>
               <DaoCard daoAddress={daoAddress} />
@@ -54,4 +54,4 @@ const CommunityDaos = () => {
   )
 }
 
-export default CommunityDaos
+export default PublicDaos

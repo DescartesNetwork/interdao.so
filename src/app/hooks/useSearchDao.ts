@@ -3,7 +3,7 @@ import { account } from '@senswap/sen-js'
 
 import DaoProvider, {
   RegisterDaoData,
-} from 'app/view/dao/communityDaos/search/daoProvider'
+} from 'app/view/dao/publicDaos/search/daoProvider'
 import usePDB from './usePDB'
 import { MetaData } from 'app/model/createDao.controller'
 
