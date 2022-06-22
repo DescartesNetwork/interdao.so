@@ -1,0 +1,2 @@
+"use strict";(globalThis.webpackChunkinterdao=globalThis.webpackChunkinterdao||[]).push([["src_app_templates_blank_info_tsx"],{61889:(a,e,l)=>{l.r(e),l.d(e,{default:()=>r});var s=l(92281),t=l(45263);const r=a=>{let{proposalAddress:e}=a;return(0,t.jsx)(s.Z,{label:"Template",value:"Blank"})}}}]);
+//# sourceMappingURL=src_app_templates_blank_info_tsx.44bdbaa0.chunk.js.map
