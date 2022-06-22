@@ -23,7 +23,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
       </Col>
       <Col span={24}>
         <RowSpaceBetween
-          label="Token to be transferred"
+          label="Token To Be Transferred"
           value={
             <Space>
               <MintAvatar mintAddress={mint} />
@@ -34,7 +34,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
       </Col>
       <Col span={24}>
         <RowSpaceBetween
-          label="Transfer amount"
+          label="Transfer Amount"
           value={templateData?.amount || '--'}
         />
       </Col>

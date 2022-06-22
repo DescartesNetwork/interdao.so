@@ -80,7 +80,7 @@ const WithdrawNotificationModal = () => {
               Voting is over!
             </Typography.Title>
             <Typography.Text type="secondary">
-              Your tokens and NFTs can be withdraw from the proposals below.
+              Your tokens and NFTs can be withdrawn from the proposals below.
             </Typography.Text>
           </Space>
         </Col>

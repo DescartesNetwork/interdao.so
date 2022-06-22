@@ -7,12 +7,8 @@ type TypeOfDAOProps = {
 
 const TypeOfDAO = ({ value, setType }: TypeOfDAOProps) => {
   return (
-    <Select
-      value={value}
-      style={{ textTransform: 'capitalize', width: '100%' }}
-      onChange={setType}
-    >
-      <Select.Option value="all">All type of DAO</Select.Option>
+    <Select value={value} style={{ width: '100%' }} onChange={setType}>
+      <Select.Option value="all">All Type of DAO</Select.Option>
       <Select.Option value="flexible-dao">Flexible DAO</Select.Option>
       <Select.Option value="multisig-dao">Multisig DAO</Select.Option>
     </Select>

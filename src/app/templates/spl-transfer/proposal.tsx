@@ -41,7 +41,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
         </Col>
         <Col xs={12} md={6}>
           <RowSpaceVertical
-            label="Token to be transferred"
+            label="Token To Be Transferred"
             value={
               <Typography.Text className="t-16">
                 <Space>
@@ -55,13 +55,13 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
         <Col xs={12} md={6}>
           <RowSpaceVertical
             className="t-16"
-            label="Transfer amount"
+            label="Transfer Amount"
             value={!mint ? '--' : templateData.amount}
           />
         </Col>
         <Col xs={12} md={6}>
           <RowSpaceVertical
-            label="End time"
+            label="End Time"
             value={
               endTime && (
                 <Typography.Text className="t-16">

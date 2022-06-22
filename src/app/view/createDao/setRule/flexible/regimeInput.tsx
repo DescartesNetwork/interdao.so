@@ -35,15 +35,15 @@ const RegimeInput = ({ value, onChangeRegime }: RegimeInputProps) => {
                 <Col span={24}>
                   <Space direction="vertical">
                     <Typography.Text>
-                      <strong>Dictatorial.</strong> Only DAO owner can create
+                      <strong>Dictatorial:</strong> Only DAO owner can create
                       and execute proposals.
                     </Typography.Text>
                     <Typography.Text>
-                      <strong>Democratic.</strong> Community can create
+                      <strong>Democratic:</strong> Community can create
                       proposals, DAO owner execute proposals.
                     </Typography.Text>
                     <Typography.Text>
-                      <strong>Autonomous.</strong> Community can create and
+                      <strong>Autonomous:</strong> Community can create and
                       execute proposals.
                     </Typography.Text>
                   </Space>

@@ -22,7 +22,7 @@ const TokenAddressInput = ({
     <Row gutter={[8, 8]}>
       <Col span={24}>
         <Space size={32}>
-          <Typography.Text>Vote by</Typography.Text>
+          <Typography.Text>Vote By</Typography.Text>
           <Space size={12}>
             <Button
               onClick={() => onNftChange(false)}

@@ -46,7 +46,7 @@ const CardVoteToken = ({
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Typography.Title level={5}>Cast your votes</Typography.Title>
+          <Typography.Title level={5}>Cast Your Votes</Typography.Title>
         </Col>
         {!isMultisigDAO && !isComplete && (
           <Col span={24}>
@@ -57,7 +57,7 @@ const CardVoteToken = ({
             >
               <Row gutter={[8, 8]}>
                 <Col flex="auto">
-                  <Typography.Text>Amount votes</Typography.Text>
+                  <Typography.Text>Amount Votes</Typography.Text>
                 </Col>
                 <Col>
                   <Typography.Text>
