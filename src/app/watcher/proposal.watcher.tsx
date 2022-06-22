@@ -13,7 +13,6 @@ const ProposalWatcher = () => {
   const reloadProposalData = useCallback(
     ({ proposal: proposalPublicKey }: { proposal: PublicKey }) => {
       const proposalAddress = proposalPublicKey.toBase58()
-      console.log('reloadProposalData', reloadProposalData)
       return dispatch(getProposal({ address: proposalAddress, force: true }))
     },
     [dispatch],

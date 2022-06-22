@@ -24,7 +24,6 @@ const ReceiptWatcher = () => {
       receipt: PublicKey
       proposal?: PublicKey
     }) => {
-      console.log('reload')
       const receiptAddress = receiptPublicKey.toBase58()
       if (proposal) {
         const proposalAddress = proposal.toBase58()

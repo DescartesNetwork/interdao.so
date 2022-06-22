@@ -104,7 +104,6 @@ export const parserIxDataNoPrefix = async (
 ) => {
   const program = await getProgram(templateIdl)
   const accounts = await parserAccounts(templateIdl, templateData)
-  console.log('accounts', accounts)
   const args = await parserArgs(templateIdl, templateData)
   const ix = await program.methods[DEFAULT_IX_NAME].call(this, ...args)
     .accounts(accounts)
