@@ -20,7 +20,7 @@ const useValidDaoMember = (daoAddress: string) => {
   } = useWallet()
   const { nfts } = useOwnerNFT(myAddress)
 
-  const checkMemberOnlyNFT = useCallback(async () => {
+  const isMemberOnlyNFT = useMemo(() => {
     if (!nfts) return false
     for (const nft of nfts)
       if (nft.collection?.key === daoMint.toBase58()) return true
@@ -46,11 +46,11 @@ const useValidDaoMember = (daoAddress: string) => {
     return valid
   }, [metaData, myAddress])
 
-  const checkDaoMember = useCallback(async () => {
+  const checkDaoMember = useCallback(() => {
     if (!metaData || !daoMint) return setChecking(true)
     const { daoType } = metaData
     let valid = false
-    if (daoType === 'flexible-dao' && isNft) valid = await checkMemberOnlyNFT()
+    if (daoType === 'flexible-dao' && isNft) valid = isMemberOnlyNFT
 
     if (daoType === 'flexible-dao' && !isNft) valid = isMemberTokenDAO
 
@@ -59,12 +59,12 @@ const useValidDaoMember = (daoAddress: string) => {
     setValidMember(valid)
     setChecking(false)
   }, [
-    daoMint,
     metaData,
+    daoMint,
     isNft,
+    isMemberOnlyNFT,
     isMemberTokenDAO,
     isMemberMultisig,
-    checkMemberOnlyNFT,
   ])
 
   useEffect(() => {
