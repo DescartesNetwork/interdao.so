@@ -6,6 +6,7 @@ import { Col, Row, Space } from 'antd'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import StatisticCard from 'app/components/statisticCard'
 import RegimeTag from 'app/components/regimeTag'
+import AvatarNFT from 'app/components/avatarNFT'
 
 import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
@@ -17,7 +18,7 @@ export type ProposalPreviewProps = {
 
 const ProposalPreview = ({ daoAddress }: ProposalPreviewProps) => {
   const daos = useSelector((state: AppState) => state.daos)
-  const { regime, mint } =
+  const { regime, mint, isNft } =
     daos[daoAddress] ||
     ({
       regime: {},
@@ -34,10 +35,14 @@ const ProposalPreview = ({ daoAddress }: ProposalPreviewProps) => {
         <StatisticCard
           title="Vote By"
           value={
-            <Space>
-              <MintAvatar mintAddress={mint.toBase58()} />
-              <MintSymbol mintAddress={mint.toBase58()} />
-            </Space>
+            isNft ? (
+              <AvatarNFT mintAddress={mint.toBase58()} />
+            ) : (
+              <Space>
+                <MintAvatar mintAddress={mint.toBase58()} />
+                <MintSymbol mintAddress={mint.toBase58()} />
+              </Space>
+            )
           }
         />
       </Col>
