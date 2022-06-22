@@ -1,5 +1,5 @@
 import { utils } from '@project-serum/anchor'
-import { TemplateIdl } from '../index'
+import { TemplateIdl, TemplateNames } from '../index'
 
 export enum BlankIds {
   // Accounts
@@ -13,7 +13,7 @@ export enum BlankIds {
 }
 
 export const BlankIdl: TemplateIdl = {
-  name: 'blank',
+  name: TemplateNames.BlankTemplate,
   accounts: [
     {
       name: BlankIds.source,

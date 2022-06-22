@@ -1,7 +1,4 @@
 import { RulesData, RulesName } from './core/rule'
-import { SplTransferIdl } from './spl-transfer/configs'
-import { SplApproveIdl } from './spl-approve/configs'
-import { BlankIdl } from './blank/configs'
 
 // Config
 export enum TemplateNames {
@@ -9,18 +6,14 @@ export enum TemplateNames {
   'SplApprove' = 'spl-approve',
   'BlankTemplate' = 'blank',
 }
-export const Templates: Record<TemplateNames, TemplateIdl> = {
-  [TemplateNames.SplTransfer]: SplTransferIdl,
-  [TemplateNames.SplApprove]: SplApproveIdl,
-  [TemplateNames.BlankTemplate]: BlankIdl,
-}
+
 // Component Type
 export type PropsCreateComponent = {
   daoAddress: string
 }
 // System type
 export type TemplateIdl = {
-  name: string
+  name: TemplateNames
   accounts: (TemplateAccount | TemplateAccountWithRule)[]
   args: (TemplateArg | TemplateArgWithRule)[]
   programId: string

@@ -1,6 +1,6 @@
 import { utils } from '@project-serum/anchor'
 import { RulesName } from '../core/rule'
-import { TemplateIdl } from '../index'
+import { TemplateIdl, TemplateNames } from '../index'
 
 export enum SplApproveIds {
   // Accounts
@@ -15,7 +15,7 @@ export enum SplApproveIds {
 }
 
 export const SplApproveIdl: TemplateIdl = {
-  name: 'spl-approve',
+  name: TemplateNames.SplApprove,
   accounts: [
     {
       name: SplApproveIds.source,
