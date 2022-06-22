@@ -1,5 +1,3 @@
-import { utils } from '@senswap/sen-js'
-
 import { Col, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import { PropsTemplateProposalLoader } from '../templateLoader'
@@ -7,7 +5,6 @@ import RowSpaceBetween from 'app/components/rowSpaceBetween'
 import IconCopy from 'app/components/iconCopy'
 
 import { useTemplateDataWithProposal } from '../hooks/useTemplateDataWithProposal'
-import useMintDecimals from 'shared/hooks/useMintDecimals'
 import { SplTransferIds } from './configs'
 import { explorer, shortenAddress } from 'shared/util'
 
@@ -16,7 +13,6 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
     useTemplateDataWithProposal<Record<SplTransferIds, string>>(proposalAddress)
 
   const mint = templateData.mint
-  const decimals = useMintDecimals(mint) || 0
   const source = templateData?.source || ''
   const destination = templateData?.destination || ''
 
@@ -39,11 +35,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
       <Col span={24}>
         <RowSpaceBetween
           label="Transfer amount"
-          value={
-            !mint
-              ? '--'
-              : utils.undecimalize(BigInt(templateData.amount), decimals)
-          }
+          value={templateData?.amount || '--'}
         />
       </Col>
       <Col span={24}>
