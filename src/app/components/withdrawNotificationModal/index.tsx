@@ -87,9 +87,9 @@ const WithdrawNotificationModal = () => {
         </Col>
         <Col span={24}>
           <Row gutter={[24, 24]}>
-            {Object.keys(withdrawableProposals).map((value, index) => {
+            {Object.keys(withdrawableProposals).map((value) => {
               return (
-                <Col span={24}>
+                <Col span={24} key={value}>
                   <ProposalItem proposalAddress={value} />
                 </Col>
               )
