@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Button, Col, Row, Space } from 'antd'
@@ -17,26 +17,15 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
   const { metaData: daoMetaData } = useMetaData(daoAddress)
   const { confirm, close } = useConfirmIdl()
 
-  const generateData = useCallback(async () => {
-    const defaults = [
-      {
-        id: SplTransferIds.authority,
-        value: daoData.master.toBase58(),
-      },
-      {
-        id: SplTransferIds.code,
-        value: '3',
-      },
-      {
-        id: SplTransferIds.source,
-        value: daoData.master.toBase58(),
-      },
-    ]
-    defaults.map((elm) => dispatch(setTemplateData(elm)))
-  }, [daoData.master, dispatch])
-  useEffect(() => {
-    generateData()
-  }, [generateData])
+  const onConfirm = useCallback(async () => {
+    const defaultData = {
+      [SplTransferIds.code]: '3',
+      [SplTransferIds.authority]: daoData.master.toBase58(),
+      [SplTransferIds.source]: daoData.master.toBase58(),
+    }
+    await dispatch(setTemplateData(defaultData))
+    return confirm(SplTransferIdl)
+  }, [confirm, daoData.master, dispatch])
 
   return (
     <Row gutter={[24, 24]}>
@@ -53,6 +42,7 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
           title="Sender's Wallet Address"
           placeholder="Input Sender's Wallet Address"
           disabled={daoMetaData?.daoType === 'multisig-dao'}
+          defaultValue={daoData.master.toBase58()}
         />
       </Col>
       <Col span={24}>
@@ -68,11 +58,7 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
           <Button type="text" onClick={close}>
             Close
           </Button>
-          <Button
-            type="primary"
-            onClick={() => confirm(SplTransferIdl)}
-            disabled={false}
-          >
+          <Button type="primary" onClick={onConfirm} disabled={false}>
             Continue
           </Button>
         </Space>
