@@ -32,8 +32,6 @@ const TIME_RECHECK = 500
 const watcherState: Record<string, WatchState> = {}
 
 const reloadData = (event: string, data: any) => {
-  console.log('event', event)
-  console.log('watcherState', watcherState)
   const callbacks = watcherState[event].callbacks
   for (const callback of callbacks) {
     callback(data)

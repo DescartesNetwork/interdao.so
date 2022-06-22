@@ -78,7 +78,6 @@ export const getReceipt = createAsyncThunk<
   } = getState()
   if (data && !force) return { [address]: data }
   const raw = await interDao.getReceiptData(address)
-  console.log('raw', raw)
   return { [address]: raw }
 })
 
