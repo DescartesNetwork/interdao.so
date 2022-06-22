@@ -10,7 +10,7 @@ import { AppState } from 'app/model'
 const currentDate = Math.floor(Number(new Date()) / 1000)
 
 const useProposalStatus = (proposalAddress: string) => {
-  const { proposal } = useSelector((state: AppState) => state)
+  const proposal = useSelector((state: AppState) => state.proposal)
   const {
     startDate,
     endDate,
@@ -53,12 +53,13 @@ const useProposalStatus = (proposalAddress: string) => {
   }, [actualSupply, consensusQuorum, votingAgainstPower, votingForPower])
 
   const status: ProposalStatusType = useMemo(() => {
+    if (!proposal) return 'Loading'
     if (currentDate < Number(startDate)) return 'Preparing'
     if (currentDate < Number(endDate)) return 'Voting'
     if (executed) return 'Executed'
     if (isSuccess) return 'Succeeded'
     return 'Failed'
-  }, [endDate, executed, isSuccess, startDate])
+  }, [endDate, executed, isSuccess, proposal, startDate])
 
   return { status, isSuccess, actualSupply }
 }

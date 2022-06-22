@@ -27,7 +27,8 @@ const DAO_TYPE = [
     key: 'multisig-dao',
     label: 'MultiSig DAO',
     description:
-      'The Multisig DAO allows you to create an organization for your team members with Autonomous regime and jointly own, manage shared assets such as treasury accounts, NFTs or mints.',
+      'The Multisig DAO allows you to create an organization for your team members with Autonomous regime and jointly own, manage shared assets such as treasury accounts, NFTs or mints. (Coming soon) ',
+    disabled: true,
   },
 ]
 
@@ -52,9 +53,13 @@ const ChooseDaoType = () => {
           className="btn-radio-card"
         >
           <Row gutter={[24, 24]}>
-            {DAO_TYPE.map(({ key, label, description }) => (
+            {DAO_TYPE.map(({ key, label, description, disabled }) => (
               <Col xs={24} md={12} key={key}>
-                <Radio.Button value={key} style={{ border: 'none' }}>
+                <Radio.Button
+                  value={key}
+                  style={{ border: 'none' }}
+                  disabled={disabled}
+                >
                   <Card
                     style={{ ...cardBorder(key) }}
                     className={`group-btn-card ${key} ${

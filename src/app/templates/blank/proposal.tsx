@@ -14,7 +14,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
     (state: AppState) => state.proposal[proposalAddress],
   )
 
-  const endTime = proposalData.endDate.toNumber()
+  const endTime = proposalData.endDate.toNumber() * 1000
 
   return (
     <ProposalTemplateCard
