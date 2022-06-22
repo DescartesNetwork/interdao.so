@@ -42,9 +42,9 @@ const useDaoCanJoin = () => {
           if (!amount || !(Number(amount.toString()) > 0)) valid = false
         }
         if (daoType === 'flexible-dao' && isNft) {
-          if (!nfts) return
-          for (const nft of nfts)
-            if (nft.collection?.key !== mint.toBase58()) return (valid = false)
+          const myCollections = nfts?.map((nft) => nft.collection?.key)
+          if (!myCollections || !myCollections.includes(mint.toBase58()))
+            valid = false
         }
 
         if (valid) filteredDaos[addr] = daoData
