@@ -7,6 +7,7 @@ import { account } from '@senswap/sen-js'
 import { AppDispatch } from 'app/model'
 import configs from 'app/configs'
 import { getReceipt, getReceipts } from 'app/model/receipt.controller'
+import { addLoading, clearLoading } from 'app/model/loading.controller'
 
 const {
   sol: { interDao },
@@ -40,6 +41,12 @@ const ReceiptWatcher = () => {
   // First-time fetching
   const fetchData = useCallback(async () => {
     try {
+      dispatch(
+        addLoading({
+          id: 'fetch-receipt',
+          message: 'Welcome to InterDAO. Loading Receipts...',
+        }),
+      )
       if (!account.isAddress(walletAddress)) return
       await dispatch(getReceipts({ authorityAddress: walletAddress })).unwrap()
     } catch (er) {
@@ -47,8 +54,11 @@ const ReceiptWatcher = () => {
         type: 'error',
         description: 'Cannot fetch data of receipts',
       })
+    } finally {
+      dispatch(clearLoading('fetch-receipt'))
     }
   }, [dispatch, walletAddress])
+
   // Watch dao events
   const watchData = useCallback(async () => {
     watchVoteFor = setInterval(async () => {

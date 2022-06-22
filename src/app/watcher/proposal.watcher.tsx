@@ -5,6 +5,7 @@ import { PublicKey } from '@solana/web3.js'
 import { AppDispatch } from 'app/model'
 import configs from 'app/configs'
 import { getProposal, getProposals } from 'app/model/proposal.controller'
+import { addLoading, clearLoading } from 'app/model/loading.controller'
 
 const {
   sol: { interDao },
@@ -33,6 +34,28 @@ const ProposalWatcher = () => {
     },
     [dispatch],
   )
+
+  // First-time fetching
+  const fetchData = useCallback(async () => {
+    try {
+      dispatch(
+        addLoading({
+          id: 'fetch-proposals',
+          message: 'Welcome to InterDAO. Loading proposal...',
+        }),
+      )
+      dispatch(getProposals()) //fetch all proposal
+    } catch (er) {
+      return window.notify({
+        type: 'error',
+        description: 'Cannot fetch data of DAOs',
+      })
+    } finally {
+      setTimeout(() => {
+        dispatch(clearLoading('fetch-proposals'))
+      }, 2000)
+    }
+  }, [dispatch])
 
   // Watch dao events
   const watchData = useCallback(async () => {
@@ -72,8 +95,8 @@ const ProposalWatcher = () => {
 
   useEffect(() => {
     // I don't understand why but this fixes the watcher error
+    fetchData()
     watchData()
-    dispatch(getProposals()) //fetch all proposal
     // Unwatch (cancel socket)
     return () => {
       ;(async () => {
@@ -92,7 +115,7 @@ const ProposalWatcher = () => {
         }
       })()
     }
-  }, [dispatch, watchData])
+  }, [dispatch, fetchData, watchData])
 
   return <Fragment />
 }

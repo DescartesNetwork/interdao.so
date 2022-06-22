@@ -36,43 +36,44 @@ const View = () => {
 
   return (
     <Row gutter={[24, 24]} justify="center">
-      <Col span={24}>
-        <Switch>
-          <Route exact path={`/app/${appId}/dao`} component={Dao} />
-          <Route
-            exact
-            path={`/app/${appId}/dao/create-dao`}
-            component={CreateDao}
-          />
-          <Route
-            exact
-            path={`/app/${appId}/dao/:daoAddress`}
-            component={Proposal}
-          />
-          <Route
-            exact
-            path={`/app/${appId}/dao/:daoAddress/edit`}
-            component={EditDAO}
-          />
-          <Route
-            exact
-            path={`/app/${appId}/dao/:daoAddress/new-proposal`}
-            component={ProposalInitialization}
-          />
-          <Route
-            exact
-            path={`/app/${appId}/dao/:daoAddress/proposal/:proposalAddress`}
-            component={ProposalDetails}
-          />
-          <Redirect from="*" to={`/app/${appId}/dao`} />
-        </Switch>
-      </Col>
+      <Loading>
+        <Col span={24}>
+          <Switch>
+            <Route exact path={`/app/${appId}/dao`} component={Dao} />
+            <Route
+              exact
+              path={`/app/${appId}/dao/create-dao`}
+              component={CreateDao}
+            />
+            <Route
+              exact
+              path={`/app/${appId}/dao/:daoAddress`}
+              component={Proposal}
+            />
+            <Route
+              exact
+              path={`/app/${appId}/dao/:daoAddress/edit`}
+              component={EditDAO}
+            />
+            <Route
+              exact
+              path={`/app/${appId}/dao/:daoAddress/new-proposal`}
+              component={ProposalInitialization}
+            />
+            <Route
+              exact
+              path={`/app/${appId}/dao/:daoAddress/proposal/:proposalAddress`}
+              component={ProposalDetails}
+            />
+            <Redirect from="*" to={`/app/${appId}/dao`} />
+          </Switch>
+        </Col>
+      </Loading>
       <Col span={24} />
       <DaoWatcher />
       <ProposalWatcher />
       <ReceiptWatcher />
       <MetadataWatcher />
-      <Loading />
     </Row>
   )
 }

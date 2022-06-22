@@ -5,9 +5,9 @@ import { useWallet } from '@senhub/providers'
 
 import { AppState } from 'app/model'
 import { ProposalState } from 'app/model/proposal.controller'
-import { getReceipts } from './useReceipts'
 
 const useWithdrawable = () => {
+  const receipts = useSelector((state: AppState) => state.receipt)
   const proposals = useSelector((state: AppState) => state.proposal)
   const [withdrawableProposals, setWithdrawableProposals] =
     useState<ProposalState>({})
@@ -21,27 +21,27 @@ const useWithdrawable = () => {
   const filterWithdrawable = useCallback(async () => {
     let filteredReceipts: (ReceiptData & { address: string })[] = []
     let filteredProposals: ProposalState = {}
-    for (const proposalAddress in proposals) {
-      let receipts = await getReceipts(proposalAddress)
-
-      for (const receipt in receipts) {
-        if (
-          receipts[receipt].authority.toBase58() === walletAddress &&
-          Number(proposals[proposalAddress].endDate) < Date.now() / 1000 &&
-          proposals[proposalAddress] &&
-          receipts[receipt].amount.toNumber() > 0
-        ) {
-          filteredReceipts.push({ ...receipts[receipt], address: receipt })
-          const proposalAddress = receipts[receipt].proposal.toBase58()
-          if (!filteredProposals[proposalAddress]) {
-            filteredProposals[proposalAddress] = proposals[proposalAddress]
-          }
+    for (const receiptAddr in receipts) {
+      const proposalAddress = receipts[receiptAddr].proposal.toBase58()
+      if (
+        receipts[receiptAddr].authority.toBase58() === walletAddress &&
+        Number(proposals[proposalAddress].endDate) < Date.now() / 1000 &&
+        proposals[proposalAddress] &&
+        receipts[receiptAddr].amount.toNumber() > 0
+      ) {
+        filteredReceipts.push({
+          ...receipts[receiptAddr],
+          address: receiptAddr,
+        })
+        const proposalAddress = receipts[receiptAddr].proposal.toBase58()
+        if (!filteredProposals[proposalAddress]) {
+          filteredProposals[proposalAddress] = proposals[proposalAddress]
         }
       }
     }
     setWithdrawableProposals(filteredProposals)
     setWithdrawableReceipts(filteredReceipts)
-  }, [proposals, walletAddress])
+  }, [proposals, receipts, walletAddress])
 
   useEffect(() => {
     filterWithdrawable()
