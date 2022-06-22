@@ -5,7 +5,7 @@ import { Card, Image, Typography } from 'antd'
 import autonomous from 'app/static/images/system/bg-autonomous.png'
 import democratic from 'app/static/images/system/bg-democratic.png'
 import dictatorial from 'app/static/images/system/bg-dictatorial.png'
-import { DaoCardBackground } from '../../dao/communityDaos/daoCard'
+import { DaoCardBackground } from '../../dao/publicDaos/daoCard'
 
 const DAO_CARD_BG = {
   autonomous,

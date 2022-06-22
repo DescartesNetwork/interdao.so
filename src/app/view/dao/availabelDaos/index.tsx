@@ -2,13 +2,13 @@ import { useMemo } from 'react'
 import LazyLoad from '@sentre/react-lazyload'
 
 import { Empty, Col, Row } from 'antd'
-import DaoCard from '../communityDaos/daoCard'
+import DaoCard from '../publicDaos/daoCard'
 
-import useDaoCanJoin from 'app/hooks/daos/useDaoCanJoin'
+import useAvailableDaos from 'app/hooks/daos/useAvailableDaos'
 
-const DaoCanJoin = () => {
-  const daosCanJoin = useDaoCanJoin()
-  const daos = useMemo(() => Object.keys(daosCanJoin), [daosCanJoin])
+const AvailableDaos = () => {
+  const availableDaos = useAvailableDaos()
+  const daos = useMemo(() => Object.keys(availableDaos), [availableDaos])
 
   if (!daos.length) return <Empty />
 
@@ -25,4 +25,4 @@ const DaoCanJoin = () => {
   )
 }
 
-export default DaoCanJoin
+export default AvailableDaos
