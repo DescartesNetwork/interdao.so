@@ -1,23 +1,29 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
-import { AppState } from 'app/model'
+import { AppDispatch } from 'app/model'
 import { getCID } from 'app/helpers'
 import { ProposalMetaData } from 'app/view/proposal/proposalInitialization'
 import IPFS from 'app/helpers/ipfs'
+import { getProposal } from 'app/model/proposal.controller'
+import { DataLoader } from 'shared/dataloader'
 
 const useProposalMetaData = (proposalAddress: string) => {
+  const dispatch = useDispatch<AppDispatch>()
   const [metaData, setMetaData] = useState<ProposalMetaData>()
-  const [loading, setLoading] = useState(false)
-  const { proposal } = useSelector((state: AppState) => state)
-  const { metadata: digest } = proposal[proposalAddress] || {}
+  const [loading, setLoading] = useState(true)
 
   const getMetaData = useCallback(async () => {
-    if (!digest) return setMetaData(undefined)
-    setLoading(true)
-    const cid = getCID(digest)
-    const ipfs = new IPFS()
     try {
+      setLoading(true)
+      const {
+        [proposalAddress]: { metadata: digest },
+      } = await DataLoader.load(`getProposal:${proposalAddress}`, () =>
+        dispatch(getProposal({ address: proposalAddress })).unwrap(),
+      )
+      if (!digest) return setMetaData(undefined)
+      const cid = getCID(digest)
+      const ipfs = new IPFS()
       const data = await ipfs.get<any>(cid)
       return setMetaData(data)
     } catch (er: any) {
@@ -25,7 +31,7 @@ const useProposalMetaData = (proposalAddress: string) => {
     } finally {
       setLoading(false)
     }
-  }, [digest])
+  }, [dispatch, proposalAddress])
 
   useEffect(() => {
     getMetaData()
