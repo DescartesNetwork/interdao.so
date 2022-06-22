@@ -60,7 +60,7 @@ const WithdrawNotificationModal = () => {
 
   return (
     <Modal
-      visible={true}
+      visible={visible}
       onCancel={() => {
         setVisible(false)
       }}
