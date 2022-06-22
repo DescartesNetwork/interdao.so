@@ -87,7 +87,7 @@ const SPL = ({ daoAddress }: { daoAddress: string }) => {
                     <Radio.Button value={TemplateNames.SplApprove}>
                       <CardOption
                         label="Approve"
-                        description="Coming soon"
+                        description="Allow this wallet to use money in another wallet."
                         icon="thumbs-up-outline"
                       />
                     </Radio.Button>

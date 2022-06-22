@@ -61,7 +61,7 @@ const CardVoteByNFT = ({
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Typography.Title level={5}>Cast your votes</Typography.Title>
+          <Typography.Title level={5}>Cast Your Votes</Typography.Title>
         </Col>
         {isLockedVote && (
           <Col span={24}>

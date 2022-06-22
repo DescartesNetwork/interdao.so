@@ -8,6 +8,7 @@ import { AppState } from 'app/model'
 import { SplTransferIdl, SplTransferIds } from '../spl-transfer/configs'
 import { PropsCreateComponent } from '../index'
 import { useConfirmIdl } from '../hooks/useConfirmIdl'
+import { isAddress } from '@interdao/core'
 
 const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
   const daoData = useSelector((state: AppState) => state.daos[daoAddress])
@@ -22,6 +23,11 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
     }
     return confirm(SplTransferIdl, { ...defaultData, ...templateData })
   }, [confirm, daoData.master, templateData])
+
+  const disabled =
+    !templateData[SplTransferIds.amount] ||
+    !isAddress(templateData[SplTransferIds.destination]) ||
+    !templateData[SplTransferIds.mint]
 
   return (
     <Row gutter={[24, 24]}>
@@ -54,7 +60,7 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
           <Button type="text" onClick={close}>
             Close
           </Button>
-          <Button type="primary" onClick={onConfirm} disabled={false}>
+          <Button type="primary" onClick={onConfirm} disabled={disabled}>
             Continue
           </Button>
         </Space>

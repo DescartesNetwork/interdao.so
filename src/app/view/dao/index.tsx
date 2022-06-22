@@ -43,11 +43,11 @@ const Dao = () => {
               <Tabs.TabPane tab="Community DAOs" key="community-daos">
                 <CommunityDaos />
               </Tabs.TabPane>
-              <Tabs.TabPane tab="Your DAOs" key="your-daos">
-                <YourDaos />
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="DAOs can join" key="daos-can-join">
+              <Tabs.TabPane tab="Votable DAOs" key="votable-daos">
                 <DaoCanJoin />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Created DAOs" key="your-daos">
+                <YourDaos />
               </Tabs.TabPane>
             </Tabs>
           </Col>

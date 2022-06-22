@@ -50,7 +50,7 @@ const MultisigDAOReview = () => {
           </Col>
           <Col>
             <RowSpaceVertical
-              label="DAO privacy"
+              label="DAO Privacy"
               value={
                 <Typography.Title level={1}>
                   {isPublic ? 'Public' : 'Member'}
