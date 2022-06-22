@@ -23,15 +23,15 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
         background: `url(${BG_BLANK})`,
       }}
     >
-      <Row gutter={[12, 12]}>
-        <Col xs={12} md={6}>
+      <Row gutter={[12, 12]} justify="space-between">
+        <Col>
           <RowSpaceVertical
             label="Template"
             value={<Typography.Text className="t-16">Blank</Typography.Text>}
           />
         </Col>
 
-        <Col xs={12} md={6}>
+        <Col>
           <RowSpaceVertical
             label="End time"
             value={
