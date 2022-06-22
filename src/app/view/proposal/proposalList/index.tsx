@@ -8,11 +8,11 @@ import { SystemProgram } from '@solana/web3.js'
 
 import { Button, Col, Empty, Row, Select, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
-import ProposalCard from './proposalCard'
 
 import { AppDispatch, AppState } from 'app/model'
 import Template from 'app/view/templates'
 import { setVisible } from 'app/model/template.controller'
+import { TemplateProposalLoader } from 'app/templates/templateLoader'
 
 export type ProposalListProps = { daoAddress: string }
 
@@ -172,10 +172,7 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
             filterProposalAddresses.map((proposalAddress) => (
               <Col key={proposalAddress} span={24}>
                 <LazyLoad height={176}>
-                  <ProposalCard
-                    daoAddress={daoAddress}
-                    proposalAddress={proposalAddress}
-                  />
+                  <TemplateProposalLoader proposalAddress={proposalAddress} />
                 </LazyLoad>
               </Col>
             ))

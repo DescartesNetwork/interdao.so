@@ -3,8 +3,8 @@ import { ReactNode } from 'react'
 import { Col, Row, Typography } from 'antd'
 
 type RowSpaceBetweenProps = {
-  label?: string
-  value?: string | ReactNode
+  label: string
+  value: ReactNode
 }
 const RowSpaceBetween = ({ label = '', value = '' }: RowSpaceBetweenProps) => {
   return (

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { TemplateNames } from 'app/templates'
 
 import { ProposalReturnType } from 'app/view/templates/types'
 
@@ -9,7 +10,8 @@ import { ProposalReturnType } from 'app/view/templates/types'
 export type TemplateState = {
   visible: boolean
   tx?: ProposalReturnType
-  templateName: string
+  templateName?: TemplateNames
+  data: Record<string, string>
 }
 
 /**
@@ -20,7 +22,8 @@ const NAME = 'template'
 const initialState: TemplateState = {
   visible: false,
   tx: undefined,
-  templateName: '',
+  templateName: undefined,
+  data: {},
 }
 
 /**
@@ -47,8 +50,22 @@ export const clearTx = createAsyncThunk(`${NAME}/clearTx`, async () => {
 
 export const setTemplateName = createAsyncThunk(
   `${NAME}/setTemplateName`,
-  async (name: string) => {
+  async (name?: TemplateNames) => {
     return { templateName: name }
+  },
+)
+
+export const setTemplateData = createAsyncThunk(
+  `${NAME}/setTemplateData`,
+  async (templateData: Record<string, string>) => {
+    return templateData
+  },
+)
+
+export const clearTemplate = createAsyncThunk(
+  `${NAME}/clearTemplate`,
+  async () => {
+    return { visible: false, tx: undefined, templateName: undefined, data: {} }
   },
 )
 
@@ -63,6 +80,10 @@ const slice = createSlice({
   extraReducers: (builder) =>
     void builder
       .addCase(
+        setTemplateData.fulfilled,
+        (state, { payload }) => void Object.assign(state.data, payload),
+      )
+      .addCase(
         setVisible.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
@@ -76,6 +97,10 @@ const slice = createSlice({
       )
       .addCase(
         clearTx.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        clearTemplate.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })

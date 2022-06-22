@@ -1,11 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  ConsensusMechanisms,
-  ConsensusQuorums,
-  FeeOptions,
-} from '@interdao/core'
+import { ConsensusMechanisms, ConsensusQuorums } from '@interdao/core'
 import BN from 'bn.js'
 import { CID } from 'ipfs-core'
 
@@ -31,28 +27,30 @@ export type ProposalMetaData = {
   title: string
   description: string
   templateName: string
+  templateData?: any
 }
 
 const CURRENT_TIME = Number(new Date())
 const ONE_DAY = 24 * 60 * 60 * 1000
+const DEFAULT_DURATION = [CURRENT_TIME + ONE_DAY, CURRENT_TIME + 15 * ONE_DAY]
 
 const ProposalInitialization = () => {
+  const history = useHistory()
+  const dispatch = useDispatch()
+  const { daoAddress } = useParams<{ daoAddress: string }>()
+
+  const daos = useSelector((state: AppState) => state.daos)
+  const template = useSelector((state: AppState) => state.template)
+
   const [consensusMechanism, setConsensusMechanism] = useState(
     ConsensusMechanisms.StakedTokenCounter,
   )
   const [consensusQuorum, setConsensusQuorum] = useState(ConsensusQuorums.Half)
-  const [duration, setDuration] = useState([
-    CURRENT_TIME + ONE_DAY,
-    CURRENT_TIME + 15 * ONE_DAY,
-  ])
-  const [loading, setLoading] = useState(false)
+  const [duration, setDuration] = useState([...DEFAULT_DURATION])
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const daos = useSelector((state: AppState) => state.daos)
-  const { tx, templateName } = useSelector((state: AppState) => state.template)
-  const { daoAddress } = useParams<{ daoAddress: string }>()
-  const history = useHistory()
-  const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false)
+
   const { metaData: daoMetaData } = useMetaData(daoAddress)
 
   const disabled = !title || !description
@@ -62,34 +60,31 @@ const ProposalInitialization = () => {
     return {
       title,
       description,
-      templateName,
+      templateName: template.templateName || '',
+      templateData: template.data,
     }
-  }, [description, templateName, title])
+  }, [description, template, title])
+
+  const uploadMetaData = useCallback(async () => {
+    const ipfs = new IPFS()
+    const cid = await ipfs.set(proposalMetaData)
+    const {
+      multihash: { digest },
+    } = CID.parse(cid)
+    return digest
+  }, [proposalMetaData])
 
   const newProposal = useCallback(async () => {
     const { authority } = daos[daoAddress]
-    if (!tx) return
-
+    if (!template.tx) return
     try {
       setLoading(true)
-
-      const ipfs = new IPFS()
-      const cid = await ipfs.set(proposalMetaData)
-      const {
-        multihash: { digest },
-      } = CID.parse(cid)
-
-      const feeOption: Partial<FeeOptions> = {
-        revenue: new BN(fee),
-        revenuemanAddress: authority.toBase58(),
-        tax: new BN(fee),
-        taxmanAddress: taxman,
-      }
-
-      const { programId, data, accounts } = tx
+      const digest = await uploadMetaData()
 
       const metadata = Buffer.from(digest)
+      const { programId, data, accounts } = template.tx
       const valueAccounts = Object.values(accounts)
+
       const { txId, proposalAddress } = await interDao.initializeProposal(
         daoAddress,
         programId.toBase58(),
@@ -103,7 +98,12 @@ const ProposalInitialization = () => {
         metadata,
         consensusMechanism,
         consensusQuorum,
-        feeOption,
+        {
+          revenue: new BN(fee),
+          revenuemanAddress: authority.toBase58(),
+          tax: new BN(fee),
+          taxmanAddress: taxman,
+        },
       )
       window.notify({
         type: 'success',
@@ -114,7 +114,6 @@ const ProposalInitialization = () => {
 
       //Clear tx in redux
       dispatch(clearTx())
-
       return history.push(
         `/app/${appId}/dao/${daoAddress}/proposal/${proposalAddress}`,
       )
@@ -127,20 +126,20 @@ const ProposalInitialization = () => {
       return setLoading(false)
     }
   }, [
-    daos,
-    daoAddress,
-    proposalMetaData,
-    tx,
-    duration,
     consensusMechanism,
     consensusQuorum,
+    daoAddress,
+    daos,
     dispatch,
+    duration,
     history,
+    template.tx,
+    uploadMetaData,
   ])
 
   useEffect(() => {
-    if (!tx) return history.push(`/app/${appId}/dao/${daoAddress}`)
-  }, [daoAddress, history, tx])
+    if (!template.tx) return history.push(`/app/${appId}/dao/${daoAddress}`)
+  }, [daoAddress, history, template.tx])
 
   return (
     <Row gutter={[24, 24]} justify="center">
