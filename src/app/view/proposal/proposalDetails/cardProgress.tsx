@@ -49,12 +49,12 @@ const CardProgress = ({
 
     if (mechanismQuorum === 'half') {
       const supplyNeed = actualSupply.div(new BN(2)).add(defaultRequire)
-      return actualYesVote.mul(new BN(100)).div(supplyNeed)
+      return actualYesVote.mul(new BN(100)).divRound(supplyNeed)
     }
 
     if (mechanismQuorum === 'oneThird') {
       const supplyNeed = actualSupply.div(new BN(3)).add(defaultRequire)
-      return actualYesVote.mul(new BN(100)).div(supplyNeed)
+      return actualYesVote.mul(new BN(100)).divRound(supplyNeed)
     }
 
     if (mechanismQuorum === 'twoThird') {
@@ -63,7 +63,7 @@ const CardProgress = ({
         .div(new BN(3))
         .add(defaultRequire)
 
-      return actualYesVote.mul(new BN(100)).div(supplyNeed)
+      return actualYesVote.mul(new BN(100)).divRound(supplyNeed)
     }
 
     return new BN(0)

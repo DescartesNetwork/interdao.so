@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import IonIcon from '@sentre/antd-ionicon'
-import { Button, Col, Modal, Row, Space, Typography } from 'antd'
+import { Button, Col, Image, Modal, Row, Space, Typography } from 'antd'
 import ProposalItem from './proposalItem'
 
 import useWithdrawableReceipt from 'app/hooks/proposal/useWithdrawableReceipt'
@@ -19,15 +19,13 @@ const {
 const WithdrawNotificationModal = () => {
   const proposals = useSelector((state: AppState) => state.proposal)
   const daos = useSelector((state: AppState) => state.daos)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
   const [loading, setLoading] = useState(false)
   const { withdrawableReceipts, withdrawableProposals } =
     useWithdrawableReceipt()
 
   useEffect(() => {
-    if (withdrawableReceipts.length > 0) {
-      return setVisible(true)
-    }
+    if (withdrawableReceipts.length > 0) return setVisible(true)
     setVisible(false)
   }, [withdrawableReceipts])
 
@@ -66,12 +64,11 @@ const WithdrawNotificationModal = () => {
       }}
       closeIcon={<IonIcon name="close-outline" />}
       footer={null}
-      bodyStyle={{
-        padding: '48px 24px 24px 24px',
-        backgroundImage: `url(${BG_JOIN_DAO})`,
-      }}
+      bodyStyle={{ padding: '72px 24px 24px 24px' }}
+      className="join-dao"
     >
-      <Row gutter={[32, 32]}>
+      <Image preview={false} src={BG_JOIN_DAO} />
+      <Row gutter={[32, 32]} className="join-dao_content">
         <Col span={24}>
           <Space
             direction="vertical"
@@ -79,9 +76,11 @@ const WithdrawNotificationModal = () => {
             align="center"
             style={{ width: '100%' }}
           >
-            <Typography.Title level={1}>Voting is over!</Typography.Title>
-            <Typography.Text style={{ color: '#A08D70' }}>
-              Your tokens and NFTs can be withdrawn from the proposals below.
+            <Typography.Title className="join-dao_title" level={2}>
+              Voting is over!
+            </Typography.Title>
+            <Typography.Text type="secondary">
+              Your tokens and NFTs can be withdraw from the proposals below.
             </Typography.Text>
           </Space>
         </Col>
