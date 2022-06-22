@@ -7,12 +7,14 @@ import usePDB from '../usePDB'
 import { AppState } from 'app/model'
 import { DaoState } from 'app/model/daos.controller'
 import { MetaData } from 'app/model/createDao.controller'
+import useOwnerNFT from '../useOwnerNFT'
 
 const useDaoCanJoin = () => {
   const daos = useSelector((state: AppState) => state.daos)
   const [filteredDaos, setFilteredDaos] = useState<DaoState>({})
   const { accounts } = useAccount()
   const { wallet } = useWallet()
+  const { nfts } = useOwnerNFT(wallet.address)
   const pdb = usePDB()
 
   const filterDaos = useCallback(async () => {
@@ -20,7 +22,7 @@ const useDaoCanJoin = () => {
     try {
       for (const addr in daos) {
         const daoData = daos[addr]
-        const { mint } = daoData
+        const { mint, isNft } = daoData
         let valid = true
 
         // Validate MultisigDAO
@@ -31,7 +33,7 @@ const useDaoCanJoin = () => {
           if (!listMember.includes(wallet.address)) valid = false
         }
 
-        if (daoType === 'flexible-dao') {
+        if (daoType === 'flexible-dao' && !isNft) {
           const tokenAccount = await utils.token.associatedAddress({
             mint,
             owner: new web3.PublicKey(wallet.address),
@@ -39,12 +41,17 @@ const useDaoCanJoin = () => {
           const amount = accounts[tokenAccount.toBase58()]?.amount
           if (!amount || !(Number(amount.toString()) > 0)) valid = false
         }
+        if (daoType === 'flexible-dao' && isNft) {
+          const myCollections = nfts?.map((nft) => nft.collection?.key)
+          if (!myCollections || !myCollections.includes(mint.toBase58()))
+            valid = false
+        }
 
         if (valid) filteredDaos[addr] = daoData
       }
     } catch (error) {}
     return setFilteredDaos(filteredDaos)
-  }, [accounts, daos, pdb, wallet.address])
+  }, [accounts, daos, nfts, pdb, wallet.address])
 
   useEffect(() => {
     filterDaos()

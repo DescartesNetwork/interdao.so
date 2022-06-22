@@ -19,7 +19,7 @@ const {
 const WithdrawNotificationModal = () => {
   const proposals = useSelector((state: AppState) => state.proposal)
   const daos = useSelector((state: AppState) => state.daos)
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
   const { withdrawableReceipts, withdrawableProposals } =
     useWithdrawableReceipt()
