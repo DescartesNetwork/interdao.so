@@ -21,7 +21,7 @@ let watchVoteFor: NodeJS.Timer
 let watchVoteAgainst: NodeJS.Timer
 let watchExecuteProposal: NodeJS.Timer
 
-const TIME_RECHECK = 2000
+const TIME_RECHECK = 500
 
 const ProposalWatcher = () => {
   const dispatch = useDispatch<AppDispatch>()
