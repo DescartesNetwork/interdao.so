@@ -21,7 +21,7 @@ const EVENTS = [
   'TransferAuthorityEvent',
   'UpdateDaoMetadataEvent',
 ]
-const TIME_RECHECK = 2000
+const TIME_RECHECK = 500
 
 type WatchState = {
   id: number
