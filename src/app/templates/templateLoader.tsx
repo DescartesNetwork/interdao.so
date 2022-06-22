@@ -1,7 +1,5 @@
 import { Component, ErrorInfo, lazy, ReactNode, Suspense } from 'react'
 
-import { Skeleton } from 'antd'
-
 import { useTemplateWithProposal } from './hooks/useTemplateWithProposal'
 import { TemplateNames } from './index'
 
@@ -16,7 +14,7 @@ export const TemplateCreateLoader = ({
   const Component = lazy(() => import(`./${name}/create`))
   return (
     <ErrorBoundary>
-      <Suspense fallback={<Skeleton active />}>
+      <Suspense fallback={<div />}>
         <Component daoAddress={daoAddress} />
       </Suspense>
     </ErrorBoundary>
@@ -31,7 +29,7 @@ export const TemplateProposalLoader = ({
   const Component = lazy(() => import(`./${template}/proposal`))
   return (
     <ErrorBoundary>
-      <Suspense fallback={<Skeleton active />}>
+      <Suspense fallback={<div />}>
         <Component proposalAddress={proposalAddress} />
       </Suspense>
     </ErrorBoundary>
@@ -46,7 +44,7 @@ export const TemplateInfoLoader = ({
   const Component = lazy(() => import(`./${template}/info`))
   return (
     <ErrorBoundary>
-      <Suspense fallback={<Skeleton active />}>
+      <Suspense fallback={<div />}>
         <Component proposalAddress={proposalAddress} />
       </Suspense>
     </ErrorBoundary>

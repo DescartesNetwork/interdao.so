@@ -77,7 +77,9 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
     }))
 
     const myRecept: Receipt[] = listRecept.filter(
-      (receipt) => receipt.authority.toBase58() === walletAddress,
+      (receipt) =>
+        receipt.authority.toBase58() === walletAddress &&
+        receipt.amount.toNumber() > 0,
     )
 
     return setListReceipt(myRecept)

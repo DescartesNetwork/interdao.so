@@ -22,23 +22,41 @@ const InfoDAOMaster = ({ daoAddress }: { daoAddress: string }) => {
   }
 
   return (
-    <RowSpaceBetween
-      label="Treasury Address"
-      value={
-        <Space>
-          <Typography.Text className="t-16">
-            {shortenAddress(daoAddress)}
+    <Row>
+      <Col span={24}>
+        <Space size={8}>
+          <IonIcon
+            name="information-circle-outline"
+            style={{ color: '#f9deb0' }}
+          />
+          <Typography.Text>
+            The treasury should be deposited to facilitate proposals.
           </Typography.Text>
-          <Tooltip title="Copied" visible={copied}>
-            <CopyToClipboard text={daoAddress} onCopy={onCopy}>
-              <Typography.Text style={{ cursor: 'pointer' }} className="t-16">
-                <IonIcon name="copy-outline" />
-              </Typography.Text>
-            </CopyToClipboard>
-          </Tooltip>
         </Space>
-      }
-    />
+      </Col>
+      <Col>
+        <RowSpaceBetween
+          label="Treasury Address"
+          value={
+            <Space>
+              <Typography.Text className="t-16">
+                {shortenAddress(daoAddress)}
+              </Typography.Text>
+              <Tooltip title="Copied" visible={copied}>
+                <CopyToClipboard text={daoAddress} onCopy={onCopy}>
+                  <Typography.Text
+                    style={{ cursor: 'pointer' }}
+                    className="t-16"
+                  >
+                    <IonIcon name="copy-outline" />
+                  </Typography.Text>
+                </CopyToClipboard>
+              </Tooltip>
+            </Space>
+          }
+        />
+      </Col>
+    </Row>
   )
 }
 

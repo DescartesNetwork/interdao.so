@@ -68,6 +68,8 @@ const parserArg = (val: string, type: TemplateArg['type']) => {
   switch (type) {
     case 'u8':
       return Number(val)
+    case 'u32':
+      return Number(val)
     case 'u64':
       return new BN(val)
     default:
@@ -102,6 +104,7 @@ export const parserIxDataNoPrefix = async (
 ) => {
   const program = await getProgram(templateIdl)
   const accounts = await parserAccounts(templateIdl, templateData)
+  console.log('accounts', accounts)
   const args = await parserArgs(templateIdl, templateData)
   const ix = await program.methods[DEFAULT_IX_NAME].call(this, ...args)
     .accounts(accounts)
@@ -126,9 +129,9 @@ export const parserProposalReturnType = (
   }
 
   const proposalReturnType: ProposalReturnType = {
-    name: '',
+    name: templateIdl.name,
     data: ix.data,
-    accounts: {},
+    accounts,
     programId: new PublicKey(templateIdl.programId),
   }
   return proposalReturnType

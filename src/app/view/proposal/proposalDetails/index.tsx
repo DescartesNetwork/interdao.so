@@ -27,8 +27,9 @@ const ProposalDetails = () => {
   const { proposalAddress, daoAddress } =
     useParams<{ daoAddress: string; proposalAddress: string }>()
   const { loading } = useProposalMetaData(proposalAddress)
+
   return (
-    <Spin spinning={loading}>
+    <Spin spinning={loading} tip="Loading Proposal Data...">
       <Row justify="center">
         <Col xs={24} lg={18}>
           <Row gutter={[24, 24]}>

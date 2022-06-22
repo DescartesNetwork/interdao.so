@@ -1,5 +1,4 @@
 import { useSelector } from 'react-redux'
-import { utils } from '@senswap/sen-js'
 import moment from 'moment'
 
 import { Col, Row, Space, Typography } from 'antd'
@@ -11,7 +10,6 @@ import ProposalTemplateCard from '../components/proposalTemplateCard'
 import { AppState } from 'app/model'
 import { useTemplateDataWithProposal } from '../hooks/useTemplateDataWithProposal'
 import { SplApproveIds } from './configs'
-import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 import BG_SOLANA from 'app/static/images/templates/bg-spl.png'
 
@@ -24,7 +22,6 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
 
   const endTime = proposalData.endDate.toNumber()
   const mint = templateData.mint
-  const decimals = useMintDecimals(mint) || 0
 
   return (
     <ProposalTemplateCard
@@ -59,11 +56,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
           <RowSpaceVertical
             className="t-16"
             label="Amount"
-            value={
-              !mint
-                ? '--'
-                : utils.undecimalize(BigInt(templateData.amount), decimals)
-            }
+            value={templateData?.amount || '--'}
           />
         </Col>
         <Col xs={12} md={6}>

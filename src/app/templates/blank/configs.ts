@@ -1,4 +1,4 @@
-import { utils } from '@project-serum/anchor'
+import { web3 } from '@project-serum/anchor'
 import { TemplateIdl, TemplateNames } from '../index'
 
 export enum BlankIds {
@@ -35,11 +35,11 @@ export const BlankIdl: TemplateIdl = {
     },
   ],
   args: [
-    { name: BlankIds.code, type: 'u8' },
+    { name: BlankIds.code, type: 'u32' },
     {
       name: BlankIds.lamports,
       type: 'u64',
     },
   ],
-  programId: utils.token.TOKEN_PROGRAM_ID.toBase58(),
+  programId: web3.SystemProgram.programId.toBase58(),
 }

@@ -6,7 +6,7 @@ import { ProposalData } from '@interdao/core'
 import { AppDispatch, AppState } from 'app/model'
 import { getProposal } from 'app/model/proposal.controller'
 
-const useProposal = (proposalAddress: string, daoAddress: string) => {
+const useProposal = (proposalAddress: string) => {
   const dispatch = useDispatch<AppDispatch>()
   const proposals = useSelector((state: AppState) => state.proposal)
 
@@ -18,7 +18,7 @@ const useProposal = (proposalAddress: string, daoAddress: string) => {
   useEffect(() => {
     if (!proposalData && account.isAddress(proposalAddress))
       dispatch(getProposal({ address: proposalAddress }))
-  }, [daoAddress, proposalData, dispatch, proposalAddress])
+  }, [proposalData, dispatch, proposalAddress])
 
   return { ...proposalData }
 }

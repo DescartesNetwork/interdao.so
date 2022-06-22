@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
 import { DaoData } from '@interdao/core'
 import { BN } from 'bn.js'
@@ -15,6 +15,7 @@ import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import useProposalStatus from 'app/hooks/proposal/useProposalStatus'
 import useMetaData from 'app/hooks/useMetaData'
 import useProposalFee from 'app/hooks/proposal/useProposalFee'
+import { setVoteBidAmount } from 'app/model/voteBid.controller'
 
 const {
   sol: { interDao },
@@ -30,6 +31,7 @@ const ActionVote = ({
   const [loadingAgainst, setLoadingAgainst] = useState(false)
   const daos = useSelector((state: AppState) => state.daos)
   const amount = useSelector((state: AppState) => state.voteBid.amount)
+  const dispatch = useDispatch()
   const { mint } = daos[daoAddress] || ({} as DaoData)
   const { balance, decimals } = useAccountBalanceByMintAddress(mint?.toBase58())
   const { status } = useProposalStatus(proposalAddress)
@@ -56,6 +58,7 @@ const ActionVote = ({
         nextAmount,
         proposalFee,
       )
+      dispatch(setVoteBidAmount(''))
       window.notify({
         type: 'success',
         description: 'Voted successfully. Click to view details!',
@@ -69,7 +72,7 @@ const ActionVote = ({
     } finally {
       setLoadingFor(false)
     }
-  }, [amount, proposalAddress, isMultisigDAO, decimals, proposalFee])
+  }, [amount, decimals, dispatch, isMultisigDAO, proposalAddress, proposalFee])
 
   const onVoteAgainst = useCallback(async () => {
     setLoadingAgainst(true)
@@ -84,6 +87,7 @@ const ActionVote = ({
         nextAmount,
         proposalFee,
       )
+      dispatch(setVoteBidAmount(''))
       window.notify({
         type: 'success',
         description: 'Voted successfully. Click to view details!',
@@ -97,7 +101,7 @@ const ActionVote = ({
     } finally {
       setLoadingAgainst(false)
     }
-  }, [amount, proposalAddress, isMultisigDAO, decimals, proposalFee])
+  }, [amount, decimals, dispatch, isMultisigDAO, proposalAddress, proposalFee])
 
   return (
     <Fragment>

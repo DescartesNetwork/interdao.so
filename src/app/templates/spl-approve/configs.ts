@@ -32,6 +32,10 @@ export const SplApproveIdl: TemplateIdl = {
       isMut: true,
       isSigner: false,
       isMaster: false,
+      rule: {
+        name: RulesName.tokenAccount,
+        configs: { mint: SplApproveIds.mint, owner: SplApproveIds.source },
+      },
     },
     {
       name: SplApproveIds.authority,

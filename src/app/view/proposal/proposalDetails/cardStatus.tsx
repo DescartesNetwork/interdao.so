@@ -24,13 +24,11 @@ const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
   const members = useMemo(() => {
     if (!Object.values(receipts).length) return 0
     const authorities: string[] = []
-
     for (const receipt of Object.values(receipts)) {
       const { authority } = receipt
       if (authorities.includes(authority.toBase58())) continue
       authorities.push(authority.toBase58())
     }
-
     return authorities.length
   }, [receipts])
 
@@ -73,8 +71,14 @@ const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
                   <ProposalStatus status={status} />
                 </Space>
                 <Space>
-                  <IonIcon name="people-outline" />
-                  <Typography.Text>Member: {members}</Typography.Text>
+                  <Row>
+                    <Col span={24}>
+                      <Space size={5}>
+                        <IonIcon name="people-outline" />
+                        <Typography.Text>Member: {members}</Typography.Text>
+                      </Space>
+                    </Col>
+                  </Row>
                 </Space>
               </Space>
             </Col>

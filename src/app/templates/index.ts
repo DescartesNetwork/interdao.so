@@ -40,7 +40,7 @@ export const isTemplateAccountWithRule = (
 
 export type TemplateArg = {
   name: string
-  type: 'u8' | 'u64'
+  type: 'u8' | 'u64' | 'u32'
 }
 export type TemplateArgWithRule = TemplateArg & {
   rule: {
