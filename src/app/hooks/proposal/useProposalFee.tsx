@@ -25,21 +25,13 @@ const useProposalFee = ({ daoAddress }: useProposalFeeProps) => {
 
   const proposalFee = useMemo(() => {
     if (!parseRegime || !authority) return
-
+    const revenueFee = parseRegime === 'democratic' ? new BN(0) : new BN(fee)
     const feeOption: FeeOptions = {
       tax: new BN(fee),
       taxmanAddress: taxman,
-      revenue: new BN(fee),
+      revenue: revenueFee,
       revenuemanAddress: authority.toBase58(),
     }
-
-    if (parseRegime === 'democratic')
-      return {
-        tax: new BN(0),
-        taxmanAddress: taxman,
-        revenue: new BN(0),
-        revenuemanAddress: authority.toBase58(),
-      }
 
     return feeOption
   }, [authority, parseRegime])
