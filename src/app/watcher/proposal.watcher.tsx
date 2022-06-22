@@ -29,22 +29,33 @@ const ProposalWatcher = () => {
 
   const reloadProposalData = useCallback(
     ({ proposal: proposalPublicKey }: { proposal: PublicKey }) => {
-      dispatch(
-        addLoading({
-          id: 'fetch-proposal',
-          message: 'Welcome to InterDAO. Loading Proposals...',
-        }),
-      )
-      try {
-        const proposalAddress = proposalPublicKey.toBase58()
-        return dispatch(getProposal({ address: proposalAddress, force: true }))
-      } catch (error) {
-      } finally {
-        dispatch(clearLoading('fetch-proposal'))
-      }
+      const proposalAddress = proposalPublicKey.toBase58()
+      return dispatch(getProposal({ address: proposalAddress, force: true }))
     },
     [dispatch],
   )
+
+  // First-time fetching
+  const fetchData = useCallback(async () => {
+    try {
+      dispatch(
+        addLoading({
+          id: 'fetch-proposals',
+          message: 'Welcome to InterDAO. Loading proposal...',
+        }),
+      )
+      dispatch(getProposals()) //fetch all proposal
+    } catch (er) {
+      return window.notify({
+        type: 'error',
+        description: 'Cannot fetch data of DAOs',
+      })
+    } finally {
+      setTimeout(() => {
+        dispatch(clearLoading('fetch-proposals'))
+      }, 2000)
+    }
+  }, [dispatch])
 
   // Watch dao events
   const watchData = useCallback(async () => {
@@ -84,8 +95,8 @@ const ProposalWatcher = () => {
 
   useEffect(() => {
     // I don't understand why but this fixes the watcher error
+    fetchData()
     watchData()
-    dispatch(getProposals()) //fetch all proposal
     // Unwatch (cancel socket)
     return () => {
       ;(async () => {
@@ -104,7 +115,7 @@ const ProposalWatcher = () => {
         }
       })()
     }
-  }, [dispatch, watchData])
+  }, [dispatch, fetchData, watchData])
 
   return <Fragment />
 }

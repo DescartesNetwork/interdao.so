@@ -32,19 +32,8 @@ const ReceiptWatcher = () => {
 
   const reloadReceiptData = useCallback(
     ({ receipt: receiptPublicKey }: { receipt: PublicKey }) => {
-      dispatch(
-        addLoading({
-          id: 'fetch-receipt',
-          message: 'Welcome to InterDAO. Loading Receipts...',
-        }),
-      )
-      try {
-        const receiptAddress = receiptPublicKey.toBase58()
-        return dispatch(getReceipt({ address: receiptAddress, force: true }))
-      } catch (error) {
-      } finally {
-        dispatch(clearLoading('fetch-proposal'))
-      }
+      const receiptAddress = receiptPublicKey.toBase58()
+      return dispatch(getReceipt({ address: receiptAddress, force: true }))
     },
     [dispatch],
   )
@@ -52,6 +41,12 @@ const ReceiptWatcher = () => {
   // First-time fetching
   const fetchData = useCallback(async () => {
     try {
+      dispatch(
+        addLoading({
+          id: 'fetch-receipt',
+          message: 'Welcome to InterDAO. Loading Receipts...',
+        }),
+      )
       if (!account.isAddress(walletAddress)) return
       await dispatch(getReceipts({ authorityAddress: walletAddress })).unwrap()
     } catch (er) {
@@ -59,6 +54,8 @@ const ReceiptWatcher = () => {
         type: 'error',
         description: 'Cannot fetch data of receipts',
       })
+    } finally {
+      dispatch(clearLoading('fetch-receipt'))
     }
   }, [dispatch, walletAddress])
   // Watch dao events
