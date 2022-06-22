@@ -14,11 +14,7 @@ import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
 import useProposalStatus from 'app/hooks/proposal/useProposalStatus'
 import useProposal from 'app/hooks/proposal/useProposal'
-
-const STROKE_COLOR = {
-  dark: { default: '#312B29', agree: '#698033', disagree: '#F9575E' },
-  light: { default: '#F2EFE9', agree: '#F9DEB0', disagree: '#F9575E' },
-}
+import { STROKE_COLOR } from 'app/constant'
 
 const CardProgress = ({
   proposalAddress,
@@ -27,13 +23,11 @@ const CardProgress = ({
   const [backGroundColor, setBackGroundColor] = useState('')
   const [successColor, setSuccessColor] = useState('')
   const daos = useSelector((state: AppState) => state.daos)
-  const { votingAgainstPower, votingForPower, consensusQuorum } = useProposal(
-    proposalAddress,
-    daoAddress,
-  )
+  const { votingAgainstPower, votingForPower, consensusQuorum } =
+    useProposal(proposalAddress)
   const { mint } = daos[daoAddress] || ({} as DaoData)
   const mintDecimal = useMintDecimals(mint?.toBase58()) || 0
-  const { actualSupply } = useProposalStatus(proposalAddress)
+  const { status, actualSupply } = useProposalStatus(proposalAddress)
   const {
     ui: { theme },
   } = useUI()
@@ -100,13 +94,26 @@ const CardProgress = ({
     if (!percentNo && !percentYes)
       return setBackGroundColor(STROKE_COLOR[theme].default)
     if (!percentNo && percentYes)
-      return setSuccessColor(STROKE_COLOR[theme].agree)
+      return setSuccessColor(STROKE_COLOR[theme].for)
     if (percentNo && !percentYes)
-      return setBackGroundColor(STROKE_COLOR[theme].disagree)
+      return setBackGroundColor(STROKE_COLOR[theme].against)
 
-    setBackGroundColor(STROKE_COLOR[theme].disagree)
-    return setSuccessColor(STROKE_COLOR[theme].agree)
+    setBackGroundColor(STROKE_COLOR[theme].against)
+    return setSuccessColor(STROKE_COLOR[theme].for)
   }, [percentNo, percentYes, theme])
+
+  const quorumText = useMemo(() => {
+    switch (status) {
+      case 'Failed':
+        return 'The proposal has been failed'
+      case 'Succeeded':
+        return 'The proposal has been approved'
+      default:
+        return `${numeric(
+          utils.undecimalize(BigInt(powerRequire.toString()), mintDecimal),
+        ).format('0,0.[0000]')} more Vote For required`
+    }
+  }, [mintDecimal, powerRequire, status])
 
   useEffect(() => {
     getColors()
@@ -121,21 +128,13 @@ const CardProgress = ({
         <Col span={24}>
           <Space size={0} style={{ width: '100%' }} direction="vertical">
             <Typography.Text type="secondary">Quorum</Typography.Text>
-            <Typography.Text>
-              {numeric(
-                utils.undecimalize(
-                  BigInt(powerRequire.toString()),
-                  mintDecimal,
-                ),
-              ).format('0,0.[0000]')}{' '}
-              more Yes votes required
-            </Typography.Text>
+            <Typography.Text>{quorumText}</Typography.Text>
             <Progress
               percent={100}
               strokeColor={STROKE_COLOR[theme].default}
               success={{
                 percent: currentPower.toNumber(),
-                strokeColor: STROKE_COLOR[theme].agree,
+                strokeColor: STROKE_COLOR[theme].for,
               }}
               showInfo={false}
             />
@@ -145,7 +144,7 @@ const CardProgress = ({
           <Row gutter={[4, 4]}>
             <Col flex="auto">
               <RowSpaceVertical
-                label="Agree"
+                label="Voted For"
                 size={0}
                 value={
                   <Typography.Title level={4}>
@@ -158,7 +157,7 @@ const CardProgress = ({
             </Col>
             <Col>
               <RowSpaceVertical
-                label="Disagree"
+                label="Voted Against"
                 size={0}
                 align="end"
                 value={

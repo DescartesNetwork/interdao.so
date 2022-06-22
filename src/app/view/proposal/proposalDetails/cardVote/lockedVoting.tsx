@@ -26,7 +26,7 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
   const [remainingTime, setRemainingTime] = useState(defaultRemainingTime)
   const { status } = useProposalStatus(proposalAddress)
   const voteAmount = useSelector((state: AppState) => state.voteBid.amount)
-  const { endDate, startDate } = useProposal(proposalAddress, daoAddress)
+  const { endDate, startDate } = useProposal(proposalAddress)
 
   const voteNow = new Date().getTime()
   const endTime = Number(endDate) * 1000

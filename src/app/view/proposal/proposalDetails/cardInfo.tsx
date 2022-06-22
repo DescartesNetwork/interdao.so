@@ -16,7 +16,7 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
   const [copied, setCopied] = useState(false)
   const [visible, setVisible] = useState(false)
   const { consensusQuorum, startDate, endDate, consensusMechanism, creator } =
-    useProposal(proposalAddress, daoAddress)
+    useProposal(proposalAddress)
   const authProposalAddress = creator?.toBase58() || ''
   const quorum = useParseQuorumText(consensusQuorum)
 
