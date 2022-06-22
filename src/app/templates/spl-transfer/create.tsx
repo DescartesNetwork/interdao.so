@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { useSelector } from 'react-redux'
+import { isAddress } from '@interdao/core'
 
 import { Button, Col, Row, Space } from 'antd'
 import { NumberInput, MintInput, AddressInput } from 'app/templates/components'
@@ -8,7 +9,6 @@ import { AppState } from 'app/model'
 import { SplTransferIdl, SplTransferIds } from '../spl-transfer/configs'
 import { PropsCreateComponent } from '../index'
 import { useConfirmIdl } from '../hooks/useConfirmIdl'
-import { isAddress } from '@interdao/core'
 
 const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
   const daoData = useSelector((state: AppState) => state.daos[daoAddress])

@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
+import CopyToClipboard from 'react-copy-to-clipboard'
 
 import IonIcon from '@sentre/antd-ionicon'
 import { Button, Card, Col, Row, Space, Tabs, Tooltip, Typography } from 'antd'
 import NftTreasury from './nftsTreasury'
 import Treasury from './treasury'
 import RowSpaceBetween from 'app/components/rowSpaceBetween'
-import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { asyncWait, shortenAddress } from 'shared/util'
 import { AppState } from 'app/model'
