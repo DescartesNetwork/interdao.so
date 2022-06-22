@@ -58,6 +58,7 @@ const ReceiptWatcher = () => {
       dispatch(clearLoading('fetch-receipt'))
     }
   }, [dispatch, walletAddress])
+
   // Watch dao events
   const watchData = useCallback(async () => {
     watchVoteFor = setInterval(async () => {
