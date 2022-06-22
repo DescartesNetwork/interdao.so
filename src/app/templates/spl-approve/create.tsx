@@ -20,6 +20,7 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
   const onConfirm = useCallback(async () => {
     const defaultData = {
       [SplApproveIds.code]: '4',
+      [SplApproveIds.source]: daoData.master.toBase58(),
       [SplApproveIds.authority]: daoData.master.toBase58(),
     }
     return confirm(SplApproveIdl, { ...defaultData, ...templateData })
