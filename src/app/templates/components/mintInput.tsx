@@ -16,7 +16,7 @@ const MintInput = ({ id, title }: { id: string; title?: string }) => {
       <MintSelection
         value={value}
         onChange={(value) => {
-          dispatch(setTemplateData({ id, value }))
+          dispatch(setTemplateData({ [id]: value }))
         }}
         style={{ marginLeft: -7 }}
       />

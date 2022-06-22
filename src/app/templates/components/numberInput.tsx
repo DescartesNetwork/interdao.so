@@ -21,7 +21,7 @@ const NumberInput = ({
         className="border-less"
         placeholder="Input Amount"
         defaultValue={value}
-        onValue={(value) => dispatch(setTemplateData({ id, value }))}
+        onValue={(val) => dispatch(setTemplateData({ [id]: val }))}
         {...rest}
       />
     </Space>

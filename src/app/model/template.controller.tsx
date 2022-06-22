@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { TemplateNames } from 'app/templates'
 
 import { ProposalReturnType } from 'app/view/templates/types'
 
@@ -9,7 +10,7 @@ import { ProposalReturnType } from 'app/view/templates/types'
 export type TemplateState = {
   visible: boolean
   tx?: ProposalReturnType
-  templateName: string
+  templateName?: TemplateNames
   data: Record<string, string>
 }
 
@@ -21,7 +22,7 @@ const NAME = 'template'
 const initialState: TemplateState = {
   visible: false,
   tx: undefined,
-  templateName: '',
+  templateName: undefined,
   data: {},
 }
 
@@ -55,9 +56,9 @@ export const setTemplateName = createAsyncThunk(
 )
 
 export const setTemplateData = createAsyncThunk(
-  `${NAME}/onChangeTemplateData`,
-  async ({ id, value }: { id: string; value: string }) => {
-    return { [id]: value }
+  `${NAME}/setTemplateData`,
+  async (templateData: Record<string, string>) => {
+    return templateData
   },
 )
 

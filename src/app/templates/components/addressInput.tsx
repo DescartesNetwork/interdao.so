@@ -5,11 +5,12 @@ import { InputProps, Space, Typography, Input } from 'antd'
 import { AppDispatch, AppState } from 'app/model'
 import { setTemplateData } from 'app/model/template.controller'
 
-const AddressInput = ({
-  id,
-  title,
-  ...rest
-}: { id: string; title: string } & InputProps) => {
+type PropsAddressInput = {
+  id: string
+  title: string
+} & InputProps
+
+const AddressInput = ({ id, title, ...rest }: PropsAddressInput) => {
   const dispatch = useDispatch<AppDispatch>()
   const value = useSelector((state: AppState) => state.template.data[id])
 
@@ -20,9 +21,7 @@ const AddressInput = ({
         className="border-less"
         placeholder="Input Address"
         value={value}
-        onChange={(e) =>
-          dispatch(setTemplateData({ id, value: e.target.value }))
-        }
+        onChange={(e) => dispatch(setTemplateData({ [id]: e.target.value }))}
         {...rest}
       />
     </Space>
