@@ -7,7 +7,7 @@ import SPL from './spl'
 
 import { TemplateNames } from 'app/templates'
 import { AppDispatch, AppState } from 'app/model'
-import { setVisible } from 'app/model/template.controller'
+import { clearTemplate } from 'app/model/template.controller'
 
 import './index.less'
 
@@ -21,7 +21,7 @@ const Template = ({ daoAddress }: { daoAddress: string }) => {
       footer={false}
       closeIcon={<IonIcon name="close-outline" />}
       className="template-card template-modal"
-      onCancel={() => dispatch(setVisible(false))}
+      onCancel={() => dispatch(clearTemplate())}
     >
       <Row>
         <Col span={24} className="template-header">

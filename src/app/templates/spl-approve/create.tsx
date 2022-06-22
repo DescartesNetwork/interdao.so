@@ -1,19 +1,18 @@
 import { useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { Button, Col, Row, Space } from 'antd'
 import { NumberInput, MintInput, AddressInput } from 'app/templates/components'
 
-import { AppDispatch, AppState } from 'app/model'
+import { AppState } from 'app/model'
 import { SplApproveIdl, SplApproveIds } from '../spl-approve/configs'
 import { PropsCreateComponent } from '../index'
 import useMetaData from 'app/hooks/useMetaData'
 import { useConfirmIdl } from '../hooks/useConfirmIdl'
-import { setTemplateData } from 'app/model/template.controller'
 
 const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
-  const dispatch = useDispatch<AppDispatch>()
   const daoData = useSelector((state: AppState) => state.daos[daoAddress])
+  const templateData = useSelector((state: AppState) => state.template.data)
   const { metaData: daoMetaData } = useMetaData(daoAddress)
 
   const { confirm, close } = useConfirmIdl()
@@ -23,9 +22,8 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
       [SplApproveIds.code]: '4',
       [SplApproveIds.authority]: daoData.master.toBase58(),
     }
-    await dispatch(setTemplateData(defaultData))
-    return confirm(SplApproveIdl)
-  }, [confirm, daoData.master, dispatch])
+    return confirm(SplApproveIdl, { ...defaultData, ...templateData })
+  }, [confirm, daoData.master, templateData])
 
   return (
     <Row gutter={[24, 24]}>
@@ -39,6 +37,7 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
       <Col span={24}>
         <AddressInput
           id={SplApproveIds.source}
+          defaultValue={daoData.master.toBase58()}
           title="Source's Wallet Address"
           placeholder="Input Source's Wallet Address"
           disabled={daoMetaData?.daoType === 'multisig-dao'}

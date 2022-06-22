@@ -1,19 +1,18 @@
 import { useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { Button, Col, Row, Space } from 'antd'
 import { NumberInput, MintInput, AddressInput } from 'app/templates/components'
 
-import { AppDispatch, AppState } from 'app/model'
-import { setTemplateData } from 'app/model/template.controller'
+import { AppState } from 'app/model'
 import useMetaData from 'app/hooks/useMetaData'
 import { SplTransferIdl, SplTransferIds } from '../spl-transfer/configs'
 import { PropsCreateComponent } from '../index'
 import { useConfirmIdl } from '../hooks/useConfirmIdl'
 
 const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
-  const dispatch = useDispatch<AppDispatch>()
   const daoData = useSelector((state: AppState) => state.daos[daoAddress])
+  const templateData = useSelector((state: AppState) => state.template.data)
   const { metaData: daoMetaData } = useMetaData(daoAddress)
   const { confirm, close } = useConfirmIdl()
 
@@ -23,9 +22,8 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
       [SplTransferIds.authority]: daoData.master.toBase58(),
       [SplTransferIds.source]: daoData.master.toBase58(),
     }
-    await dispatch(setTemplateData(defaultData))
-    return confirm(SplTransferIdl)
-  }, [confirm, daoData.master, dispatch])
+    return confirm(SplTransferIdl, { ...defaultData, ...templateData })
+  }, [confirm, daoData.master, templateData])
 
   return (
     <Row gutter={[24, 24]}>

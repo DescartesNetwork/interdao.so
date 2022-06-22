@@ -50,7 +50,7 @@ export const clearTx = createAsyncThunk(`${NAME}/clearTx`, async () => {
 
 export const setTemplateName = createAsyncThunk(
   `${NAME}/setTemplateName`,
-  async (name: string) => {
+  async (name?: TemplateNames) => {
     return { templateName: name }
   },
 )
@@ -59,6 +59,13 @@ export const setTemplateData = createAsyncThunk(
   `${NAME}/setTemplateData`,
   async (templateData: Record<string, string>) => {
     return templateData
+  },
+)
+
+export const clearTemplate = createAsyncThunk(
+  `${NAME}/clearTemplate`,
+  async () => {
+    return { visible: false, tx: undefined, templateName: undefined, data: {} }
   },
 )
 
@@ -90,6 +97,10 @@ const slice = createSlice({
       )
       .addCase(
         clearTx.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        clearTemplate.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })
