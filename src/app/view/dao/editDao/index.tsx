@@ -4,6 +4,7 @@ import { Card, Col, Row, Tabs, Typography } from 'antd'
 import Information from './editDaoDetail'
 import Rule from './rule'
 import TransferAuthority from './transferAuthority'
+import EditSupply from './editSupply'
 
 import './index.less'
 
@@ -16,15 +17,18 @@ const EditDAO = () => {
         <Card bodyStyle={{ padding: 0 }} bordered={false} className="edit-dao">
           <Row>
             <Col span={24} className="edit-dao_header">
-              <Typography.Title level={4}>Edit DAO</Typography.Title>
+              <Typography.Title level={4}>Settings DAO </Typography.Title>
             </Col>
             <Col span={24} className="edit-dao_body">
               <Tabs>
                 <Tabs.TabPane key="information" tab="Information">
                   <Information daoAddress={daoAddress} />
                 </Tabs.TabPane>
-                <Tabs.TabPane key="rule" tab="Rule">
+                <Tabs.TabPane key="regime" tab="Regime">
                   <Rule daoAddress={daoAddress} />
+                </Tabs.TabPane>
+                <Tabs.TabPane key="supply" tab="Supply">
+                  <EditSupply daoAddress={daoAddress} />
                 </Tabs.TabPane>
                 <Tabs.TabPane key="transfer-authority" tab="Transfer Authority">
                   <TransferAuthority daoAddress={daoAddress} />
