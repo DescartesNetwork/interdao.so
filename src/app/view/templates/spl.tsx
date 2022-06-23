@@ -44,9 +44,27 @@ const SPL = ({ daoAddress }: { daoAddress: string }) => {
               <Space size={0} direction="vertical">
                 <Typography.Text>Solana Program Library</Typography.Text>
                 <Space size={2} style={{ marginLeft: -8 }}>
-                  <Button type="text" icon={<IonIcon name="logo-discord" />} />
-                  <Button type="text" icon={<IonIcon name="logo-twitter" />} />
-                  <Button type="text" icon={<IonIcon name="logo-telegram" />} />
+                  <Button
+                    type="text"
+                    icon={<IonIcon name="logo-discord" />}
+                    onClick={() => {
+                      window.open('https://discord.com/invite/pquxPsq', 'blank')
+                    }}
+                  />
+                  <Button
+                    type="text"
+                    icon={<IonIcon name="logo-twitter" />}
+                    onClick={() => {
+                      window.open('https://twitter.com/solana', 'blank')
+                    }}
+                  />
+                  <Button
+                    type="text"
+                    icon={<IonIcon name="logo-telegram" />}
+                    onClick={() => {
+                      window.open('https://t.me/solana', 'blank')
+                    }}
+                  />
                 </Space>
               </Space>
             </Space>
