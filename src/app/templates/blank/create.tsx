@@ -1,27 +1,31 @@
 import { useCallback } from 'react'
-import { useSelector } from 'react-redux'
 
 import { Button, Col, Row, Space } from 'antd'
 
-import { AppState } from 'app/model'
 import { BlankIdl, BlankIds } from '../blank/configs'
 import { PropsCreateComponent } from '../index'
 import { useConfirmIdl } from '../hooks/useConfirmIdl'
+import { useDaoData } from 'app/hooks/dao'
 
 const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
-  const daoData = useSelector((state: AppState) => state.daos[daoAddress])
+  const daoData = useDaoData(daoAddress)
   const { confirm, close } = useConfirmIdl()
 
   const onConfirm = useCallback(async () => {
-    const defaultData: Record<string, string> = {
-      [BlankIds.code]: '2',
-      [BlankIds.lamports]: '0',
-      [BlankIds.source]: daoData.master.toBase58(),
-      [BlankIds.destination]: daoData.master.toBase58(),
-      [BlankIds.authority]: daoData.master.toBase58(),
+    try {
+      if (!daoData) throw new Error('Invalid Dao Data')
+      const defaultData: Record<string, string> = {
+        [BlankIds.code]: '2',
+        [BlankIds.lamports]: '0',
+        [BlankIds.source]: daoData.master.toBase58(),
+        [BlankIds.destination]: daoData.master.toBase58(),
+        [BlankIds.authority]: daoData.master.toBase58(),
+      }
+      return confirm(BlankIdl, { ...defaultData })
+    } catch (error: any) {
+      window.notify({ type: 'error', description: error.message })
     }
-    return confirm(BlankIdl, { ...defaultData })
-  }, [confirm, daoData.master])
+  }, [confirm, daoData])
 
   return (
     <Row gutter={[24, 24]}>
