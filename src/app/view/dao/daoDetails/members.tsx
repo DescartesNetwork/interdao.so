@@ -1,12 +1,12 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { Col, Row, Space, Tooltip, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
-import useMembers from 'app/hooks/useMembers'
 import useMetaData from 'app/hooks/useMetaData'
-import { asyncWait, numeric, shortenAddress } from 'shared/util'
+import { asyncWait, shortenAddress } from 'shared/util'
+import DaoMember from 'app/components/dao/daoMember'
 
 const InfoMember = ({ daoAddress }: { daoAddress: string }) => {
   const [copied, setCopied] = useState('address')
@@ -56,15 +56,8 @@ const InfoMember = ({ daoAddress }: { daoAddress: string }) => {
 }
 
 const AmountMembers = ({ daoAddress }: { daoAddress: string }) => {
-  const members = useMembers(daoAddress)
   const { metaData } = useMetaData(daoAddress)
   const isMultisig = metaData?.daoType === 'multisig-dao'
-
-  const amountMembers = useMemo(() => {
-    if (!isMultisig) return members
-    const { members: daoMembers } = metaData
-    return daoMembers.length
-  }, [isMultisig, members, metaData])
 
   return (
     <Row gutter={[8, 8]}>
@@ -87,7 +80,9 @@ const AmountMembers = ({ daoAddress }: { daoAddress: string }) => {
           )}
         </Space>
       </Col>
-      <Col span={24}> {numeric(amountMembers).format('0,0')}</Col>
+      <Col span={24}>
+        <DaoMember daoAddress={daoAddress} />
+      </Col>
     </Row>
   )
 }

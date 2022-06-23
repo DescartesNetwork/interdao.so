@@ -7,10 +7,10 @@ import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import StatisticCard from 'app/components/statisticCard'
 import RegimeTag from 'app/components/regimeTag'
 import AvatarNFT from 'app/components/avatarNFT'
+import DaoMember from 'app/components/dao/daoMember'
 
 import { AppState } from 'app/model'
-import { numeric, shortenAddress } from 'shared/util'
-import useMembers from 'app/hooks/useMembers'
+import { shortenAddress } from 'shared/util'
 
 export type ProposalPreviewProps = {
   daoAddress: string
@@ -24,7 +24,6 @@ const ProposalPreview = ({ daoAddress }: ProposalPreviewProps) => {
       regime: {},
       mint: SystemProgram.programId,
     } as DaoData)
-  const members = useMembers(daoAddress)
 
   return (
     <Row gutter={[36, 16]}>
@@ -47,7 +46,10 @@ const ProposalPreview = ({ daoAddress }: ProposalPreviewProps) => {
         />
       </Col>
       <Col xs={12} md={5}>
-        <StatisticCard title="Members" value={numeric(members).format('0,0')} />
+        <StatisticCard
+          title="Members"
+          value={<DaoMember daoAddress={daoAddress} />}
+        />
       </Col>
       <Col xs={12} md={5}>
         <StatisticCard title="Regime" value={<RegimeTag regime={regime} />} />

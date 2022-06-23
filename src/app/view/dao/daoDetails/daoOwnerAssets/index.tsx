@@ -2,10 +2,11 @@ import { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
-import IonIcon from '@sentre/antd-ionicon'
 import { Button, Card, Col, Row, Space, Tabs, Tooltip, Typography } from 'antd'
+import IonIcon from '@sentre/antd-ionicon'
+import QRcode from 'qrcode.react'
 import NftTreasury from './nftsTreasury'
-import Treasury from './treasury'
+import TokenTreasury from './tokenTreasury'
 import RowSpaceBetween from 'app/components/rowSpaceBetween'
 
 import { asyncWait, shortenAddress } from 'shared/util'
@@ -21,21 +22,27 @@ const InfoDAOMaster = ({ daoAddress }: { daoAddress: string }) => {
   }
 
   return (
-    <Row>
+    <Row justify="center" gutter={[16, 16]}>
       <Col span={24}>
         <Space size={8}>
           <IonIcon
             name="information-circle-outline"
             style={{ color: '#f9deb0' }}
           />
-          <Typography.Text>
-            The treasury should be deposited to facilitate proposals.
-          </Typography.Text>
+          <Typography.Text>You can deposit to this address</Typography.Text>
         </Space>
       </Col>
-      <Col>
+      <Col style={{ background: '#f4f4f5', paddingTop: 8 }}>
+        <QRcode
+          value={daoAddress}
+          size={110}
+          bgColor="#ffffff"
+          fgColor="#1f1f1f"
+        />
+      </Col>
+      <Col span={24}>
         <RowSpaceBetween
-          label="Treasury Address"
+          label="DAO Master Address:"
           value={
             <Space>
               <Typography.Text className="t-16">
@@ -81,7 +88,7 @@ const DaoOwnerAssets = ({ daoAddress }: { daoAddress: string }) => {
         }
       >
         <Tabs.TabPane tab="Treasury" key="treasury">
-          <Treasury daoAddress={daoAddress} />
+          <TokenTreasury daoAddress={daoAddress} />
         </Tabs.TabPane>
         <Tabs.TabPane tab="NFTs" key="nft">
           <NftTreasury daoAddress={daoAddress} />

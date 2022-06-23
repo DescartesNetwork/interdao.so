@@ -25,7 +25,6 @@ import GradientAvatar from 'app/components/gradientAvatar'
 
 import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
-import useMembers from 'app/hooks/useMembers'
 import useMetaData from 'app/hooks/useMetaData'
 import useValidDaoMember from 'app/hooks/dao/useValidDaoMember'
 import { getIcon, validURL } from 'app/helpers'
@@ -33,6 +32,7 @@ import { getIcon, validURL } from 'app/helpers'
 import autonomous from 'app/static/images/system/bg-autonomous.png'
 import democratic from 'app/static/images/system/bg-democratic.png'
 import dictatorial from 'app/static/images/system/bg-dictatorial.png'
+import DaoMember from 'app/components/dao/daoMember'
 
 export type DaoCardProps = { daoAddress: string }
 export type DaoCardBackground = 'autonomous' | 'democratic' | 'dictatorial'
@@ -54,7 +54,6 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
     ui: { width },
   } = useUI()
 
-  const members = useMembers(daoAddress)
   const { metaData, loading } = useMetaData(daoAddress)
   const { validMember } = useValidDaoMember(daoAddress)
   const parseRegime = Object.keys(regime)?.[0]
@@ -182,7 +181,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
                   <Col span={8}>
                     <StatisticCard
                       title="Members"
-                      value={numeric(members).format('0,0')}
+                      value={<DaoMember daoAddress={daoAddress} />}
                     />
                   </Col>
                 </Row>
