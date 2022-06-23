@@ -25,7 +25,7 @@ import GradientAvatar from 'app/components/gradientAvatar'
 
 import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
-import useMembers from 'app/hooks/useMembers'
+import { useDaoMembers } from 'app/hooks/dao'
 import useMetaData from 'app/hooks/useMetaData'
 import useValidDaoMember from 'app/hooks/dao/useValidDaoMember'
 import { getIcon, validURL } from 'app/helpers'
@@ -54,7 +54,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
     ui: { width },
   } = useUI()
 
-  const members = useMembers(daoAddress)
+  const members = useDaoMembers(daoAddress)
   const { metaData, loading } = useMetaData(daoAddress)
   const { validMember } = useValidDaoMember(daoAddress)
   const parseRegime = Object.keys(regime)?.[0]

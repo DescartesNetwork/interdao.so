@@ -4,7 +4,7 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 import { Col, Row, Space, Tooltip, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
-import useMembers from 'app/hooks/useMembers'
+import { useDaoMembers } from 'app/hooks/dao'
 import useMetaData from 'app/hooks/useMetaData'
 import { asyncWait, numeric, shortenAddress } from 'shared/util'
 
@@ -56,7 +56,7 @@ const InfoMember = ({ daoAddress }: { daoAddress: string }) => {
 }
 
 const AmountMembers = ({ daoAddress }: { daoAddress: string }) => {
-  const members = useMembers(daoAddress)
+  const members = useDaoMembers(daoAddress)
   const { metaData } = useMetaData(daoAddress)
   const isMultisig = metaData?.daoType === 'multisig-dao'
 

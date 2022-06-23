@@ -43,7 +43,11 @@ const conf: Record<Net, Conf> = {
    * Production configurations
    */
   mainnet: {
-    interDao: new InterDAO(new SafeWallet(), rpc),
+    interDao: new InterDAO(
+      new SafeWallet(),
+      rpc,
+      'Cf9aesANCGv35NsqtGpJ4d3M7wKrcPLiGDLUxYPtaEab',
+    ),
     utility: new Utility(new SafeWallet(), rpc),
     fee: 1000000, // 0.001 SOL
     taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',

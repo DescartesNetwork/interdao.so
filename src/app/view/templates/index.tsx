@@ -2,10 +2,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { Col, Modal, Row, Tabs, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
-import { TemplateCreateLoader } from 'app/templates/templateLoader'
 import SPL from './spl'
-
-import { TemplateNames } from 'app/templates'
+import Blank from './blank'
 import { AppDispatch, AppState } from 'app/model'
 import { clearTemplate } from 'app/model/template.controller'
 
@@ -28,14 +26,10 @@ const Template = ({ daoAddress }: { daoAddress: string }) => {
           <Typography.Title level={4}>Choose a template</Typography.Title>
         </Col>
         <Col className="template-body" span={24}>
-          <Tabs
-            tabBarExtraContent={
-              <TemplateCreateLoader
-                name={TemplateNames.BlankTemplate}
-                daoAddress={daoAddress}
-              />
-            }
-          >
+          <Tabs>
+            <Tabs.TabPane tab="Blank" key="blank">
+              <Blank daoAddress={daoAddress} />
+            </Tabs.TabPane>
             <Tabs.TabPane tab="SPL" key="spl">
               <SPL daoAddress={daoAddress} />
             </Tabs.TabPane>
