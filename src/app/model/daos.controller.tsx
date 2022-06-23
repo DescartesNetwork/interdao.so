@@ -52,6 +52,7 @@ export const getDao = createAsyncThunk<
     daos: { [address]: data },
   } = getState()
   if (data && !force) return { [address]: data }
+
   const daoData: DaoData = await interDao.getDaoData(address)
   return {
     [address]: daoData,

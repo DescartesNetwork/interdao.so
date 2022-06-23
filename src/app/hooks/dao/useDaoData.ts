@@ -1,33 +1,24 @@
-import { useDispatch } from 'react-redux'
-import { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+
+import { AppDispatch, AppState } from 'app/model'
+import { getDao } from 'app/model/daos.controller'
 import { DaoData } from '@interdao/core'
 
-import { AppDispatch } from 'app/model'
-import { getDao } from 'app/model/daos.controller'
-import { DataLoader } from 'shared/dataloader'
-
-export const useDaoData = (daoAddress?: string) => {
+export const useDaoData = (daoAddress: string) => {
   const dispatch = useDispatch<AppDispatch>()
-  const [daoData, setDaoData] = useState<DaoData>()
-
-  const fetchDaoData = useCallback(
-    async (daoAddress: string) => {
-      try {
-        const keyLoader = 'useDaoData:fetchDaoData:' + daoAddress
-        const data = await DataLoader.load(keyLoader, () =>
-          dispatch(getDao({ address: daoAddress })).unwrap(),
-        )
-        const daoData = data[daoAddress]
-        setDaoData(daoData)
-      } catch (er: any) {
-        return window.notify({ type: 'error', description: er.message })
-      }
-    },
-    [dispatch],
+  const daoData: DaoData | undefined = useSelector(
+    (state: AppState) => state.daos[daoAddress],
   )
-  useEffect(() => {
-    if (daoAddress) fetchDaoData(daoAddress)
-  }, [daoAddress, fetchDaoData])
 
-  return { daoData, fetchDaoData }
+  useEffect(() => {
+    if (daoData) return
+    try {
+      dispatch(getDao({ address: daoAddress })).unwrap()
+    } catch (er: any) {
+      return window.notify({ type: 'error', description: er.message })
+    }
+  }, [daoAddress, daoData, dispatch])
+
+  return daoData
 }

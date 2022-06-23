@@ -10,7 +10,7 @@ import AvatarNFT from 'app/components/avatarNFT'
 
 import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
-import useMembers from 'app/hooks/useMembers'
+import { useDaoMembers } from 'app/hooks/dao'
 
 export type ProposalPreviewProps = {
   daoAddress: string
@@ -24,7 +24,7 @@ const ProposalPreview = ({ daoAddress }: ProposalPreviewProps) => {
       regime: {},
       mint: SystemProgram.programId,
     } as DaoData)
-  const members = useMembers(daoAddress)
+  const members = useDaoMembers(daoAddress)
 
   return (
     <Row gutter={[36, 16]}>
