@@ -1,39 +1,36 @@
-import { useSelector } from 'react-redux'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccount, useWallet } from '@senhub/providers'
-import { DaoData } from '@interdao/core'
 
-import { AppState } from 'app/model'
 import useMetaData from 'app/hooks/useMetaData'
 import useOwnerNFT from '../useOwnerNFT'
+import { useDaoData } from './useDaoData'
 
 const useValidDaoMember = (daoAddress: string) => {
-  const daos = useSelector((state: AppState) => state.daos)
-  const { accounts } = useAccount()
-
-  const { mint: daoMint, isNft } = daos[daoAddress] || ({} as DaoData)
-  const { metaData } = useMetaData(daoAddress)
   const [validMember, setValidMember] = useState(false)
   const [checking, setChecking] = useState(true)
+  const { accounts } = useAccount()
+  const daoData = useDaoData(daoAddress)
+  const { metaData } = useMetaData(daoAddress)
   const {
     wallet: { address: myAddress },
   } = useWallet()
+
   const { nfts } = useOwnerNFT(myAddress)
 
   const isMemberOnlyNFT = useMemo(() => {
-    if (!nfts || !daoMint) return false
+    if (!nfts || !daoData?.mint) return false
     for (const nft of nfts)
-      if (nft.collection?.key === daoMint.toBase58()) return true
+      if (nft.collection?.key === daoData.mint.toBase58()) return true
 
     return false
-  }, [daoMint, nfts])
+  }, [daoData?.mint, nfts])
 
   const isMemberTokenDAO = useMemo(() => {
-    if (!daoMint) return false
+    if (!daoData?.mint) return false
     const mints = []
     for (const { mint } of Object.values(accounts)) mints.push(mint)
-    return mints.includes(daoMint.toBase58())
-  }, [accounts, daoMint])
+    return mints.includes(daoData?.mint.toBase58())
+  }, [daoData?.mint, accounts])
 
   const isMemberMultisig = useMemo(() => {
     if (!metaData) return false
@@ -48,24 +45,24 @@ const useValidDaoMember = (daoAddress: string) => {
   }, [metaData, myAddress])
 
   const checkDaoMember = useCallback(() => {
-    if (!metaData || !daoMint) return setChecking(true)
+    if (!metaData || !daoData?.mint) return setChecking(true)
     const { daoType } = metaData
     let valid = false
-    if (daoType === 'flexible-dao' && isNft) valid = isMemberOnlyNFT
+    if (daoType === 'flexible-dao' && daoData?.isNft) valid = isMemberOnlyNFT
 
-    if (daoType === 'flexible-dao' && !isNft) valid = isMemberTokenDAO
+    if (daoType === 'flexible-dao' && !daoData?.isNft) valid = isMemberTokenDAO
 
     if (daoType === 'multisig-dao') valid = isMemberMultisig
 
     setValidMember(valid)
     setChecking(false)
   }, [
-    metaData,
-    daoMint,
-    isNft,
+    daoData?.isNft,
+    daoData?.mint,
+    isMemberMultisig,
     isMemberOnlyNFT,
     isMemberTokenDAO,
-    isMemberMultisig,
+    metaData,
   ])
 
   useEffect(() => {
