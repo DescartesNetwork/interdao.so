@@ -6,7 +6,7 @@ import { Button, Card, Col, Row, Space, Tabs, Tooltip, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import QRcode from 'qrcode.react'
 import NftTreasury from './nftsTreasury'
-import Treasury from './treasury'
+import TokenTreasury from './tokenTreasury'
 import RowSpaceBetween from 'app/components/rowSpaceBetween'
 
 import { asyncWait, shortenAddress } from 'shared/util'
@@ -88,7 +88,7 @@ const DaoOwnerAssets = ({ daoAddress }: { daoAddress: string }) => {
         }
       >
         <Tabs.TabPane tab="Treasury" key="treasury">
-          <Treasury daoAddress={daoAddress} />
+          <TokenTreasury daoAddress={daoAddress} />
         </Tabs.TabPane>
         <Tabs.TabPane tab="NFTs" key="nft">
           <NftTreasury daoAddress={daoAddress} />
