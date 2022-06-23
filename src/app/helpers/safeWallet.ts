@@ -3,7 +3,6 @@ import { AnchorWallet } from '@interdao/core'
 import { WalletInterface } from '@senswap/sen-js'
 
 class SafeWallet implements AnchorWallet {
-  private _wallet: WalletInterface = window.sentre.wallet
   private _publicKey: PublicKey = new PublicKey(
     'GuestAccount11111111111111111111111111111111',
   )
@@ -12,9 +11,13 @@ class SafeWallet implements AnchorWallet {
     this._init()
   }
 
+  private get _wallet(): WalletInterface {
+    return window.sentre?.wallet
+  }
+
   private _init = async () => {
-    const address = await this._wallet.getAddress()
-    this._publicKey = new PublicKey(address)
+    const address = await this._wallet?.getAddress()
+    if (address) this._publicKey = new PublicKey(address)
   }
 
   signTransaction = async (tx: Transaction): Promise<Transaction> => {
