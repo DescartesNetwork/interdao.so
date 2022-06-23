@@ -10,7 +10,7 @@ import useTotalUSD from 'app/hooks/useBalance'
 import { numeric } from 'shared/util'
 import { useDaoData } from 'app/hooks/dao'
 
-const Treasury = ({ daoAddress }: { daoAddress: string }) => {
+const TokenTreasury = ({ daoAddress }: { daoAddress: string }) => {
   const [tokenAccounts, setTokenAccounts] = useState<AccountData[]>()
   const daoData = useDaoData(daoAddress)
   const totalUSD = useTotalUSD({ accounts: tokenAccounts || [] })
@@ -89,4 +89,4 @@ const Treasury = ({ daoAddress }: { daoAddress: string }) => {
   )
 }
 
-export default Treasury
+export default TokenTreasury

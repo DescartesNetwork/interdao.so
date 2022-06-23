@@ -6,7 +6,7 @@ import { Button, Card, Col, Row, Space, Tabs, Tooltip, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import QRcode from 'qrcode.react'
 import NftTreasury from './nftsTreasury'
-import Treasury from './treasury'
+import TokenTreasury from './tokenTreasury'
 import RowSpaceBetween from 'app/components/rowSpaceBetween'
 
 import { asyncWait, shortenAddress } from 'shared/util'
@@ -22,7 +22,7 @@ const InfoDAOMaster = ({ daoAddress }: { daoAddress: string }) => {
   }
 
   return (
-    <Row justify="center" gutter={[16, 16]}>
+    <Row justify="center" gutter={[16, 16]} style={{ padding: 12 }}>
       <Col span={24}>
         <Space size={8}>
           <IonIcon
@@ -83,12 +83,12 @@ const DaoOwnerAssets = ({ daoAddress }: { daoAddress: string }) => {
             overlayClassName="info-member treasury-addr"
             title={<InfoDAOMaster daoAddress={daoMasterAddress} />}
           >
-            <Button size="small">Receive</Button>
+            <Button size="small">Master Wallet</Button>
           </Tooltip>
         }
       >
         <Tabs.TabPane tab="Treasury" key="treasury">
-          <Treasury daoAddress={daoAddress} />
+          <TokenTreasury daoAddress={daoAddress} />
         </Tabs.TabPane>
         <Tabs.TabPane tab="NFTs" key="nft">
           <NftTreasury daoAddress={daoAddress} />

@@ -1,10 +1,9 @@
 import { useMemo } from 'react'
-import { useSelector } from 'react-redux'
-import { DaoData, FeeOptions } from '@interdao/core'
+import { FeeOptions } from '@interdao/core'
 import { BN } from 'bn.js'
 
 import configs from 'app/configs'
-import { AppState } from 'app/model'
+import { useDaoData } from '../dao'
 
 type useProposalFeeProps = {
   daoAddress: string
@@ -15,26 +14,21 @@ const {
 } = configs
 
 const useProposalFee = ({ daoAddress }: useProposalFeeProps) => {
-  const daos = useSelector((state: AppState) => state.daos)
-  const { regime, authority } = daos[daoAddress] || ({} as DaoData)
-
-  const parseRegime = useMemo(() => {
-    if (!regime) return ''
-    return Object.keys(regime)[0]
-  }, [regime])
+  const daoData = useDaoData(daoAddress)
 
   const proposalFee = useMemo(() => {
-    if (!parseRegime || !authority) return
+    if (!daoData?.regime || !daoData?.authority) return
+    const parseRegime = Object.keys(daoData.regime)[0]
     const revenueFee = parseRegime === 'democratic' ? new BN(0) : new BN(fee)
     const feeOption: FeeOptions = {
       tax: new BN(fee),
       taxmanAddress: taxman,
       revenue: revenueFee,
-      revenuemanAddress: authority.toBase58(),
+      revenuemanAddress: daoData.authority.toBase58(),
     }
 
     return feeOption
-  }, [authority, parseRegime])
+  }, [daoData])
 
   return proposalFee
 }
