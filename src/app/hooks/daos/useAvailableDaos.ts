@@ -5,20 +5,20 @@ import { utils, web3 } from '@project-serum/anchor'
 
 import usePDB from '../usePDB'
 import { AppState } from 'app/model'
-import { DaoState } from 'app/model/daos.controller'
 import { MetaData } from 'app/model/createDao.controller'
 import useOwnerNFT from '../useOwnerNFT'
 
 const useAvailableDaos = () => {
   const daos = useSelector((state: AppState) => state.daos)
-  const [filteredDaos, setFilteredDaos] = useState<DaoState>({})
+  const [filteredDaos, setFilteredDaos] = useState<string[]>()
   const { accounts } = useAccount()
   const { wallet } = useWallet()
   const { nfts } = useOwnerNFT(wallet.address)
   const pdb = usePDB()
 
   const filterDaos = useCallback(async () => {
-    const filteredDaos: DaoState = {}
+    if (!nfts) return setFilteredDaos(undefined)
+    const filteredDaos: string[] = []
     try {
       for (const addr in daos) {
         const daoData = daos[addr]
@@ -46,7 +46,7 @@ const useAvailableDaos = () => {
             valid = false
         }
 
-        if (valid) filteredDaos[addr] = daoData
+        if (valid) filteredDaos.push(addr)
       }
     } catch (error) {}
     return setFilteredDaos(filteredDaos)
