@@ -1,47 +1,46 @@
-import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { SystemProgram } from '@solana/web3.js'
 import BN from 'bn.js'
 import { useUI, useWallet } from '@senhub/providers'
 
 import { Avatar, Button, Card, Col, Row, Space, Spin, Typography } from 'antd'
+import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import IonIcon from '@sentre/antd-ionicon'
 import StatisticCard from 'app/components/statisticCard'
 import RegimeTag from 'app/components/regimeTag'
 import AvatarNFT from 'app/components/avatarNFT'
-import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import GradientAvatar from 'app/components/gradientAvatar'
 import AmountMembers from './members'
 
-import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
-import useMetaData from 'app/hooks/useMetaData'
 import { getIcon, validURL } from 'app/helpers'
-import configs from 'app/configs'
+import useMetaData from 'app/hooks/useMetaData'
+import { useDaoData } from 'app/hooks/dao'
 import { DaoDetailsProps } from './index'
+import configs from 'app/configs'
 
 const {
   manifest: { appId },
 } = configs
 
 const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
-  const daos = useSelector((state: AppState) => state.daos)
+  const history = useHistory()
+  const { metaData, loading } = useMetaData(daoAddress)
+  const daoData = useDaoData(daoAddress)
   const {
     ui: { width },
   } = useUI()
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const { metaData, loading } = useMetaData(daoAddress)
-  const history = useHistory()
 
-  const { regime, nonce, mint, authority, isNft } = daos?.[daoAddress] || {
+  const { regime, nonce, mint, authority, isNft } = daoData || {
     regime: {},
     nonce: new BN(0),
     mint: SystemProgram.programId,
   }
 
-  const editDAO = () => history.push(`/app/${appId}/dao/${daoAddress}/edit`)
+  const onEditDAO = () => history.push(`/app/${appId}/dao/${daoAddress}/edit`)
 
   const mobileScreen = width < 768
 
@@ -92,7 +91,7 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
                 <Button
                   type="text"
                   size="large"
-                  onClick={editDAO}
+                  onClick={onEditDAO}
                   disabled={authority && walletAddress !== authority.toBase58()}
                   style={{
                     marginRight: -10,
