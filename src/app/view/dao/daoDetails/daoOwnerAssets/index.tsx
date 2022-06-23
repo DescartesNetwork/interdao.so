@@ -22,7 +22,7 @@ const InfoDAOMaster = ({ daoAddress }: { daoAddress: string }) => {
   }
 
   return (
-    <Row justify="center" gutter={[16, 16]}>
+    <Row justify="center" gutter={[16, 16]} style={{ padding: 12 }}>
       <Col span={24}>
         <Space size={8}>
           <IonIcon
@@ -83,7 +83,7 @@ const DaoOwnerAssets = ({ daoAddress }: { daoAddress: string }) => {
             overlayClassName="info-member treasury-addr"
             title={<InfoDAOMaster daoAddress={daoMasterAddress} />}
           >
-            <Button size="small">Receive</Button>
+            <Button size="small">Master Wallet</Button>
           </Tooltip>
         }
       >
