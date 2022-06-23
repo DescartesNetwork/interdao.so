@@ -45,8 +45,8 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
   const mobileScreen = width < 768
 
   return (
-    <Spin spinning={loading} tip="Loading...">
-      <Card bordered={false}>
+    <Card bordered={false} style={{ height: '100%' }}>
+      <Spin spinning={loading} tip="Loading...">
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Row justify="space-between" wrap={false}>
@@ -148,8 +148,8 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
             </Typography.Paragraph>
           </Col>
         </Row>
-      </Card>
-    </Spin>
+      </Spin>
+    </Card>
   )
 }
 
