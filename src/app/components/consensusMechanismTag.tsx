@@ -18,7 +18,7 @@ const ConsensusMechanismTag = ({
       return 'StakedTokenCounter'
     if (isEqual(consensusMechanism, ConsensusMechanisms.LockedTokenCounter))
       return 'LockedTokenCounter'
-    return 'Consensus Mechanism'
+    return 'Voting Mechanism'
   }, [consensusMechanism])
 
   return (
