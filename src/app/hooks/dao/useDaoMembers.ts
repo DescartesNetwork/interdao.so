@@ -1,3 +1,4 @@
+import { useDaoData } from 'app/hooks/dao'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -6,6 +7,7 @@ import { getTokenHolders } from 'app/model/tokenHolder.controller'
 
 export const useDaoMembers = (daoAddress: string): number => {
   const dispatch = useDispatch<AppDispatch>()
+  const daoData = useDaoData(daoAddress)
   const [members, setMembers] = useState(0)
 
   const fetchDaoMember = useCallback(async () => {
@@ -15,8 +17,8 @@ export const useDaoMembers = (daoAddress: string): number => {
   }, [daoAddress, dispatch])
 
   useEffect(() => {
-    if (daoAddress) fetchDaoMember()
-  }, [daoAddress, fetchDaoMember])
+    if (daoData) fetchDaoMember()
+  }, [daoData, fetchDaoMember])
 
   return members
 }
