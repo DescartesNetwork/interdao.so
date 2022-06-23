@@ -46,10 +46,10 @@ const HEIGHT_RATIO = 1.777777
 const MAX_WIDTH_RATE = 24 / 18 // full screen is 24 col, max width is 18 col
 
 const DaoCard = ({ daoAddress }: DaoCardProps) => {
+  const history = useHistory()
   const { regime, nonce, mint, isPublic, isNft } = useSelector(
     (state: AppState) => state.daos[daoAddress],
   )
-  const history = useHistory()
   const {
     ui: { width },
   } = useUI()

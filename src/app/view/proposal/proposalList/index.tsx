@@ -178,7 +178,7 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
             ))
           ) : (
             <Col span={24} style={{ textAlign: 'center' }}>
-              <Empty />
+              <Empty description="No Proposals" />
             </Col>
           )}
         </Row>

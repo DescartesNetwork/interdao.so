@@ -2,33 +2,40 @@ import { useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { isAddress } from '@interdao/core'
 
-import { Button, Col, Row, Space } from 'antd'
+import { Button, Col, Empty, Row, Space } from 'antd'
 import { NumberInput, MintInput, AddressInput } from 'app/templates/components'
 
 import { AppState } from 'app/model'
 import { SplTransferIdl, SplTransferIds } from '../spl-transfer/configs'
 import { PropsCreateComponent } from '../index'
 import { useConfirmIdl } from '../hooks/useConfirmIdl'
+import { useDaoData } from 'app/hooks/dao'
 
 const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
-  const daoData = useSelector((state: AppState) => state.daos[daoAddress])
+  const daoData = useDaoData(daoAddress)
   const templateData = useSelector((state: AppState) => state.template.data)
   const { confirm, close } = useConfirmIdl()
 
   const onConfirm = useCallback(async () => {
-    const defaultData = {
-      [SplTransferIds.code]: '3',
-      [SplTransferIds.authority]: daoData.master.toBase58(),
-      [SplTransferIds.source]: daoData.master.toBase58(),
+    try {
+      if (!daoData) throw new Error('Invalid DAO data')
+      const defaultData = {
+        [SplTransferIds.code]: '3',
+        [SplTransferIds.authority]: daoData.master.toBase58(),
+        [SplTransferIds.source]: daoData.master.toBase58(),
+      }
+      return confirm(SplTransferIdl, { ...defaultData, ...templateData })
+    } catch (er: any) {
+      window.notify({ type: 'error', description: er.message })
     }
-    return confirm(SplTransferIdl, { ...defaultData, ...templateData })
-  }, [confirm, daoData.master, templateData])
+  }, [confirm, daoData, templateData])
 
   const disabled =
     !templateData[SplTransferIds.amount] ||
     !isAddress(templateData[SplTransferIds.destination]) ||
     !templateData[SplTransferIds.mint]
 
+  if (!daoData) return <Empty description="Invalid DAO data" />
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>
