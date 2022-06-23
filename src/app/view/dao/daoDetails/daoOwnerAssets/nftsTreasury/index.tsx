@@ -1,45 +1,65 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useCallback, useEffect, useState } from 'react'
 import LazyLoad from '@sentre/react-lazyload'
 import axios from 'axios'
 
-import { Card, Col, Image, Row } from 'antd'
+import { Card, Col, Empty, Image, Row, Space, Spin, Typography } from 'antd'
 
 import useNftMetaData from 'app/hooks/useNftMetaData'
 import { fetchYourOwnerNTFs, MetadataDataType } from 'app/helpers/metaplex'
-import { AppState } from 'app/model'
 
 import IMAGE_DEFAULT from 'app/static/images/system/nft.jpeg'
+import { useDaoData } from 'app/hooks/dao'
 
 const NftTreasury = ({ daoAddress }: { daoAddress: string }) => {
   const [listNFTs, setListNFTs] = useState<MetadataDataType[]>()
-  const daos = useSelector((state: AppState) => state.daos)
-
-  const daoMasterAddress = useMemo(() => {
-    const { master } = daos[daoAddress] || {}
-    return master?.toBase58() || ''
-  }, [daos, daoAddress])
+  const daoData = useDaoData(daoAddress)
 
   const getYourOwnerNFTs = useCallback(async () => {
-    const nfts = await fetchYourOwnerNTFs(daoMasterAddress)
+    if (!daoData?.master) return setListNFTs(undefined)
+    const nfts = await fetchYourOwnerNTFs(daoData.master.toBase58())
     return setListNFTs(nfts)
-  }, [daoMasterAddress])
+  }, [daoData?.master])
 
   useEffect(() => {
     getYourOwnerNFTs()
   }, [getYourOwnerNFTs])
 
   return (
-    <Row gutter={[8, 8]} className="scrollbar" style={{ height: 160 }}>
-      {listNFTs &&
-        listNFTs.map((nft) => (
-          <Col xs={8} md={8} key={nft.mint}>
-            <LazyLoad height={87}>
-              <CardNFT mintAddress={nft.mint} />
-            </LazyLoad>
-          </Col>
-        ))}
-    </Row>
+    <Spin spinning={!listNFTs} tip="Loading...">
+      <Row gutter={[8, 8]} style={{ height: 160 }}>
+        <Col span={24}>
+          <Row align="middle">
+            <Col flex="auto">
+              <Space align="baseline">
+                <Typography.Text type="secondary">Total NFTs</Typography.Text>
+              </Space>
+            </Col>
+            <Col>
+              <Typography.Title level={4}>
+                {listNFTs?.length || 0}
+              </Typography.Title>
+            </Col>
+          </Row>
+        </Col>
+        <Col span={24}>
+          <Row gutter={[8, 8]} className="scrollbar">
+            {listNFTs?.length !== 0 ? (
+              listNFTs?.map((nft) => (
+                <Col xs={8} md={8} key={nft.mint}>
+                  <LazyLoad height={87}>
+                    <CardNFT mintAddress={nft.mint} />
+                  </LazyLoad>
+                </Col>
+              ))
+            ) : (
+              <Col span={24}>
+                <Empty description="No NFTs" />
+              </Col>
+            )}
+          </Row>
+        </Col>
+      </Row>
+    </Spin>
   )
 }
 

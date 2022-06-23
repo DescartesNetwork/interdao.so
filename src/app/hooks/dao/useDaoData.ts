@@ -5,11 +5,9 @@ import { AppDispatch, AppState } from 'app/model'
 import { getDao } from 'app/model/daos.controller'
 import { DaoData } from '@interdao/core'
 
-export const useDaoData = (daoAddress: string) => {
+export const useDaoData = (daoAddress: string): DaoData | undefined => {
   const dispatch = useDispatch<AppDispatch>()
-  const daoData: DaoData | undefined = useSelector(
-    (state: AppState) => state.daos[daoAddress],
-  )
+  const daoData = useSelector((state: AppState) => state.daos[daoAddress])
 
   useEffect(() => {
     if (daoData) return
