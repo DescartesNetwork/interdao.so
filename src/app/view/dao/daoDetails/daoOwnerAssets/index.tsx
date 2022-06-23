@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Button, Card, Spin, Tabs, Tooltip } from 'antd'
+import { Button, Card, Tabs, Tooltip } from 'antd'
 import NftTreasury from './nftsTreasury'
 import TokenTreasury from './tokenTreasury'
 
