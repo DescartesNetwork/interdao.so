@@ -43,7 +43,7 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
           id={SplTransferIds.source}
           title="Sender's Wallet Address"
           placeholder="Input Sender's Wallet Address"
-          disabled
+          readOnly
           defaultValue={daoData.master.toBase58()}
         />
       </Col>
