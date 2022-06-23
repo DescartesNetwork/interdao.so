@@ -30,7 +30,6 @@ const useAvailableDaos = () => {
 
           // Validate MultisigDAO
           const { daoType, members } = (await pdb.getItem(addr)) as MetaData
-          console.log(addr, daoType, loadingNFTs, nfts)
 
           if (daoType === 'multisig-dao') {
             const listMember = members.map(({ walletAddress }) => walletAddress)
@@ -44,6 +43,7 @@ const useAvailableDaos = () => {
             })
             if (!accounts[tokenAccount.toBase58()]) valid = false
           }
+
           if (daoType === 'flexible-dao' && isNft && !loadingNFTs) {
             const myCollections = nfts?.map((nft) => nft.collection?.key)
             if (!myCollections || !myCollections.includes(mint.toBase58()))
