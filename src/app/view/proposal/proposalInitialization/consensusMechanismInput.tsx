@@ -42,7 +42,7 @@ const ConsensusMechanismInput = ({
                       vote is only counted based on the number of staked tokens.
                     </Typography.Text>
                     <Typography.Text>
-                      <strong>Lock (Token) To Vote:</strong> The power of a vote
+                      <strong>Lock (Token) to Vote:</strong> The power of a vote
                       is the product of the number of staked tokens and the lock
                       time in seconds.
                     </Typography.Text>
