@@ -14,43 +14,49 @@ const useAvailableDaos = () => {
   const [filteredDaos, setFilteredDaos] = useState<DaoState>({})
   const { accounts } = useAccount()
   const { wallet } = useWallet()
-  const { nfts } = useOwnerNFT(wallet.address)
+  const { nfts, loading: loadingNFTs } = useOwnerNFT(wallet.address)
   const pdb = usePDB()
 
   const filterDaos = useCallback(async () => {
+    if (loadingNFTs) return
     const filteredDaos: DaoState = {}
-    try {
-      for (const addr in daos) {
-        const daoData = daos[addr]
-        const { mint, isNft } = daoData
-        let valid = true
 
-        // Validate MultisigDAO
-        const { daoType, members } = (await pdb.getItem(addr)) as MetaData
+    await Promise.all(
+      Object.keys(daos).map(async (addr) => {
+        try {
+          const daoData = daos[addr]
+          const { mint, isNft } = daoData
+          let valid = true
 
-        if (daoType === 'multisig-dao') {
-          const listMember = members.map(({ walletAddress }) => walletAddress)
-          if (!listMember.includes(wallet.address)) valid = false
-        }
+          // Validate MultisigDAO
+          const { daoType, members } = (await pdb.getItem(addr)) as MetaData
+          console.log(addr, daoType, loadingNFTs, nfts)
 
-        if (daoType === 'flexible-dao' && !isNft) {
-          const tokenAccount = await utils.token.associatedAddress({
-            mint,
-            owner: new web3.PublicKey(wallet.address),
-          })
-          if (!accounts[tokenAccount.toBase58()]) valid = false
-        }
-        if (daoType === 'flexible-dao' && isNft) {
-          const myCollections = nfts?.map((nft) => nft.collection?.key)
-          if (!myCollections || !myCollections.includes(mint.toBase58()))
-            valid = false
-        }
+          if (daoType === 'multisig-dao') {
+            const listMember = members.map(({ walletAddress }) => walletAddress)
+            if (!listMember.includes(wallet.address)) valid = false
+          }
 
-        if (valid) filteredDaos[addr] = daoData
-      }
-    } catch (error) {}
+          if (daoType === 'flexible-dao' && !isNft) {
+            const tokenAccount = await utils.token.associatedAddress({
+              mint,
+              owner: new web3.PublicKey(wallet.address),
+            })
+            if (!accounts[tokenAccount.toBase58()]) valid = false
+          }
+          if (daoType === 'flexible-dao' && isNft && !loadingNFTs) {
+            const myCollections = nfts?.map((nft) => nft.collection?.key)
+            if (!myCollections || !myCollections.includes(mint.toBase58()))
+              valid = false
+          }
+
+          if (valid) filteredDaos[addr] = daoData
+        } catch (error) {}
+      }),
+    )
+
     return setFilteredDaos(filteredDaos)
-  }, [accounts, daos, nfts, pdb, wallet.address])
+  }, [accounts, daos, loadingNFTs, nfts, pdb, wallet.address])
 
   useEffect(() => {
     filterDaos()
