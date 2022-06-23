@@ -24,7 +24,7 @@ const ConsensusMechanismInput = ({
     <Row gutter={[8, 8]}>
       <Col span={24}>
         <Space>
-          <Typography.Text>Consensus Mechanism</Typography.Text>
+          <Typography.Text>Voting Mechanism</Typography.Text>
           <Popover
             overlayStyle={{ maxWidth: 300 }}
             trigger="click"
@@ -32,19 +32,19 @@ const ConsensusMechanismInput = ({
               <Row gutter={[16, 16]}>
                 <Col span={24}>
                   <Typography.Title level={5}>
-                    What are Consensus Mechanisms?
+                    What are Voting Mechanisms?
                   </Typography.Title>
                 </Col>
                 <Col span={24}>
                   <Space direction="vertical">
                     <Typography.Text>
-                      <strong>Staked (Token) Counter:</strong> The power of a
+                      <strong>Stake (Token) to Vote:</strong> The power of a
                       vote is only counted based on the number of staked tokens.
                     </Typography.Text>
                     <Typography.Text>
-                      <strong>Locked (Token) Counter:</strong> The power of a
-                      vote is the product of the number of staked tokens and the
-                      lock time in seconds.
+                      <strong>Lock (Token) To Vote:</strong> The power of a vote
+                      is the product of the number of staked tokens and the lock
+                      time in seconds.
                     </Typography.Text>
                   </Space>
                 </Col>
@@ -69,7 +69,7 @@ const ConsensusMechanismInput = ({
           onClick={() => onChange(ConsensusMechanisms.StakedTokenCounter)}
           block
         >
-          Staked Counter
+          Stake to Vote
         </Button>
       </Col>
       <Col span={mobileSpan}>
@@ -82,7 +82,7 @@ const ConsensusMechanismInput = ({
           onClick={() => onChange(ConsensusMechanisms.LockedTokenCounter)}
           block
         >
-          Locked Counter
+          Lock to Vote
         </Button>
       </Col>
     </Row>
