@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Connection, programs } from '@metaplex/js'
 import { PublicKey } from '@solana/web3.js'
 
-import { net } from 'shared/runtime'
+import { rpc } from 'shared/runtime'
 
 const {
   metadata: { Metadata, MetadataData },
@@ -12,7 +12,7 @@ const TOKEN_METADATA_PROGRAM_ID = new PublicKey(
   'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s',
 )
 
-const connection = new Connection(net)
+const connection = new Connection(rpc)
 
 export type MetadataType = InstanceType<typeof Metadata>
 export type MetadataDataType = InstanceType<typeof MetadataData>
