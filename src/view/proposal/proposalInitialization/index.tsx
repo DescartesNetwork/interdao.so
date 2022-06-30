@@ -115,7 +115,7 @@ const ProposalInitialization = () => {
       //Clear tx in redux
       dispatch(clearTx())
       return history.push(
-        `/${appId}/dao/${daoAddress}/proposal/${proposalAddress}`,
+        `/app/${appId}/dao/${daoAddress}/proposal/${proposalAddress}`,
       )
     } catch (er: any) {
       return window.notify({
@@ -138,7 +138,7 @@ const ProposalInitialization = () => {
   ])
 
   useEffect(() => {
-    if (!template.tx) return history.push(`/${appId}/dao/${daoAddress}`)
+    if (!template.tx) return history.push(`/app/${appId}/dao/${daoAddress}`)
   }, [daoAddress, history, template.tx])
 
   return (
@@ -202,7 +202,7 @@ const ProposalInitialization = () => {
             <Col flex="auto">
               <Button
                 type="text"
-                onClick={() => history.push(`/${appId}/dao/${daoAddress}`)}
+                onClick={() => history.push(`/app/${appId}/dao/${daoAddress}`)}
                 size="large"
               >
                 Cancel

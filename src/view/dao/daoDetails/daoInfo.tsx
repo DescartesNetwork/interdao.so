@@ -40,7 +40,7 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
     mint: SystemProgram.programId,
   }
 
-  const onEditDAO = () => history.push(`/${appId}/dao/${daoAddress}/edit`)
+  const onEditDAO = () => history.push(`/app/${appId}/dao/${daoAddress}/edit`)
 
   const mobileScreen = width < 768
 

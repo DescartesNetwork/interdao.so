@@ -32,7 +32,7 @@ const Proposal = () => {
         type: 'warning',
         description: 'You are not a member of this DAO',
       })
-      return history.push(`/${appId}/dao`)
+      return history.push(`/app/${appId}/dao`)
     }
   }, [checking, daoAddress, history, isPublic, validMember])
 
@@ -44,7 +44,7 @@ const Proposal = () => {
             <Button
               icon={<IonIcon name="arrow-back-outline" />}
               type="text"
-              onClick={() => history.push(`/${appId}/dao`)}
+              onClick={() => history.push(`/app/${appId}/dao`)}
               style={{ marginLeft: -8 }}
             >
               Back

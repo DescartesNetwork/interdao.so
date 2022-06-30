@@ -34,7 +34,7 @@ export const useConfirmIdl = () => {
       await dispatch(setTx(tx))
       await dispatch(setVisible(false))
       await dispatch(setTemplateData(templateData))
-      return history.push(`/${appId}/dao/${daoAddress}/new-proposal`)
+      return history.push(`/app/${appId}/dao/${daoAddress}/new-proposal`)
     },
     [daoAddress, dispatch, history],
   )

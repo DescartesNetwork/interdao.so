@@ -33,7 +33,9 @@ const ProposalTemplateCard: React.FC<PropProposalTemplateCard> = ({
     <Card
       bordered={false}
       onClick={() =>
-        history.push(`/${appId}/dao/${daoAddress}/proposal/${proposalAddress}`)
+        history.push(
+          `/app/${appId}/dao/${daoAddress}/proposal/${proposalAddress}`,
+        )
       }
       className="proposal-card"
       bodyStyle={{ padding: '24px 0', minHeight: 150 }}

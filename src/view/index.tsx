@@ -15,6 +15,7 @@ import DaoWatcher from '../watcher/dao.watcher'
 import ProposalWatcher from '../watcher/proposal.watcher'
 import ReceiptWatcher from '../watcher/receipt.watcher'
 import MetadataWatcher from '../watcher/metadata.watcher'
+import EventsWatcher from 'watcher/evens.watch'
 
 import BG from 'static/images/system/bg-dark.png'
 import BG_LIGHT from 'static/images/system/bg-light.png'
@@ -22,7 +23,6 @@ import configs from 'configs'
 
 import 'static/styles/dark.less'
 import 'static/styles/light.less'
-import EventsWatcher from 'watcher/evens.watch'
 
 const {
   manifest: { appId },
@@ -40,33 +40,33 @@ const View = () => {
       <Loading>
         <Col span={24}>
           <Switch>
-            <Route exact path={`/${appId}/dao`} component={Dao} />
+            <Route exact path={`/app/${appId}/dao`} component={Dao} />
             <Route
               exact
-              path={`/${appId}/dao/create-dao`}
+              path={`/app/${appId}/dao/create-dao`}
               component={CreateDao}
             />
             <Route
               exact
-              path={`/${appId}/dao/:daoAddress`}
+              path={`/app/${appId}/dao/:daoAddress`}
               component={Proposal}
             />
             <Route
               exact
-              path={`/${appId}/dao/:daoAddress/edit`}
+              path={`/app/${appId}/dao/:daoAddress/edit`}
               component={EditDAO}
             />
             <Route
               exact
-              path={`/${appId}/dao/:daoAddress/new-proposal`}
+              path={`/app/${appId}/dao/:daoAddress/new-proposal`}
               component={ProposalInitialization}
             />
             <Route
               exact
-              path={`/${appId}/dao/:daoAddress/proposal/:proposalAddress`}
+              path={`/app/${appId}/dao/:daoAddress/proposal/:proposalAddress`}
               component={ProposalDetails}
             />
-            <Redirect from="*" to={`/${appId}/dao`} />
+            <Redirect from="*" to={`/app/${appId}/dao`} />
           </Switch>
         </Col>
       </Loading>

@@ -39,7 +39,7 @@ const ProposalDetails = () => {
               <Button
                 type="text"
                 icon={<IonIcon name="arrow-back-outline" />}
-                onClick={() => history.push(`/${appId}/dao/${daoAddress}`)}
+                onClick={() => history.push(`/app/${appId}/dao/${daoAddress}`)}
               >
                 Back
               </Button>
