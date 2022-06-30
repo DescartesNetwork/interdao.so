@@ -54,7 +54,9 @@ const YourDaos = () => {
             <Typography.Text type="secondary">
               You have no DAO yet!
             </Typography.Text>
-            <Button onClick={() => history.push(`/${appId}/dao/create-dao`)}>
+            <Button
+              onClick={() => history.push(`/app/${appId}/dao/create-dao`)}
+            >
               Build your DAO
             </Button>
           </Space>

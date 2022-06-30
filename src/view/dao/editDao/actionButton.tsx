@@ -17,7 +17,7 @@ const ActionButton = ({ daoAddress, onSave, ...rest }: ActionButtonProps) => {
   const history = useHistory()
 
   const onCancel = async () => {
-    history.push(`/${appId}/dao/${daoAddress}`)
+    history.push(`/app/${appId}/dao/${daoAddress}`)
   }
 
   return (

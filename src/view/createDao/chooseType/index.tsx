@@ -89,7 +89,7 @@ const ChooseDaoType = () => {
           <Col flex="auto">
             <Button
               type="text"
-              onClick={() => history.push(`/${appId}/dao`)}
+              onClick={() => history.push(`/app/${appId}/dao`)}
               size="large"
             >
               Cancel

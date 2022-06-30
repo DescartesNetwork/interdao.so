@@ -92,7 +92,7 @@ const useMultisigDao = () => {
         description: 'A new DAO is created. Click here to view details.',
         onClick: () => window.open(util.explorer(txId), '_blank'),
       })
-      return history.push(`/${appId}/dao/${daoAddress}`)
+      return history.push(`/app/${appId}/dao/${daoAddress}`)
     } catch (er: any) {
       window.notify({ type: 'error', description: er.message })
     } finally {
