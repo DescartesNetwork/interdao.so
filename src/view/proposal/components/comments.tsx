@@ -1,25 +1,27 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { Button, Card, Col, Row, Space, Tag, Typography } from 'antd'
-import CardComment from './cardComment'
 import IonIcon from '@sentre/antd-ionicon'
 import RowBetweenNodeTitle from 'components/rowBetweenNodeTitle'
+import ActionCommentOnly from './actionCommentOnly'
+import ListComments from './listComments'
 
 import { AppDispatch } from 'model'
 import { CommentProposal, getComments } from 'model/comment.controller'
-import ActionCommentOnly from './actionCommentOnly'
 
-const Discussion = () => {
+type DiscussionProps = { total?: number }
+const Discussion = ({ total = 0 }: DiscussionProps) => {
   return (
     <Space>
       <Typography.Title level={5}>Discussion</Typography.Title>
-      <Tag>3</Tag>
+      <Tag>{total}</Tag>
     </Space>
   )
 }
 
-const Comments = ({ proposalAddress }: { proposalAddress: string }) => {
+type CommentsProps = { proposalAddress: string }
+const Comments = ({ proposalAddress }: CommentsProps) => {
   const [comment, setComment] = useState<Record<string, CommentProposal[]>>()
   const dispatch = useDispatch<AppDispatch>()
 
@@ -32,7 +34,23 @@ const Comments = ({ proposalAddress }: { proposalAddress: string }) => {
     fetchComments()
   }, [fetchComments])
 
-  const disabled = !comment || Object.keys(comment).length < 5
+  const pareStringToDate = (time: string) => {
+    return Date.parse(time)
+  }
+
+  const mergedComments = useMemo(() => {
+    if (!comment || !Object.keys(comment).length) return []
+
+    let listComments: CommentProposal[] = []
+    for (const item of Object.values(comment)) {
+      listComments.push(...item)
+    }
+    listComments.sort(
+      (a, b) => pareStringToDate(b.time) - pareStringToDate(a.time),
+    )
+
+    return listComments
+  }, [comment])
 
   return (
     <Card bordered={false}>
@@ -45,19 +63,15 @@ const Comments = ({ proposalAddress }: { proposalAddress: string }) => {
         </Col>
 
         {/* List comments */}
-        {!!comment &&
-          Object.keys(comment).map((walletAddress, idx) => (
-            <Col span={24}>
-              <CardComment walletAddress={walletAddress} key={idx} />
-            </Col>
-          ))}
-
+        <Col span={24}>
+          <ListComments comments={mergedComments} />
+        </Col>
         {/* view more comment */}
         <Col>
           <Button
             type="text"
             icon={<IonIcon name="chevron-down-outline" onClick={() => {}} />}
-            disabled={disabled}
+            disabled={!mergedComments?.length || mergedComments?.length < 5}
           >
             View more
           </Button>
