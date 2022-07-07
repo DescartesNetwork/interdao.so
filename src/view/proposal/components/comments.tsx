@@ -8,9 +8,8 @@ const Comments = ({ proposalAddress }: { proposalAddress: string }) => {
   const dispatch = useDispatch<AppDispatch>()
 
   const fetchComments = useCallback(async () => {
-    const comments = await dispatch(getComments(proposalAddress)).unwrap()
-    setComment(comments[proposalAddress])
-    console.log('comments', comments)
+    const { bulk } = await dispatch(getComments(proposalAddress)).unwrap()
+    setComment(bulk)
   }, [dispatch, proposalAddress])
 
   useEffect(() => {
