@@ -1,6 +1,7 @@
 import { CSSProperties, Fragment, ReactNode } from 'react'
 import { util } from '@sentre/senhub'
 import moment from 'moment'
+import { account } from '@senswap/sen-js'
 
 import {
   Avatar,
@@ -15,6 +16,7 @@ import {
 } from 'antd'
 import { COMMENTS_VOTE_TYPE } from 'constant'
 import IonIcon from '@sentre/antd-ionicon'
+import CardLoading from 'components/cardLoading'
 
 import { CommentProposal } from 'model/comments.controller'
 
@@ -77,7 +79,10 @@ const CardComment = ({ comment }: CardCommentProps) => {
                   <Button
                     type="text"
                     icon={<IonIcon name="open-outline" />}
-                    onClick={() => {}}
+                    onClick={() =>
+                      window.open(util.explorer(walletAddress), '_blank')
+                    }
+                    disabled={!account.isAddress(walletAddress)}
                   />
                 </Space>
                 <Space>
@@ -106,6 +111,7 @@ const ListComments = ({ comments }: ListCommentsProps) => {
 
   return (
     <Fragment>
+      <CardLoading loading />
       {comments.map((comment, idx) => (
         <CardComment comment={comment} key={idx} />
       ))}
