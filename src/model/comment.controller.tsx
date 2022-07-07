@@ -16,10 +16,17 @@ const {
  * Interface & Utility
  */
 
+export enum VoteState {
+  For = 'vote-for',
+  Against = 'vote-against',
+}
+
 export type CommentProposal = {
+  authority: string
   time: string
   content: string
-  vote?: 'vote-for' | 'vote-against'
+  voteState?: VoteState
+  receipt?: string
 }
 
 type ProposalAddress = string
@@ -78,9 +85,41 @@ export const getComments = createAsyncThunk(
         bulk[elm.account.authority.toBase58()] = data
       }),
     )
+    return {
+      proposal,
+      bulk,
+    }
+  },
+)
+
+export const getComment = createAsyncThunk(
+  `${NAME}/getComments`,
+  async ({
+    proposal,
+    wallet,
+    cid,
+  }: {
+    proposal: string
+    wallet: string
+    cid: number[]
+  }) => {
+    const discriminator = deriveDiscriminator(proposal)
+    const ipfsols = await interDao.program.account.ipfsol.all([
+      { memcmp: { offset: 40, bytes: bs58.encode(discriminator) } },
+    ])
+
+    let bulk: Record<WalletAddress, CommentProposal[]> = {}
+    await Promise.all(
+      ipfsols.map(async (elm) => {
+        const cid = getCID(elm.account.cid)
+        const data = await ipfs.get<CommentProposal[]>(cid)
+        bulk[elm.account.authority.toBase58()] = data
+      }),
+    )
     console.log('ipfsols', ipfsols)
     return {
-      [proposal]: bulk,
+      proposal,
+      bulk,
     }
   },
 )
@@ -94,10 +133,10 @@ const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) =>
-    void builder.addCase(
-      getComments.fulfilled,
-      (state, { payload }) => void Object.assign(state, payload),
-    ),
+    void builder.addCase(getComments.fulfilled, (state, { payload }) => {
+      Object.assign(state[payload.proposal], payload.bulk)
+      return state
+    }),
 })
 
 export default slice.reducer

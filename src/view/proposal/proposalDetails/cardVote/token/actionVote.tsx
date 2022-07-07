@@ -18,6 +18,7 @@ import { notifyError, notifySuccess } from 'helpers'
 import { useAnchorProvider } from 'hooks/useAnchorProvider'
 import { useDaoData } from 'hooks/dao'
 import { useCommentProposal } from 'hooks/useCommentProposal'
+import { VoteState } from 'model/comment.controller'
 
 const {
   sol: { interDao },
@@ -25,16 +26,11 @@ const {
 
 const DEFAULT_VALUE_VOTE_MULTISIG = 1
 
-enum Vote {
-  For,
-  Against,
-}
-
 const ActionVote = ({
   proposalAddress,
   daoAddress,
 }: ProposalChildCardProps) => {
-  const [voting, setVoting] = useState<Vote>()
+  const [voting, setVoting] = useState<VoteState>()
   const [comment, setComment] = useState('')
   const amount = useSelector((state: AppState) => state.voteBid.amount)
   const dispatch = useDispatch()
@@ -56,13 +52,13 @@ const ActionVote = ({
     return status !== 'Voting' || !amount || !account.isAddress(proposalAddress)
   }, [amount, balance, isMultisigDAO, proposalAddress, status, voting])
 
-  const getTxVote = async (voteType: Vote) => {
+  const getTxVote = async (voteType: VoteState) => {
     const rawAmount = isMultisigDAO ? DEFAULT_VALUE_VOTE_MULTISIG : amount
     const amountBN = utilsBN.decimalize(rawAmount, decimals)
     switch (voteType) {
-      case Vote.For:
+      case VoteState.For:
         return interDao.voteFor(proposalAddress, amountBN, proposalFee, false)
-      case Vote.Against:
+      case VoteState.Against:
         return interDao.voteAgainst(
           proposalAddress,
           amountBN,
@@ -74,15 +70,21 @@ const ActionVote = ({
     }
   }
 
-  const onVote = async (type: Vote) => {
-    setVoting(type)
+  const onVote = async (voteState: VoteState) => {
+    setVoting(voteState)
     try {
-      const { tx } = await getTxVote(type)
+      const { tx: txVote } = await getTxVote(voteState)
       if (comment) {
-        const txComment = await initTxCommentProposal(proposalAddress, comment)
-        tx.add(txComment)
+        const receipt = txVote.instructions[0].keys[7].pubkey.toString()
+        const txComment = await initTxCommentProposal({
+          proposal: proposalAddress,
+          content: comment,
+          voteState,
+          receipt,
+        })
+        txVote.add(txComment)
       }
-      const txId = await provider.sendAndConfirm(tx)
+      const txId = await provider.sendAndConfirm(txVote)
       dispatch(setVoteBidAmount(''))
       notifySuccess('Voted', txId)
     } catch (error) {
@@ -120,10 +122,10 @@ const ActionVote = ({
 
         <Col span={isMultisigDAO ? 24 : 12}>
           <Button
-            onClick={() => onVote(Vote.For)}
+            onClick={() => onVote(VoteState.For)}
             type="primary"
             disabled={disabled}
-            loading={voting === Vote.For}
+            loading={voting === VoteState.For}
             block
             size="large"
             icon={<IonIcon name="thumbs-up-outline" />}
@@ -133,10 +135,10 @@ const ActionVote = ({
         </Col>
         <Col span={isMultisigDAO ? 24 : 12}>
           <Button
-            onClick={() => onVote(Vote.Against)}
+            onClick={() => onVote(VoteState.Against)}
             type="primary"
             disabled={disabled}
-            loading={voting === Vote.Against}
+            loading={voting === VoteState.Against}
             block
             size="large"
             icon={<IonIcon name="thumbs-down-outline" />}
