@@ -7,8 +7,10 @@ import CardNFT from 'components/cardNFT'
 
 import { MetadataDataType } from 'helpers/metaplex'
 import configs from 'configs'
-import { VotingType } from './index'
 import useProposalFee from 'hooks/proposal/useProposalFee'
+import { useCommentProposal } from 'hooks/useCommentProposal'
+import { VoteState } from 'model/comments.controller'
+import { useAnchorProvider } from 'hooks/useAnchorProvider'
 
 const {
   sol: { interDao },
@@ -18,9 +20,11 @@ type ModalVoteNFTProps = {
   visible: boolean
   setVisible: (visible: boolean) => void
   collection: MetadataDataType[]
-  votingType: VotingType
+  votingType: VoteState
   proposalAddress: string
   daoAddress: string
+  comment?: string
+  onClearComment?: () => void
 }
 
 const ModalVoteNFT = ({
@@ -30,22 +34,40 @@ const ModalVoteNFT = ({
   votingType,
   proposalAddress,
   daoAddress,
+  comment,
+  onClearComment = () => {},
 }: ModalVoteNFTProps) => {
   const [nftVoting, setNftVoting] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const proposalFee = useProposalFee({ daoAddress })
+  const { initTxCommentProposal } = useCommentProposal()
+  const provider = useAnchorProvider()
 
   const onVoteNftFor = useCallback(async () => {
     setLoading(true)
     try {
       if (!account.isAddress(proposalAddress) || !nftVoting) return
-
-      const { txId } = await interDao.voteNftFor(
+      const { tx: txVoteNFT } = await interDao.voteNftFor(
         proposalAddress,
         nftVoting,
         proposalFee,
+        false,
       )
+
+      if (!!comment) {
+        const receipt = txVoteNFT.instructions[0].keys[7].pubkey.toString()
+        const txComment = await initTxCommentProposal({
+          content: comment,
+          proposal: proposalAddress,
+          voteState: votingType,
+          receipt,
+        })
+        txVoteNFT.add(txComment)
+      }
+      const txId = await provider.sendAndConfirm(txVoteNFT)
+
       setNftVoting('')
+      onClearComment()
       return window.notify({
         type: 'success',
         description: 'Voted successfully. Click to view details!',
@@ -60,7 +82,17 @@ const ModalVoteNFT = ({
       setVisible(false)
       setLoading(false)
     }
-  }, [nftVoting, proposalAddress, proposalFee, setVisible])
+  }, [
+    comment,
+    initTxCommentProposal,
+    nftVoting,
+    onClearComment,
+    proposalAddress,
+    proposalFee,
+    provider,
+    setVisible,
+    votingType,
+  ])
 
   const onVoteNftAgainst = useCallback(async () => {
     setLoading(true)
@@ -91,10 +123,10 @@ const ModalVoteNFT = ({
 
   const onConfirm = () => {
     switch (votingType) {
-      case VotingType.for:
+      case VoteState.For:
         onVoteNftFor()
         break
-      case VotingType.against:
+      case VoteState.Against:
         onVoteNftAgainst()
         break
     }
