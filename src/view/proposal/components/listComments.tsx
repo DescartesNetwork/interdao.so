@@ -1,5 +1,6 @@
-import IonIcon from '@sentre/antd-ionicon'
+import { CSSProperties, Fragment, ReactNode } from 'react'
 import { util } from '@sentre/senhub'
+import moment from 'moment'
 
 import {
   Avatar,
@@ -13,9 +14,9 @@ import {
   Typography,
 } from 'antd'
 import { COMMENTS_VOTE_TYPE } from 'constant'
-import { CommentProposal } from 'model/comment.controller'
-import moment from 'moment'
-import { CSSProperties, Fragment, ReactNode } from 'react'
+import IonIcon from '@sentre/antd-ionicon'
+
+import { CommentProposal } from 'model/comments.controller'
 
 type CommentVoteTagProps = {
   tagColor?: string

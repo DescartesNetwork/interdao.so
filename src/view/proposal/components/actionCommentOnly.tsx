@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useState } from 'react'
-import { Transaction } from '@solana/web3.js'
 import { useParams } from 'react-router-dom'
+import { account } from '@senswap/sen-js'
 
 import { Button, Col, Input, Modal, Row, Space, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -8,7 +8,6 @@ import IonIcon from '@sentre/antd-ionicon'
 import { useCommentProposal } from 'hooks/useCommentProposal'
 import { notifyError, notifySuccess } from 'helpers'
 import { useAnchorProvider } from 'hooks/useAnchorProvider'
-import { account } from '@senswap/sen-js'
 
 const ActionCommentOnly = () => {
   const [loading, setLoading] = useState(false)
@@ -17,7 +16,6 @@ const ActionCommentOnly = () => {
   const { initTxCommentProposal } = useCommentProposal()
   const provider = useAnchorProvider()
   const { proposalAddress } = useParams<{
-    daoAddress: string
     proposalAddress: string
   }>()
 
@@ -25,14 +23,11 @@ const ActionCommentOnly = () => {
     try {
       if (!value || !account.isAddress(proposalAddress))
         throw new Error('Invalid comments.')
-
       setLoading(true)
-      const transaction = new Transaction()
       const txComment = await initTxCommentProposal({
         proposal: proposalAddress,
         content: value,
       })
-      transaction.add(txComment)
       const txId = await provider.sendAndConfirm(txComment)
 
       setVisible(false)

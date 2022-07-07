@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Button, Card, Col, Row, Space, Tag, Typography } from 'antd'
@@ -11,8 +11,10 @@ import { CommentProposal, getComments } from 'model/comments.controller'
 import { useIpfsolWatcher } from 'helpers/useIpfsolWatcher'
 import { AppDispatch, AppState } from 'model'
 
-type DiscussionProps = { total?: number }
-const Discussion = ({ total = 0 }: DiscussionProps) => {
+const DEFAULT_AMOUNT_COMMENTS = 4
+
+type DiscussionProps = { total: number }
+const Discussion = ({ total }: DiscussionProps) => {
   return (
     <Space>
       <Typography.Title level={5}>Discussion</Typography.Title>
@@ -23,6 +25,7 @@ const Discussion = ({ total = 0 }: DiscussionProps) => {
 
 type CommentsProps = { proposalAddress: string }
 const Comments = ({ proposalAddress }: CommentsProps) => {
+  const [amount, setAmount] = useState(DEFAULT_AMOUNT_COMMENTS)
   const comments = useSelector(
     (state: AppState) => state.comments[proposalAddress],
   )
@@ -60,21 +63,25 @@ const Comments = ({ proposalAddress }: CommentsProps) => {
       <Row gutter={[24, 24]} justify="center">
         {/* Comment header */}
         <Col span={24}>
-          <RowBetweenNodeTitle title={<Discussion />}>
+          <RowBetweenNodeTitle
+            title={<Discussion total={mergedComments.length} />}
+          >
             <ActionCommentOnly />
           </RowBetweenNodeTitle>
         </Col>
 
         {/* List comments */}
         <Col span={24}>
-          <ListComments comments={mergedComments} />
+          <ListComments comments={mergedComments.slice(0, amount)} />
         </Col>
+
         {/* view more comment */}
         <Col>
           <Button
             type="text"
-            icon={<IonIcon name="chevron-down-outline" onClick={() => {}} />}
-            disabled={!mergedComments?.length || mergedComments?.length < 5}
+            icon={<IonIcon name="chevron-down-outline" />}
+            onClick={() => setAmount(amount + DEFAULT_AMOUNT_COMMENTS)}
+            disabled={mergedComments?.length < DEFAULT_AMOUNT_COMMENTS}
           >
             View more
           </Button>

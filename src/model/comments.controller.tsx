@@ -126,6 +126,7 @@ const slice = createSlice({
   extraReducers: (builder) =>
     void builder
       .addCase(getComments.fulfilled, (state, { payload }) => {
+        if (!state[payload.proposal]) state[payload.proposal] = {}
         Object.assign(state[payload.proposal], payload.bulk)
         return state
       })
