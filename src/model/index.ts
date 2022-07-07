@@ -9,6 +9,7 @@ import proposal from 'model/proposal.controller'
 import receipt from 'model/receipt.controller'
 import voteBid from 'model/voteBid.controller'
 import template from 'model/template.controller'
+import comments from 'model/comments.controller'
 
 /**
  * Isolated store
@@ -26,6 +27,7 @@ const model = configureStore({
     voteBid,
     template,
     loading,
+    comments,
   },
 })
 

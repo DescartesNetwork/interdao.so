@@ -1,14 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useCallback, useEffect, useMemo } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Button, Card, Col, Row, Space, Tag, Typography } from 'antd'
-import IonIcon from '@sentre/antd-ionicon'
+import ListComments from './listComments'
 import RowBetweenNodeTitle from 'components/rowBetweenNodeTitle'
 import ActionCommentOnly from './actionCommentOnly'
-import ListComments from './listComments'
+import IonIcon from '@sentre/antd-ionicon'
 
-import { AppDispatch } from 'model'
-import { CommentProposal, getComments } from 'model/comment.controller'
+import { CommentProposal, getComments } from 'model/comments.controller'
+import { useIpfsolWatcher } from 'helpers/useIpfsolWatcher'
+import { AppDispatch, AppState } from 'model'
 
 type DiscussionProps = { total?: number }
 const Discussion = ({ total = 0 }: DiscussionProps) => {
@@ -22,12 +23,14 @@ const Discussion = ({ total = 0 }: DiscussionProps) => {
 
 type CommentsProps = { proposalAddress: string }
 const Comments = ({ proposalAddress }: CommentsProps) => {
-  const [comment, setComment] = useState<Record<string, CommentProposal[]>>()
+  const comments = useSelector(
+    (state: AppState) => state.comments[proposalAddress],
+  )
   const dispatch = useDispatch<AppDispatch>()
+  useIpfsolWatcher(proposalAddress)
 
   const fetchComments = useCallback(async () => {
-    const { bulk } = await dispatch(getComments(proposalAddress)).unwrap()
-    setComment(bulk)
+    await dispatch(getComments(proposalAddress)).unwrap()
   }, [dispatch, proposalAddress])
 
   useEffect(() => {
@@ -39,10 +42,10 @@ const Comments = ({ proposalAddress }: CommentsProps) => {
   }
 
   const mergedComments = useMemo(() => {
-    if (!comment || !Object.keys(comment).length) return []
+    if (!comments || !Object.keys(comments).length) return []
 
     let listComments: CommentProposal[] = []
-    for (const item of Object.values(comment)) {
+    for (const item of Object.values(comments)) {
       listComments.push(...item)
     }
     listComments.sort(
@@ -50,7 +53,7 @@ const Comments = ({ proposalAddress }: CommentsProps) => {
     )
 
     return listComments
-  }, [comment])
+  }, [comments])
 
   return (
     <Card bordered={false}>
