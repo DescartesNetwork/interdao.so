@@ -92,8 +92,8 @@ export const getComments = createAsyncThunk(
   },
 )
 
-export const getComment = createAsyncThunk(
-  `${NAME}/getComments`,
+export const upsetComment = createAsyncThunk(
+  `${NAME}/upsetComment`,
   async ({
     proposal,
     wallet,
@@ -103,20 +103,11 @@ export const getComment = createAsyncThunk(
     wallet: string
     cid: number[]
   }) => {
-    const discriminator = deriveDiscriminator(proposal)
-    const ipfsols = await interDao.program.account.ipfsol.all([
-      { memcmp: { offset: 40, bytes: bs58.encode(discriminator) } },
-    ])
-
     let bulk: Record<WalletAddress, CommentProposal[]> = {}
-    await Promise.all(
-      ipfsols.map(async (elm) => {
-        const cid = getCID(elm.account.cid)
-        const data = await ipfs.get<CommentProposal[]>(cid)
-        bulk[elm.account.authority.toBase58()] = data
-      }),
-    )
-    console.log('ipfsols', ipfsols)
+    const cidString = getCID(cid)
+    const data = await ipfs.get<CommentProposal[]>(cidString)
+    bulk[wallet] = data
+    console.log('bulk', bulk)
     return {
       proposal,
       bulk,
@@ -133,10 +124,15 @@ const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) =>
-    void builder.addCase(getComments.fulfilled, (state, { payload }) => {
-      Object.assign(state[payload.proposal], payload.bulk)
-      return state
-    }),
+    void builder
+      .addCase(getComments.fulfilled, (state, { payload }) => {
+        Object.assign(state[payload.proposal], payload.bulk)
+        return state
+      })
+      .addCase(upsetComment.fulfilled, (state, { payload }) => {
+        Object.assign(state[payload.proposal], payload.bulk)
+        return state
+      }),
 })
 
 export default slice.reducer

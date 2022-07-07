@@ -12,7 +12,7 @@ import {
   deriveDiscriminator,
   deriveIpfsolAddress,
   VoteState,
-} from 'model/comment.controller'
+} from 'model/comments.controller'
 import { web3 } from '@project-serum/anchor'
 
 const {
@@ -45,15 +45,15 @@ export const useCommentProposal = () => {
     ipfsol: web3.PublicKey,
     newComment: CommentProposal,
   ) => {
-    let comments: CommentProposal[] = []
+    let ownerComments: CommentProposal[] = []
     try {
       // fetch comments history
       const ipfsolData = await interDao.program.account.ipfsol.fetch(ipfsol)
       const cid = getCID(ipfsolData.cid)
-      comments = await ipfs.get<CommentProposal[]>(cid)
+      ownerComments = await ipfs.get<CommentProposal[]>(cid)
     } catch (error) {}
-    comments.push(newComment)
-    return comments
+    ownerComments.push(newComment)
+    return ownerComments
   }
 
   const initTxCommentProposal = useCallback(

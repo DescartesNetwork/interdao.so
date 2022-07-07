@@ -1,22 +1,26 @@
-import { AppDispatch } from 'model'
-import { CommentProposal, getComments } from 'model/comment.controller'
-import { useCallback, useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useCallback, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { useIpfsolWatcher } from 'helpers/useIpfsolWatcher'
+import { AppDispatch, AppState } from 'model'
+import { getComments } from 'model/comments.controller'
 
 const Comments = ({ proposalAddress }: { proposalAddress: string }) => {
-  const [comment, setComment] = useState<Record<string, CommentProposal[]>>()
+  const comments = useSelector(
+    (state: AppState) => state.comments[proposalAddress],
+  )
   const dispatch = useDispatch<AppDispatch>()
+  useIpfsolWatcher(proposalAddress)
 
   const fetchComments = useCallback(async () => {
-    const { bulk } = await dispatch(getComments(proposalAddress)).unwrap()
-    setComment(bulk)
+    await dispatch(getComments(proposalAddress)).unwrap()
   }, [dispatch, proposalAddress])
 
   useEffect(() => {
     fetchComments()
   }, [fetchComments])
 
-  console.log('comment', comment)
+  console.log('comment', comments)
   return <div>Comments: {proposalAddress}</div>
 }
 

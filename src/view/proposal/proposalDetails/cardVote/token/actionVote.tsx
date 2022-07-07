@@ -18,7 +18,7 @@ import { notifyError, notifySuccess } from 'helpers'
 import { useAnchorProvider } from 'hooks/useAnchorProvider'
 import { useDaoData } from 'hooks/dao'
 import { useCommentProposal } from 'hooks/useCommentProposal'
-import { VoteState } from 'model/comment.controller'
+import { VoteState } from 'model/comments.controller'
 
 const {
   sol: { interDao },
