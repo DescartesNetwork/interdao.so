@@ -86,6 +86,7 @@ const CardVoteToken = ({
             </Card>
           </Col>
         )}
+
         {isLockedVote && (
           <Col span={24}>
             <LockedVoting

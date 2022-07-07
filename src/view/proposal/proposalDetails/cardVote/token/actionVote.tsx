@@ -1,11 +1,9 @@
-import { Fragment, useCallback, useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { account, utils } from '@senswap/sen-js'
-import { DaoData } from '@interdao/core'
-import { BN } from 'bn.js'
-import { util } from '@sentre/senhub'
+import { account } from '@senswap/sen-js'
+import { utilsBN } from 'sentre-web3'
 
-import { Button, Col, Row } from 'antd'
+import { Button, Card, Col, Input, Row, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { AppState } from 'model'
@@ -16,6 +14,11 @@ import useProposalStatus from 'hooks/proposal/useProposalStatus'
 import useMetaData from 'hooks/useMetaData'
 import useProposalFee from 'hooks/proposal/useProposalFee'
 import { setVoteBidAmount } from 'model/voteBid.controller'
+import { notifyError, notifySuccess } from 'helpers'
+import { useAnchorProvider } from 'hooks/useAnchorProvider'
+import { useDaoData } from 'hooks/dao'
+import { useCommentProposal } from 'hooks/useCommentProposal'
+import { VoteState } from 'model/comments.controller'
 
 const {
   sol: { interDao },
@@ -27,118 +30,123 @@ const ActionVote = ({
   proposalAddress,
   daoAddress,
 }: ProposalChildCardProps) => {
-  const [loadingFor, setLoadingFor] = useState(false)
-  const [loadingAgainst, setLoadingAgainst] = useState(false)
-  const daos = useSelector((state: AppState) => state.daos)
+  const [voting, setVoting] = useState<VoteState>()
+  const [comment, setComment] = useState('')
   const amount = useSelector((state: AppState) => state.voteBid.amount)
   const dispatch = useDispatch()
-  const { mint } = daos[daoAddress] || ({} as DaoData)
-  const { balance, decimals } = useAccountBalanceByMintAddress(mint?.toBase58())
-  const { status } = useProposalStatus(proposalAddress)
+  const daoData = useDaoData(daoAddress)
   const { metaData: daoMetaData } = useMetaData(daoAddress)
+  const { balance, decimals } = useAccountBalanceByMintAddress(
+    daoData?.mint?.toBase58() || '',
+  )
+  const { status } = useProposalStatus(proposalAddress)
   const proposalFee = useProposalFee({ daoAddress })
+  const { initTxCommentProposal } = useCommentProposal()
+  const provider = useAnchorProvider()
+
   const isMultisigDAO = daoMetaData?.daoType === 'multisig-dao'
 
   const disabled = useMemo(() => {
+    if (!!voting) return true
     if (isMultisigDAO) return status !== 'Voting' || balance <= 0
-
     return status !== 'Voting' || !amount || !account.isAddress(proposalAddress)
-  }, [amount, balance, isMultisigDAO, proposalAddress, status])
+  }, [amount, balance, isMultisigDAO, proposalAddress, status, voting])
 
-  const onVoteFor = useCallback(async () => {
-    setLoadingFor(true)
-    try {
-      if ((!amount || !account.isAddress(proposalAddress)) && !isMultisigDAO)
-        return
-      const actualAmount = isMultisigDAO ? DEFAULT_VALUE_VOTE_MULTISIG : amount
-      const voteAmount = utils.decimalize(actualAmount, decimals)
-      const nextAmount = new BN(voteAmount.toString())
-      const { txId } = await interDao.voteFor(
-        proposalAddress,
-        nextAmount,
-        proposalFee,
-      )
-      dispatch(setVoteBidAmount(''))
-      window.notify({
-        type: 'success',
-        description: 'Voted successfully. Click to view details!',
-        onClick: () => window.open(util.explorer(txId), '_blank'),
-      })
-    } catch (error: any) {
-      window.notify({
-        type: 'error',
-        description: error.message,
-      })
-    } finally {
-      setLoadingFor(false)
+  const getTxVote = async (voteType: VoteState) => {
+    const rawAmount = isMultisigDAO ? DEFAULT_VALUE_VOTE_MULTISIG : amount
+    const amountBN = utilsBN.decimalize(rawAmount, decimals)
+    switch (voteType) {
+      case VoteState.For:
+        return interDao.voteFor(proposalAddress, amountBN, proposalFee, false)
+      case VoteState.Against:
+        return interDao.voteAgainst(
+          proposalAddress,
+          amountBN,
+          proposalFee,
+          false,
+        )
+      default:
+        throw new Error('Invalid vote type')
     }
-  }, [amount, decimals, dispatch, isMultisigDAO, proposalAddress, proposalFee])
+  }
 
-  const onVoteAgainst = useCallback(async () => {
-    setLoadingAgainst(true)
+  const onVote = async (voteState: VoteState) => {
+    setVoting(voteState)
     try {
-      if ((!amount || !account.isAddress(proposalAddress)) && !isMultisigDAO)
-        return
-      const actualAmount = isMultisigDAO ? DEFAULT_VALUE_VOTE_MULTISIG : amount
-      const voteAmount = utils.decimalize(actualAmount, decimals)
-      const nextAmount = new BN(voteAmount.toString())
-      const { txId } = await interDao.voteAgainst(
-        proposalAddress,
-        nextAmount,
-        proposalFee,
-      )
+      const { tx: txVote } = await getTxVote(voteState)
+      if (comment) {
+        const receipt = txVote.instructions[0].keys[7].pubkey.toString()
+        const txComment = await initTxCommentProposal({
+          proposal: proposalAddress,
+          content: comment,
+          voteState,
+          receipt,
+        })
+        txVote.add(txComment)
+      }
+      const txId = await provider.sendAndConfirm(txVote)
       dispatch(setVoteBidAmount(''))
-      window.notify({
-        type: 'success',
-        description: 'Voted successfully. Click to view details!',
-        onClick: () => window.open(util.explorer(txId), '_blank'),
-      })
-    } catch (error: any) {
-      window.notify({
-        type: 'error',
-        description: error.message,
-      })
+      notifySuccess('Voted', txId)
+    } catch (error) {
+      notifyError(error)
     } finally {
-      setLoadingAgainst(false)
+      setVoting(undefined)
     }
-  }, [amount, decimals, dispatch, isMultisigDAO, proposalAddress, proposalFee])
+  }
 
   return (
     <Fragment>
-      {balance ? (
-        <Row gutter={[16, 16]}>
-          <Col span={isMultisigDAO ? 24 : 12}>
-            <Button
-              onClick={onVoteFor}
-              type="primary"
-              disabled={disabled}
-              loading={loadingFor}
-              block
-              size="large"
-              icon={<IonIcon name="thumbs-up-outline" />}
-            >
-              Vote For
-            </Button>
-          </Col>
-          <Col span={isMultisigDAO ? 24 : 12}>
-            <Button
-              onClick={onVoteAgainst}
-              type="primary"
-              disabled={disabled}
-              loading={loadingAgainst}
-              block
-              size="large"
-              icon={<IonIcon name="thumbs-down-outline" />}
-            >
-              Vote Against
-            </Button>
-          </Col>
-        </Row>
-      ) : (
-        <Button block size="large" type="primary" disabled={true}>
-          Voted
-        </Button>
-      )}
+      <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Card
+            className="numric-ip-card"
+            bodyStyle={{ padding: '8px 12px' }}
+            bordered={false}
+          >
+            <Row gutter={[8, 8]}>
+              <Col>
+                <Typography.Text>Add a comment (Optional)</Typography.Text>
+              </Col>
+              <Col span={24}>
+                <Input
+                  bordered={false}
+                  style={{ padding: 0 }}
+                  placeholder=""
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                />
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+
+        <Col span={isMultisigDAO ? 24 : 12}>
+          <Button
+            onClick={() => onVote(VoteState.For)}
+            type="primary"
+            disabled={disabled}
+            loading={voting === VoteState.For}
+            block
+            size="large"
+            icon={<IonIcon name="thumbs-up-outline" />}
+          >
+            Vote For
+          </Button>
+        </Col>
+        <Col span={isMultisigDAO ? 24 : 12}>
+          <Button
+            onClick={() => onVote(VoteState.Against)}
+            type="primary"
+            disabled={disabled}
+            loading={voting === VoteState.Against}
+            block
+            size="large"
+            icon={<IonIcon name="thumbs-down-outline" />}
+          >
+            Vote Against
+          </Button>
+        </Col>
+      </Row>
     </Fragment>
   )
 }

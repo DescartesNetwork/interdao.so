@@ -1,3 +1,4 @@
+import { util } from '@sentre/senhub'
 import { CID } from 'ipfs-core'
 
 const SOCIALS_MEDIA: Record<string, string> = {
@@ -46,4 +47,20 @@ export const getIcon = (url: string) => {
   const iconName = SOCIALS_MEDIA[socialName.toLowerCase()]
   if (!iconName) return SOCIALS_MEDIA['global']
   return iconName
+}
+
+export const notifySuccess = (content: string, txId: string) => {
+  return window.notify({
+    type: 'success',
+    description: `${content} successfully. Click to view details.`,
+    onClick: () => window.open(util.explorer(txId), '_blank'),
+  })
+}
+
+export const notifyError = (er: any) => {
+  console.log('er', er)
+  return window.notify({
+    type: 'error',
+    description: er.message,
+  })
 }
