@@ -107,7 +107,6 @@ export const upsetComment = createAsyncThunk(
     const cidString = getCID(cid)
     const data = await ipfs.get<CommentProposal[]>(cidString)
     bulk[wallet] = data
-    console.log('bulk', bulk)
     return {
       proposal,
       bulk,

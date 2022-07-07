@@ -10,6 +10,7 @@ import IonIcon from '@sentre/antd-ionicon'
 import { CommentProposal, getComments } from 'model/comments.controller'
 import { useIpfsolWatcher } from 'helpers/useIpfsolWatcher'
 import { AppDispatch, AppState } from 'model'
+import CardLoading from 'components/cardLoading'
 
 const DEFAULT_AMOUNT_COMMENTS = 4
 
@@ -30,7 +31,7 @@ const Comments = ({ proposalAddress }: CommentsProps) => {
     (state: AppState) => state.comments[proposalAddress],
   )
   const dispatch = useDispatch<AppDispatch>()
-  useIpfsolWatcher(proposalAddress)
+  const { loading } = useIpfsolWatcher(proposalAddress)
 
   const fetchComments = useCallback(async () => {
     await dispatch(getComments(proposalAddress)).unwrap()
@@ -72,6 +73,7 @@ const Comments = ({ proposalAddress }: CommentsProps) => {
 
         {/* List comments */}
         <Col span={24}>
+          <CardLoading loading={loading} />
           <ListComments comments={mergedComments.slice(0, amount)} />
         </Col>
 

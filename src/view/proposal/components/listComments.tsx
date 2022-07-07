@@ -16,7 +16,6 @@ import {
 } from 'antd'
 import { COMMENTS_VOTE_TYPE } from 'constant'
 import IonIcon from '@sentre/antd-ionicon'
-import CardLoading from 'components/cardLoading'
 
 import { CommentProposal } from 'model/comments.controller'
 
@@ -111,7 +110,6 @@ const ListComments = ({ comments }: ListCommentsProps) => {
 
   return (
     <Fragment>
-      <CardLoading loading />
       {comments.map((comment, idx) => (
         <CardComment comment={comment} key={idx} />
       ))}

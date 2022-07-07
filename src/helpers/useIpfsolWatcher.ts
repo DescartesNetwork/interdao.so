@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { sha256 } from 'js-sha256'
 import camelcase from 'camelcase'
@@ -21,21 +21,25 @@ export const accountDiscriminator = (name: string): Buffer => {
 }
 
 export const useIpfsolWatcher = (proposal: string) => {
+  const [loading, setLoading] = useState(false)
   const dispatch = useDispatch<AppDispatch>()
+
   const watchData = useCallback(async () => {
     const discriminator = deriveDiscriminator(proposal)
     watcherId = interDao.program.provider.connection.onProgramAccountChange(
       interDao.program.programId,
-      (data) => {
+      async (data) => {
         try {
           const ipfsol = interDao.parseIpfsolData(data.accountInfo.data)
-          dispatch(
+          setLoading(true)
+          await dispatch(
             upsetComment({
               proposal,
               wallet: ipfsol.authority.toBase58(),
               cid: ipfsol.cid,
             }),
           ).unwrap()
+          setLoading(false)
         } catch (error) {}
       },
       'confirmed',
@@ -61,5 +65,5 @@ export const useIpfsolWatcher = (proposal: string) => {
     }
   }, [watchData])
 
-  return
+  return { loading }
 }

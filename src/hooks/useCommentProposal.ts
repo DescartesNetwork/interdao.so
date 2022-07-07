@@ -47,10 +47,9 @@ export const useCommentProposal = () => {
   ) => {
     let ownerComments: CommentProposal[] = []
     try {
-      // fetch comments history
       const ipfsolData = await interDao.program.account.ipfsol.fetch(ipfsol)
       const cid = getCID(ipfsolData.cid)
-      ownerComments = await ipfs.get<CommentProposal[]>(cid)
+      ownerComments = [...(await ipfs.get<CommentProposal[]>(cid))]
     } catch (error) {}
     ownerComments.push(newComment)
     return ownerComments
