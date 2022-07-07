@@ -53,7 +53,7 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
     <Row gutter={[16, 16]}>
       <Col flex="auto">
         <Space direction="vertical">
-          <Typography.Text>Time remaining</Typography.Text>
+          <Typography.Text type="secondary">Time remaining</Typography.Text>
           <Typography.Title level={5}>
             {remainingTime.days}d : {remainingTime.hours}h :{' '}
             {remainingTime.minutes}m : {remainingTime.seconds}s
@@ -69,7 +69,9 @@ const LockedVoting = ({ proposalAddress, daoAddress }: LockedVotingProps) => {
                 name="information-circle-outline"
               />
             </Tooltip>
-            <Typography.Text>Power of your votes</Typography.Text>
+            <Typography.Text type="secondary">
+              Power of your votes
+            </Typography.Text>
           </Space>
 
           <Typography.Title level={5} style={{ textAlign: 'right' }}>

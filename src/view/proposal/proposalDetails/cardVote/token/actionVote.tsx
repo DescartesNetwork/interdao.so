@@ -86,6 +86,7 @@ const ActionVote = ({
       }
       const txId = await provider.sendAndConfirm(txVote)
       dispatch(setVoteBidAmount(''))
+      setComment('')
       notifySuccess('Voted', txId)
     } catch (error) {
       notifyError(error)
@@ -105,7 +106,9 @@ const ActionVote = ({
           >
             <Row gutter={[8, 8]}>
               <Col>
-                <Typography.Text>Add a comment (Optional)</Typography.Text>
+                <Typography.Text type="secondary">
+                  Add a comment (Optional)
+                </Typography.Text>
               </Col>
               <Col span={24}>
                 <Input

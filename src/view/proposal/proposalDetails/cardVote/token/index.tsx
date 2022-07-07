@@ -57,7 +57,9 @@ const CardVoteToken = ({
             >
               <Row gutter={[8, 8]}>
                 <Col flex="auto">
-                  <Typography.Text>Amount Votes</Typography.Text>
+                  <Typography.Text type="secondary">
+                    Amount Votes
+                  </Typography.Text>
                 </Col>
                 <Col>
                   <Typography.Text>
