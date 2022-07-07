@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { DaoData } from '@interdao/core'
 import { util } from '@sentre/senhub'
 
-import { Card, Col, Input, Row, Space, Typography } from 'antd'
+import { Card, Col, Row, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
 import Withdraw from '../../withdraw'
 import LockedVoting from '../lockedVoting'
