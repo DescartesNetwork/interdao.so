@@ -12,6 +12,7 @@ import configs from 'configs'
 import useProposalMetaData from 'hooks/proposal/useProposalMetaData'
 
 import './index.less'
+import Comments from '../components/comments'
 
 const {
   manifest: { appId },
@@ -54,11 +55,15 @@ const ProposalDetails = () => {
                         daoAddress={daoAddress}
                       />
                     </Col>
+
                     <Col span={24}>
                       <CardVote
                         proposalAddress={proposalAddress}
                         daoAddress={daoAddress}
                       />
+                    </Col>
+                    <Col span={24}>
+                      <Comments proposalAddress={proposalAddress} />
                     </Col>
                     <Col span={24}>
                       <History
