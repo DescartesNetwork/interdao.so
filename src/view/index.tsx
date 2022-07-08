@@ -10,6 +10,7 @@ import CreateDao from './createDao'
 import ProposalDetails from './proposal/proposalDetails'
 import EditDAO from './dao/editDao'
 import Loading from 'components/loading'
+import PageNotFound from 'view/pageNotFound'
 
 import DaoWatcher from '../watcher/dao.watcher'
 import ProposalWatcher from '../watcher/proposal.watcher'
@@ -48,7 +49,7 @@ const View = () => {
             />
             <Route
               exact
-              path={`/app/${appId}/dao/:daoAddress`}
+              path={`/app/${appId}/dao/:daoAddress/:daoName`}
               component={Proposal}
             />
             <Route
@@ -63,8 +64,13 @@ const View = () => {
             />
             <Route
               exact
-              path={`/app/${appId}/dao/:daoAddress/proposal/:proposalAddress`}
+              path={`/app/${appId}/dao/:daoAddress/:daoName/proposal/:proposalAddress`}
               component={ProposalDetails}
+            />
+            <Route
+              exact
+              path={`/app/${appId}/page-not-found`}
+              component={PageNotFound}
             />
             <Redirect from="*" to={`/app/${appId}/dao`} />
           </Switch>
