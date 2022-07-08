@@ -31,6 +31,7 @@ const ProposalTemplateCard: React.FC<PropProposalTemplateCard> = ({
   const { status } = useProposalStatus(proposalAddress)
   const daoAddress = proposalData.dao.toBase58()
   const { daoNameUrl } = useDaoNameUrl(daoAddress)
+
   return (
     <Card
       bordered={false}

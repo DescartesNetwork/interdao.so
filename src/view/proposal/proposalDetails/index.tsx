@@ -36,8 +36,10 @@ const ProposalDetails = () => {
   const proposal = useSelector((state: AppState) => state.proposal)
 
   const checkValidProposalAddress = useCallback(() => {
-    if (!proposal[proposalAddress])
+    if (!proposal[proposalAddress]) {
+      console.log('checkValidProposalAddress', proposalAddress)
       return history.push(`/app/${appId}/page-not-found`)
+    }
   }, [proposalAddress, proposal, history])
 
   useEffect(() => {

@@ -57,7 +57,7 @@ const ActionCommentOnly = () => {
       >
         <Row gutter={[32, 32]}>
           <Col span={24}>
-            <Typography.Title level={5}>Add a comment oly</Typography.Title>
+            <Typography.Title level={5}>Add a comment only</Typography.Title>
           </Col>
           <Col span={24}>
             <Row gutter={[24, 24]} justify="end">

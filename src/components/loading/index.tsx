@@ -13,7 +13,8 @@ const Loading: React.FC = ({ children }) => {
     return Object.values(loading).find((e) => e.loading === true)
   }, [loading])
 
-  if (!loadingElement?.message) return <Fragment>{children}</Fragment>
+  if (!loadingElement?.message && Object.values(loading).length)
+    return <Fragment>{children}</Fragment>
   return (
     <div className="loading-screen" style={{ display: 'block' }}>
       <Row gutter={[24, 24]}>

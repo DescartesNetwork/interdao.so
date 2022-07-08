@@ -25,14 +25,17 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
   const { daoNameUrl } = useDaoNameUrl(daoAddress)
 
   const checkValidDaoAddress = useCallback(() => {
-    if (!daos) return
-    if (!daos[daoAddress] || (daoName !== daoNameUrl && daoNameUrl))
+    if (daoNameUrl === undefined) return
+    if (!daos[daoAddress] || daoName !== daoNameUrl) {
+      console.log('checkValidDaoAddress')
       return history.push(`/app/${appId}/page-not-found`)
+    }
   }, [daoAddress, daoName, daoNameUrl, daos, history])
 
   useEffect(() => {
     checkValidDaoAddress()
   }, [checkValidDaoAddress])
+
   return (
     <Row gutter={[24, 24]}>
       <Col xs={24} md={16}>
