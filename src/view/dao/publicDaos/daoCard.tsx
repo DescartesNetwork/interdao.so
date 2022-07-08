@@ -33,6 +33,7 @@ import autonomous from 'static/images/system/bg-autonomous.png'
 import democratic from 'static/images/system/bg-democratic.png'
 import dictatorial from 'static/images/system/bg-dictatorial.png'
 import DaoMember from 'components/dao/daoMember'
+import useDaoNameUrl from 'hooks/dao/useDaoNameUrl'
 
 export type DaoCardProps = { daoAddress: string }
 export type DaoCardBackground = 'autonomous' | 'democratic' | 'dictatorial'
@@ -53,7 +54,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
   const {
     ui: { width },
   } = useUI()
-
+  const { daoNameUrl } = useDaoNameUrl(daoAddress)
   const { metaData, loading } = useMetaData(daoAddress)
   const { validMember } = useValidDaoMember(daoAddress)
   const parseRegime = Object.keys(regime)?.[0]
@@ -76,7 +77,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
         description: 'You are not a member of this DAO',
       })
 
-    history.push(`dao/${daoAddress}`)
+    history.push(`dao/${daoAddress}/${daoNameUrl}`)
   }
 
   const isMobile = width < 768

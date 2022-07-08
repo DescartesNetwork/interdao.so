@@ -1,18 +1,21 @@
+import { useCallback, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { useParams, useHistory } from 'react-router-dom'
 
 import { Button, Col, Row, Spin } from 'antd'
+import IonIcon from '@sentre/antd-ionicon'
 import CardStatus from './cardStatus'
 import CardVote from './cardVote'
 import CardInfo from './cardInfo'
 import CardProgress from './cardProgress'
 import History from './history'
-import IonIcon from '@sentre/antd-ionicon'
+import Comments from '../components/comments'
 
+import { AppState } from 'model'
 import configs from 'configs'
 import useProposalMetaData from 'hooks/proposal/useProposalMetaData'
 
 import './index.less'
-import Comments from '../components/comments'
 
 const {
   manifest: { appId },
@@ -30,6 +33,16 @@ const ProposalDetails = () => {
     proposalAddress: string
   }>()
   const { loading } = useProposalMetaData(proposalAddress)
+  const proposal = useSelector((state: AppState) => state.proposal)
+
+  const checkValidProposalAddress = useCallback(() => {
+    if (!proposal[proposalAddress])
+      return history.push(`/app/${appId}/page-not-found`)
+  }, [proposalAddress, proposal, history])
+
+  useEffect(() => {
+    checkValidProposalAddress()
+  }, [checkValidProposalAddress])
 
   return (
     <Spin spinning={loading} tip="Loading Proposal Data...">
