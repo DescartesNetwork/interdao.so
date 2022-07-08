@@ -1,14 +1,15 @@
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import { util } from '@sentre/senhub'
 
 import { Card, CardProps, Col, Row, Typography } from 'antd'
+import ProposalStatus from 'components/proposalStatus'
 
 import useProposalMetaData from 'hooks/proposal/useProposalMetaData'
 import { AppState } from 'model'
 import configs from 'configs'
-import ProposalStatus from 'components/proposalStatus'
 import useProposalStatus from 'hooks/proposal/useProposalStatus'
-import { util } from '@sentre/senhub'
+import useDaoNameUrl from 'hooks/dao/useDaoNameUrl'
 
 const {
   manifest: { appId },
@@ -29,12 +30,14 @@ const ProposalTemplateCard: React.FC<PropProposalTemplateCard> = ({
   const { metaData } = useProposalMetaData(proposalAddress)
   const { status } = useProposalStatus(proposalAddress)
   const daoAddress = proposalData.dao.toBase58()
+  const { daoNameUrl } = useDaoNameUrl(daoAddress)
+
   return (
     <Card
       bordered={false}
       onClick={() =>
         history.push(
-          `/app/${appId}/dao/${daoAddress}/proposal/${proposalAddress}`,
+          `/app/${appId}/dao/${daoAddress}/${daoNameUrl}/proposal/${proposalAddress}`,
         )
       }
       className="proposal-card"

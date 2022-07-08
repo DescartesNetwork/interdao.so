@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { utilsBN } from 'sentre-web3'
 
-import { Button, Card, Col, Input, Row, Typography } from 'antd'
+import { Button, Col, Row } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { AppState } from 'model'
@@ -19,6 +19,7 @@ import { useAnchorProvider } from 'hooks/useAnchorProvider'
 import { useDaoData } from 'hooks/dao'
 import { useCommentProposal } from 'hooks/useCommentProposal'
 import { VoteState } from 'model/comments.controller'
+import InputComment from 'components/inputComment'
 
 const {
   sol: { interDao },
@@ -86,6 +87,7 @@ const ActionVote = ({
       }
       const txId = await provider.sendAndConfirm(txVote)
       dispatch(setVoteBidAmount(''))
+      setComment('')
       notifySuccess('Voted', txId)
     } catch (error) {
       notifyError(error)
@@ -98,26 +100,7 @@ const ActionVote = ({
     <Fragment>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Card
-            className="numric-ip-card"
-            bodyStyle={{ padding: '8px 12px' }}
-            bordered={false}
-          >
-            <Row gutter={[8, 8]}>
-              <Col>
-                <Typography.Text>Add a comment (Optional)</Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Input
-                  bordered={false}
-                  style={{ padding: 0 }}
-                  placeholder=""
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                />
-              </Col>
-            </Row>
-          </Card>
+          <InputComment value={comment} onChange={setComment} />
         </Col>
 
         <Col span={isMultisigDAO ? 24 : 12}>

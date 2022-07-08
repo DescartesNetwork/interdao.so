@@ -7,6 +7,7 @@ import bs58 from 'bs58'
 import { deriveDiscriminator, upsetComment } from 'model/comments.controller'
 import { AppDispatch } from 'model'
 import configs from 'configs'
+import { notifyError } from 'helpers'
 
 const {
   sol: { interDao },
@@ -39,8 +40,11 @@ export const useIpfsolWatcher = (proposal: string) => {
               cid: ipfsol.cid,
             }),
           ).unwrap()
+        } catch (error) {
+          notifyError(error)
+        } finally {
           setLoading(false)
-        } catch (error) {}
+        }
       },
       'confirmed',
       [
