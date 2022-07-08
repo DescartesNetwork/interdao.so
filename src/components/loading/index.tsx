@@ -15,6 +15,7 @@ const Loading: React.FC = ({ children }) => {
 
   if (!loadingElement?.message && Object.values(loading).length)
     return <Fragment>{children}</Fragment>
+
   return (
     <div className="loading-screen" style={{ display: 'block' }}>
       <Row gutter={[24, 24]}>

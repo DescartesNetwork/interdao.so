@@ -37,7 +37,6 @@ const ProposalDetails = () => {
 
   const checkValidProposalAddress = useCallback(() => {
     if (!proposal[proposalAddress]) {
-      console.log('checkValidProposalAddress', proposalAddress)
       return history.push(`/app/${appId}/page-not-found`)
     }
   }, [proposalAddress, proposal, history])
