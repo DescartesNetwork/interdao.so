@@ -27,7 +27,6 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
   const checkValidDaoAddress = useCallback(() => {
     if (daoNameUrl === undefined) return
     if (!daos[daoAddress] || daoName !== daoNameUrl) {
-      console.log('checkValidDaoAddress')
       return history.push(`/app/${appId}/page-not-found`)
     }
   }, [daoAddress, daoName, daoNameUrl, daos, history])

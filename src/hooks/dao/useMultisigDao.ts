@@ -13,6 +13,7 @@ import configs from 'configs'
 import MultisigWallet from 'helpers/mutisigWallet'
 import Distributor from 'helpers/distributor'
 import usePDB from '../usePDB'
+import { deriveDaoNameURL } from './useDaoNameUrl'
 
 const {
   sol: { interDao },
@@ -30,6 +31,7 @@ const useMultisigDao = () => {
   const {
     wallet: { address: myWallet },
   } = useWallet()
+  const daoNameUrl = deriveDaoNameURL(metadata.daoName)
 
   const createVotingMint = useCallback(async () => {
     const { members } = metadata
@@ -92,7 +94,7 @@ const useMultisigDao = () => {
         description: 'A new DAO is created. Click here to view details.',
         onClick: () => window.open(util.explorer(txId), '_blank'),
       })
-      return history.push(`/app/${appId}/dao/${daoAddress}`)
+      return history.push(`/app/${appId}/dao/${daoAddress}/${daoNameUrl}`)
     } catch (er: any) {
       window.notify({ type: 'error', description: er.message })
     } finally {
@@ -105,6 +107,7 @@ const useMultisigDao = () => {
     metadata,
     pdb,
     history,
+    daoNameUrl,
   ])
 
   return { createMultisigDao, loading }

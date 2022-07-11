@@ -16,6 +16,7 @@ import {
   parserIxDataNoPrefix,
   parserProposalReturnType,
 } from '../core/templateParser'
+import useDaoNameUrl from 'hooks/dao/useDaoNameUrl'
 
 const {
   manifest: { appId },
@@ -25,6 +26,7 @@ export const useConfirmIdl = () => {
   const dispatch = useDispatch<AppDispatch>()
   const history = useHistory()
   const { daoAddress } = useParams<{ daoAddress: string }>()
+  const { daoNameUrl } = useDaoNameUrl(daoAddress)
 
   const confirm = useCallback(
     async (templateIdl: TemplateIdl, templateData: Record<string, string>) => {
@@ -34,9 +36,11 @@ export const useConfirmIdl = () => {
       await dispatch(setTx(tx))
       await dispatch(setVisible(false))
       await dispatch(setTemplateData(templateData))
-      return history.push(`/app/${appId}/dao/${daoAddress}/new-proposal`)
+      return history.push(
+        `/app/${appId}/dao/${daoAddress}/${daoNameUrl}/new-proposal`,
+      )
     },
-    [daoAddress, dispatch, history],
+    [daoAddress, daoNameUrl, dispatch, history],
   )
 
   const close = useCallback(async () => {

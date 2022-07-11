@@ -18,6 +18,7 @@ import useMetaData from 'hooks/useMetaData'
 import { useDaoData } from 'hooks/dao'
 import { DaoDetailsProps } from './index'
 import configs from 'configs'
+import useDaoNameUrl from 'hooks/dao/useDaoNameUrl'
 
 const {
   manifest: { appId },
@@ -33,6 +34,7 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
   const {
     wallet: { address: walletAddress },
   } = useWallet()
+  const { daoNameUrl } = useDaoNameUrl(daoAddress)
 
   const { regime, nonce, mint, authority, isNft } = daoData || {
     regime: {},
@@ -40,7 +42,8 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
     mint: SystemProgram.programId,
   }
 
-  const onEditDAO = () => history.push(`/app/${appId}/dao/${daoAddress}/edit`)
+  const onEditDAO = () =>
+    history.push(`/app/${appId}/dao/${daoAddress}/${daoNameUrl}/edit`)
 
   const mobileScreen = width < 768
 

@@ -76,7 +76,6 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
         type: 'warning',
         description: 'You are not a member of this DAO',
       })
-
     history.push(`dao/${daoAddress}/${daoNameUrl}`)
   }
 

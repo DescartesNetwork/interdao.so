@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { Row, Button, Col, ButtonProps } from 'antd'
 
 import configs from 'configs'
+import useDaoNameUrl from 'hooks/dao/useDaoNameUrl'
 
 const {
   manifest: { appId },
@@ -15,9 +16,10 @@ type ActionButtonProps = {
 
 const ActionButton = ({ daoAddress, onSave, ...rest }: ActionButtonProps) => {
   const history = useHistory()
+  const { daoNameUrl } = useDaoNameUrl(daoAddress)
 
   const onCancel = async () => {
-    history.push(`/app/${appId}/dao/${daoAddress}`)
+    history.push(`/app/${appId}/dao/${daoAddress}/${daoNameUrl}`)
   }
 
   return (
