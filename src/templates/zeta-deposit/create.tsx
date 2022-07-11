@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { isAddress } from '@interdao/core'
+import { utils } from '@project-serum/anchor'
 
 import { Button, Col, Empty, Row, Space } from 'antd'
 import { NumberInput, MintInput, AddressInput } from 'templates/components'
@@ -22,7 +23,7 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
       const defaultData = {
         [ZetaDepositIds.code]: '3',
         [ZetaDepositIds.authority]: daoData.master.toBase58(),
-        [ZetaDepositIds.source]: daoData.master.toBase58(),
+        [ZetaDepositIds.tokenProgram]: utils.token.TOKEN_PROGRAM_ID.toBase58(),
       }
       return confirm(ZetaDepositIdl, { ...defaultData, ...templateData })
     } catch (er: any) {
@@ -32,7 +33,7 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
 
   const disabled =
     !templateData[ZetaDepositIds.amount] ||
-    !isAddress(templateData[ZetaDepositIds.destination]) ||
+    !isAddress(templateData[ZetaDepositIds.authority]) ||
     !templateData[ZetaDepositIds.mint]
 
   if (!daoData) return <Empty description="Invalid DAO data" />
@@ -47,18 +48,60 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
       </Col>
       <Col span={24}>
         <AddressInput
-          id={ZetaDepositIds.source}
-          title="Sender's Wallet Address"
-          placeholder="Input Sender's Wallet Address"
-          readOnly
+          id={ZetaDepositIds.zetaGroup}
+          title="zetaGroup"
+          placeholder="zetaGroup"
+        />
+      </Col>
+      <Col span={24}>
+        <AddressInput
+          id={ZetaDepositIds.marginAccount}
+          title="marginAccount"
+          placeholder="marginAccount"
+        />
+      </Col>
+
+      <Col span={24}>
+        <AddressInput
+          id={ZetaDepositIds.vault}
+          title="vault"
+          placeholder="vault"
+        />
+      </Col>
+      <Col span={24}>
+        <AddressInput
+          id={ZetaDepositIds.userTokenAccount}
+          title="userTokenAccount"
+          placeholder="userTokenAccount"
+        />
+      </Col>
+      <Col span={24}>
+        <AddressInput
+          id={ZetaDepositIds.socializedLossAccount}
+          title="socializedLossAccount"
+          placeholder="socializedLossAccount"
+        />
+      </Col>
+      <Col span={24}>
+        <AddressInput
+          id={ZetaDepositIds.authority}
+          title="authority"
+          placeholder="authority"
           defaultValue={daoData.master.toBase58()}
         />
       </Col>
       <Col span={24}>
         <AddressInput
-          id={ZetaDepositIds.destination}
-          title="Receiver's Wallet Address"
-          placeholder="Input Receiver's Wallet Address"
+          id={ZetaDepositIds.state}
+          title="state"
+          placeholder="state"
+        />
+      </Col>
+      <Col span={24}>
+        <AddressInput
+          id={ZetaDepositIds.greeks}
+          title="greeks"
+          placeholder="greeks"
         />
       </Col>
       <Col span={24} />

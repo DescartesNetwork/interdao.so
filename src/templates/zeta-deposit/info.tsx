@@ -14,8 +14,8 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
     useTemplateDataWithProposal<Record<ZetaDepositIds, string>>(proposalAddress)
 
   const mint = templateData.mint
-  const source = templateData?.source || ''
-  const destination = templateData?.destination || ''
+  const source = ''
+  const destination = ''
 
   return (
     <Row gutter={[12, 12]}>

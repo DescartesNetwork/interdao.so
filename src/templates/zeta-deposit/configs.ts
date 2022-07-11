@@ -1,50 +1,80 @@
-import { utils } from '@project-serum/anchor'
 import { RulesName } from '../core/rule'
 import { TemplateIdl, TemplateNames } from './../index'
 
 export enum ZetaDepositIds {
   // Accounts
-  source = 'source',
-  destination = 'destination',
+  zetaGroup = 'zetaGroup',
+  marginAccount = 'marginAccount',
+  vault = 'vault',
+  userTokenAccount = 'userTokenAccount',
+  socializedLossAccount = 'socializedLossAccount',
   authority = 'authority',
-  // Prams
-  code = 'code',
+  tokenProgram = 'tokenProgram',
+  state = 'state',
+  greeks = 'greeks',
+  // Params
   amount = 'amount',
   // Context
   mint = 'mint',
+  code = 'code',
 }
 
 export const ZetaDepositIdl: TemplateIdl = {
   name: TemplateNames.ZetaDeposit,
   accounts: [
     {
-      name: ZetaDepositIds.source,
-      isMut: true,
+      name: ZetaDepositIds.zetaGroup,
+      isMut: false,
       isSigner: false,
       isMaster: false,
-      rule: {
-        name: RulesName.tokenAccount,
-        configs: { mint: ZetaDepositIds.mint, owner: ZetaDepositIds.source },
-      },
     },
     {
-      name: ZetaDepositIds.destination,
+      name: ZetaDepositIds.marginAccount,
       isMut: true,
       isSigner: false,
       isMaster: false,
-      rule: {
-        name: RulesName.tokenAccount,
-        configs: {
-          mint: ZetaDepositIds.mint,
-          owner: ZetaDepositIds.destination,
-        },
-      },
+    },
+    {
+      name: ZetaDepositIds.vault,
+      isMut: true,
+      isSigner: false,
+      isMaster: false,
+    },
+    {
+      name: ZetaDepositIds.userTokenAccount,
+      isMut: true,
+      isSigner: false,
+      isMaster: false,
+    },
+    {
+      name: ZetaDepositIds.socializedLossAccount,
+      isMut: true,
+      isSigner: false,
+      isMaster: false,
     },
     {
       name: ZetaDepositIds.authority,
-      isMut: true,
+      isMut: false,
       isSigner: true,
       isMaster: true,
+    },
+    {
+      name: ZetaDepositIds.tokenProgram,
+      isMut: false,
+      isSigner: false,
+      isMaster: false,
+    },
+    {
+      name: ZetaDepositIds.state,
+      isMut: false,
+      isSigner: false,
+      isMaster: false,
+    },
+    {
+      name: ZetaDepositIds.greeks,
+      isMut: false,
+      isSigner: false,
+      isMaster: false,
     },
   ],
   args: [
@@ -61,5 +91,5 @@ export const ZetaDepositIdl: TemplateIdl = {
       },
     },
   ],
-  programId: utils.token.TOKEN_PROGRAM_ID.toBase58(),
+  programId: 'BG3oRikW8d16YjUEmX3ZxHm9SiJzrGtMhsSR8aCw1Cd7',
 }
