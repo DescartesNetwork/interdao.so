@@ -13,7 +13,7 @@ import configs from 'configs'
 import MultisigWallet from 'helpers/mutisigWallet'
 import Distributor from 'helpers/distributor'
 import usePDB from '../usePDB'
-import { deriveDaoName } from './useDaoNameUrl'
+import { deriveDaoNameURL } from './useDaoNameUrl'
 
 const {
   sol: { interDao },
@@ -31,7 +31,7 @@ const useMultisigDao = () => {
   const {
     wallet: { address: myWallet },
   } = useWallet()
-  const daoNameUrl = deriveDaoName(metadata.daoName)
+  const daoNameUrl = deriveDaoNameURL(metadata.daoName)
 
   const createVotingMint = useCallback(async () => {
     const { members } = metadata

@@ -10,7 +10,7 @@ import useMintDecimals from 'shared/hooks/useMintDecimals'
 import configs from 'configs'
 import { AppState } from 'model'
 import usePDB from '../usePDB'
-import { deriveDaoName } from './useDaoNameUrl'
+import { deriveDaoNameURL } from './useDaoNameUrl'
 
 const {
   sol: { interDao },
@@ -25,7 +25,7 @@ const useFlexibleDao = () => {
   const decimals = useMintDecimals(mintAddress) || 0
   const pdb = usePDB()
   const history = useHistory()
-  const daoNameUrl = deriveDaoName(metadata.daoName)
+  const daoNameUrl = deriveDaoNameURL(metadata.daoName)
 
   const createFlexDAO = useCallback(async () => {
     try {
