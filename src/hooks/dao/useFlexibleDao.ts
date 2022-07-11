@@ -10,6 +10,7 @@ import useMintDecimals from 'shared/hooks/useMintDecimals'
 import configs from 'configs'
 import { AppState } from 'model'
 import usePDB from '../usePDB'
+import { deriveDaoName } from './useDaoNameUrl'
 
 const {
   sol: { interDao },
@@ -20,10 +21,11 @@ const useFlexibleDao = () => {
   const [loading, setLoading] = useState(false)
   const createDaoData = useSelector((state: AppState) => state.createDao.data)
 
-  const { mintAddress } = createDaoData
+  const { mintAddress, metadata } = createDaoData
   const decimals = useMintDecimals(mintAddress) || 0
   const pdb = usePDB()
   const history = useHistory()
+  const daoNameUrl = deriveDaoName(metadata.daoName)
 
   const createFlexDAO = useCallback(async () => {
     try {
@@ -54,13 +56,13 @@ const useFlexibleDao = () => {
         description: 'A new DAO is created. Click here to view details.',
         onClick: () => window.open(util.explorer(txId), '_blank'),
       })
-      return history.push(`/app/${appId}/dao/${daoAddress}`)
+      return history.push(`/app/${appId}/dao/${daoAddress}/${daoNameUrl}`)
     } catch (er: any) {
       window.notify({ type: 'error', description: er.message })
     } finally {
       setLoading(false)
     }
-  }, [createDaoData, decimals, pdb, history])
+  }, [createDaoData, decimals, pdb, history, daoNameUrl])
 
   return { createFlexDAO, loading }
 }

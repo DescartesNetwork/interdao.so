@@ -17,6 +17,7 @@ import IPFS from 'helpers/ipfs'
 import { AppState } from 'model'
 import { clearTx } from 'model/template.controller'
 import useMetaData from 'hooks/useMetaData'
+import useDaoNameUrl from 'hooks/dao/useDaoNameUrl'
 
 const {
   sol: { interDao, taxman, fee },
@@ -52,6 +53,7 @@ const ProposalInitialization = () => {
   const [loading, setLoading] = useState(false)
 
   const { metaData: daoMetaData } = useMetaData(daoAddress)
+  const { daoNameUrl } = useDaoNameUrl(daoAddress)
 
   const disabled = !title || !description
   const isMultisigDAO = daoMetaData?.daoType === 'multisig-dao'
@@ -115,7 +117,7 @@ const ProposalInitialization = () => {
       //Clear tx in redux
       dispatch(clearTx())
       return history.push(
-        `/app/${appId}/dao/${daoAddress}/proposal/${proposalAddress}`,
+        `/app/${appId}/dao/${daoAddress}/${daoNameUrl}/proposal/${proposalAddress}`,
       )
     } catch (er: any) {
       return window.notify({
@@ -129,6 +131,7 @@ const ProposalInitialization = () => {
     consensusMechanism,
     consensusQuorum,
     daoAddress,
+    daoNameUrl,
     daos,
     dispatch,
     duration,
@@ -138,8 +141,9 @@ const ProposalInitialization = () => {
   ])
 
   useEffect(() => {
-    if (!template.tx) return history.push(`/app/${appId}/dao/${daoAddress}`)
-  }, [daoAddress, history, template.tx])
+    if (!template.tx)
+      return history.push(`/app/${appId}/dao/${daoAddress}/${daoNameUrl}`)
+  }, [daoAddress, daoNameUrl, history, template.tx])
 
   return (
     <Row gutter={[24, 24]} justify="center">
@@ -202,7 +206,9 @@ const ProposalInitialization = () => {
             <Col flex="auto">
               <Button
                 type="text"
-                onClick={() => history.push(`/app/${appId}/dao/${daoAddress}`)}
+                onClick={() =>
+                  history.push(`/app/${appId}/dao/${daoAddress}/${daoNameUrl}`)
+                }
                 size="large"
               >
                 Cancel

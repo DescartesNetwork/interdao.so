@@ -2,7 +2,13 @@ import { useHistory } from 'react-router-dom'
 
 import { Col, Row, Typography, Button, Image, Card } from 'antd'
 
+import configs from 'configs'
+
 import BG_NOT_FOUND from 'static/images/system/not-found.png'
+
+const {
+  manifest: { appId },
+} = configs
 
 const PageNotFound = () => {
   const history = useHistory()
@@ -29,7 +35,10 @@ const PageNotFound = () => {
             </Col>
             <Col span={24} />
             <Col span={24}>
-              <Button onClick={() => history.push('/')} type="primary">
+              <Button
+                onClick={() => history.push(`/app/${appId}`)}
+                type="primary"
+              >
                 Go to the homepage
               </Button>
             </Col>

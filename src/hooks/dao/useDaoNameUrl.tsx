@@ -2,13 +2,16 @@ import { useCallback, useEffect, useState } from 'react'
 
 import useMetaData from 'hooks/useMetaData'
 
+export const deriveDaoName = (daoName: string) =>
+  daoName.replace(/[\W_]+/gm, '-').toLocaleLowerCase()
+
 const useDaoNameUrl = (daoAddress: string) => {
   const { metaData } = useMetaData(daoAddress)
   const [daoNameUrl, setDaoNameUrl] = useState<string>()
 
   const loadDaoName = useCallback(() => {
     if (!metaData?.daoName) return
-    const daoName = metaData.daoName.replace(/ /g, '-').toLocaleLowerCase()
+    const daoName = deriveDaoName(metaData.daoName)
     return setDaoNameUrl(daoName)
   }, [metaData?.daoName])
   useEffect(() => {
