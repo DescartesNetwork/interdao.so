@@ -5,6 +5,7 @@ export enum TemplateNames {
   'SplTransfer' = 'spl-transfer',
   'SplApprove' = 'spl-approve',
   'BlankTemplate' = 'blank',
+  'ZetaDeposit' = 'zeta-deposit',
 }
 
 // Component Type
