@@ -96,6 +96,15 @@ const Zeta = ({ daoAddress }: { daoAddress: string }) => {
                       />
                     </Radio.Button>
                   </Col>
+                  <Col xs={24} sm={12} md={12} lg={12}>
+                    <Radio.Button value={TemplateNames.ZetaCreate}>
+                      <CardOption
+                        label="Zeta Create"
+                        description="Create token to another wallet address"
+                        icon="paper-plane-outline"
+                      />
+                    </Radio.Button>
+                  </Col>
                 </Row>
               </Radio.Group>
             </Space>

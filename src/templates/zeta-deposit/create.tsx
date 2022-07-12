@@ -5,7 +5,7 @@ import { Button, Col, Empty, Row, Space } from 'antd'
 import { NumberInput, MintInput } from 'templates/components'
 
 import { AppState } from 'model'
-import { ZetaDepositIdl, ZetaDepositIds } from '../zeta-deposit/configs'
+import { ZetaDepositIdl, ZetaDepositIds } from './configs'
 import { PropsCreateComponent } from '../index'
 import { useConfirmIdl } from '../hooks/useConfirmIdl'
 import { useDaoData } from 'hooks/dao'
@@ -64,7 +64,12 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
         <NumberInput
           id={ZetaDepositIds.amount}
           title="Deposit"
-          prefix={<MintInput id={ZetaDepositIds.mint} />}
+          prefix={
+            <MintInput
+              id={ZetaDepositIds.mint}
+              defaultValue={'6PEh8n3p7BbCTykufbq1nSJYAZvUp6gSwEANAs1ZhsCX'}
+            />
+          }
         />
       </Col>
       <Col span={24} />

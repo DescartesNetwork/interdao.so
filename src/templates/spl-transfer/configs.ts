@@ -16,6 +16,7 @@ export enum SplTransferIds {
 
 export const SplTransferIdl: TemplateIdl = {
   name: TemplateNames.SplTransfer,
+  ixName: TemplateNames.SplTransfer,
   accounts: [
     {
       name: SplTransferIds.source,

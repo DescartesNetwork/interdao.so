@@ -12,7 +12,6 @@ import {
 import { TEMPLATE_RULES } from './rule'
 import { ProposalAccountType, ProposalReturnType } from 'view/templates/types'
 
-const DEFAULT_IX_NAME = 'ixname'
 const ANCHOR_PREFIX_SIZE = 8
 
 const getProgram = (templateIdl: TemplateIdl) => {
@@ -24,7 +23,7 @@ const getProgram = (templateIdl: TemplateIdl) => {
     {
       instructions: [
         {
-          name: DEFAULT_IX_NAME,
+          name: templateIdl.ixName,
           accounts: templateIdl.accounts,
           args: templateIdl.args,
         },
@@ -102,7 +101,8 @@ export const parserIxDataNoPrefix = async (
   const program = await getProgram(templateIdl)
   const accounts = await parserAccounts(templateIdl, templateData)
   const args = await parserArgs(templateIdl, templateData)
-  const ix = await program.methods[DEFAULT_IX_NAME].call(this, ...args)
+  const ix = await program.methods[templateIdl.ixName]
+    .call(this, ...args)
     .accounts(accounts)
     .instruction()
   ix.data = ix.data.slice(ANCHOR_PREFIX_SIZE, ix.data.length)
@@ -117,7 +117,8 @@ export const parserIxData = async (
   const program = await getProgram(templateIdl)
   const accounts = await parserAccounts(templateIdl, templateData)
   const args = await parserArgs(templateIdl, templateData)
-  const ix = await program.methods[DEFAULT_IX_NAME].call(this, ...args)
+  const ix = await program.methods[templateIdl.ixName]
+    .call(this, ...args)
     .accounts(accounts)
     .instruction()
   return ix

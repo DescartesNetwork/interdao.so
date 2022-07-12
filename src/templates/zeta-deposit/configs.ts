@@ -1,5 +1,5 @@
 import { RulesName } from '../core/rule'
-import { TemplateIdl, TemplateNames } from './../index'
+import { TemplateIdl, TemplateNames } from '../index'
 
 export enum ZetaDepositIds {
   // Accounts
@@ -20,6 +20,7 @@ export enum ZetaDepositIds {
 
 export const ZetaDepositIdl: TemplateIdl = {
   name: TemplateNames.ZetaDeposit,
+  ixName: 'deposit',
   accounts: [
     {
       name: ZetaDepositIds.zetaGroup,
@@ -81,9 +82,10 @@ export const ZetaDepositIdl: TemplateIdl = {
       name: ZetaDepositIds.amount,
       type: 'u64',
       rule: {
-        name: RulesName.zetaAmount,
+        name: RulesName.decimalize,
         configs: {
           amount: ZetaDepositIds.amount,
+          mint: ZetaDepositIds.mint,
         },
       },
     },

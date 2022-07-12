@@ -4,13 +4,11 @@ import util from '@senswap/sen-js/dist/utils'
 export enum RulesName {
   'tokenAccount' = 'token-account',
   'decimalize' = 'decimalize',
-  'zetaAmount' = 'zeta-amount',
 }
 
 export type RulesData = {
   [RulesName.tokenAccount]: { mint: string; owner: string }
   [RulesName.decimalize]: { mint: string; amount: string }
-  [RulesName.zetaAmount]: { amount: string }
 }
 export const TEMPLATE_RULES = {
   [RulesName.tokenAccount]: {
@@ -26,11 +24,6 @@ export const TEMPLATE_RULES = {
       const { splt } = window.sentre
       const mintData = await splt.getMintData(data.mint)
       return util.decimalize(data.amount, mintData.decimals)
-    },
-  },
-  [RulesName.zetaAmount]: {
-    call: async (data: RulesData[RulesName.zetaAmount]) => {
-      return parseInt((Number(data.amount) * Math.pow(10, 6)).toFixed(0))
     },
   },
 }
