@@ -34,7 +34,6 @@ export const zetaDepositParams = async (
     // ThrottleMs - increase if you are running into rate limit issues on startup.
     0,
   )
-  const walletAddress = await window.sentre.wallet.getAddress()
   // const client = await Client.load(
   //   connection,
   //   {
@@ -44,15 +43,13 @@ export const zetaDepositParams = async (
   //   utils.defaultCommitment(),
   //   undefined,
   // )
-  const amountDeposit = utils.convertDecimalToNativeInteger(10_000)
-  console.log('amountDeposit: ', amountDeposit)
   const masterDaoPublicKey = toPublicKey(masterDaoAddress)
   const programId = Exchange.programId
   const zetaGroup = Exchange.zetaGroupAddress
   const [marginAccount] = await utils.getMarginAccount(
     programId,
     zetaGroup,
-    toPublicKey(walletAddress),
+    masterDaoPublicKey,
   )
   const vault = Exchange.vaultAddress
   const userTokenAccount = await utils.getAssociatedTokenAddress(

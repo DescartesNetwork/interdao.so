@@ -12,7 +12,7 @@ export enum ZetaCreateIds {
 
 export const ZetaCreateIdl: TemplateIdl = {
   name: TemplateNames.ZetaDeposit,
-  ixName: 'deposit',
+  ixName: 'initializeMarginAccount',
   accounts: [
     {
       name: ZetaCreateIds.marginAccount,
@@ -23,14 +23,20 @@ export const ZetaCreateIdl: TemplateIdl = {
     {
       name: ZetaCreateIds.authority,
       isMut: false,
-      isSigner: false,
-      isMaster: false,
+      isSigner: true,
+      isMaster: true,
     },
     {
       name: ZetaCreateIds.payer,
       isMut: true,
       isSigner: true,
       isMaster: true,
+    },
+    {
+      name: ZetaCreateIds.zetaProgram,
+      isMut: false,
+      isSigner: false,
+      isMaster: false,
     },
     {
       name: ZetaCreateIds.systemProgram,
