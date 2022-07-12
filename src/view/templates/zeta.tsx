@@ -48,21 +48,17 @@ const Zeta = ({ daoAddress }: { daoAddress: string }) => {
                     type="text"
                     icon={<IonIcon name="logo-discord" />}
                     onClick={() => {
-                      window.open('https://discord.com/invite/pquxPsq', 'blank')
+                      window.open(
+                        'https://discord.com/invite/SacGBFKNzQ',
+                        'blank',
+                      )
                     }}
                   />
                   <Button
                     type="text"
                     icon={<IonIcon name="logo-twitter" />}
                     onClick={() => {
-                      window.open('https://twitter.com/solana', 'blank')
-                    }}
-                  />
-                  <Button
-                    type="text"
-                    icon={<IonIcon name="logo-telegram" />}
-                    onClick={() => {
-                      window.open('https://t.me/solana', 'blank')
+                      window.open('https://twitter.com/ZetaMarkets', 'blank')
                     }}
                   />
                 </Space>
@@ -74,7 +70,10 @@ const Zeta = ({ daoAddress }: { daoAddress: string }) => {
               type="secondary"
               ellipsis={{ rows: 3, expandable: true, symbol: 'View more' }}
             >
-              Zeta description
+              The world's first options and futures DEX. Zeta (ζ) is the premier
+              under-collateralized DeFi derivatives platform, providing liquid
+              derivatives trading to individuals and institutions alike. Powered
+              by @solana x @serum.
             </Typography.Paragraph>
           </Col>
           <Col span={24}>
@@ -88,19 +87,19 @@ const Zeta = ({ daoAddress }: { daoAddress: string }) => {
               >
                 <Row gutter={[24, 24]}>
                   <Col xs={24} sm={12} md={12} lg={12}>
-                    <Radio.Button value={TemplateNames.ZetaDeposit}>
+                    <Radio.Button value={TemplateNames.ZetaCreate}>
                       <CardOption
-                        label="Deposit"
-                        description="Deposit token to another wallet address"
+                        label="Create Margin Account"
+                        description="Create margin token account"
                         icon="paper-plane-outline"
                       />
                     </Radio.Button>
                   </Col>
                   <Col xs={24} sm={12} md={12} lg={12}>
-                    <Radio.Button value={TemplateNames.ZetaCreate}>
+                    <Radio.Button value={TemplateNames.ZetaDeposit}>
                       <CardOption
-                        label="Zeta Create"
-                        description="Create token to another wallet address"
+                        label="Deposit"
+                        description="Deposit token to your Zeta account"
                         icon="paper-plane-outline"
                       />
                     </Radio.Button>

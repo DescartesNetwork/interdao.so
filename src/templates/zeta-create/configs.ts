@@ -11,7 +11,7 @@ export enum ZetaCreateIds {
 }
 
 export const ZetaCreateIdl: TemplateIdl = {
-  name: TemplateNames.ZetaDeposit,
+  name: TemplateNames.ZetaCreate,
   ixName: 'initializeMarginAccount',
   accounts: [
     {

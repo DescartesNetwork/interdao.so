@@ -113,7 +113,6 @@ export const parserIxData = async (
   templateIdl: TemplateIdl,
   templateData: Record<string, string>,
 ) => {
-  console.log('Normal parse')
   const program = await getProgram(templateIdl)
   const accounts = await parserAccounts(templateIdl, templateData)
   const args = await parserArgs(templateIdl, templateData)

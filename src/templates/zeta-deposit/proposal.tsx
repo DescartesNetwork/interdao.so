@@ -21,7 +21,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
     useTemplateDataWithProposal<Record<ZetaDepositIds, string>>(proposalAddress)
 
   const endTime = proposalData.endDate.toNumber() * 1000
-  const mint = templateData.mint
+  const mint = templateData.zetaDepositMint
 
   return (
     <ProposalTemplateCard
@@ -55,7 +55,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
         <Col xs={12} md={6}>
           <RowSpaceVertical
             className="t-16"
-            label="Transfer Amount"
+            label="Deposit Amount"
             value={!mint ? '--' : templateData.amount}
           />
         </Col>

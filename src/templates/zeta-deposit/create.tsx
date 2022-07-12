@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { net } from '@sentre/senhub'
 
 import { Button, Col, Empty, Row, Space } from 'antd'
 import { NumberInput, MintInput } from 'templates/components'
@@ -10,6 +11,12 @@ import { PropsCreateComponent } from '../index'
 import { useConfirmIdl } from '../hooks/useConfirmIdl'
 import { useDaoData } from 'hooks/dao'
 import { zetaDepositParams } from 'helpers/zetaClient'
+
+export const USDC_MINT_ADDRESS = {
+  testnet: '',
+  devnet: '6PEh8n3p7BbCTykufbq1nSJYAZvUp6gSwEANAs1ZhsCX',
+  mainnet: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+}
 
 const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
   const daoData = useDaoData(daoAddress)
@@ -44,7 +51,6 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
         [ZetaDepositIds.state]: state.toBase58(),
         [ZetaDepositIds.greeks]: greeks.toBase58(),
       }
-      console.log('data in instruction: ', { ...defaultData, ...templateData })
       return confirm(ZetaDepositIdl, { ...defaultData, ...templateData }, true)
     } catch (er: any) {
       window.notify({ type: 'error', description: er.message })
@@ -52,7 +58,6 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
       setLoading(false)
     }
   }, [confirm, daoData, templateData])
-  console.log(templateData)
 
   const disabled = !templateData[ZetaDepositIds.amount]
 
@@ -67,7 +72,8 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
           prefix={
             <MintInput
               id={ZetaDepositIds.mint}
-              defaultValue={'6PEh8n3p7BbCTykufbq1nSJYAZvUp6gSwEANAs1ZhsCX'}
+              defaultValue={USDC_MINT_ADDRESS[net]}
+              disabled={true}
             />
           }
         />

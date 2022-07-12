@@ -11,10 +11,12 @@ const MintInput = ({
   id,
   title,
   defaultValue,
+  disabled = false,
 }: {
   id: string
   title?: string
   defaultValue?: string
+  disabled?: boolean
 }) => {
   const dispatch = useDispatch<AppDispatch>()
   const value = useSelector((state: AppState) => state.template.data[id])
@@ -33,6 +35,7 @@ const MintInput = ({
           dispatch(setTemplateData({ [id]: value }))
         }}
         style={{ marginLeft: -7 }}
+        disabled={disabled}
       />
     </Space>
   )

@@ -35,8 +35,6 @@ export const useConfirmIdl = () => {
       templateData: Record<string, string>,
       normalParse: boolean = false,
     ) => {
-      console.log('templateIdl: ', templateIdl)
-      console.log('templateData: ', templateData)
       const ix = normalParse
         ? await parserIxData(templateIdl, templateData)
         : await parserIxDataNoPrefix(templateIdl, templateData)
@@ -45,9 +43,6 @@ export const useConfirmIdl = () => {
       await dispatch(setTx(tx))
       await dispatch(setVisible(false))
       await dispatch(setTemplateData(templateData))
-      console.log('ix: ', ix)
-      console.log('tx: ', tx)
-
       return history.push(
         `/app/${appId}/dao/${daoAddress}/${daoNameUrl}/new-proposal`,
       )

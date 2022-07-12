@@ -1,10 +1,7 @@
-import { util } from '@sentre/senhub'
-
-import { Col, Row, Space, Typography } from 'antd'
+import { Col, Row, Space } from 'antd'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import { PropsTemplateProposalLoader } from '../templateLoader'
 import RowSpaceBetween from 'components/rowSpaceBetween'
-import IconCopy from 'components/iconCopy'
 
 import { useTemplateDataWithProposal } from '../hooks/useTemplateDataWithProposal'
 import { ZetaDepositIds } from './configs'
@@ -13,9 +10,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
   const templateData =
     useTemplateDataWithProposal<Record<ZetaDepositIds, string>>(proposalAddress)
 
-  const mint = templateData.mint
-  const source = ''
-  const destination = ''
+  const mint = templateData.zetaDepositMint
 
   return (
     <Row gutter={[12, 12]}>
@@ -35,42 +30,8 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
       </Col>
       <Col span={24}>
         <RowSpaceBetween
-          label="Transfer Amount"
+          label="Deposit Amount"
           value={templateData?.amount || '--'}
-        />
-      </Col>
-      <Col span={24}>
-        <RowSpaceBetween
-          label="Sender's Wallet Address"
-          value={
-            <Space size={10}>
-              <Typography.Text
-                style={{ cursor: 'pointer', textDecoration: 'underline' }}
-                onClick={() => window.open(util.explorer(source), '_blank')}
-              >
-                {util.shortenAddress(source)}
-              </Typography.Text>
-              <IconCopy value={source} />
-            </Space>
-          }
-        />
-      </Col>
-      <Col span={24}>
-        <RowSpaceBetween
-          label="Receiver's Wallet Address"
-          value={
-            <Space size={10}>
-              <Typography.Text
-                style={{ cursor: 'pointer', textDecoration: 'underline' }}
-                onClick={() =>
-                  window.open(util.explorer(destination), '_blank')
-                }
-              >
-                {util.shortenAddress(destination)}
-              </Typography.Text>
-              <IconCopy value={destination} />
-            </Space>
-          }
         />
       </Col>
     </Row>

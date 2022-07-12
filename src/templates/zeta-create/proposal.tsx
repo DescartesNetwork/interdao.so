@@ -29,7 +29,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
           <RowSpaceVertical
             label="Template"
             value={
-              <Typography.Text className="t-16">Zeta/Deposit</Typography.Text>
+              <Typography.Text className="t-16">Zeta/Create</Typography.Text>
             }
           />
         </Col>

@@ -15,7 +15,7 @@ export enum ZetaDepositIds {
   // Params
   amount = 'amount',
   // Context
-  mint = 'mint',
+  mint = 'zetaDepositMint',
 }
 
 export const ZetaDepositIdl: TemplateIdl = {
