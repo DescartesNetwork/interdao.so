@@ -1,42 +1,63 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { isAddress } from '@interdao/core'
-import { utils } from '@project-serum/anchor'
 
 import { Button, Col, Empty, Row, Space } from 'antd'
-import { NumberInput, MintInput, AddressInput } from 'templates/components'
+import { NumberInput, MintInput } from 'templates/components'
 
 import { AppState } from 'model'
 import { ZetaDepositIdl, ZetaDepositIds } from '../zeta-deposit/configs'
 import { PropsCreateComponent } from '../index'
 import { useConfirmIdl } from '../hooks/useConfirmIdl'
 import { useDaoData } from 'hooks/dao'
+import { zetaDepositParams } from 'helpers/zetaClient'
 
 const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
   const daoData = useDaoData(daoAddress)
   const templateData = useSelector((state: AppState) => state.template.data)
   const { confirm, close } = useConfirmIdl()
+  const [loading, setLoading] = useState(false)
 
   const onConfirm = useCallback(async () => {
     try {
       if (!daoData) throw new Error('Invalid DAO data')
+      setLoading(true)
+      const {
+        zetaGroup,
+        marginAccount,
+        vault,
+        userTokenAccount,
+        socializedLossAccount,
+        authority,
+        tokenProgram,
+        state,
+        greeks,
+      } = await zetaDepositParams(daoData.master.toBase58())
       const defaultData = {
-        [ZetaDepositIds.code]: '3',
-        [ZetaDepositIds.authority]: daoData.master.toBase58(),
-        [ZetaDepositIds.tokenProgram]: utils.token.TOKEN_PROGRAM_ID.toBase58(),
+        [ZetaDepositIds.zetaGroup]: zetaGroup.toBase58(),
+        [ZetaDepositIds.marginAccount]: marginAccount.toBase58(),
+        [ZetaDepositIds.vault]: vault.toBase58(),
+        [ZetaDepositIds.userTokenAccount]: userTokenAccount.toBase58(),
+        [ZetaDepositIds.socializedLossAccount]:
+          socializedLossAccount.toBase58(),
+        [ZetaDepositIds.authority]: authority.toBase58(),
+        [ZetaDepositIds.tokenProgram]: tokenProgram.toBase58(),
+        [ZetaDepositIds.state]: state.toBase58(),
+        [ZetaDepositIds.greeks]: greeks.toBase58(),
       }
-      return confirm(ZetaDepositIdl, { ...defaultData, ...templateData })
+      console.log('data in instruction: ', { ...defaultData, ...templateData })
+      return confirm(ZetaDepositIdl, { ...defaultData, ...templateData }, true)
     } catch (er: any) {
       window.notify({ type: 'error', description: er.message })
+    } finally {
+      setLoading(false)
     }
   }, [confirm, daoData, templateData])
+  console.log(templateData)
 
-  const disabled =
-    !templateData[ZetaDepositIds.amount] ||
-    !isAddress(templateData[ZetaDepositIds.authority]) ||
-    !templateData[ZetaDepositIds.mint]
+  const disabled = !templateData[ZetaDepositIds.amount]
 
   if (!daoData) return <Empty description="Invalid DAO data" />
+
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>
@@ -46,71 +67,18 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
           prefix={<MintInput id={ZetaDepositIds.mint} />}
         />
       </Col>
-      <Col span={24}>
-        <AddressInput
-          id={ZetaDepositIds.zetaGroup}
-          title="zetaGroup"
-          placeholder="zetaGroup"
-        />
-      </Col>
-      <Col span={24}>
-        <AddressInput
-          id={ZetaDepositIds.marginAccount}
-          title="marginAccount"
-          placeholder="marginAccount"
-        />
-      </Col>
-
-      <Col span={24}>
-        <AddressInput
-          id={ZetaDepositIds.vault}
-          title="vault"
-          placeholder="vault"
-        />
-      </Col>
-      <Col span={24}>
-        <AddressInput
-          id={ZetaDepositIds.userTokenAccount}
-          title="userTokenAccount"
-          placeholder="userTokenAccount"
-        />
-      </Col>
-      <Col span={24}>
-        <AddressInput
-          id={ZetaDepositIds.socializedLossAccount}
-          title="socializedLossAccount"
-          placeholder="socializedLossAccount"
-        />
-      </Col>
-      <Col span={24}>
-        <AddressInput
-          id={ZetaDepositIds.authority}
-          title="authority"
-          placeholder="authority"
-          defaultValue={daoData.master.toBase58()}
-        />
-      </Col>
-      <Col span={24}>
-        <AddressInput
-          id={ZetaDepositIds.state}
-          title="state"
-          placeholder="state"
-        />
-      </Col>
-      <Col span={24}>
-        <AddressInput
-          id={ZetaDepositIds.greeks}
-          title="greeks"
-          placeholder="greeks"
-        />
-      </Col>
       <Col span={24} />
       <Col span={24} style={{ textAlign: 'right' }}>
         <Space>
           <Button type="text" onClick={close}>
             Close
           </Button>
-          <Button type="primary" onClick={onConfirm} disabled={disabled}>
+          <Button
+            type="primary"
+            onClick={onConfirm}
+            disabled={disabled}
+            loading={loading}
+          >
             Continue
           </Button>
         </Space>

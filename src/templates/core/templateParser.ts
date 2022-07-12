@@ -109,6 +109,20 @@ export const parserIxDataNoPrefix = async (
   return ix
 }
 
+export const parserIxData = async (
+  templateIdl: TemplateIdl,
+  templateData: Record<string, string>,
+) => {
+  console.log('Normal parse')
+  const program = await getProgram(templateIdl)
+  const accounts = await parserAccounts(templateIdl, templateData)
+  const args = await parserArgs(templateIdl, templateData)
+  const ix = await program.methods[DEFAULT_IX_NAME].call(this, ...args)
+    .accounts(accounts)
+    .instruction()
+  return ix
+}
+
 export const parserProposalReturnType = (
   templateIdl: TemplateIdl,
   ix: TransactionInstruction,

@@ -16,7 +16,6 @@ export enum ZetaDepositIds {
   amount = 'amount',
   // Context
   mint = 'mint',
-  code = 'code',
 }
 
 export const ZetaDepositIdl: TemplateIdl = {
@@ -78,15 +77,13 @@ export const ZetaDepositIdl: TemplateIdl = {
     },
   ],
   args: [
-    { name: ZetaDepositIds.code, type: 'u8' },
     {
       name: ZetaDepositIds.amount,
       type: 'u64',
       rule: {
-        name: RulesName.decimalize,
+        name: RulesName.zetaAmount,
         configs: {
           amount: ZetaDepositIds.amount,
-          mint: ZetaDepositIds.mint,
         },
       },
     },
