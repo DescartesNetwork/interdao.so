@@ -1,4 +1,4 @@
-import { Card, Col, Input, Row, Typography } from 'antd'
+import { Card, Col, Input, Row } from 'antd'
 
 type InputCommentProps = {
   value: string
