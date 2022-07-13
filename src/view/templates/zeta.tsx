@@ -1,7 +1,7 @@
-import { Button, Col, Image, Radio, Row, Space, Typography } from 'antd'
+import { Button, Col, Avatar, Radio, Row, Space, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
-import SOLANA_LOGO from 'static/images/templates/solana.svg'
+import ZETA_LOGO from 'static/images/templates/logo-zeta.jpeg'
 import { TemplateCreateLoader } from 'templates/templateLoader'
 import { TemplateNames } from 'templates'
 import { useState } from 'react'
@@ -40,7 +40,7 @@ const Zeta = ({ daoAddress }: { daoAddress: string }) => {
         <Row gutter={[16, 16]} className="spl-info">
           <Col span={24}>
             <Space size={24}>
-              <Image preview={false} src={SOLANA_LOGO} />
+              <Avatar src={ZETA_LOGO} size={56} shape="square" />
               <Space size={0} direction="vertical">
                 <Typography.Text>Zeta</Typography.Text>
                 <Space size={2} style={{ marginLeft: -8 }}>
@@ -89,8 +89,8 @@ const Zeta = ({ daoAddress }: { daoAddress: string }) => {
                   <Col xs={24} sm={12} md={12} lg={12}>
                     <Radio.Button value={TemplateNames.ZetaCreate}>
                       <CardOption
-                        label="Create Margin Account"
-                        description="Create margin token account"
+                        label="Create"
+                        description="Create margin account"
                         icon="paper-plane-outline"
                       />
                     </Radio.Button>
