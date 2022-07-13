@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import { Button, Col, Empty, Row, Space } from 'antd'
+import { Button, Col, Empty, Row, Space, Typography } from 'antd'
 
 import { ZetaCreateIdl, ZetaCreateIds } from './configs'
 import { PropsCreateComponent } from '../index'
@@ -40,16 +40,26 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
   if (!daoData) return <Empty description="Invalid DAO data" />
 
   return (
-    <Row gutter={[24, 24]} align="bottom" style={{ height: '100%' }}>
-      <Col span={24} style={{ textAlign: 'right' }}>
-        <Space>
-          <Button type="text" onClick={close}>
-            Close
-          </Button>
-          <Button type="primary" onClick={onConfirm} loading={loading}>
-            Continue
-          </Button>
-        </Space>
+    <Row gutter={[24, 24]} justify="space-between" style={{ height: '100%' }}>
+      <Col span={24}>
+        <Typography.Text type="secondary">
+          Margin account must be created first to store assets and then can
+          perform other transactions
+        </Typography.Text>
+      </Col>
+      <Col span={24}>
+        <Row style={{ height: '100%' }} align="bottom">
+          <Col span={24} style={{ textAlign: 'right' }}>
+            <Space>
+              <Button type="text" onClick={close}>
+                Close
+              </Button>
+              <Button type="primary" onClick={onConfirm} loading={loading}>
+                Continue
+              </Button>
+            </Space>
+          </Col>
+        </Row>
       </Col>
     </Row>
   )

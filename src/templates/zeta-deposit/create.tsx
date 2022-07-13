@@ -64,7 +64,7 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
   if (!daoData) return <Empty description="Invalid DAO data" />
 
   return (
-    <Row gutter={[24, 24]}>
+    <Row gutter={[24, 24]} justify="space-between" style={{ height: '100%' }}>
       <Col span={24}>
         <NumberInput
           id={ZetaDepositIds.amount}
@@ -78,21 +78,24 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
           }
         />
       </Col>
-      <Col span={24} />
-      <Col span={24} style={{ textAlign: 'right' }}>
-        <Space>
-          <Button type="text" onClick={close}>
-            Close
-          </Button>
-          <Button
-            type="primary"
-            onClick={onConfirm}
-            disabled={disabled}
-            loading={loading}
-          >
-            Continue
-          </Button>
-        </Space>
+      <Col span={24}>
+        <Row style={{ height: '100%' }} align="bottom">
+          <Col span={24} style={{ textAlign: 'right' }}>
+            <Space>
+              <Button type="text" onClick={close}>
+                Close
+              </Button>
+              <Button
+                type="primary"
+                onClick={onConfirm}
+                disabled={disabled}
+                loading={loading}
+              >
+                Continue
+              </Button>
+            </Space>
+          </Col>
+        </Row>
       </Col>
     </Row>
   )
