@@ -6,7 +6,7 @@ import { ZetaCreateIdl, ZetaCreateIds } from './configs'
 import { PropsCreateComponent } from '../index'
 import { useConfirmIdl } from '../hooks/useConfirmIdl'
 import { useDaoData } from 'hooks/dao'
-import { zetaCreateParams } from 'helpers/zetaClient'
+import { zetaCreateParams } from './zetaCreateHelper'
 
 const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
   const daoData = useDaoData(daoAddress)

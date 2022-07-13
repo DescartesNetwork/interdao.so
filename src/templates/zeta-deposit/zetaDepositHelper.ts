@@ -19,13 +19,6 @@ export type DepositInfo = {
   greeks: PublicKey
 }
 
-export type CreateInfo = {
-  zetaGroup: PublicKey
-  marginAccount: PublicKey
-  systemProgram: PublicKey
-  zetaProgram: PublicKey
-}
-
 export const zetaDepositParams = async (
   masterDaoAddress: string,
 ): Promise<DepositInfo> => {
@@ -70,36 +63,5 @@ export const zetaDepositParams = async (
     tokenProgram,
     state,
     greeks,
-  }
-}
-
-export const zetaCreateParams = async (
-  masterDaoAddress: string,
-): Promise<CreateInfo> => {
-  const connection = new Connection(NETWORK_URL)
-  await Exchange.load(
-    PROGRAM_ID,
-    net as Network,
-    connection,
-    utils.defaultCommitment(),
-    // Exchange wallet can be ignored for normal clients.
-    undefined,
-    // ThrottleMs - increase if you are running into rate limit issues on startup.
-    0,
-  )
-  const masterDaoPublicKey = toPublicKey(masterDaoAddress)
-  const programId = Exchange.programId
-  const zetaGroup = Exchange.zetaGroupAddress
-  const [marginAccount] = await utils.getMarginAccount(
-    programId,
-    zetaGroup,
-    masterDaoPublicKey,
-  )
-
-  return {
-    zetaGroup: zetaGroup,
-    marginAccount,
-    systemProgram: toPublicKey('11111111111111111111111111111111'),
-    zetaProgram: PROGRAM_ID,
   }
 }

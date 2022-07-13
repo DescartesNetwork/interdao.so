@@ -10,7 +10,7 @@ import { ZetaDepositIdl, ZetaDepositIds } from './configs'
 import { PropsCreateComponent } from '../index'
 import { useConfirmIdl } from '../hooks/useConfirmIdl'
 import { useDaoData } from 'hooks/dao'
-import { zetaDepositParams } from 'helpers/zetaClient'
+import { zetaDepositParams } from './zetaDepositHelper'
 
 export const USDC_MINT_ADDRESS = {
   testnet: '',
