@@ -8,7 +8,7 @@ import ActionCommentOnly from './actionCommentOnly'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { CommentProposal, getComments } from 'model/comments.controller'
-import { useIpfsolWatcher } from 'helpers/useIpfsolWatcher'
+import { useContentWatcher } from 'helpers/useContentWatcher'
 import { AppDispatch, AppState } from 'model'
 import CardLoading from 'components/cardLoading'
 
@@ -31,7 +31,7 @@ const Comments = ({ proposalAddress }: CommentsProps) => {
     (state: AppState) => state.comments[proposalAddress],
   )
   const dispatch = useDispatch<AppDispatch>()
-  const { loading } = useIpfsolWatcher(proposalAddress)
+  const { loading } = useContentWatcher(proposalAddress)
 
   const fetchComments = useCallback(async () => {
     await dispatch(getComments(proposalAddress)).unwrap()

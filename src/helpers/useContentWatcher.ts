@@ -21,7 +21,7 @@ export const accountDiscriminator = (name: string): Buffer => {
   ).slice(0, 8)
 }
 
-export const useIpfsolWatcher = (proposal: string) => {
+export const useContentWatcher = (proposal: string) => {
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch<AppDispatch>()
 
@@ -31,13 +31,13 @@ export const useIpfsolWatcher = (proposal: string) => {
       interDao.program.programId,
       async (data) => {
         try {
-          const ipfsol = interDao.parseIpfsolData(data.accountInfo.data)
+          const content = interDao.parseContentData(data.accountInfo.data)
           setLoading(true)
           await dispatch(
             upsetComment({
               proposal,
-              wallet: ipfsol.authority.toBase58(),
-              cid: ipfsol.cid,
+              wallet: content.authority.toBase58(),
+              metadata: content.metadata,
             }),
           ).unwrap()
         } catch (error) {
@@ -51,7 +51,7 @@ export const useIpfsolWatcher = (proposal: string) => {
         {
           memcmp: {
             offset: 0,
-            bytes: bs58.encode(accountDiscriminator('ipfsol')),
+            bytes: bs58.encode(accountDiscriminator('content')),
           },
         },
         { memcmp: { offset: 40, bytes: bs58.encode(discriminator) } },

@@ -35,7 +35,10 @@ const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
   const execute = useCallback(async () => {
     setLoading(true)
     try {
+      const data = await interDao.getProposalData(proposalAddress)
+      console.log('data', data)
       const { txId } = await interDao.executeProposal(proposalAddress)
+
       return window.notify({
         type: 'success',
         description: 'Execute successfully',
