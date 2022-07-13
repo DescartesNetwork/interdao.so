@@ -1,5 +1,4 @@
 import { useCallback, useEffect } from 'react'
-import { useSelector } from 'react-redux'
 import { useParams, useHistory } from 'react-router-dom'
 
 import { Button, Col, Row, Spin } from 'antd'
@@ -11,11 +10,12 @@ import CardProgress from './cardProgress'
 import History from './history'
 import Comments from '../components/comments'
 
-import { AppState } from 'model'
 import configs from 'configs'
 import useProposalMetaData from 'hooks/proposal/useProposalMetaData'
 
 import './index.less'
+import useDaoNameUrl from 'hooks/dao/useDaoNameUrl'
+import useProposal from 'hooks/proposal/useProposal'
 
 const {
   manifest: { appId },
@@ -33,13 +33,14 @@ const ProposalDetails = () => {
     proposalAddress: string
   }>()
   const { loading } = useProposalMetaData(proposalAddress)
-  const proposal = useSelector((state: AppState) => state.proposal)
+  const proposal = useProposal(proposalAddress)
+  const { daoNameUrl } = useDaoNameUrl(daoAddress)
 
   const checkValidProposalAddress = useCallback(() => {
-    if (!proposal[proposalAddress]) {
+    if (!proposal) {
       return history.push(`/app/${appId}/page-not-found`)
     }
-  }, [proposalAddress, proposal, history])
+  }, [proposal, history])
 
   useEffect(() => {
     checkValidProposalAddress()
@@ -54,7 +55,9 @@ const ProposalDetails = () => {
               <Button
                 type="text"
                 icon={<IonIcon name="arrow-back-outline" />}
-                onClick={() => history.push(`/app/${appId}/dao/${daoAddress}`)}
+                onClick={() =>
+                  history.push(`/app/${appId}/dao/${daoAddress}/${daoNameUrl}`)
+                }
               >
                 Back
               </Button>
