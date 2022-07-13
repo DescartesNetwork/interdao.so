@@ -41,7 +41,7 @@ const ProposalTemplateCard: React.FC<PropProposalTemplateCard> = ({
         )
       }
       className="proposal-card"
-      bodyStyle={{ padding: '24px 0', minHeight: 150 }}
+      bodyStyle={{ padding: '24px 12px 0 0', minHeight: 150 }}
       hoverable
       {...rest}
     >

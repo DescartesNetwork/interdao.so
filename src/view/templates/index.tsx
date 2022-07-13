@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Col, Modal, Row, Tabs, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import SPL from './spl'
+import Zeta from './zeta'
 import Blank from './blank'
 import { AppDispatch, AppState } from 'model'
 import { clearTemplate } from 'model/template.controller'
@@ -33,6 +34,10 @@ const Template = ({ daoAddress }: { daoAddress: string }) => {
             <Tabs.TabPane tab="SPL" key="spl">
               <SPL daoAddress={daoAddress} />
             </Tabs.TabPane>
+            <Tabs.TabPane tab="Zeta" key="zeta">
+              <Zeta daoAddress={daoAddress} />
+            </Tabs.TabPane>
+
             <Tabs.TabPane tab="Atrix" key="atrix" disabled />
             <Tabs.TabPane tab="Quarry" key="quarry" disabled />
             <Tabs.TabPane tab="Advanced" key="advanced" disabled />

@@ -24,7 +24,7 @@ const STATUS_COLOR: Record<string, string> = {
 const ProposalStatus = ({ status }: ProposalStatusProps) => {
   return (
     <Tag
-      style={{ color: STATUS_COLOR[status], border: 'solid', margin: 0 }}
+      style={{ color: STATUS_COLOR[status], border: '1px solid', margin: 0 }}
       color={'transparent'}
     >
       {status}
