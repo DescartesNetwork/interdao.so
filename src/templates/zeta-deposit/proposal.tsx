@@ -11,7 +11,7 @@ import { AppState } from 'model'
 import { useTemplateDataWithProposal } from '../hooks/useTemplateDataWithProposal'
 import { ZetaDepositIds } from './configs'
 
-import BG_SOLANA from 'static/images/templates/bg-spl.png'
+import BG_ZETA from 'static/images/templates/bg-zeta.png'
 
 const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
   const proposalData = useSelector(
@@ -27,7 +27,7 @@ const Proposal = ({ proposalAddress }: PropsTemplateProposalLoader) => {
     <ProposalTemplateCard
       proposalAddress={proposalAddress}
       style={{
-        background: `url(${BG_SOLANA})`,
+        background: `url(${BG_ZETA})`,
       }}
     >
       <Row gutter={[12, 12]}>

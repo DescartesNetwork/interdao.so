@@ -91,7 +91,7 @@ const Zeta = ({ daoAddress }: { daoAddress: string }) => {
                       <CardOption
                         label="Create"
                         description="Create margin account"
-                        icon="paper-plane-outline"
+                        icon="add-circle-outline"
                       />
                     </Radio.Button>
                   </Col>
@@ -100,7 +100,7 @@ const Zeta = ({ daoAddress }: { daoAddress: string }) => {
                       <CardOption
                         label="Deposit"
                         description="Deposit token to your Zeta account"
-                        icon="paper-plane-outline"
+                        icon="download-outline"
                       />
                     </Radio.Button>
                   </Col>
