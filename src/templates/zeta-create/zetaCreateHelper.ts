@@ -4,8 +4,11 @@ import { web3 } from '@project-serum/anchor'
 import { Exchange, Network, utils } from '@zetamarkets/sdk'
 import { toPublicKey } from 'sentre-web3'
 
-const NETWORK_URL = rpc
-const PROGRAM_ID = new PublicKey('BG3oRikW8d16YjUEmX3ZxHm9SiJzrGtMhsSR8aCw1Cd7')
+export const network = net as Network
+export const PROGRAM_ID =
+  network === 'devnet'
+    ? new PublicKey('BG3oRikW8d16YjUEmX3ZxHm9SiJzrGtMhsSR8aCw1Cd7')
+    : new PublicKey('ZETAxsqBRek56DhiGXrn75yj2NHU3aYUnxvHXpkf3aD')
 
 export type CreateInfo = {
   zetaGroup: PublicKey
@@ -17,10 +20,10 @@ export type CreateInfo = {
 export const zetaCreateParams = async (
   masterDaoAddress: string,
 ): Promise<CreateInfo> => {
-  const connection = new Connection(NETWORK_URL)
+  const connection = new Connection(rpc)
   await Exchange.load(
     PROGRAM_ID,
-    net as Network,
+    network,
     connection,
     utils.defaultCommitment(),
     // Exchange wallet can be ignored for normal clients.
@@ -38,9 +41,9 @@ export const zetaCreateParams = async (
   )
 
   return {
-    zetaGroup: zetaGroup,
+    zetaGroup,
     marginAccount,
     systemProgram: web3.SystemProgram.programId,
-    zetaProgram: PROGRAM_ID,
+    zetaProgram: programId,
   }
 }
