@@ -94,7 +94,7 @@ const parserArgs = async (
   return args
 }
 
-export const parserIxDataNoPrefix = async (
+export const parserIxData = async (
   templateIdl: TemplateIdl,
   templateData: Record<string, string>,
   isPrefix: boolean = true,
