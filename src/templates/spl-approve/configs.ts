@@ -17,6 +17,7 @@ export enum SplApproveIds {
 export const SplApproveIdl: TemplateIdl = {
   name: TemplateNames.SplApprove,
   ixName: TemplateNames.SplApprove,
+  anchor: false,
   accounts: [
     {
       name: SplApproveIds.source,

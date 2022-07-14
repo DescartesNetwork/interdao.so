@@ -26,12 +26,8 @@ export const useConfirmIdl = () => {
   const { daoNameUrl } = useDaoNameUrl(daoAddress)
 
   const confirm = useCallback(
-    async (
-      templateIdl: TemplateIdl,
-      templateData: Record<string, string>,
-      isPrefix: boolean = true,
-    ) => {
-      const ix = await parserIxData(templateIdl, templateData, isPrefix)
+    async (templateIdl: TemplateIdl, templateData: Record<string, string>) => {
+      const ix = await parserIxData(templateIdl, templateData)
       const tx = await parserProposalReturnType(templateIdl, ix)
       await dispatch(setTemplateName(templateIdl.name))
       await dispatch(setTx(tx))

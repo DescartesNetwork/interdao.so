@@ -29,7 +29,7 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
         [ZetaCreateIds.systemProgram]: systemProgram.toBase58(),
         [ZetaCreateIds.zetaProgram]: zetaProgram.toBase58(),
       }
-      return confirm(ZetaCreateIdl, defaultData, false)
+      return confirm(ZetaCreateIdl, defaultData)
     } catch (er: any) {
       window.notify({ type: 'error', description: er.message })
     } finally {

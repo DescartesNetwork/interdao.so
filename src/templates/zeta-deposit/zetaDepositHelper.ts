@@ -1,4 +1,4 @@
-import { TOKEN_PROGRAM_ID } from '@project-serum/anchor/dist/cjs/utils/token'
+import { utils as anchorUtils } from '@project-serum/anchor'
 import { rpc } from '@sentre/senhub'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { Exchange, utils } from '@zetamarkets/sdk'
@@ -46,7 +46,7 @@ export const zetaDepositParams = async (
   )
   const socializedLossAccount = Exchange.socializedLossAccountAddress
   const authority = masterDaoPublicKey
-  const tokenProgram = TOKEN_PROGRAM_ID
+  const tokenProgram = anchorUtils.token.TOKEN_PROGRAM_ID
   const state = Exchange.stateAddress
   const greeks = Exchange.zetaGroup.greeks
 
