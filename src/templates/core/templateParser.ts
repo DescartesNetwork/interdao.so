@@ -94,21 +94,6 @@ const parserArgs = async (
   return args
 }
 
-export const parserIxDataNoPrefix = async (
-  templateIdl: TemplateIdl,
-  templateData: Record<string, string>,
-) => {
-  const program = await getProgram(templateIdl)
-  const accounts = await parserAccounts(templateIdl, templateData)
-  const args = await parserArgs(templateIdl, templateData)
-  const ix = await program.methods[templateIdl.ixName]
-    .call(this, ...args)
-    .accounts(accounts)
-    .instruction()
-  ix.data = ix.data.slice(ANCHOR_PREFIX_SIZE, ix.data.length)
-  return ix
-}
-
 export const parserIxData = async (
   templateIdl: TemplateIdl,
   templateData: Record<string, string>,
@@ -120,6 +105,9 @@ export const parserIxData = async (
     .call(this, ...args)
     .accounts(accounts)
     .instruction()
+  if (!templateIdl.anchor)
+    ix.data = ix.data.slice(ANCHOR_PREFIX_SIZE, ix.data.length)
+
   return ix
 }
 

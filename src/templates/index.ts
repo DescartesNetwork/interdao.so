@@ -17,6 +17,7 @@ export type PropsCreateComponent = {
 export type TemplateIdl = {
   name: TemplateNames
   ixName: string
+  anchor: boolean
   accounts: (TemplateAccount | TemplateAccountWithRule)[]
   args: (TemplateArg | TemplateArgWithRule)[]
   programId: string

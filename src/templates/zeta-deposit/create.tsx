@@ -51,7 +51,7 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
         [ZetaDepositIds.state]: state.toBase58(),
         [ZetaDepositIds.greeks]: greeks.toBase58(),
       }
-      return confirm(ZetaDepositIdl, { ...defaultData, ...templateData }, true)
+      return confirm(ZetaDepositIdl, { ...defaultData, ...templateData })
     } catch (er: any) {
       window.notify({ type: 'error', description: er.message })
     } finally {

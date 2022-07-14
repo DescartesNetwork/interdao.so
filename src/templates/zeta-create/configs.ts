@@ -13,6 +13,7 @@ export enum ZetaCreateIds {
 export const ZetaCreateIdl: TemplateIdl = {
   name: TemplateNames.ZetaCreate,
   ixName: 'initializeMarginAccount',
+  anchor: true,
   accounts: [
     {
       name: ZetaCreateIds.marginAccount,

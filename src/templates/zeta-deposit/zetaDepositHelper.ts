@@ -1,11 +1,10 @@
-import { TOKEN_PROGRAM_ID } from '@project-serum/anchor/dist/cjs/utils/token'
-import { rpc, net } from '@sentre/senhub'
+import { utils as anchorUtils } from '@project-serum/anchor'
+import { rpc } from '@sentre/senhub'
 import { Connection, PublicKey } from '@solana/web3.js'
-import { Exchange, Network, utils } from '@zetamarkets/sdk'
+import { Exchange, utils } from '@zetamarkets/sdk'
 import { toPublicKey } from 'sentre-web3'
 
-const NETWORK_URL = rpc
-const PROGRAM_ID = new PublicKey('BG3oRikW8d16YjUEmX3ZxHm9SiJzrGtMhsSR8aCw1Cd7')
+import { PROGRAM_ID, network } from '../zeta-create/zetaCreateHelper'
 
 export type DepositInfo = {
   zetaGroup: PublicKey
@@ -22,10 +21,10 @@ export type DepositInfo = {
 export const zetaDepositParams = async (
   masterDaoAddress: string,
 ): Promise<DepositInfo> => {
-  const connection = new Connection(NETWORK_URL)
+  const connection = new Connection(rpc)
   await Exchange.load(
     PROGRAM_ID,
-    net as Network,
+    network,
     connection,
     utils.defaultCommitment(),
     // Exchange wallet can be ignored for normal clients.
@@ -46,10 +45,9 @@ export const zetaDepositParams = async (
     Exchange.usdcMintAddress,
     masterDaoPublicKey,
   )
-
   const socializedLossAccount = Exchange.socializedLossAccountAddress
   const authority = masterDaoPublicKey
-  const tokenProgram = TOKEN_PROGRAM_ID
+  const tokenProgram = anchorUtils.token.TOKEN_PROGRAM_ID
   const state = Exchange.stateAddress
   const greeks = Exchange.zetaGroup.greeks
 

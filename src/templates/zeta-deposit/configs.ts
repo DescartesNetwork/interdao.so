@@ -21,6 +21,7 @@ export enum ZetaDepositIds {
 export const ZetaDepositIdl: TemplateIdl = {
   name: TemplateNames.ZetaDeposit,
   ixName: 'deposit',
+  anchor: true,
   accounts: [
     {
       name: ZetaDepositIds.zetaGroup,
