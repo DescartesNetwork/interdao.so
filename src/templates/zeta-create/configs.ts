@@ -1,4 +1,5 @@
 import { TemplateIdl, TemplateNames } from '../index'
+import { PROGRAM_ID } from '../zeta-create/zetaCreateHelper'
 
 export enum ZetaCreateIds {
   // Accounts
@@ -53,5 +54,5 @@ export const ZetaCreateIdl: TemplateIdl = {
     },
   ],
   args: [],
-  programId: 'BG3oRikW8d16YjUEmX3ZxHm9SiJzrGtMhsSR8aCw1Cd7',
+  programId: PROGRAM_ID.toBase58(),
 }

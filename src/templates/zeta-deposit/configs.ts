@@ -1,5 +1,6 @@
 import { RulesName } from '../core/rule'
 import { TemplateIdl, TemplateNames } from '../index'
+import { PROGRAM_ID } from '../zeta-create/zetaCreateHelper'
 
 export enum ZetaDepositIds {
   // Accounts
@@ -91,5 +92,5 @@ export const ZetaDepositIdl: TemplateIdl = {
       },
     },
   ],
-  programId: 'BG3oRikW8d16YjUEmX3ZxHm9SiJzrGtMhsSR8aCw1Cd7',
+  programId: PROGRAM_ID.toBase58(),
 }
