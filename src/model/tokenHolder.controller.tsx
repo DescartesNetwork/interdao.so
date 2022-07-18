@@ -1,13 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { account } from '@senswap/sen-js'
-import { utils } from '@project-serum/anchor'
+import { net } from '@sentre/senhub'
 
-import configs from 'configs'
-import { DataLoader } from '@sentre/senhub'
-
-const {
-  sol: { interDao },
-} = configs
+import {
+  fecthTokenHoldersFromSmartContract,
+  fetchTokenHoldersFromSolScan,
+} from 'helpers/tokenHolders'
 
 /**
  * Interface & Utility
@@ -42,22 +40,14 @@ export const getTokenHolders = createAsyncThunk<
   const mintAddress = mint.toBase58()
   if (!account.isAddress(mintAddress)) return {}
   if (amountHolder && !force) return { [daoAddress]: amountHolder }
-  const {
-    provider: { connection },
-  } = interDao.program
+  let members = 0
 
-  const accounts = await DataLoader.load(
-    'getTokenHolders' + mintAddress,
-    () => {
-      return connection.getProgramAccounts(utils.token.TOKEN_PROGRAM_ID, {
-        filters: [
-          { dataSize: 165 },
-          { memcmp: { bytes: mintAddress, offset: 0 } },
-        ],
-      })
-    },
-  )
-  return { [daoAddress]: accounts.length }
+  if (net === 'devnet')
+    members = await fecthTokenHoldersFromSmartContract(mintAddress)
+  if (net === 'mainnet')
+    members = await fetchTokenHoldersFromSolScan(mintAddress)
+
+  return { [daoAddress]: members }
 })
 
 /**
