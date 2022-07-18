@@ -1,4 +1,4 @@
-import { Card, Col, Input, Row, Typography } from 'antd'
+import { Card, Col, Input, Row } from 'antd'
 
 type InputCommentProps = {
   value: string
@@ -9,7 +9,7 @@ type InputCommentProps = {
 const InputComment = ({
   onChange,
   value,
-  placeholder = 'Enter your comment...',
+  placeholder = 'Add a comment (Optional)',
 }: InputCommentProps) => {
   return (
     <Card
@@ -18,11 +18,6 @@ const InputComment = ({
       bordered={false}
     >
       <Row gutter={[8, 8]}>
-        <Col>
-          <Typography.Text type="secondary">
-            Add a comment (Optional)
-          </Typography.Text>
-        </Col>
         <Col span={24}>
           <Input
             bordered={false}

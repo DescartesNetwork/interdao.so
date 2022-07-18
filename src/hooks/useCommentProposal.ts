@@ -10,7 +10,6 @@ import IPFS from 'helpers/ipfs'
 import {
   CommentProposal,
   deriveDiscriminator,
-  deriveIpfsolAddress,
   VoteState,
 } from 'model/comments.controller'
 import { web3 } from '@project-serum/anchor'
@@ -42,14 +41,16 @@ export const useCommentProposal = () => {
   )
 
   const addNewComment = async (
-    ipfsol: web3.PublicKey,
+    contentId: web3.PublicKey,
     newComment: CommentProposal,
   ) => {
     let ownerComments: CommentProposal[] = []
     try {
-      const ipfsolData = await interDao.program.account.ipfsol.fetch(ipfsol)
-      const cid = getCID(ipfsolData.cid)
-      ownerComments = [...(await ipfs.get<CommentProposal[]>(cid))]
+      const contentData = await interDao.program.account.content.fetch(
+        contentId,
+      )
+      const metadata = getCID(contentData.metadata)
+      ownerComments = [...(await ipfs.get<CommentProposal[]>(metadata))]
     } catch (error) {}
     ownerComments.push(newComment)
     return ownerComments
@@ -64,23 +65,23 @@ export const useCommentProposal = () => {
     }) => {
       const { proposal, content, voteState, receipt } = params
       const discriminator = deriveDiscriminator(proposal)
-      const ipfsol = await deriveIpfsolAddress(discriminator, wallet.address)
+      const contentId = await interDao.deriveContentAddress(discriminator)
       const newComment = buildCommentData(content, voteState, receipt)
-      const comments = await addNewComment(ipfsol, newComment)
+      const comments = await addNewComment(contentId, newComment)
       // Override new Cid
       const newCid = await ipfs.set(comments)
       const {
         multihash: { digest },
       } = CID.parse(newCid)
 
-      const { tx } = await interDao.initializeIpfsol(
+      const { tx } = await interDao.initializeContent(
         discriminator,
         digest,
         false,
       )
       return tx
     },
-    [buildCommentData, wallet.address],
+    [buildCommentData],
   )
 
   return { initTxCommentProposal }

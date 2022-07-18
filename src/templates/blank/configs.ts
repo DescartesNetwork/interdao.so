@@ -14,6 +14,8 @@ export enum BlankIds {
 
 export const BlankIdl: TemplateIdl = {
   name: TemplateNames.BlankTemplate,
+  ixName: TemplateNames.BlankTemplate,
+  anchor: false,
   accounts: [
     {
       name: BlankIds.source,

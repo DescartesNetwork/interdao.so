@@ -5,6 +5,8 @@ export enum TemplateNames {
   'SplTransfer' = 'spl-transfer',
   'SplApprove' = 'spl-approve',
   'BlankTemplate' = 'blank',
+  'ZetaDeposit' = 'zeta-deposit',
+  'ZetaCreate' = 'zeta-create',
 }
 
 // Component Type
@@ -14,6 +16,8 @@ export type PropsCreateComponent = {
 // System type
 export type TemplateIdl = {
   name: TemplateNames
+  ixName: string
+  anchor: boolean
   accounts: (TemplateAccount | TemplateAccountWithRule)[]
   args: (TemplateArg | TemplateArgWithRule)[]
   programId: string

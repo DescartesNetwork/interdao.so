@@ -12,10 +12,7 @@ import {
   setVisible,
 } from 'model/template.controller'
 import { TemplateIdl } from '../index'
-import {
-  parserIxDataNoPrefix,
-  parserProposalReturnType,
-} from '../core/templateParser'
+import { parserIxData, parserProposalReturnType } from '../core/templateParser'
 import useDaoNameUrl from 'hooks/dao/useDaoNameUrl'
 
 const {
@@ -30,7 +27,7 @@ export const useConfirmIdl = () => {
 
   const confirm = useCallback(
     async (templateIdl: TemplateIdl, templateData: Record<string, string>) => {
-      const ix = await parserIxDataNoPrefix(templateIdl, templateData)
+      const ix = await parserIxData(templateIdl, templateData)
       const tx = await parserProposalReturnType(templateIdl, ix)
       await dispatch(setTemplateName(templateIdl.name))
       await dispatch(setTx(tx))
