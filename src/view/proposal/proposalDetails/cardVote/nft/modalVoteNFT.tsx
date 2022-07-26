@@ -141,7 +141,9 @@ const ModalVoteNFT = ({
     >
       <Row gutter={[24, 24]}>
         <Col span={24}>
-          <Typography.Title level={4}>Vote {votingType}</Typography.Title>
+          <Typography.Title level={4}>
+            Vote {votingType === 'vote-for' ? 'For' : 'Against'}
+          </Typography.Title>
         </Col>
         <Col span={24}>
           <Typography.Text>Choose NFT to vote</Typography.Text>
