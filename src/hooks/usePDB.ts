@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { PDB, useWallet } from '@sentre/senhub'
+import { PDB, useWalletAddress } from '@sentre/senhub'
 
 import configs from 'configs'
 
@@ -8,9 +8,7 @@ const {
 } = configs
 
 const usePDB = () => {
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
 
   const pdb = useMemo(() => {
     return new PDB(walletAddress).createInstance(appId)

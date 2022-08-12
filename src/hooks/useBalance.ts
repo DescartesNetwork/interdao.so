@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import { AccountData, utils } from '@senswap/sen-js'
-import { TokenProvider, useMint, util } from '@sentre/senhub'
+import {
+  TokenProvider,
+  tokenProvider,
+  useGetMintDecimals,
+  util,
+} from '@sentre/senhub'
 
 const DEFAULT_DATA = {
   address: '',
@@ -48,7 +53,7 @@ const useTotalUSD = ({
   inUSD?: boolean
   accounts: AccountData[]
 }) => {
-  const { tokenProvider, getDecimals } = useMint()
+  const getDecimals = useGetMintDecimals()
   const [totalUSD, setTotalUSD] = useState(0)
 
   const clcTotalUSD = useCallback(async () => {
@@ -56,7 +61,7 @@ const useTotalUSD = ({
     let totalUSD = 0
     for (const account of accounts) {
       const { mint, amount } = account
-      const decimals = await getDecimals(mint)
+      const decimals = (await getDecimals({ mintAddress: mint })) || 0
       const balance = await getBalance(
         inUSD,
         tokenProvider,
@@ -67,7 +72,7 @@ const useTotalUSD = ({
       totalUSD += balance
     }
     return setTotalUSD(totalUSD)
-  }, [accounts, getDecimals, tokenProvider, inUSD])
+  }, [accounts, getDecimals, inUSD])
 
   useEffect(() => {
     clcTotalUSD()

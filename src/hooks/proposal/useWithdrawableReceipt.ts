@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { ReceiptData } from '@interdao/core'
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 
 import { AppState } from 'model'
 import { ProposalState } from 'model/proposal.controller'
@@ -14,9 +14,7 @@ const useWithdrawable = () => {
   const [withdrawableReceipts, setWithdrawableReceipts] = useState<
     (ReceiptData & { address: string })[]
   >([])
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
 
   const filterWithdrawable = useCallback(async () => {
     let filteredReceipts: (ReceiptData & { address: string })[] = []

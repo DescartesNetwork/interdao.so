@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAccount, useWallet } from '@sentre/senhub'
+import { useAccounts, useWalletAddress } from '@sentre/senhub'
 import { util } from '@sentre/senhub'
 
 import { Button, Col, Image, Modal, Row, Typography } from 'antd'
@@ -13,11 +13,9 @@ import BG_JOIN_DAO from 'static/images/system/bg-join-dao.png'
 const JoinDao = ({ daoAddress }: DaoDetailsProps) => {
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const { metaData } = useMetaData(daoAddress)
-  const { accounts } = useAccount()
+  const accounts = useAccounts()
 
   const listMint = useMemo(() => {
     const mints = []
