@@ -23,7 +23,6 @@ const MintName = ({
   reversed?: boolean
 }) => {
   const [name, setName] = useState(DEFAULT_NAME)
-
   const { pools } = usePool()
 
   const deriveName = useCallback(async (address: string) => {
