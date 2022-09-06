@@ -12,6 +12,7 @@ type Conf = {
   utility: Utility
   fee: number
   taxman: string
+  taxmanAddress: string
 }
 
 const conf: Record<Net, Conf> = {
@@ -27,6 +28,7 @@ const conf: Record<Net, Conf> = {
     utility: new Utility(new SafeWallet(), rpc),
     fee: 1000000, // 0.001 SOL
     taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',
+    taxmanAddress: '8UaZw2jDhJzv5V53569JbCd3bD4BnyCfBH3sjwgajGS9',
   },
 
   /**
@@ -37,6 +39,7 @@ const conf: Record<Net, Conf> = {
     utility: new Utility(new SafeWallet(), rpc),
     fee: 1000000, // 0.001 SOL
     taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',
+    taxmanAddress: '',
   },
 
   /**
@@ -51,6 +54,7 @@ const conf: Record<Net, Conf> = {
     utility: new Utility(new SafeWallet(), rpc),
     fee: 1000000, // 0.001 SOL
     taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',
+    taxmanAddress: '9doo2HZQEmh2NgfT3Yx12M89aoBheycYqH1eaR5gKb3e',
   },
 }
 

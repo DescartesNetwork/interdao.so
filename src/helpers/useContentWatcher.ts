@@ -64,7 +64,10 @@ export const useContentWatcher = (proposal: string) => {
     watchData()
     return () => {
       ;(async () => {
-        await interDao.removeListener(watcherId)
+        if (watcherId)
+          await interDao.program.provider.connection.removeProgramAccountChangeListener(
+            watcherId,
+          )
       })()
     }
   }, [watchData])

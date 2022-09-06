@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { account } from '@senswap/sen-js'
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 import { PublicKey } from '@solana/web3.js'
 
 import { AppDispatch } from 'model'
@@ -10,9 +10,7 @@ import { addLoading, clearLoading } from 'model/loading.controller'
 import { addEventListener } from './evens.watch'
 
 const DaoWatcher = () => {
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const dispatch = useDispatch<AppDispatch>()
 
   const reloadDaoData = useCallback(

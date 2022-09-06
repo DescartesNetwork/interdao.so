@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useMint } from '@sentre/senhub'
+import { tokenProvider } from '@sentre/senhub'
 import { AccountData } from '@senswap/sen-js'
 import { util } from '@sentre/senhub'
 
@@ -15,7 +15,6 @@ const MintBalance = ({ account }: { account: AccountData }) => {
   const [mintBalance, setMintBalance] = useState(0)
 
   const { mint, amount } = account
-  const { tokenProvider } = useMint()
   const decimals = useMintDecimals(mint) || 0
 
   const fetchBalance = useCallback(async () => {
@@ -35,7 +34,7 @@ const MintBalance = ({ account }: { account: AccountData }) => {
     )
     setMintBalance(mintBalance)
     setUSDBalance(usdBalance)
-  }, [amount, decimals, mint, tokenProvider])
+  }, [amount, decimals, mint])
 
   useEffect(() => {
     fetchBalance()

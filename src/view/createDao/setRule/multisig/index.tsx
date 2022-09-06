@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DaoRegimes } from '@interdao/core'
 import { account } from '@senswap/sen-js'
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 
 import { Button, Col, Row } from 'antd'
 import Regime from './regime'
@@ -23,7 +23,7 @@ const MultiSigDAORule = () => {
   )
   const [members, setMember] = useState<DAOMember[]>([])
   const [isPublic, setIsPublic] = useState(false)
-  const { address: myAddress } = useWallet().wallet
+  const myAddress = useWalletAddress()
 
   const setDefaultValue = useCallback(() => {
     if (members.length) return

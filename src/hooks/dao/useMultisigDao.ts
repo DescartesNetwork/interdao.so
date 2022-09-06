@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { CID } from 'ipfs-core'
 import BN from 'bn.js'
 import { account, DEFAULT_EMPTY_ADDRESS } from '@senswap/sen-js'
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 import { util } from '@sentre/senhub'
 
 import IPFS from 'helpers/ipfs'
@@ -28,9 +28,7 @@ const useMultisigDao = () => {
   )
   const pdb = usePDB()
   const history = useHistory()
-  const {
-    wallet: { address: myWallet },
-  } = useWallet()
+  const myWallet = useWalletAddress()
   const daoNameUrl = deriveDaoNameURL(metadata.daoName)
 
   const createVotingMint = useCallback(async () => {

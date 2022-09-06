@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { CID } from 'ipfs-core'
 
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 
 import configs from 'configs'
 import { getCID } from 'helpers'
@@ -21,7 +21,7 @@ const {
 const ipfs = new IPFS()
 
 export const useCommentProposal = () => {
-  const { wallet } = useWallet()
+  const walletAddress = useWalletAddress()
 
   const buildCommentData = useCallback(
     (
@@ -30,14 +30,14 @@ export const useCommentProposal = () => {
       receipt?: string,
     ): CommentProposal => {
       return {
-        authority: wallet.address,
+        authority: walletAddress,
         voteState,
         receipt,
         time: new Date().toUTCString(),
         content,
       }
     },
-    [wallet.address],
+    [walletAddress],
   )
 
   const addNewComment = async (

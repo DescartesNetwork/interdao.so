@@ -2,7 +2,7 @@ import { Fragment, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { DaoData } from '@interdao/core'
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 
 import { Button, Card, Col, Row, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -29,9 +29,7 @@ const CardVoteByNFT = ({
   const { mint } = daos[daoAddress] || ({} as DaoData)
   const { status } = useProposalStatus(proposalAddress)
   const { consensusMechanism } = useProposal(proposalAddress)
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const { nfts: collectionNFTs } = useOwnerNftByCollection(walletAddress)
   const myCollection = collectionNFTs?.[mint.toBase58()] || []
   const isLockedVote =

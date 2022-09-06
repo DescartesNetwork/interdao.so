@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { PublicKey } from '@solana/web3.js'
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 import { account } from '@senswap/sen-js'
 
 import { AppDispatch } from 'model'
@@ -11,9 +11,7 @@ import { getProposal } from 'model/proposal.controller'
 import { addEventListener } from './evens.watch'
 
 const ReceiptWatcher = () => {
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const dispatch = useDispatch<AppDispatch>()
 
   const reloadReceiptData = useCallback(
