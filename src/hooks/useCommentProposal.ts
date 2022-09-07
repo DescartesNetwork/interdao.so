@@ -22,7 +22,6 @@ const ipfs = new IPFS()
 
 export const useCommentProposal = () => {
   const walletAddress = useWalletAddress()
-
   const buildCommentData = useCallback(
     (
       content: string,

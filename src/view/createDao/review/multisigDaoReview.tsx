@@ -1,11 +1,11 @@
 import { useSelector } from 'react-redux'
+import { useWidth } from '@sentre/senhub'
 
 import { Col, Image, Row, Space, Typography } from 'antd'
 import RowSpaceVertical from 'components/rowSpaceVertical'
 import CardRegime from '../components/cardRegime'
 
 import { AppState } from 'model'
-import { useUI } from '@sentre/senhub'
 
 const PAGE_SPACING = 24
 const HEIGHT_RATIO = 1.777777
@@ -28,9 +28,7 @@ const MultisigDAOReview = () => {
   const members = useSelector(
     (state: AppState) => state.createDao.data.metadata.members,
   )
-  const {
-    ui: { width },
-  } = useUI()
+  const width = useWidth()
 
   const isMobile = width < 768
   const desktopWidth = width > 992 ? width / MAX_WIDTH_RATIO : width

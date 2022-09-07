@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import { useUI } from '@sentre/senhub'
 import { Redirect, Route, Switch } from 'react-router-dom'
+import { useSetBackground } from '@sentre/senhub'
 
 import { Row, Col } from 'antd'
 import Dao from './dao'
@@ -30,7 +30,7 @@ const {
 } = configs
 
 const View = () => {
-  const { setBackground } = useUI()
+  const setBackground = useSetBackground()
 
   useEffect(() => {
     setBackground({ light: BG_LIGHT, dark: BG })

@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { DaoData } from '@interdao/core'
 import { utils } from '@senswap/sen-js'
-import { useUI } from '@sentre/senhub'
+import { useTheme } from '@sentre/senhub'
 import BN from 'bn.js'
 import { util } from '@sentre/senhub'
 
@@ -28,9 +28,7 @@ const CardProgress = ({
   const { mint } = daos[daoAddress] || ({} as DaoData)
   const mintDecimal = useMintDecimals(mint?.toBase58()) || 0
   const { status, actualSupply } = useProposalStatus(proposalAddress)
-  const {
-    ui: { theme },
-  } = useUI()
+  const theme = useTheme()
 
   const noVote = Number(votingAgainstPower) || 0
   const yesVote = Number(votingForPower) || 0

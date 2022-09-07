@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { ReceiptData } from '@interdao/core'
-import { useUI } from '@sentre/senhub'
+import { useTheme } from '@sentre/senhub'
 
 import { Typography } from 'antd'
 
@@ -13,9 +13,7 @@ const VOTE_TYPE = {
 }
 
 const ColumnType = ({ record }: { record: ReceiptData }) => {
-  const {
-    ui: { theme },
-  } = useUI()
+  const theme = useTheme()
 
   const type = useMemo(() => {
     const action = Object.keys(record.action || {})[0]

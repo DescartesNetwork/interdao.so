@@ -1,6 +1,6 @@
 import { ConsensusQuorum, ConsensusQuorums } from '@interdao/core'
 import isEqual from 'react-fast-compare'
-import { useUI } from '@sentre/senhub'
+import { Infix, useInfix } from '@sentre/senhub'
 
 import { Button, Row, Col, Typography } from 'antd'
 
@@ -13,10 +13,8 @@ const ConsensusQuorumInput = ({
   value = ConsensusQuorums.Half,
   onChange = () => {},
 }: ConsensusQuorumInputProps) => {
-  const {
-    ui: { infix },
-  } = useUI()
-  const mobileScreen = infix === 'xs'
+  const infix = useInfix()
+  const mobileScreen = infix === Infix.xs
   const mobileSpan = mobileScreen ? 8 : undefined
 
   return (

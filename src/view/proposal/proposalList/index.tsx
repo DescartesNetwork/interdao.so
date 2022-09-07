@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import LazyLoad from '@sentre/react-lazyload'
-import { useUI, useWalletAddress } from '@sentre/senhub'
+import { useWalletAddress, useWidth } from '@sentre/senhub'
 import { DaoRegimes } from '@interdao/core'
 import isEqual from 'react-fast-compare'
 import { SystemProgram } from '@solana/web3.js'
@@ -23,10 +23,8 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
   const daos = useSelector((state: AppState) => state.daos)
   const proposal = useSelector((state: AppState) => state.proposal)
   const dispatch = useDispatch<AppDispatch>()
+  const width = useWidth()
   const walletAddress = useWalletAddress()
-  const {
-    ui: { width },
-  } = useUI()
 
   const { regime, authority } = daos[daoAddress] || {
     regime: DaoRegimes.Dictatorial,

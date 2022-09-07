@@ -8,7 +8,7 @@
     "@senswap/sen-js": "^1.4.0",
     "@sentre/antd-ionicon": "^1.0.31",
     "@sentre/react-lazyload": "^3.2.2",
-    "@sentre/senhub": "^3.2.9",
+    "@sentre/senhub": "^3.2.23",
     "@sentre/utility": "^1.0.2",
     "@zetamarkets/sdk": "^0.14.3",
     "antd": "^4.21.1",

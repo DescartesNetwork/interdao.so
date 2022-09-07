@@ -1,6 +1,6 @@
 import { ConsensusMechanism, ConsensusMechanisms } from '@interdao/core'
 import isEqual from 'react-fast-compare'
-import { useUI } from '@sentre/senhub'
+import { Infix, useInfix } from '@sentre/senhub'
 
 import { Button, Row, Col, Space, Typography, Popover } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -14,10 +14,8 @@ const ConsensusMechanismInput = ({
   value = ConsensusMechanisms.StakedTokenCounter,
   onChange = () => {},
 }: ConsensusMechanismInputProps) => {
-  const {
-    ui: { infix },
-  } = useUI()
-  const mobileScreen = infix === 'xs'
+  const infix = useInfix()
+  const mobileScreen = infix === Infix.xs
   const mobileSpan = mobileScreen ? 12 : undefined
 
   return (

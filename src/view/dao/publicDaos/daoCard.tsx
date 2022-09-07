@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { useUI } from '@sentre/senhub'
+import { useWidth } from '@sentre/senhub'
 import { util } from '@sentre/senhub'
 
 import {
@@ -51,9 +51,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
   const { regime, nonce, mint, isPublic, isNft } = useSelector(
     (state: AppState) => state.daos[daoAddress],
   )
-  const {
-    ui: { width },
-  } = useUI()
+  const width = useWidth()
   const { daoNameUrl } = useDaoNameUrl(daoAddress)
   const { metaData, loading } = useMetaData(daoAddress)
   const { validMember } = useValidDaoMember(daoAddress)
