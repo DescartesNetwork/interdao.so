@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { Gateway } from '@sentre/connector'
-import { useUI } from '@sentre/senhub'
+import { useSetBackground } from '@sentre/senhub'
 
 export type EmbededViewProps = {
   appId: string
@@ -10,7 +10,7 @@ export type EmbededViewProps = {
 }
 
 const EmbededView = ({ appId, src, title, background }: EmbededViewProps) => {
-  const { setBackground } = useUI()
+  const setBackground = useSetBackground()
   // This trick is to avoid render loop if user directly pass in an object
   const theme = useMemo(() => JSON.stringify(background), [background])
   // Set theme

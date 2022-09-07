@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import LazyLoad from '@sentre/react-lazyload'
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 import { account } from '@senswap/sen-js'
 import { DaoData } from '@interdao/core'
 
@@ -17,9 +17,7 @@ const {
 } = configs
 
 const YourDaos = () => {
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const daos = useSelector((state: AppState) => state.daos)
   const history = useHistory()
 

@@ -76,7 +76,7 @@ const EventsWatcher = () => {
         for (const event of EVENTS) {
           const state = watcherState[event]
           try {
-            await interDao.removeListener(state.id)
+            if (state.id) await interDao.removeListener(state.id)
           } catch (er: any) {
             console.warn(er.message)
           } finally {

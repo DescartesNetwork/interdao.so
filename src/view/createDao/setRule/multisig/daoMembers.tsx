@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react'
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 import isEqual from 'react-fast-compare'
 
 import { Button, Col, Row, Typography } from 'antd'
@@ -14,9 +14,7 @@ type DAOMembersProps = {
 }
 
 const DAOMembers = ({ members, setMember }: DAOMembersProps) => {
-  const {
-    wallet: { address: myAddress },
-  } = useWallet()
+  const myAddress = useWalletAddress()
 
   const onAddNew = () => {
     const nextMembers = [...members]

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAccount, useWallet } from '@sentre/senhub'
+import { useAccounts, useWalletAddress } from '@sentre/senhub'
 
 import useMetaData from 'hooks/useMetaData'
 import useOwnerNFT from '../useOwnerNFT'
@@ -8,12 +8,10 @@ import { useDaoData } from './useDaoData'
 const useValidDaoMember = (daoAddress: string) => {
   const [validMember, setValidMember] = useState(false)
   const [checking, setChecking] = useState(true)
-  const { accounts } = useAccount()
+  const accounts = useAccounts()
   const daoData = useDaoData(daoAddress)
   const { metaData } = useMetaData(daoAddress)
-  const {
-    wallet: { address: myAddress },
-  } = useWallet()
+  const myAddress = useWalletAddress()
 
   const { nfts } = useOwnerNFT(myAddress)
 

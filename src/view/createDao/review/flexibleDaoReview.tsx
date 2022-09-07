@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux'
-import { useUI } from '@sentre/senhub'
-import { util } from '@sentre/senhub'
+import { useWidth, util } from '@sentre/senhub'
 
 import { Col, Image, Row, Space, Typography } from 'antd'
 import CardRegime from '../components/cardRegime'
@@ -29,9 +28,7 @@ const FlexibleDaoReview = () => {
   const image = useSelector(
     (state: AppState) => state.createDao.data.metadata.image,
   )
-  const {
-    ui: { width },
-  } = useUI()
+  const width = useWidth()
 
   const isMobile = width < 768
   const desktopWidth = width > 992 ? width / MAX_WIDTH_RATIO : width

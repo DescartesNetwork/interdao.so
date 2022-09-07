@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useUI } from '@sentre/senhub'
+import { useWidth } from '@sentre/senhub'
 
 import { Card, Row, Col, Typography, Image } from 'antd'
 
@@ -18,9 +18,7 @@ const SIZE_DESKTOP = 198
 const SIZE_MOBILE = 150
 
 const CardNFT = ({ mintAddress, onSelect, isSelected }: CardNFTProps) => {
-  const {
-    ui: { width },
-  } = useUI()
+  const width = useWidth()
 
   const imageSize = useMemo(() => {
     if (width < 768) return SIZE_MOBILE

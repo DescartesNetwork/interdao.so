@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 import { DaoData, ReceiptData } from '@interdao/core'
 import BN from 'bn.js'
 import moment from 'moment'
@@ -29,9 +29,7 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
   const { receipts } = useReceipts({ proposalAddress })
   const daos = useSelector((state: AppState) => state.daos)
   const { isNft } = daos[daoAddress] || ({} as DaoData)
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
 
   const COLUMNS = [
     {

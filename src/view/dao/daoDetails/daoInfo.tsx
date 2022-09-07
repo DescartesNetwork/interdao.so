@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom'
 import { SystemProgram } from '@solana/web3.js'
 import BN from 'bn.js'
-import { useUI, useWallet } from '@sentre/senhub'
+import { useWidth, useWalletAddress } from '@sentre/senhub'
 import { util } from '@sentre/senhub'
 
 import { Avatar, Button, Card, Col, Row, Space, Spin, Typography } from 'antd'
@@ -28,12 +28,9 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
   const history = useHistory()
   const { metaData, loading } = useMetaData(daoAddress)
   const daoData = useDaoData(daoAddress)
-  const {
-    ui: { width },
-  } = useUI()
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const width = useWidth()
+  const walletAddress = useWalletAddress()
+
   const { daoNameUrl } = useDaoNameUrl(daoAddress)
 
   const { regime, nonce, mint, authority, isNft } = daoData || {
