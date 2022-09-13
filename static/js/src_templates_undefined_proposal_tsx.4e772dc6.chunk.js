@@ -1,2 +1,0 @@
-"use strict";(globalThis.webpackChunkinterdao=globalThis.webpackChunkinterdao||[]).push([["src_templates_undefined_proposal_tsx"],{47068:(a,e,s)=>{s.r(e),s.d(e,{default:()=>o});var d=s(94751),n=s(45263);const o=()=>(0,n.jsx)(d.Spin,{spinning:!0,tip:"Loading Proposal Data...",children:(0,n.jsx)(d.Card,{bordered:!1,className:"proposal-card",style:{background:"unset"},bodyStyle:{padding:"24px 0",height:176},hoverable:!0})})}}]);
-//# sourceMappingURL=src_templates_undefined_proposal_tsx.4e772dc6.chunk.js.map
