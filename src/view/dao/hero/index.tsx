@@ -26,7 +26,7 @@ const Hero = () => {
   }, [proposal])
 
   return (
-    <Row className="interdao-banner" justify="center">
+    <Row className="inter_dao-banner" justify="center">
       <Col xs={24} lg={18}>
         <Row gutter={[24, 24]}>
           <Col span={24}>

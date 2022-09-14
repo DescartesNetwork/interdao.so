@@ -105,7 +105,7 @@ const FormInputDetail = ({ metadata, setMetadata }: FormInputDetailProps) => {
             </Card>
           ) : (
             <Upload
-              className={`interdao-upload-metadata ${
+              className={`inter_dao-upload-metadata ${
                 !!metadata.image ? 'uploaded' : ''
               }`}
               accept="image/png,image/jpg,image/webp"
