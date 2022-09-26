@@ -11,16 +11,11 @@ import DAOMembers from './daoMembers'
 import Regime from 'view/createDao/setRule/multisig/regime'
 
 import { AppState } from 'model'
-import configs from 'configs'
 import IPFS from 'helpers/ipfs'
 import MultisigWallet from 'helpers/mutisigWallet'
 import usePDB from 'hooks/usePDB'
 import { DAOMember, MetaData } from 'model/createDao.controller'
 import useMetaData from 'hooks/useMetaData'
-
-const {
-  sol: { interDao },
-} = configs
 
 const EditMultisigDaoRule = ({ daoAddress }: { daoAddress: string }) => {
   const [loading, setLoading] = useState(false)
@@ -64,7 +59,10 @@ const EditMultisigDaoRule = ({ daoAddress }: { daoAddress: string }) => {
         multihash: { digest },
       } = CID.parse(cid)
       const daoMetaData = Buffer.from(digest)
-      const { txId } = await interDao.updateDaoMetadata(daoMetaData, daoAddress)
+      const { txId } = await window.interDao.updateDaoMetadata(
+        daoMetaData,
+        daoAddress,
+      )
       const multisigWallet = new MultisigWallet(mintAddress)
 
       for (const { walletAddress } of nextMetadata.members) {

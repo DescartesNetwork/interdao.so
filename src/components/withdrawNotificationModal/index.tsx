@@ -8,13 +8,8 @@ import ProposalItem from './proposalItem'
 
 import useWithdrawableReceipt from 'hooks/proposal/useWithdrawableReceipt'
 import { AppState } from 'model'
-import configs from 'configs'
 
 import BG_JOIN_DAO from 'static/images/system/bg-join-dao.png'
-
-const {
-  sol: { interDao },
-} = configs
 
 const WithdrawNotificationModal = () => {
   const proposals = useSelector((state: AppState) => state.proposal)
@@ -37,8 +32,9 @@ const WithdrawNotificationModal = () => {
         let response: { txId: string; receiptAddress: string }
         const { isNft } =
           daos[proposals[receipt.proposal.toBase58()].dao.toBase58()]
-        if (isNft) response = await interDao.closeNftVoting(receipt.address)
-        else response = await interDao.close(receipt.address)
+        if (isNft)
+          response = await window.interDao.closeNftVoting(receipt.address)
+        else response = await window.interDao.close(receipt.address)
         window.notify({
           type: 'success',
           description: 'Successful withdrawal. Click to view details!',

@@ -8,12 +8,7 @@ import { Col, Row } from 'antd'
 import ActionButton from '../actionButton'
 import RegimeInput from 'view/createDao/setRule/flexible/regimeInput'
 
-import configs from 'configs'
 import { AppState } from 'model'
-
-const {
-  sol: { interDao },
-} = configs
 
 const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
   const { regime } = useSelector((state: AppState) => state.daos[daoAddress])
@@ -24,7 +19,10 @@ const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
     if (!nextRegime || isEqual(nextRegime, regime)) return
     try {
       setLoading(true)
-      const { txId } = await interDao.updateDaoRegime(nextRegime, daoAddress)
+      const { txId } = await window.interDao.updateDaoRegime(
+        nextRegime,
+        daoAddress,
+      )
       return window.notify({
         type: 'success',
         description: 'Update regime successfully. Click here to view details',

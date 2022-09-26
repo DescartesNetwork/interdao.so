@@ -6,12 +6,7 @@ import bs58 from 'bs58'
 
 import { deriveDiscriminator, upsetComment } from 'model/comments.controller'
 import { AppDispatch } from 'model'
-import configs from 'configs'
 import { notifyError } from 'helpers'
-
-const {
-  sol: { interDao },
-} = configs
 
 let watcherId = 0
 
@@ -27,36 +22,39 @@ export const useContentWatcher = (proposal: string) => {
 
   const watchData = useCallback(async () => {
     const discriminator = deriveDiscriminator(proposal)
-    watcherId = interDao.program.provider.connection.onProgramAccountChange(
-      interDao.program.programId,
-      async (data) => {
-        try {
-          const content = interDao.parseContentData(data.accountInfo.data)
-          setLoading(true)
-          await dispatch(
-            upsetComment({
-              proposal,
-              wallet: content.authority.toBase58(),
-              metadata: content.metadata,
-            }),
-          ).unwrap()
-        } catch (error) {
-          notifyError(error)
-        } finally {
-          setLoading(false)
-        }
-      },
-      'confirmed',
-      [
-        {
-          memcmp: {
-            offset: 0,
-            bytes: bs58.encode(accountDiscriminator('content')),
-          },
+    watcherId =
+      window.interDao.program.provider.connection.onProgramAccountChange(
+        window.interDao.program.programId,
+        async (data) => {
+          try {
+            const content = window.interDao.parseContentData(
+              data.accountInfo.data,
+            )
+            setLoading(true)
+            await dispatch(
+              upsetComment({
+                proposal,
+                wallet: content.authority.toBase58(),
+                metadata: content.metadata,
+              }),
+            ).unwrap()
+          } catch (error) {
+            notifyError(error)
+          } finally {
+            setLoading(false)
+          }
         },
-        { memcmp: { offset: 40, bytes: bs58.encode(discriminator) } },
-      ],
-    )
+        'confirmed',
+        [
+          {
+            memcmp: {
+              offset: 0,
+              bytes: bs58.encode(accountDiscriminator('content')),
+            },
+          },
+          { memcmp: { offset: 40, bytes: bs58.encode(discriminator) } },
+        ],
+      )
     if (!watcherId) setTimeout(() => watchData(), 500)
   }, [dispatch, proposal])
 
@@ -65,7 +63,7 @@ export const useContentWatcher = (proposal: string) => {
     return () => {
       ;(async () => {
         if (watcherId)
-          await interDao.program.provider.connection.removeProgramAccountChangeListener(
+          await window.interDao.program.provider.connection.removeProgramAccountChangeListener(
             watcherId,
           )
       })()

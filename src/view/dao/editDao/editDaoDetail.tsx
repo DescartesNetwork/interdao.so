@@ -6,16 +6,11 @@ import { Col, Row } from 'antd'
 import ActionButton from './actionButton'
 
 import IPFS from 'helpers/ipfs'
-import configs from 'configs'
 import useMetaData from 'hooks/useMetaData'
 import usePDB from 'hooks/usePDB'
 import FormInputDetail from 'components/formInputDetail'
 import { DEFAULT_META_DATA } from 'model/createDao.controller'
 import { validURL } from 'helpers'
-
-const {
-  sol: { interDao },
-} = configs
 
 const Information = ({ daoAddress }: { daoAddress: string }) => {
   const [loading, setLoading] = useState(false)
@@ -33,7 +28,10 @@ const Information = ({ daoAddress }: { daoAddress: string }) => {
         multihash: { digest },
       } = CID.parse(cid)
       const daoMetaData = Buffer.from(digest)
-      const { txId } = await interDao.updateDaoMetadata(daoMetaData, daoAddress)
+      const { txId } = await window.interDao.updateDaoMetadata(
+        daoMetaData,
+        daoAddress,
+      )
       window.notify({
         type: 'success',
         description:

@@ -1,12 +1,6 @@
 import { utils } from '@project-serum/anchor'
 import { DataLoader } from '@sentre/senhub'
 
-import configs from 'configs'
-
-const {
-  sol: { interDao },
-} = configs
-
 const SOLSCAN_BASE_API_URL = 'https://public-api.solscan.io'
 const END_POINT_HOLDERS = '/token/holders'
 
@@ -25,7 +19,7 @@ export const fecthTokenHoldersFromSmartContract = async (
 ) => {
   const {
     provider: { connection },
-  } = interDao.program
+  } = window.interDao.program
 
   const accounts = await DataLoader.load(
     'getTokenHolders' + mintAddress,

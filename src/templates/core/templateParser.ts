@@ -2,7 +2,6 @@ import { AnchorProvider, Program, BN } from '@project-serum/anchor'
 import { Connection, PublicKey, TransactionInstruction } from '@solana/web3.js'
 
 import { rpc } from '@sentre/senhub'
-import SafeWallet from 'helpers/safeWallet'
 import {
   isTemplateAccountWithRule,
   isTemplateArgWithRule,
@@ -16,9 +15,14 @@ const ANCHOR_PREFIX_SIZE = 8
 
 const getProgram = (templateIdl: TemplateIdl) => {
   const connection = new Connection(rpc, { commitment: 'confirmed' })
-  const provider = new AnchorProvider(connection, new SafeWallet(), {
-    commitment: 'confirmed',
-  })
+  const publicKey = window.sentre.wallet.publicKey!
+  const provider = new AnchorProvider(
+    connection,
+    { ...window.sentre.wallet, publicKey },
+    {
+      commitment: 'confirmed',
+    },
+  )
   return new Program(
     {
       instructions: [

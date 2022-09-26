@@ -8,14 +8,9 @@ import { Col, Row } from 'antd'
 import CirculatingSupply from 'view/createDao/setRule/flexible/circulatingSupply'
 import ActionButton from './actionButton'
 
-import configs from 'configs'
 import { AppState } from 'model'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import util from '@senswap/sen-js/dist/utils'
-
-const {
-  sol: { interDao },
-} = configs
 
 const EditSupply = ({ daoAddress }: { daoAddress: string }) => {
   const [nextSupply, setSupply] = useState('0')
@@ -36,7 +31,7 @@ const EditSupply = ({ daoAddress }: { daoAddress: string }) => {
     try {
       setLoading(true)
       const supplyDecimal = util.decimalize(nextSupply, decimals).toString()
-      const { txId: txIdSupply } = await interDao.updateDaoSupply(
+      const { txId: txIdSupply } = await window.interDao.updateDaoSupply(
         new BN(supplyDecimal),
         daoAddress,
       )

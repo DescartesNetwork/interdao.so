@@ -7,12 +7,6 @@ import {
 } from '@interdao/core'
 import { account } from '@senswap/sen-js'
 
-import configs from 'configs'
-
-const {
-  sol: { interDao },
-} = configs
-
 /**
  * Interface & Utility
  */
@@ -38,7 +32,7 @@ export const getReceipts = createAsyncThunk(
       provider: { connection },
       programId,
       account: { receipt },
-    } = interDao.program
+    } = window.interDao.program
     const value: Array<{ pubkey: PublicKey; account: AccountInfo<Buffer> }> =
       await connection.getProgramAccounts(programId, {
         filters: [
@@ -60,7 +54,7 @@ export const getReceipts = createAsyncThunk(
     let bulk: ReceiptState = {}
     value.forEach(({ pubkey, account: { data: buf } }) => {
       const address = pubkey.toBase58()
-      const data = interDao.parseReceiptData(buf)
+      const data = window.interDao.parseReceiptData(buf)
       bulk[address] = data
     })
     return bulk
@@ -77,7 +71,7 @@ export const getReceipt = createAsyncThunk<
     receipt: { [address]: data },
   } = getState()
   if (data && !force) return { [address]: data }
-  const raw = await interDao.getReceiptData(address)
+  const raw = await window.interDao.getReceiptData(address)
   return { [address]: raw }
 })
 

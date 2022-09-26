@@ -13,7 +13,6 @@ import usePDB from '../usePDB'
 import { deriveDaoNameURL } from './useDaoNameUrl'
 
 const {
-  sol: { interDao },
   manifest: { appId },
 } = configs
 
@@ -40,7 +39,7 @@ const useFlexibleDao = () => {
       const metadataBuff = Buffer.from(digest)
       const totalSupply = supply.mul(new BN(10).pow(new BN(decimals)))
 
-      const { txId, daoAddress } = await interDao.initializeDao(
+      const { txId, daoAddress } = await window.interDao.initializeDao(
         mintAddress,
         totalSupply,
         metadataBuff,
@@ -58,6 +57,7 @@ const useFlexibleDao = () => {
       })
       return history.push(`/app/${appId}/dao/${daoAddress}/${daoNameUrl}`)
     } catch (er: any) {
+      console.log('er', er)
       window.notify({ type: 'error', description: er.message })
     } finally {
       setLoading(false)

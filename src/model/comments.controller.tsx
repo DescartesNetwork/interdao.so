@@ -3,13 +3,8 @@ import { sha256 } from 'js-sha256'
 import camelcase from 'camelcase'
 import bs58 from 'bs58'
 
-import configs from 'configs'
 import IPFS from 'helpers/ipfs'
 import { getCID } from 'helpers'
-
-const {
-  sol: { interDao },
-} = configs
 
 /**
  * Interface & Utility
@@ -57,7 +52,7 @@ export const getComments = createAsyncThunk(
   `${NAME}/getComments`,
   async (proposal: string) => {
     const discriminator = deriveDiscriminator(proposal)
-    const contents = await interDao.program.account.content.all([
+    const contents = await window.interDao.program.account.content.all([
       { memcmp: { offset: 40, bytes: bs58.encode(discriminator) } },
     ])
 

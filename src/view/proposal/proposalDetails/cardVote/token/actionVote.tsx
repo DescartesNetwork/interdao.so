@@ -8,7 +8,6 @@ import IonIcon from '@sentre/antd-ionicon'
 
 import { AppState } from 'model'
 import { ProposalChildCardProps } from '../../index'
-import configs from 'configs'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import useProposalStatus from 'hooks/proposal/useProposalStatus'
 import useMetaData from 'hooks/useMetaData'
@@ -20,10 +19,6 @@ import { useDaoData } from 'hooks/dao'
 import { useCommentProposal } from 'hooks/useCommentProposal'
 import { VoteState } from 'model/comments.controller'
 import InputComment from 'components/inputComment'
-
-const {
-  sol: { interDao },
-} = configs
 
 const DEFAULT_VALUE_VOTE_MULTISIG = 1
 
@@ -58,9 +53,14 @@ const ActionVote = ({
     const amountBN = utilsBN.decimalize(rawAmount, decimals)
     switch (voteType) {
       case VoteState.For:
-        return interDao.voteFor(proposalAddress, amountBN, proposalFee, false)
+        return window.interDao.voteFor(
+          proposalAddress,
+          amountBN,
+          proposalFee,
+          false,
+        )
       case VoteState.Against:
-        return interDao.voteAgainst(
+        return window.interDao.voteAgainst(
           proposalAddress,
           amountBN,
           proposalFee,

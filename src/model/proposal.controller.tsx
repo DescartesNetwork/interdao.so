@@ -2,12 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { ProposalData } from '@interdao/core'
 import { account } from '@senswap/sen-js'
 
-import configs from 'configs'
-
-const {
-  sol: { interDao },
-} = configs
-
 /**
  * Interface & Utility
  */
@@ -28,7 +22,7 @@ const initialState: ProposalState = {}
 export const getProposals = createAsyncThunk(
   `${NAME}/getProposals`,
   async () => {
-    const { account } = interDao.program
+    const { account } = window.interDao.program
     let bulk: ProposalState = {}
 
     const proposals = await account.proposal.all()
@@ -50,7 +44,7 @@ export const getProposal = createAsyncThunk<
     proposal: { [address]: data },
   } = getState()
   if (data && !force) return { [address]: data }
-  const raw = await interDao.getProposalData(address)
+  const raw = await window.interDao.getProposalData(address)
   return { [address]: raw }
 })
 

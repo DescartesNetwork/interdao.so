@@ -4,12 +4,6 @@ import { PublicKey } from '@solana/web3.js'
 import { createMintAndMintTo, getAnchorProvider } from 'sentre-web3'
 import { rpc } from '@sentre/senhub'
 
-import configs from 'configs'
-
-const {
-  sol: { utility },
-} = configs
-
 class MultisigWallet {
   private _mint: PublicKey
 
@@ -39,7 +33,7 @@ class MultisigWallet {
 
   mintToAccount = async (dstAddress: string, amount: number) => {
     if (!this.isValidMint()) throw new Error('Please create mint first!')
-    await utility.safeMintTo({
+    await window.senUtility.safeMintTo({
       amount: new BN(amount),
       tokenAddress: this._mint.toBase58(),
       dstWalletAddress: dstAddress,

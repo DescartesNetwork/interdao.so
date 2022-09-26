@@ -16,7 +16,6 @@ import usePDB from '../usePDB'
 import { deriveDaoNameURL } from './useDaoNameUrl'
 
 const {
-  sol: { interDao },
   manifest: { appId },
 } = configs
 
@@ -72,7 +71,7 @@ const useMultisigDao = () => {
       const metadataBuff = Buffer.from(digest)
       const { members } = metadata
       const totalSupply = new BN(members.length)
-      const { txId, daoAddress } = await interDao.initializeDao(
+      const { txId, daoAddress } = await window.interDao.initializeDao(
         mintAddress,
         totalSupply,
         metadataBuff,

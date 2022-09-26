@@ -1,10 +1,6 @@
 import { Fragment, useCallback, useEffect } from 'react'
-import configs from 'configs'
 
-const {
-  sol: { interDao },
-} = configs
-
+console.log('window', window.interDao)
 // Watch id
 type WatchState = {
   id: number
@@ -61,7 +57,7 @@ const EventsWatcher = () => {
       if (state.interval || state.id) continue
       state.interval = setInterval(async () => {
         if (state.id) return clearInterval(state.interval)
-        state.id = await interDao.addListener(event as any, (data) =>
+        state.id = await window.interDao.addListener(event as any, (data) =>
           reloadData(event, data),
         )
       }, TIME_RECHECK)
@@ -76,7 +72,7 @@ const EventsWatcher = () => {
         for (const event of EVENTS) {
           const state = watcherState[event]
           try {
-            if (state.id) await interDao.removeListener(state.id)
+            if (state.id) await window.interDao.removeListener(state.id)
           } catch (er: any) {
             console.warn(er.message)
           } finally {

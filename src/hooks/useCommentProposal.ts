@@ -4,7 +4,6 @@ import { CID } from 'ipfs-core'
 
 import { useWalletAddress } from '@sentre/senhub'
 
-import configs from 'configs'
 import { getCID } from 'helpers'
 import IPFS from 'helpers/ipfs'
 import {
@@ -13,10 +12,6 @@ import {
   VoteState,
 } from 'model/comments.controller'
 import { web3 } from '@project-serum/anchor'
-
-const {
-  sol: { interDao },
-} = configs
 
 const ipfs = new IPFS()
 
@@ -45,7 +40,7 @@ export const useCommentProposal = () => {
   ) => {
     let ownerComments: CommentProposal[] = []
     try {
-      const contentData = await interDao.program.account.content.fetch(
+      const contentData = await window.interDao.program.account.content.fetch(
         contentId,
       )
       const metadata = getCID(contentData.metadata)
@@ -64,7 +59,9 @@ export const useCommentProposal = () => {
     }) => {
       const { proposal, content, voteState, receipt } = params
       const discriminator = deriveDiscriminator(proposal)
-      const contentId = await interDao.deriveContentAddress(discriminator)
+      const contentId = await window.interDao.deriveContentAddress(
+        discriminator,
+      )
       const newComment = buildCommentData(content, voteState, receipt)
       const comments = await addNewComment(contentId, newComment)
       // Override new Cid
@@ -73,7 +70,7 @@ export const useCommentProposal = () => {
         multihash: { digest },
       } = CID.parse(newCid)
 
-      const { tx } = await interDao.initializeContent(
+      const { tx } = await window.interDao.initializeContent(
         discriminator,
         digest,
         false,

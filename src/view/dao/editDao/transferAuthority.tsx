@@ -7,12 +7,6 @@ import RowSpaceVertical from 'components/rowSpaceVertical'
 import ActionButton from './actionButton'
 import IonIcon from '@sentre/antd-ionicon'
 
-import configs from 'configs'
-
-const {
-  sol: { interDao },
-} = configs
-
 const TransferAuthority = ({ daoAddress }: { daoAddress: string }) => {
   const [authority, setAuthority] = useState('')
   const [loading, setLoading] = useState(false)
@@ -21,7 +15,10 @@ const TransferAuthority = ({ daoAddress }: { daoAddress: string }) => {
     if (!account.isAddress(authority)) return
     try {
       setLoading(true)
-      const { txId } = await interDao.transferAuthority(authority, daoAddress)
+      const { txId } = await window.interDao.transferAuthority(
+        authority,
+        daoAddress,
+      )
       return window.notify({
         type: 'success',
         description:

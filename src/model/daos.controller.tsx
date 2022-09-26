@@ -2,12 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { account } from '@senswap/sen-js'
 import { DaoData, DAO_DISCRIMINATOR } from '@interdao/core'
 
-import configs from 'configs'
-
-const {
-  sol: { interDao },
-} = configs
-
 /**
  * Interface & Utility
  */
@@ -26,7 +20,7 @@ const initialState: DaoState = {}
  */
 
 export const getDaos = createAsyncThunk(`${NAME}/getDaos`, async () => {
-  const accounts = await interDao.program.account.dao.all([
+  const accounts = await window.interDao.program.account.dao.all([
     {
       memcmp: {
         offset: 0,
@@ -53,7 +47,7 @@ export const getDao = createAsyncThunk<
   } = getState()
   if (data && !force) return { [address]: data }
 
-  const daoData: DaoData = await interDao.getDaoData(address)
+  const daoData: DaoData = await window.interDao.getDaoData(address)
   return {
     [address]: daoData,
   }

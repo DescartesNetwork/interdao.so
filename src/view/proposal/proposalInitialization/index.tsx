@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { web3, BN } from '@project-serum/anchor'
 import { ConsensusMechanisms, ConsensusQuorums } from '@interdao/core'
-import BN from 'bn.js'
 import { CID } from 'ipfs-core'
 import { util } from '@sentre/senhub'
 
@@ -18,11 +18,13 @@ import { AppState } from 'model'
 import { clearTx } from 'model/template.controller'
 import useMetaData from 'hooks/useMetaData'
 import useDaoNameUrl from 'hooks/dao/useDaoNameUrl'
+import { useAnchorProvider } from 'hooks/useAnchorProvider'
 
 const {
-  sol: { interDao, taxman, fee },
+  sol: { taxman, fee },
   manifest: { appId },
 } = configs
+const interDao = window.interDao
 
 export type ProposalMetaData = {
   title: string
@@ -39,7 +41,6 @@ const ProposalInitialization = () => {
   const history = useHistory()
   const dispatch = useDispatch()
   const { daoAddress } = useParams<{ daoAddress: string }>()
-
   const daos = useSelector((state: AppState) => state.daos)
   const template = useSelector((state: AppState) => state.template)
 
@@ -54,6 +55,7 @@ const ProposalInitialization = () => {
 
   const { metaData: daoMetaData } = useMetaData(daoAddress)
   const { daoNameUrl } = useDaoNameUrl(daoAddress)
+  const provider = useAnchorProvider()
 
   const disabled = !title || !description
   const isMultisigDAO = daoMetaData?.daoType === 'multisig-dao'
@@ -86,27 +88,43 @@ const ProposalInitialization = () => {
       const metadata = Buffer.from(digest)
       const { programId, data, accounts } = template.tx
       const valueAccounts = Object.values(accounts)
+      const proposalIx = web3.Keypair.generate()
 
-      const { txId, proposalAddress } = await interDao.initializeProposal(
-        daoAddress,
-        programId.toBase58(),
-        data,
-        valueAccounts.map(({ pubkey }) => pubkey),
-        valueAccounts.map(({ isSigner }) => isSigner),
-        valueAccounts.map(({ isWritable }) => isWritable),
-        valueAccounts.map(({ isMaster }) => isMaster),
-        Math.floor(duration[0] / 1000),
-        Math.floor(duration[1] / 1000),
-        metadata,
-        consensusMechanism,
-        consensusQuorum,
-        {
-          revenue: new BN(fee),
-          revenuemanAddress: authority.toBase58(),
-          tax: new BN(fee),
-          taxmanAddress: taxman,
-        },
-      )
+      const { proposalAddress, tx: txCreateProposal } =
+        await window.interDao.initializeProposal({
+          daoAddress,
+          startDate: Math.floor(duration[0] / 1000),
+          endDate: Math.floor(duration[1] / 1000),
+          metadata,
+          consensusMechanism,
+          consensusQuorum,
+          feeOptions: {
+            revenue: new BN(fee),
+            revenuemanAddress: authority.toBase58(),
+            tax: new BN(fee),
+            taxmanAddress: taxman,
+          },
+          sendAndConfirm: false,
+        })
+
+      const { tx: txCreateInstruction } =
+        await window.interDao.initializeProposalInstruction({
+          proposal: proposalAddress,
+          invokedProgramAddress: programId.toBase58(),
+          data,
+          pubkeys: valueAccounts.map(({ pubkey }) => pubkey),
+          isSigners: valueAccounts.map(({ isSigner }) => isSigner),
+          isWritables: valueAccounts.map(({ isWritable }) => isWritable),
+          isMasters: valueAccounts.map(({ isMaster }) => isMaster),
+          proposalInstruction: proposalIx,
+          sendAndConfirm: false,
+        })
+
+      const transactions = new web3.Transaction()
+      transactions.add(txCreateProposal)
+      transactions.add(txCreateInstruction)
+      const txId = await provider.sendAndConfirm(transactions)
+
       window.notify({
         type: 'success',
         description:
@@ -136,6 +154,7 @@ const ProposalInitialization = () => {
     dispatch,
     duration,
     history,
+    provider,
     template.tx,
     uploadMetaData,
   ])

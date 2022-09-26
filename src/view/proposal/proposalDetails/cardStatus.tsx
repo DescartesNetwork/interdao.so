@@ -9,12 +9,7 @@ import { ProposalChildCardProps } from './index'
 import useProposalStatus from 'hooks/proposal/useProposalStatus'
 import useProposalMetaData from 'hooks/proposal/useProposalMetaData'
 import useReceipts from 'hooks/proposal/useReceipts'
-import configs from 'configs'
 import { notifyError, notifySuccess } from 'helpers'
-
-const {
-  sol: { interDao },
-} = configs
 
 const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
   const [loading, setLoading] = useState(false)
@@ -36,7 +31,9 @@ const CardStatus = ({ proposalAddress }: ProposalChildCardProps) => {
   const execute = useCallback(async () => {
     setLoading(true)
     try {
-      const { txId } = await interDao.executeProposal(proposalAddress)
+      const { txId } = await window.interDao.executeProposal({
+        proposal: proposalAddress,
+      })
       notifySuccess('Execute', txId)
     } catch (error) {
       notifyError(error)

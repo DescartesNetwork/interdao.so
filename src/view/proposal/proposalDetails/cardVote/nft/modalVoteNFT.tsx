@@ -6,15 +6,10 @@ import { Button, Col, Modal, Row, Space, Typography } from 'antd'
 import CardNFT from 'components/cardNFT'
 
 import { MetadataDataType } from 'helpers/metaplex'
-import configs from 'configs'
 import useProposalFee from 'hooks/proposal/useProposalFee'
 import { useCommentProposal } from 'hooks/useCommentProposal'
 import { VoteState } from 'model/comments.controller'
 import { useAnchorProvider } from 'hooks/useAnchorProvider'
-
-const {
-  sol: { interDao },
-} = configs
 
 type ModalVoteNFTProps = {
   visible: boolean
@@ -47,7 +42,7 @@ const ModalVoteNFT = ({
     setLoading(true)
     try {
       if (!account.isAddress(proposalAddress) || !nftVoting) return
-      const { tx: txVoteNFT } = await interDao.voteNftFor(
+      const { tx: txVoteNFT } = await window.interDao.voteNftFor(
         proposalAddress,
         nftVoting,
         proposalFee,
@@ -99,7 +94,7 @@ const ModalVoteNFT = ({
     try {
       if (!account.isAddress(proposalAddress) || !nftVoting) return
 
-      const { txId } = await interDao.voteNftAgainst(
+      const { txId } = await window.interDao.voteNftAgainst(
         proposalAddress,
         nftVoting,
         proposalFee,

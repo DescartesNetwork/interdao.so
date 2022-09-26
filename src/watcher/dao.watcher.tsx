@@ -26,7 +26,7 @@ const DaoWatcher = () => {
     dispatch(
       addLoading({
         id: 'fetch-daos',
-        message: 'Welcome to InterDAO. The application is loading...',
+        message: 'Welcome to window.interDao. The application is loading...',
       }),
     )
     try {

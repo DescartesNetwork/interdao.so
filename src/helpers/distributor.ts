@@ -4,12 +4,7 @@ import { Leaf, MerkleDistributor } from '@sentre/utility'
 import IPFS from 'helpers/ipfs'
 import { CID } from 'ipfs-core'
 
-import configs from 'configs'
 import { getCID } from './index'
-
-const {
-  sol: { utility },
-} = configs
 
 const ipfs = new IPFS()
 
@@ -43,13 +38,14 @@ class Distributor {
 
     const metadata = Buffer.from(digest)
 
-    const { distributorAddress } = await utility.initializeDistributor({
-      tokenAddress: mintAddress,
-      total: merkleDistributor.getTotal(),
-      merkleRoot: merkleDistributor.deriveMerkleRoot(),
-      metadata,
-      endedAt: ENDED_AT / 1000,
-    })
+    const { distributorAddress } =
+      await window.senUtility.initializeDistributor({
+        tokenAddress: mintAddress,
+        total: merkleDistributor.getTotal(),
+        merkleRoot: merkleDistributor.deriveMerkleRoot(),
+        metadata,
+        endedAt: ENDED_AT / 1000,
+      })
 
     return distributorAddress
   }
@@ -75,14 +71,14 @@ class Distributor {
       mint: tokenPublicKey,
       owner: walletPublicKey,
     })
-    const treasurer = await utility.deriveTreasurerAddress(
+    const treasurer = await window.senUtility.deriveTreasurerAddress(
       distributor.publicKey.toBase58(),
     )
     const treasury = await utils.token.associatedAddress({
       mint: tokenPublicKey,
       owner: new PublicKey(treasurer),
     })
-    return utility.program.methods
+    return window.senUtility.program.methods
       .initializeDistributor(
         Array.from(merkleDistributor.deriveMerkleRoot()),
         merkleDistributor.getTotal(),
@@ -107,16 +103,18 @@ class Distributor {
   }
 
   getMintAddress = async (distributorAddress: string) => {
-    const distributor = await utility.program.account.distributor.fetch(
-      distributorAddress,
-    )
+    const distributor =
+      await window.senUtility.program.account.distributor.fetch(
+        distributorAddress,
+      )
     return distributor.mint.toBase58()
   }
 
   getMerkleDistributor = async (distributorAddress: string) => {
-    const distributor = await utility.program.account.distributor.fetch(
-      distributorAddress,
-    )
+    const distributor =
+      await window.senUtility.program.account.distributor.fetch(
+        distributorAddress,
+      )
     const cid = await getCID(distributor.metadata)
     const data = await ipfs.get<any>(cid)
     const merkleDistributor = MerkleDistributor.fromBuffer(Buffer.from(data))
@@ -146,11 +144,11 @@ class Distributor {
     )
     if (!recipientData) return false
     const { salt } = recipientData
-    const receiptAddress = await utility.deriveReceiptAddress(
+    const receiptAddress = await window.senUtility.deriveReceiptAddress(
       salt,
       distributorAddress,
     )
-    const receiptData = await utility.getReceiptData(receiptAddress)
+    const receiptData = await window.senUtility.getReceiptData(receiptAddress)
 
     return receiptData
   }
@@ -167,7 +165,7 @@ class Distributor {
     )
     const proof = merkleDistributor.deriveProof(recipientData)
 
-    const { txId } = await utility.claim({
+    const { txId } = await window.senUtility.claim({
       distributorAddress,
       proof,
       data: recipientData,

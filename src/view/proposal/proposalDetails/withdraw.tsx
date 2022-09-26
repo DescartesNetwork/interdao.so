@@ -13,14 +13,9 @@ import ColumnPower from './history/columnPower'
 
 import { ProposalChildCardProps } from './index'
 import useReceipts from 'hooks/proposal/useReceipts'
-import configs from 'configs'
 import { AppState } from 'model'
 
 export type Receipt = ReceiptData & { address: string }
-
-const {
-  sol: { interDao },
-} = configs
 
 const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
   const [visible, setVisible] = useState(false)
@@ -89,8 +84,9 @@ const Withdraw = ({ daoAddress, proposalAddress }: ProposalChildCardProps) => {
       setLoading(true)
       try {
         let response: { txId: string; receiptAddress: string }
-        if (isNft) response = await interDao.closeNftVoting(receiptAddress)
-        else response = await interDao.close(receiptAddress)
+        if (isNft)
+          response = await window.interDao.closeNftVoting(receiptAddress)
+        else response = await window.interDao.close(receiptAddress)
         window.notify({
           type: 'success',
           description: 'Successful withdrawal. Click to view details!',
