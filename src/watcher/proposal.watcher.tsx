@@ -47,7 +47,7 @@ const ProposalWatcher = () => {
         'InitializeProposalEvent',
         'VoteForEvent',
         'VoteAgainstEvent',
-        'ExecuteProposalEvent',
+        'ExecuteProposalInstructionEvent',
       ],
       reloadProposalData,
     )

@@ -17,7 +17,7 @@ const EVENTS = [
   'UpdateDaoMetadataEvent',
   // Proposal Event
   'InitializeProposalEvent',
-  'ExecuteProposalEvent',
+  'ExecuteProposalInstructionEvent',
   //
   'VoteForEvent',
   'VoteAgainstEvent',

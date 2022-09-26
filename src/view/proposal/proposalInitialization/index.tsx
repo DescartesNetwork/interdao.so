@@ -24,7 +24,6 @@ const {
   sol: { taxman, fee },
   manifest: { appId },
 } = configs
-const interDao = window.interDao
 
 export type ProposalMetaData = {
   title: string
@@ -110,6 +109,7 @@ const ProposalInitialization = () => {
       const { tx: txCreateInstruction } =
         await window.interDao.initializeProposalInstruction({
           proposal: proposalAddress,
+          dao: daoAddress,
           invokedProgramAddress: programId.toBase58(),
           data,
           pubkeys: valueAccounts.map(({ pubkey }) => pubkey),
@@ -123,7 +123,7 @@ const ProposalInitialization = () => {
       const transactions = new web3.Transaction()
       transactions.add(txCreateProposal)
       transactions.add(txCreateInstruction)
-      const txId = await provider.sendAndConfirm(transactions)
+      const txId = await provider.sendAndConfirm(transactions, [proposalIx])
 
       window.notify({
         type: 'success',
