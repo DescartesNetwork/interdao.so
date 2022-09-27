@@ -15,7 +15,6 @@ import configs from 'configs'
 import { ipfs } from 'helpers/ipfs'
 import { AppState } from 'model'
 import { clearTx } from 'model/template.controller'
-import useMetaData from 'hooks/useMetaData'
 import useDaoNameUrl from 'hooks/dao/useDaoNameUrl'
 import { useAnchorProvider } from 'hooks/useAnchorProvider'
 
@@ -51,12 +50,10 @@ const ProposalInitialization = () => {
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const { metaData: daoMetaData } = useMetaData(daoAddress)
   const { daoNameUrl } = useDaoNameUrl(daoAddress)
   const provider = useAnchorProvider()
 
   const disabled = !title || !description
-  const isMultisigDAO = daoMetaData?.daoType === 'multisig-dao'
 
   const proposalMetaData: ProposalMetaData = useMemo(() => {
     return {
@@ -202,14 +199,12 @@ const ProposalInitialization = () => {
             <Col span={24}>
               <DurationInput value={duration} onChange={setDuration} />
             </Col>
-            {!isMultisigDAO && (
-              <Col span={24}>
-                <ConsensusMechanismInput
-                  value={consensusMechanism}
-                  onChange={setConsensusMechanism}
-                />
-              </Col>
-            )}
+            <Col span={24}>
+              <ConsensusMechanismInput
+                value={consensusMechanism}
+                onChange={setConsensusMechanism}
+              />
+            </Col>
             <Col span={24}>
               <ConsensusQuorumInput
                 value={consensusQuorum}

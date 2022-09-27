@@ -15,7 +15,6 @@ import { ProposalChildCardProps } from '../../index'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { MintSymbol } from 'shared/antd/mint'
 import useProposalStatus from 'hooks/proposal/useProposalStatus'
-import useMetaData from 'hooks/useMetaData'
 import useProposal from 'hooks/proposal/useProposal'
 
 const CardVoteToken = ({
@@ -28,9 +27,8 @@ const CardVoteToken = ({
   const { mint } = daos[daoAddress] || ({} as DaoData)
   const { balance } = useAccountBalanceByMintAddress(mint?.toBase58())
   const { status } = useProposalStatus(proposalAddress)
-  const { metaData: daoMetaData } = useMetaData(daoAddress)
   const { consensusMechanism } = useProposal(proposalAddress)
-  const isMultisigDAO = daoMetaData?.daoType === 'multisig-dao'
+
   const isLockedVote =
     Object.keys(consensusMechanism || [])[0] === 'lockedTokenCounter'
   const isComplete = useMemo(() => {
@@ -48,7 +46,7 @@ const CardVoteToken = ({
         <Col span={24}>
           <Typography.Title level={5}>Cast Your Votes</Typography.Title>
         </Col>
-        {!isMultisigDAO && !isComplete && (
+        {!isComplete && (
           <Col span={24}>
             <Card
               className="numric-ip-card"

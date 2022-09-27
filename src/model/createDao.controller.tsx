@@ -9,7 +9,6 @@ export const DEFAULT_META_DATA: MetaData = {
   image: '',
   optionals: [],
   daoType: 'flexible-dao',
-  members: [],
   distributorAddress: '',
 }
 
@@ -26,7 +25,7 @@ export const DEFAULT_DAO_DATA: CreateDaoData = {
 /**
  * Interface & Utility
  */
-export type DaoType = 'flexible-dao' | 'multisig-dao'
+export type DaoType = 'flexible-dao'
 
 export type CreateDaoData = {
   mintAddress: string
@@ -44,7 +43,6 @@ export type MetaData = {
   image: string | ArrayBuffer | null
   optionals: string[]
   daoType: DaoType
-  members: DAOMember[]
   distributorAddress: string
 }
 

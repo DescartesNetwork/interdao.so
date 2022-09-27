@@ -5,10 +5,10 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'model'
 import { getTokenHolders } from 'model/tokenHolder.controller'
 
-export const useDaoMembers = (daoAddress: string): number => {
+export const useDaoMembers = (daoAddress: string) => {
   const dispatch = useDispatch<AppDispatch>()
   const daoData = useDaoData(daoAddress)
-  const [members, setMembers] = useState(0)
+  const [members, setMembers] = useState<number>()
 
   const fetchDaoMember = useCallback(async () => {
     const data = await dispatch(getTokenHolders({ daoAddress })).unwrap()

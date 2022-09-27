@@ -4,29 +4,17 @@ import { ReceiptData } from '@interdao/core'
 import { Card, Col, Row, Typography, Table, Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
-import { HISTORY_COLUMNS_MULTISIG, HISTORY_COLUMNS_FLEXIBLE } from './column'
+import { HISTORY_COLUMNS_FLEXIBLE } from './column'
 import { getReceipts } from 'hooks/proposal/useReceipts'
 
 import './index.less'
-import useMetaData from 'hooks/useMetaData'
 
 const DEFAULT_AMOUNT_HISTORY = 5
 
-const History = ({
-  proposalAddress,
-  daoAddress,
-}: {
-  proposalAddress: string
-  daoAddress: string
-}) => {
+const History = ({ proposalAddress }: { proposalAddress: string }) => {
   const [amount, setAmount] = useState(DEFAULT_AMOUNT_HISTORY)
   const [loading, setLoading] = useState(false)
   const [listReceipt, setListReceipt] = useState<ReceiptData[]>([])
-  const { metaData } = useMetaData(daoAddress)
-  const isMultisigDAO = metaData?.daoType === 'multisig-dao'
-  const historyColum = isMultisigDAO
-    ? HISTORY_COLUMNS_MULTISIG
-    : HISTORY_COLUMNS_FLEXIBLE
 
   const fetchReceipts = useCallback(async () => {
     setLoading(true)
@@ -79,7 +67,7 @@ const History = ({
         </Col>
         <Col span={24}>
           <Table
-            columns={historyColum}
+            columns={HISTORY_COLUMNS_FLEXIBLE}
             dataSource={listReceipt.slice(0, amount)}
             pagination={false}
             loading={loading}

@@ -2,25 +2,22 @@ import { Fragment, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { utilsBN } from 'sentre-web3'
+import { useGetMintDecimals } from '@sentre/senhub'
 
 import { Button, Col, Row } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { AppState } from 'model'
 import { ProposalChildCardProps } from '../../index'
-import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import useProposalStatus from 'hooks/proposal/useProposalStatus'
-import useMetaData from 'hooks/useMetaData'
 import useProposalFee from 'hooks/proposal/useProposalFee'
 import { setVoteBidAmount } from 'model/voteBid.controller'
 import { notifyError, notifySuccess } from 'helpers'
 import { useAnchorProvider } from 'hooks/useAnchorProvider'
-import { useDaoData } from 'hooks/dao'
 import { useCommentProposal } from 'hooks/useCommentProposal'
 import { VoteState } from 'model/comments.controller'
 import InputComment from 'components/inputComment'
-
-const DEFAULT_VALUE_VOTE_MULTISIG = 1
+import { useDaoData } from 'hooks/dao'
 
 const ActionVote = ({
   proposalAddress,
@@ -28,29 +25,27 @@ const ActionVote = ({
 }: ProposalChildCardProps) => {
   const [voting, setVoting] = useState<VoteState>()
   const [comment, setComment] = useState('')
-  const amount = useSelector((state: AppState) => state.voteBid.amount)
+
   const dispatch = useDispatch()
+  const amount = useSelector((state: AppState) => state.voteBid.amount)
   const daoData = useDaoData(daoAddress)
-  const { metaData: daoMetaData } = useMetaData(daoAddress)
-  const { balance, decimals } = useAccountBalanceByMintAddress(
-    daoData?.mint?.toBase58() || '',
-  )
+
+  const getMintDecimals = useGetMintDecimals()
   const { status } = useProposalStatus(proposalAddress)
   const proposalFee = useProposalFee({ daoAddress })
   const { initTxCommentProposal } = useCommentProposal()
   const provider = useAnchorProvider()
 
-  const isMultisigDAO = daoMetaData?.daoType === 'multisig-dao'
-
   const disabled = useMemo(() => {
     if (!!voting) return true
-    if (isMultisigDAO) return status !== 'Voting' || balance <= 0
     return status !== 'Voting' || !amount || !account.isAddress(proposalAddress)
-  }, [amount, balance, isMultisigDAO, proposalAddress, status, voting])
+  }, [amount, proposalAddress, status, voting])
 
   const getTxVote = async (voteType: VoteState) => {
-    const rawAmount = isMultisigDAO ? DEFAULT_VALUE_VOTE_MULTISIG : amount
-    const amountBN = utilsBN.decimalize(rawAmount, decimals)
+    const decimals = await getMintDecimals({
+      mintAddress: daoData?.mint.toBase58()!,
+    })
+    const amountBN = utilsBN.decimalize(amount, decimals!)
     switch (voteType) {
       case VoteState.For:
         return window.interDao.voteFor(
@@ -103,7 +98,7 @@ const ActionVote = ({
           <InputComment value={comment} onChange={setComment} />
         </Col>
 
-        <Col span={isMultisigDAO ? 24 : 12}>
+        <Col span={12}>
           <Button
             onClick={() => onVote(VoteState.For)}
             type="primary"
@@ -116,7 +111,7 @@ const ActionVote = ({
             Vote For
           </Button>
         </Col>
-        <Col span={isMultisigDAO ? 24 : 12}>
+        <Col span={12}>
           <Button
             onClick={() => onVote(VoteState.Against)}
             type="primary"

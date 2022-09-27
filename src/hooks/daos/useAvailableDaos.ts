@@ -20,15 +20,8 @@ const useAvailableDaos = () => {
     try {
       for (const addr in daos) {
         const { mint, isNft, metadata } = daos[addr]
-        const { daoType, members } = await ipfs.methods.daoMetadata.get(
-          metadata,
-        )
+        const { daoType } = await ipfs.methods.daoMetadata.get(metadata)
         let valid = true
-
-        if (daoType === 'multisig-dao') {
-          const listMember = members.map(({ walletAddress }) => walletAddress)
-          if (!listMember.includes(walletAddress)) valid = false
-        }
 
         if (daoType === 'flexible-dao' && !isNft) {
           const tokenAccount = await utils.token.associatedAddress({

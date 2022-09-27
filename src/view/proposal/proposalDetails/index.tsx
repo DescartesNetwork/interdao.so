@@ -83,10 +83,7 @@ const ProposalDetails = () => {
                       <Comments proposalAddress={proposalAddress} />
                     </Col>
                     <Col span={24}>
-                      <History
-                        proposalAddress={proposalAddress}
-                        daoAddress={daoAddress}
-                      />
+                      <History proposalAddress={proposalAddress} />
                     </Col>
                   </Row>
                 </Col>

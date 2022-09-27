@@ -30,18 +30,6 @@ const useValidDaoMember = (daoAddress: string) => {
     return mints.includes(daoData?.mint.toBase58())
   }, [daoData?.mint, accounts])
 
-  const isMemberMultisig = useMemo(() => {
-    if (!metaData) return false
-    const { members } = metaData
-    let valid = false
-    for (const { walletAddress } of members)
-      if (walletAddress === myAddress) {
-        valid = true
-        break
-      }
-    return valid
-  }, [metaData, myAddress])
-
   const checkDaoMember = useCallback(() => {
     if (!metaData || !daoData?.mint) return setChecking(true)
     const { daoType } = metaData
@@ -50,14 +38,11 @@ const useValidDaoMember = (daoAddress: string) => {
 
     if (daoType === 'flexible-dao' && !daoData?.isNft) valid = isMemberTokenDAO
 
-    if (daoType === 'multisig-dao') valid = isMemberMultisig
-
     setValidMember(valid)
     setChecking(false)
   }, [
     daoData?.isNft,
     daoData?.mint,
-    isMemberMultisig,
     isMemberOnlyNFT,
     isMemberTokenDAO,
     metaData,
