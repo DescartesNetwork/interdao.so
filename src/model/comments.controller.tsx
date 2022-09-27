@@ -3,8 +3,7 @@ import { sha256 } from 'js-sha256'
 import camelcase from 'camelcase'
 import bs58 from 'bs58'
 
-import IPFS from 'helpers/ipfs'
-import { getCID } from 'helpers'
+import { ipfs } from 'helpers/ipfs'
 
 /**
  * Interface & Utility
@@ -36,7 +35,6 @@ export type CommentState = Record<
 
 const NAME = 'comment'
 const initialState: CommentState = {}
-const ipfs = new IPFS()
 /**
  * Actions
  */
@@ -59,8 +57,9 @@ export const getComments = createAsyncThunk(
     let bulk: Record<WalletAddress, CommentProposal[]> = {}
     await Promise.all(
       contents.map(async (content) => {
-        const cidString = getCID(content.account.metadata)
-        const data = await ipfs.get<CommentProposal[]>(cidString)
+        const data = await ipfs.methods.proposalComments.get(
+          content.account.metadata,
+        )
         bulk[content.account.authority.toBase58()] = data
       }),
     )
@@ -83,9 +82,7 @@ export const upsetComment = createAsyncThunk(
     metadata: number[]
   }) => {
     let bulk: Record<WalletAddress, CommentProposal[]> = {}
-    const cidString = getCID(metadata)
-    const data = await ipfs.get<CommentProposal[]>(cidString)
-    bulk[wallet] = data
+    await ipfs.methods.proposalComments.get(metadata)
     return {
       proposal,
       bulk,

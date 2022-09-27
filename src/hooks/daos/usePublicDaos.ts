@@ -3,23 +3,20 @@ import { useSelector } from 'react-redux'
 
 import { AppState } from 'model'
 import { DaoState } from 'model/daos.controller'
-import { MetaData } from 'model/createDao.controller'
-import usePDB from '../usePDB'
+import { ipfs } from 'helpers/ipfs'
 
 const usePublicDaos = (daoType: string, mechanismsType: string): DaoState => {
   const daos = useSelector((state: AppState) => state.daos)
   const [filteredDaos, setFilteredDaos] = useState<DaoState>({})
-  const pdb = usePDB()
 
   const filterDaos = useCallback(async () => {
     const filteredDaos: DaoState = {}
     for (const addr in daos) {
-      const daoData = daos[addr]
-      const { isPublic, regime } = daoData
+      const { isPublic, regime, metadata } = daos[addr]
       if (!isPublic) continue
       // Validate type
       if (daoType !== 'all') {
-        const metaData = (await pdb.getItem(addr)) as MetaData
+        const metaData = await ipfs.methods.daoMetadata.get(metadata)
         if (metaData?.daoType !== daoType) continue
       }
       // Validate Regime
@@ -27,10 +24,10 @@ const usePublicDaos = (daoType: string, mechanismsType: string): DaoState => {
         const parseRegime = Object.keys(regime)[0]
         if (parseRegime !== mechanismsType) continue
       }
-      filteredDaos[addr] = daoData
+      filteredDaos[addr] = daos[addr]
     }
     return setFilteredDaos(filteredDaos)
-  }, [daoType, daos, mechanismsType, pdb])
+  }, [daoType, daos, mechanismsType])
 
   useEffect(() => {
     filterDaos()

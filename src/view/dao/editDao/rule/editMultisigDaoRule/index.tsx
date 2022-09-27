@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { account } from '@senswap/sen-js'
-import { CID } from 'ipfs-core'
 import { DaoRegimes } from '@interdao/core'
 import { util } from '@sentre/senhub'
 
@@ -11,11 +9,11 @@ import DAOMembers from './daoMembers'
 import Regime from 'view/createDao/setRule/multisig/regime'
 
 import { AppState } from 'model'
-import IPFS from 'helpers/ipfs'
 import MultisigWallet from 'helpers/mutisigWallet'
-import usePDB from 'hooks/usePDB'
 import { DAOMember, MetaData } from 'model/createDao.controller'
 import useMetaData from 'hooks/useMetaData'
+import { ipfs } from 'helpers/ipfs'
+import { notifyError } from 'helpers'
 
 const EditMultisigDaoRule = ({ daoAddress }: { daoAddress: string }) => {
   const [loading, setLoading] = useState(false)
@@ -23,12 +21,10 @@ const EditMultisigDaoRule = ({ daoAddress }: { daoAddress: string }) => {
   const [nextMetadata, setNextMetadata] = useState<MetaData>()
   const daos = useSelector((state: AppState) => state.daos)
 
-  const pdb = usePDB()
-
   const disabled = useMemo(() => {
     if (!nextMetadata) return true
     for (const { walletAddress } of nextMetadata.members) {
-      if (!account.isAddress(walletAddress)) return true
+      if (!util.isAddress(walletAddress)) return true
     }
     return false
   }, [nextMetadata])
@@ -53,11 +49,7 @@ const EditMultisigDaoRule = ({ daoAddress }: { daoAddress: string }) => {
     const mintAddress = mint.toBase58()
     try {
       setLoading(true)
-      const ipfs = new IPFS()
-      const cid = await ipfs.set(nextMetadata)
-      const {
-        multihash: { digest },
-      } = CID.parse(cid)
+      const { digest } = await ipfs.methods.daoMetadata.set(nextMetadata)
       const daoMetaData = Buffer.from(digest)
       const { txId } = await window.interDao.updateDaoMetadata(
         daoMetaData,
@@ -76,11 +68,8 @@ const EditMultisigDaoRule = ({ daoAddress }: { daoAddress: string }) => {
         description: 'Update members successfully. Click here to view details',
         onClick: () => window.open(util.explorer(txId), '_blank'),
       })
-
-      const localMetadata = { ...nextMetadata, cid } //update metadata for realtime
-      return pdb.setItem(daoAddress, localMetadata)
     } catch (er: any) {
-      window.notify({ type: 'error', description: er.message })
+      notifyError(er)
     } finally {
       setLoading(false)
     }

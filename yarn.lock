@@ -1362,10 +1362,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@interdao/core@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@interdao/core/-/core-2.0.3.tgz#c0bb417c4575d6f8f52a11a5b44733a72f9efcf9"
-  integrity sha512-Pku6wusVIkvkZ/l1EpN5lOgjKMOSM5kLep3hqksmIs8EEtGp9zEeqBt2LWRkJJ5kC9R0ICUgqqVSP3pb8szpJA==
+"@interdao/core@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@interdao/core/-/core-2.0.4.tgz#5d3f5e41a32fe38061180aa65b310a9722c13006"
+  integrity sha512-73DYruXmZE5s+XvxoFK9Bhde0wxZHE5ih/hw7ygHMvmBePAwMLb5PQGyfQRpsfRI2blQpUpDIip4XtA6p8wFJQ==
   dependencies:
     "@metaplex/js" "^4.12.0"
     "@project-serum/anchor" "^0.24.2"
@@ -2037,6 +2037,17 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.4.tgz#0c8b74c50f29ee44f423f7416829c0bf8bb5eb27"
   integrity sha512-LwzQKA4vzIct1zNZzBmRKI9QuNpLgTQMEjsQLf3BXuGYb3QPTP4Yjf6mkdX+X1mYttZ808QpOwAzZjv28kq7DA==
 
+"@sen-use/web3@^3.3.1":
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@sen-use/web3/-/web3-3.3.1.tgz#d2073a37c0267d56d337c5885116e47ceb603f7c"
+  integrity sha512-G8/3jFf9vfetNMGeVFlQOZnIuLMERUDP8LoU5WiJwyl3VB51BmhKTYELj1LbYZyfcDL2HJzXeOvX/C/tEpJTcg==
+  dependencies:
+    "@project-serum/anchor" "^0.24.2"
+    "@solana/web3.js" "^1.50.0"
+    bn.js "^5.2.1"
+    bs58 "^5.0.0"
+    web3.storage "^4.2.0"
+
 "@senswap/sen-js@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@senswap/sen-js/-/sen-js-1.4.0.tgz#e7cfb655332c9279dc9ab4cfb90d8193a2878dca"
@@ -2301,6 +2312,27 @@
     secp256k1 "^4.0.2"
     superstruct "^0.14.2"
     tweetnacl "^1.0.0"
+
+"@solana/web3.js@^1.50.0":
+  version "1.63.1"
+  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-1.63.1.tgz#88a19a17f5f4aada73ad70a94044c1067cab2b4d"
+  integrity sha512-wgEdGVK5FTS2zENxbcGSvKpGZ0jDS6BUdGu8Gn6ns0CzgJkK83u4ip3THSnBPEQ5i/jrqukg998BwV1H67+qiQ==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@noble/ed25519" "^1.7.0"
+    "@noble/hashes" "^1.1.2"
+    "@noble/secp256k1" "^1.6.3"
+    "@solana/buffer-layout" "^4.0.0"
+    bigint-buffer "^1.1.5"
+    bn.js "^5.0.0"
+    borsh "^0.7.0"
+    bs58 "^4.0.1"
+    buffer "6.0.1"
+    fast-stable-stringify "^1.0.0"
+    jayson "^3.4.4"
+    node-fetch "2"
+    rpc-websockets "^7.5.0"
+    superstruct "^0.14.2"
 
 "@stablelib/aead@^1.0.1":
   version "1.0.1"

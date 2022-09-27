@@ -1,34 +1,37 @@
 import { useCallback, useEffect, useState } from 'react'
-import { account } from '@senswap/sen-js'
+import { useSelector } from 'react-redux'
+import { util } from '@sentre/senhub'
 
 import DaoProvider, {
   RegisterDaoData,
 } from 'view/dao/publicDaos/search/daoProvider'
-import usePDB from './usePDB'
-import { MetaData } from 'model/createDao.controller'
+import { ipfs } from 'helpers/ipfs'
+import { AppState } from 'model'
 
 const useSearchDao = (keyword: string, daoAddresses: string[]) => {
+  const daos = useSelector((state: AppState) => state.daos)
   const [metaData, setMetaData] = useState<RegisterDaoData>()
   const [searchData, setSearchData] = useState<string[]>()
   const [loading, setLoading] = useState(false)
-  const pdb = usePDB()
 
   const getMetaData = useCallback(async () => {
     const nextData: RegisterDaoData = {}
-    for (const daoAddress of daoAddresses) {
-      const data = (await pdb.getItem(daoAddress)) as MetaData
-      if (!data) continue
-      nextData[daoAddress] = { ...data, daoAddress }
-    }
+    await Promise.all(
+      daoAddresses.map(async (daoAddress) => {
+        const daoData = daos[daoAddress]
+        const data = await ipfs.methods.daoMetadata.get(daoData.metadata)
+        nextData[daoAddress] = { ...data, daoAddress }
+      }),
+    )
     return setMetaData(nextData)
-  }, [daoAddresses, pdb])
+  }, [daoAddresses, daos])
 
   const onSearch = useCallback(async () => {
     if (!keyword || keyword.length < 3 || keyword === 'all-regime' || !metaData)
       return setSearchData(undefined)
     try {
       const daoProvider = new DaoProvider(metaData)
-      if (account.isAddress(keyword)) {
+      if (util.isAddress(keyword)) {
         const data = await daoProvider.findByAddress(keyword)
         return setSearchData(data)
       }

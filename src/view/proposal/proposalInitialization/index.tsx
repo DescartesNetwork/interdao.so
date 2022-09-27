@@ -3,17 +3,16 @@ import { useHistory, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { web3, BN } from '@project-serum/anchor'
 import { ConsensusMechanisms, ConsensusQuorums } from '@interdao/core'
-import { CID } from 'ipfs-core'
 import { util } from '@sentre/senhub'
 
 import { Button, Card, Col, Divider, Input, Row, Space, Typography } from 'antd'
 import ConsensusMechanismInput from './consensusMechanismInput'
-import ConsensusQuorumInput from '../../../components/consensusQuorumInput'
+import ConsensusQuorumInput from 'components/consensusQuorumInput'
 import DurationInput from './durationInput'
 import ProposalPreview from './proposalPreview'
 
 import configs from 'configs'
-import IPFS from 'helpers/ipfs'
+import { ipfs } from 'helpers/ipfs'
 import { AppState } from 'model'
 import { clearTx } from 'model/template.controller'
 import useMetaData from 'hooks/useMetaData'
@@ -69,11 +68,7 @@ const ProposalInitialization = () => {
   }, [description, template, title])
 
   const uploadMetaData = useCallback(async () => {
-    const ipfs = new IPFS()
-    const cid = await ipfs.set(proposalMetaData)
-    const {
-      multihash: { digest },
-    } = CID.parse(cid)
+    const { digest } = await ipfs.methods.proposalMetaData.set(proposalMetaData)
     return digest
   }, [proposalMetaData])
 

@@ -4,7 +4,6 @@ import { useHistory, useParams } from 'react-router-dom'
 
 import { Col, Row } from 'antd'
 import DaoInfo from './daoInfo'
-import JoinDao from './joinDao'
 import DaoOwnerAssets from './daoOwnerAssets'
 
 import { AppState } from 'model'
@@ -43,7 +42,6 @@ const DaoDetails = ({ daoAddress }: DaoDetailsProps) => {
       <Col xs={24} md={8}>
         <DaoOwnerAssets daoAddress={daoAddress} />
       </Col>
-      <JoinDao daoAddress={daoAddress} />
     </Row>
   )
 }

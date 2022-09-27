@@ -15,7 +15,6 @@ import PageNotFound from 'view/pageNotFound'
 import DaoWatcher from '../watcher/dao.watcher'
 import ProposalWatcher from '../watcher/proposal.watcher'
 import ReceiptWatcher from '../watcher/receipt.watcher'
-import MetadataWatcher from '../watcher/metadata.watcher'
 import EventsWatcher from 'watcher/evens.watch'
 
 import BG from 'static/images/system/bg-dark.png'
@@ -81,7 +80,6 @@ const View = () => {
       <ProposalWatcher />
       <ReceiptWatcher />
       <EventsWatcher />
-      <MetadataWatcher />
     </Row>
   )
 }

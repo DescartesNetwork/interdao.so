@@ -3,9 +3,8 @@ import { useSelector } from 'react-redux'
 import { useAccounts, useWalletAddress } from '@sentre/senhub'
 import { utils, web3 } from '@project-serum/anchor'
 
-import usePDB from '../usePDB'
 import { AppState } from 'model'
-import { MetaData } from 'model/createDao.controller'
+import { ipfs } from 'helpers/ipfs'
 import useOwnerNFT from '../useOwnerNFT'
 
 const useAvailableDaos = () => {
@@ -14,19 +13,17 @@ const useAvailableDaos = () => {
   const accounts = useAccounts()
   const walletAddress = useWalletAddress()
   const { nfts } = useOwnerNFT(walletAddress)
-  const pdb = usePDB()
 
   const filterDaos = useCallback(async () => {
     if (!nfts) return setFilteredDaos(undefined)
     const filteredDaos: string[] = []
     try {
       for (const addr in daos) {
-        const daoData = daos[addr]
-        const { mint, isNft } = daoData
+        const { mint, isNft, metadata } = daos[addr]
+        const { daoType, members } = await ipfs.methods.daoMetadata.get(
+          metadata,
+        )
         let valid = true
-
-        // Validate MultisigDAO
-        const { daoType, members } = (await pdb.getItem(addr)) as MetaData
 
         if (daoType === 'multisig-dao') {
           const listMember = members.map(({ walletAddress }) => walletAddress)
@@ -50,7 +47,7 @@ const useAvailableDaos = () => {
       }
     } catch (error) {}
     return setFilteredDaos(filteredDaos)
-  }, [accounts, daos, nfts, pdb, walletAddress])
+  }, [accounts, daos, nfts, walletAddress])
 
   useEffect(() => {
     filterDaos()

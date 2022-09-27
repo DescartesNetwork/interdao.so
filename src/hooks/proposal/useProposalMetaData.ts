@@ -2,9 +2,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { AppDispatch } from 'model'
-import { getCID } from 'helpers'
 import { ProposalMetaData } from 'view/proposal/proposalInitialization'
-import IPFS from 'helpers/ipfs'
+import { ipfs } from 'helpers/ipfs'
 import { getProposal } from 'model/proposal.controller'
 import { DataLoader } from '@sentre/senhub'
 
@@ -22,9 +21,7 @@ const useProposalMetaData = (proposalAddress: string) => {
         dispatch(getProposal({ address: proposalAddress })).unwrap(),
       )
       if (!digest) return setMetaData(undefined)
-      const cid = getCID(digest)
-      const ipfs = new IPFS()
-      const data = await ipfs.get<any>(cid)
+      const data = await ipfs.methods.proposalMetaData.get(digest)
       return setMetaData(data)
     } catch (er: any) {
       return window.notify({ type: 'error', description: er.message })

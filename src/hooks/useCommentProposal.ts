@@ -1,19 +1,13 @@
 import { useCallback } from 'react'
-
-import { CID } from 'ipfs-core'
-
+import { web3 } from '@project-serum/anchor'
 import { useWalletAddress } from '@sentre/senhub'
 
-import { getCID } from 'helpers'
-import IPFS from 'helpers/ipfs'
 import {
   CommentProposal,
   deriveDiscriminator,
   VoteState,
 } from 'model/comments.controller'
-import { web3 } from '@project-serum/anchor'
-
-const ipfs = new IPFS()
+import { ipfs } from 'helpers/ipfs'
 
 export const useCommentProposal = () => {
   const walletAddress = useWalletAddress()
@@ -43,8 +37,9 @@ export const useCommentProposal = () => {
       const contentData = await window.interDao.program.account.content.fetch(
         contentId,
       )
-      const metadata = getCID(contentData.metadata)
-      ownerComments = [...(await ipfs.get<CommentProposal[]>(metadata))]
+      ownerComments = [
+        ...(await ipfs.methods.proposalComments.get(contentData.metadata)),
+      ]
     } catch (error) {}
     ownerComments.push(newComment)
     return ownerComments
@@ -65,11 +60,7 @@ export const useCommentProposal = () => {
       const newComment = buildCommentData(content, voteState, receipt)
       const comments = await addNewComment(contentId, newComment)
       // Override new Cid
-      const newCid = await ipfs.set(comments)
-      const {
-        multihash: { digest },
-      } = CID.parse(newCid)
-
+      const { digest } = await ipfs.methods.proposalComments.set(comments)
       const { tx } = await window.interDao.initializeContent(
         discriminator,
         digest,

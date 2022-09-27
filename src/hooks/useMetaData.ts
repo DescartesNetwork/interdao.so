@@ -1,44 +1,30 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { account } from '@senswap/sen-js'
-import { DaoData } from '@interdao/core'
+import { util } from '@sentre/senhub'
 
-import usePDB from './usePDB'
-import IPFS from 'helpers/ipfs'
+import { ipfs } from 'helpers/ipfs'
+import { notifyError } from 'helpers'
 import { AppState } from 'model'
-import { getCID } from 'helpers'
-import { LocalMetadata } from 'watcher/metadata.watcher'
 import { MetaData } from 'model/createDao.controller'
-
-const ipfs = new IPFS()
 
 const useMetaData = (daoAddress: string) => {
   const [metaData, setMetaData] = useState<MetaData>()
   const [loading, setLoading] = useState(false)
-  const daos = useSelector((state: AppState) => state.daos)
-  const pdb = usePDB()
+  const daoData = useSelector((state: AppState) => state.daos[daoAddress])
 
   const getMetaData = useCallback(async () => {
-    if (!account.isAddress(daoAddress)) return setMetaData(undefined)
-    setLoading(true)
-    const data = (await pdb.getItem(daoAddress)) as LocalMetadata
-    const { metadata: digest } = daos[daoAddress] || ({} as DaoData)
-    if (!digest) return setLoading(false)
-    const cid = getCID(digest)
-    if (data && cid === data.cid) {
+    if (!util.isAddress(daoAddress) || !daoData) return setMetaData(undefined)
+
+    try {
+      setLoading(true)
+      const data = await ipfs.methods.daoMetadata.get(daoData.metadata)
       setMetaData(data)
+    } catch (error) {
+      notifyError(error)
+    } finally {
       return setLoading(false)
     }
-
-    const metadata: MetaData = await ipfs.get(cid)
-    if (!metadata) return setLoading(false)
-
-    const localMetadata = { ...metadata, cid }
-    await pdb.setItem(daoAddress, localMetadata)
-
-    setMetaData(metadata)
-    return setLoading(false)
-  }, [daoAddress, daos, pdb])
+  }, [daoAddress, daoData])
 
   useEffect(() => {
     getMetaData()
