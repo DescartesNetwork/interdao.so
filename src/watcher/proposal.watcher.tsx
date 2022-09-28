@@ -24,7 +24,7 @@ const ProposalWatcher = () => {
       dispatch(
         addLoading({
           id: 'fetch-proposals',
-          message: 'Welcome to window.interDao. Loading proposal...',
+          message: 'Welcome to interDao. Loading proposal...',
         }),
       )
       dispatch(getProposals()) //fetch all proposal
