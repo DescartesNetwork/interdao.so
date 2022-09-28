@@ -81,7 +81,7 @@ export class IPFS<
     // Save IPFS to cache
     return new Promise((resolve) => {
       let timeout = setTimeout(() => this.set(data), 5000)
-      this.get(cid).then(async (data) => {
+      this.get(cid, false).then(async (data) => {
         if (data) {
           clearTimeout(timeout)
           await store.setItem(this.decodeCID(digest), { data, checked: true })
@@ -96,7 +96,7 @@ export class IPFS<
     cache = true,
   ): Promise<any> {
     const cid = this.decodeCID(digest)
-    return DataLoader.load(`ipfs:${cid}`, async () => {
+    const loadIpfs = async () => {
       return new Promise((resolve, reject) => {
         let instance = setTimeout(async () => {
           // Resolve promise function
@@ -150,7 +150,9 @@ export class IPFS<
           }
         })
       })
-    })
+    }
+
+    return cache ? DataLoader.load(`ipfs:${cid}`, loadIpfs) : loadIpfs()
   }
 }
 

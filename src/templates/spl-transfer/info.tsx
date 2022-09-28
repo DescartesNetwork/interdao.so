@@ -1,7 +1,7 @@
 import { util } from '@sentre/senhub'
 
 import { Col, Row, Space, Typography } from 'antd'
-import { MintAvatar, MintSymbol } from 'shared/antd/mint'
+import { MintAvatar, MintSymbol } from '@sen-use/app'
 import { PropsTemplateProposalLoader } from '../templateLoader'
 import RowSpaceBetween from 'components/rowSpaceBetween'
 import IconCopy from 'components/iconCopy'

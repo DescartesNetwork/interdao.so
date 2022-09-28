@@ -20,8 +20,7 @@ import {
 import IonIcon from '@sentre/antd-ionicon'
 import StatisticCard from 'components/statisticCard'
 import RegimeTag from 'components/regimeTag'
-import AvatarNFT from 'components/avatarNFT'
-import { MintAvatar, MintSymbol } from 'shared/antd/mint'
+import { MintAvatar, MintSymbol } from '@sen-use/app'
 import GradientAvatar from 'components/gradientAvatar'
 
 import { AppState } from 'model'
@@ -48,7 +47,7 @@ const MAX_WIDTH_RATE = 24 / 18 // full screen is 24 col, max width is 18 col
 
 const DaoCard = ({ daoAddress }: DaoCardProps) => {
   const history = useHistory()
-  const { regime, nonce, mint, isPublic, isNft } = useSelector(
+  const { regime, nonce, mint, isPublic } = useSelector(
     (state: AppState) => state.daos[daoAddress],
   )
   const width = useWidth()
@@ -159,14 +158,10 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
                     <StatisticCard
                       title="Vote By"
                       value={
-                        isNft ? (
-                          <AvatarNFT mintAddress={mint.toBase58()} />
-                        ) : (
-                          <Space>
-                            <MintAvatar mintAddress={mint.toBase58()} />
-                            <MintSymbol mintAddress={mint.toBase58()} />
-                          </Space>
-                        )
+                        <Space>
+                          <MintAvatar mintAddress={mint.toBase58()} />
+                          <MintSymbol mintAddress={mint.toBase58()} />
+                        </Space>
                       }
                     />
                   </Col>

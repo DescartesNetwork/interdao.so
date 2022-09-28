@@ -6,7 +6,7 @@ import { util } from '@sentre/senhub'
 import { Col, Row, Space, Typography } from 'antd'
 
 import { getBalance } from 'hooks/useBalance'
-import { MintAvatar, MintSymbol } from 'shared/antd/mint'
+import { MintAvatar, MintSymbol } from '@sen-use/app'
 
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 

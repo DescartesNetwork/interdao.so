@@ -13,7 +13,7 @@ import { AppState } from 'model'
 import { setVoteBidAmount } from 'model/voteBid.controller'
 import { ProposalChildCardProps } from '../../index'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
-import { MintSymbol } from 'shared/antd/mint'
+import { MintSymbol } from '@sen-use/app'
 import useProposalStatus from 'hooks/proposal/useProposalStatus'
 import useProposal from 'hooks/proposal/useProposal'
 

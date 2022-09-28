@@ -5,7 +5,7 @@ import { Space, Typography } from 'antd'
 
 import { AppDispatch, AppState } from 'model'
 import { setTemplateData } from 'model/template.controller'
-import { MintSelection } from 'shared/antd/mint'
+import { MintSelection } from '@sen-use/app'
 
 const MintInput = ({
   id,

@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import moment from 'moment'
 
 import { Col, Row, Space, Typography } from 'antd'
-import { MintAvatar, MintSymbol } from 'shared/antd/mint'
+import { MintAvatar, MintSymbol } from '@sen-use/app'
 import RowSpaceVertical from 'components/rowSpaceVertical'
 import { PropsTemplateProposalLoader } from '../templateLoader'
 import ProposalTemplateCard from '../components/proposalTemplateCard'

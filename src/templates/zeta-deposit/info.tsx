@@ -1,5 +1,5 @@
 import { Col, Row, Space } from 'antd'
-import { MintAvatar, MintSymbol } from 'shared/antd/mint'
+import { MintAvatar, MintSymbol } from '@sen-use/app'
 import { PropsTemplateProposalLoader } from '../templateLoader'
 import RowSpaceBetween from 'components/rowSpaceBetween'
 

@@ -1,5 +1,5 @@
 import { Col, Row, Input } from 'antd'
-import { MintSelection } from 'shared/antd/mint'
+import { MintSelection } from '@sen-use/app'
 
 type VoteTokenInputProps = {
   mintAddress: string

@@ -4,10 +4,9 @@ import { SystemProgram } from '@solana/web3.js'
 import { util } from '@sentre/senhub'
 
 import { Col, Row, Space } from 'antd'
-import { MintAvatar, MintSymbol } from 'shared/antd/mint'
+import { MintAvatar, MintSymbol } from '@sen-use/app'
 import StatisticCard from 'components/statisticCard'
 import RegimeTag from 'components/regimeTag'
-import AvatarNFT from 'components/avatarNFT'
 import DaoMember from 'components/dao/daoMember'
 
 import { AppState } from 'model'
@@ -18,7 +17,7 @@ export type ProposalPreviewProps = {
 
 const ProposalPreview = ({ daoAddress }: ProposalPreviewProps) => {
   const daos = useSelector((state: AppState) => state.daos)
-  const { regime, mint, isNft } =
+  const { regime, mint } =
     daos[daoAddress] ||
     ({
       regime: {},
@@ -37,14 +36,10 @@ const ProposalPreview = ({ daoAddress }: ProposalPreviewProps) => {
         <StatisticCard
           title="Vote By"
           value={
-            isNft ? (
-              <AvatarNFT mintAddress={mint.toBase58()} />
-            ) : (
-              <Space>
-                <MintAvatar mintAddress={mint.toBase58()} />
-                <MintSymbol mintAddress={mint.toBase58()} />
-              </Space>
-            )
+            <Space>
+              <MintAvatar mintAddress={mint.toBase58()} />
+              <MintSymbol mintAddress={mint.toBase58()} />
+            </Space>
           }
         />
       </Col>

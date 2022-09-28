@@ -5,11 +5,10 @@ import { useWidth, useWalletAddress } from '@sentre/senhub'
 import { util } from '@sentre/senhub'
 
 import { Avatar, Button, Card, Col, Row, Space, Spin, Typography } from 'antd'
-import { MintAvatar, MintSymbol } from 'shared/antd/mint'
+import { MintAvatar, MintSymbol } from '@sen-use/app'
 import IonIcon from '@sentre/antd-ionicon'
 import StatisticCard from 'components/statisticCard'
 import RegimeTag from 'components/regimeTag'
-import AvatarNFT from 'components/avatarNFT'
 import GradientAvatar from 'components/gradientAvatar'
 import AmountMembers from './members'
 
@@ -33,7 +32,7 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
 
   const { daoNameUrl } = useDaoNameUrl(daoAddress)
 
-  const { regime, nonce, mint, authority, isNft } = daoData || {
+  const { regime, nonce, mint, authority } = daoData || {
     regime: {},
     nonce: new BN(0),
     mint: SystemProgram.programId,
@@ -119,14 +118,10 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
                 <StatisticCard
                   title="Vote By"
                   value={
-                    isNft ? (
-                      <AvatarNFT mintAddress={mint.toBase58()} />
-                    ) : (
-                      <Space>
-                        <MintAvatar mintAddress={mint.toBase58()} />
-                        <MintSymbol mintAddress={mint.toBase58()} />
-                      </Space>
-                    )
+                    <Space>
+                      <MintAvatar mintAddress={mint.toBase58()} />
+                      <MintSymbol mintAddress={mint.toBase58()} />
+                    </Space>
                   }
                 />
               </Col>
