@@ -19,14 +19,10 @@ import EventsWatcher from 'watcher/evens.watch'
 
 import BG from 'static/images/system/bg-dark.png'
 import BG_LIGHT from 'static/images/system/bg-light.png'
-import configs from 'configs'
 
 import 'static/styles/dark.less'
 import 'static/styles/light.less'
-
-const {
-  manifest: { appId },
-} = configs
+import { APP_ROUTE } from 'configs/route'
 
 const View = () => {
   const setBackground = useSetBackground()
@@ -40,38 +36,34 @@ const View = () => {
       <Loading>
         <Col span={24}>
           <Switch>
-            <Route exact path={`/app/${appId}/dao`} component={Dao} />
+            <Route exact path={APP_ROUTE.listDaos.path} component={Dao} />
             <Route
               exact
-              path={`/app/${appId}/dao/create-dao`}
+              path={APP_ROUTE.createDao.path}
               component={CreateDao}
             />
             <Route
               exact
-              path={`/app/${appId}/dao/:daoAddress/:daoName`}
+              path={APP_ROUTE.daoDetails.path}
               component={Proposal}
             />
+            <Route exact path={APP_ROUTE.editDao.path} component={EditDAO} />
             <Route
               exact
-              path={`/app/${appId}/dao/:daoAddress/:daoName/edit`}
-              component={EditDAO}
-            />
-            <Route
-              exact
-              path={`/app/${appId}/new-proposal`}
+              path={APP_ROUTE.createProposal.path}
               component={ProposalInitialization}
             />
             <Route
               exact
-              path={`/app/${appId}/dao/:daoAddress/:daoName/proposal/:proposalAddress`}
+              path={APP_ROUTE.proposalDetails.path}
               component={ProposalDetails}
             />
             <Route
               exact
-              path={`/app/${appId}/page-not-found`}
+              path={APP_ROUTE.notFound.path}
               component={PageNotFound}
             />
-            <Redirect from="*" to={`/app/${appId}/dao`} />
+            <Redirect from="*" to={APP_ROUTE.listDaos.path} />
           </Switch>
         </Col>
       </Loading>
