@@ -8,11 +8,13 @@ import { getProposal } from 'model/proposal.controller'
 
 const useProposal = (proposalAddress: string) => {
   const dispatch = useDispatch<AppDispatch>()
-  const proposals = useSelector((state: AppState) => state.proposal)
+  const proposal = useSelector(
+    (state: AppState) => state.proposal[proposalAddress],
+  )
 
-  const proposalData = useMemo(
-    () => proposals[proposalAddress] || ({} as ProposalData),
-    [proposals, proposalAddress],
+  const proposalData: ProposalData = useMemo(
+    () => proposal || ({} as ProposalData),
+    [proposal],
   )
 
   useEffect(() => {
@@ -20,7 +22,7 @@ const useProposal = (proposalAddress: string) => {
       dispatch(getProposal({ address: proposalAddress }))
   }, [proposalData, dispatch, proposalAddress])
 
-  return { ...proposalData }
+  return proposalData
 }
 
 export default useProposal

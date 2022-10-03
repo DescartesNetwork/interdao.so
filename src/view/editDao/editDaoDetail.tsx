@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Col, Row } from 'antd'
 import ActionButton from './actionButton'
 
-import { useDaoMetaData } from 'hooks/useDaoMetaData'
+import { useDaoMetaData } from 'hooks/dao/useDaoMetaData'
 import FormInputDetail from 'components/formInputDetail'
 import { DEFAULT_META_DATA } from 'model/createDao.controller'
 import { notifyError, notifySuccess, validURL } from 'helpers'

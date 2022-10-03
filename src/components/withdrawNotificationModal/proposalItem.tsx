@@ -6,7 +6,7 @@ import GradientAvatar from '../gradientAvatar'
 
 import useProposalMetaData from 'hooks/proposal/useProposalMetaData'
 import { AppState } from 'model'
-import { useDaoMetaData } from 'hooks/useDaoMetaData'
+import { useDaoMetaData } from 'hooks/dao/useDaoMetaData'
 
 type ProposalItemProps = {
   proposalAddress: string

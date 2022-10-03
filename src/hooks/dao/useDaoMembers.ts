@@ -1,24 +1,25 @@
-import { useDaoData } from 'hooks/dao'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { AppDispatch } from 'model'
 import { getTokenHolders } from 'model/tokenHolder.controller'
+import { DataLoader } from '@sen-use/web3/dist'
 
 export const useDaoMembers = (daoAddress: string) => {
   const dispatch = useDispatch<AppDispatch>()
-  const daoData = useDaoData(daoAddress)
   const [members, setMembers] = useState<number>()
 
   const fetchDaoMember = useCallback(async () => {
-    const data = await dispatch(getTokenHolders({ daoAddress })).unwrap()
+    const data = await DataLoader.load('load-dao-memmber', () =>
+      dispatch(getTokenHolders({ daoAddress })).unwrap(),
+    )
     const members = data[daoAddress] || 0
-    setMembers(members)
+    return setMembers(members)
   }, [daoAddress, dispatch])
 
   useEffect(() => {
-    if (daoData) fetchDaoMember()
-  }, [daoData, fetchDaoMember])
+    fetchDaoMember()
+  }, [fetchDaoMember])
 
   return members
 }

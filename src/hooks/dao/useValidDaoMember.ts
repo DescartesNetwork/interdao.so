@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccounts, useWalletAddress } from '@sentre/senhub'
 
-import { useDaoMetaData } from 'hooks/useDaoMetaData'
+import { useDaoMetaData } from 'hooks/dao/useDaoMetaData'
 import useOwnerNFT from '../useOwnerNFT'
 import { useDaoData } from './useDaoData'
 

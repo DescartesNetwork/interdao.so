@@ -13,7 +13,7 @@ import GradientAvatar from 'components/gradientAvatar'
 import AmountMembers from './members'
 
 import { getIcon, validURL } from 'helpers'
-import { useDaoMetaData } from 'hooks/useDaoMetaData'
+import { useDaoMetaData } from 'hooks/dao/useDaoMetaData'
 import { useDaoData } from 'hooks/dao'
 import { DaoDetailsProps } from './index'
 import { APP_ROUTE } from 'configs/route'

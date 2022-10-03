@@ -24,7 +24,7 @@ import { MintAvatar, MintSymbol } from '@sen-use/app'
 import GradientAvatar from 'components/gradientAvatar'
 
 import { AppState } from 'model'
-import { useDaoMetaData } from 'hooks/useDaoMetaData'
+import { useDaoMetaData } from 'hooks/dao/useDaoMetaData'
 import useValidDaoMember from 'hooks/dao/useValidDaoMember'
 import { getIcon, validURL } from 'helpers'
 

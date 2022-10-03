@@ -27,6 +27,6 @@ export const COMPONENT_CONFIGS: ComponentConfigs<IDS>[] = [
 
 export const TEMPLATE_CONFIGS: TemplateConfig<IDS> = {
   name: TemplateNames.SplApprove,
-  title: 'SPL/Transfer',
+  title: 'SPL/Approve',
   components: COMPONENT_CONFIGS,
 }
