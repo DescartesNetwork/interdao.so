@@ -1,4 +1,4 @@
-import { Alert } from 'antd'
+import { Alert, Card, Spin } from 'antd'
 import { Component, ErrorInfo, lazy, ReactNode, Suspense } from 'react'
 
 import { useTemplateWithProposal } from './hooks/useTemplateWithProposal'
@@ -28,12 +28,24 @@ export const TemplateProposalLoader = ({
 }: PropsTemplateProposalLoader) => {
   const template = useTemplateWithProposal(proposalAddress)
   const Component = lazy(() => import(`./view/${template}/proposal`))
+
+  if (!template)
+    return (
+      <Spin spinning tip="Loading...">
+        <Card
+          bordered={false}
+          className="proposal-card"
+          bodyStyle={{ padding: '24px 12px 0 0', minHeight: 150 }}
+          hoverable
+        />
+      </Spin>
+    )
   return (
-    <ErrorBoundary>
+    <Alert.ErrorBoundary>
       <Suspense fallback={<div />}>
         <Component proposalAddress={proposalAddress} />
       </Suspense>
-    </ErrorBoundary>
+    </Alert.ErrorBoundary>
   )
 }
 

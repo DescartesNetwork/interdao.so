@@ -8,6 +8,7 @@ const NumberInput = ({
   value,
   handleChange,
   defaultValue,
+  disabled,
   ...rest
 }: {
   id: string
@@ -26,6 +27,8 @@ const NumberInput = ({
       value={value}
       onValue={(value) => handleChange(id, value)}
       {...rest}
+      disabled={false}
+      readOnly={disabled}
     />
   )
 }

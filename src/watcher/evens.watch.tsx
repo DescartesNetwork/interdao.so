@@ -1,6 +1,5 @@
 import { Fragment, useCallback, useEffect } from 'react'
 
-console.log('window', window.interDao)
 // Watch id
 type WatchState = {
   id: number

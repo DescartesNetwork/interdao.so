@@ -166,7 +166,7 @@ const ProposalList = ({ daoAddress }: ProposalListProps) => {
         <Row>
           {filterProposalAddresses.length ? (
             filterProposalAddresses.map((proposalAddress) => (
-              <Col key={proposalAddress} span={24}>
+              <Col key={proposalAddress} span={24} style={{ minHeight: 150 }}>
                 <LazyLoad height={176}>
                   <TemplateProposalLoader proposalAddress={proposalAddress} />
                 </LazyLoad>

@@ -18,6 +18,7 @@ import { useAnchorProvider } from 'hooks/useAnchorProvider'
 import { useInitProposalIx } from 'hooks/instructions/useInitProposalIx'
 import { useDaoData } from 'hooks/dao'
 import { notifyError, notifySuccess } from 'helpers'
+import { TemplateConfig } from 'templates'
 
 const {
   sol: { taxman, fee },
@@ -27,7 +28,7 @@ const {
 export type ProposalMetaData = {
   title: string
   description: string
-  templateName: string
+  templateConfig: TemplateConfig<any>
   templateData?: any
 }
 
@@ -38,9 +39,8 @@ const DEFAULT_MECHANISM = ConsensusMechanisms.StakedTokenCounter
 
 const ProposalInitialization = () => {
   const daos = useSelector((state: AppState) => state.daos)
-  const { daoAddress, serializedTxs, templateData, templateName } = useSelector(
-    (state: AppState) => state.template,
-  )
+  const { daoAddress, serializedTxs, templateData, templateConfig } =
+    useSelector((state: AppState) => state.template)
   const daoData = useDaoData(daoAddress)
 
   const [mechanism, setMechanism] = useState(DEFAULT_MECHANISM)
@@ -61,10 +61,10 @@ const ProposalInitialization = () => {
     return {
       title,
       description,
-      templateName: templateName!,
+      templateConfig: templateConfig!,
       templateData,
     }
-  }, [description, templateData, templateName, title])
+  }, [description, templateData, templateConfig, title])
 
   const uploadMetaData = useCallback(async () => {
     const { digest } = await ipfs.methods.proposalMetaData.set(proposalMetaData)

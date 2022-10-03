@@ -15,14 +15,19 @@ import { useDaoData } from 'hooks/dao'
 
 type NativeTemplateData = TemplateData<IDS>
 
-const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
+const Create = ({
+  daoAddress = '',
+  defaultData,
+}: PropsCreateComponent<NativeTemplateData>) => {
   const daoData = useDaoData(daoAddress)
-  const [formData, setFormData] = useSetState<NativeTemplateData>({
-    viewAmount: '',
-    viewDelegate: '',
-    viewMint: '',
-    viewSource: daoData?.master.toBase58()!,
-  })
+  const [formData, setFormData] = useSetState<NativeTemplateData>(
+    defaultData || {
+      viewAmount: '',
+      viewDelegate: '',
+      viewMint: '',
+      viewSource: daoData?.master.toBase58()!,
+    },
+  )
   const { confirm, close } = useConfirmIdl()
   const getMintDecimals = useGetMintDecimals()
 
@@ -44,7 +49,7 @@ const Create = ({ daoAddress = '' }: PropsCreateComponent) => {
         amountBN.toNumber(),
       ),
     )
-    return confirm(daoAddress, TEMPLATE_CONFIGS.name, formData, [tx])
+    return confirm(daoAddress, TEMPLATE_CONFIGS, formData, [tx])
   }
 
   return (

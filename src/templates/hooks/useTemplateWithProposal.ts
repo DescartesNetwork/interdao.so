@@ -8,9 +8,9 @@ export const useTemplateWithProposal = (proposalAddress: string) => {
   const { metaData, loading } = useProposalMetaData(proposalAddress)
 
   const getTemplateName = useCallback(() => {
-    if (!metaData || loading) return setTemplateName(undefined)
-    // @ts-ignore
-    return setTemplateName(metaData.templateName)
+    const templateName = metaData?.templateConfig?.name
+    if (!templateName || loading) return setTemplateName(undefined)
+    return setTemplateName(templateName)
   }, [loading, metaData])
   useEffect(() => {
     getTemplateName()

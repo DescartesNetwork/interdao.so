@@ -6,17 +6,17 @@ export const COMPONENT_CONFIGS: ComponentConfigs<IDS>[] = [
   {
     id: 'viewAmount',
     type: 'number',
-    title: 'Source',
+    title: 'Amount',
     prefix: {
       id: 'viewMint',
       type: 'mint-select',
-      title: 'Source',
     },
   },
   {
     id: 'viewSource',
     type: 'address',
     title: 'Source',
+    disabled: true,
   },
   {
     id: 'viewDelegate',
@@ -27,5 +27,6 @@ export const COMPONENT_CONFIGS: ComponentConfigs<IDS>[] = [
 
 export const TEMPLATE_CONFIGS: TemplateConfig<IDS> = {
   name: TemplateNames.SplApprove,
+  title: 'SPL/Transfer',
   components: COMPONENT_CONFIGS,
 }

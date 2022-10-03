@@ -6,7 +6,7 @@ import configs from 'configs'
 import { AppDispatch } from 'model'
 import { clearTemplate, confirmTemplate } from 'model/template.controller'
 
-import { TemplateNames } from './../index'
+import { TemplateConfig } from './../index'
 import { useAppRoute } from '@sentre/senhub'
 
 const {
@@ -20,7 +20,7 @@ export const useConfirmIdl = () => {
   const confirm = useCallback(
     async (
       daoAddress: string,
-      templateName: TemplateNames,
+      templateConfig: TemplateConfig<any>,
       templateData: Record<string, string>,
       transactions: web3.Transaction[],
     ) => {
@@ -36,7 +36,12 @@ export const useConfirmIdl = () => {
           })
           .toString('base64')
       })
-      const template = { templateName, templateData, serializedTxs, daoAddress }
+      const template = {
+        templateConfig,
+        templateData,
+        serializedTxs,
+        daoAddress,
+      }
       await dispatch(confirmTemplate(template))
       return appRoute.to(`/new-proposal`)
     },

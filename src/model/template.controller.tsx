@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { TemplateNames } from 'templates'
+import { TemplateConfig, TemplateNames } from 'templates'
 
 /**
  * Interface & Utility
@@ -7,7 +7,7 @@ import { TemplateNames } from 'templates'
 
 export type TemplateState = {
   visible: boolean
-  templateName?: TemplateNames
+  templateConfig?: TemplateConfig<any>
   templateData: Record<string, string>
   serializedTxs: string[]
   daoAddress: string
@@ -20,7 +20,7 @@ export type TemplateState = {
 const NAME = 'template'
 const initialState: TemplateState = {
   visible: false,
-  templateName: undefined,
+  templateConfig: undefined,
   templateData: {},
   serializedTxs: [],
   daoAddress: '',
@@ -41,7 +41,7 @@ export const confirmTemplate = createAsyncThunk(
   `${NAME}/confirmTemplate`,
   async (template: {
     daoAddress: string
-    templateName: TemplateNames
+    templateConfig: TemplateConfig<any>
     serializedTxs?: string[]
     templateData: Record<string, string>
   }) => {

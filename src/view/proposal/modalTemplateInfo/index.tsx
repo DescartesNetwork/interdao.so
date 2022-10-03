@@ -1,4 +1,5 @@
 import { Col, Modal, Row, Typography } from 'antd'
+import useProposalMetaData from 'hooks/proposal/useProposalMetaData'
 import { TemplateInfoLoader } from 'templates/templateLoader'
 
 type TemplateInfoProps = {
@@ -12,6 +13,7 @@ const ModalTemplateInfo = ({
   visible,
   setVisible,
 }: TemplateInfoProps) => {
+  const { metaData } = useProposalMetaData(proposalAddress)
   return (
     <Modal
       className="template-card template-info"
@@ -25,7 +27,9 @@ const ModalTemplateInfo = ({
           span={24}
           style={{ textAlign: 'left' }}
         >
-          <Typography.Title level={4}>Template information</Typography.Title>
+          <Typography.Title level={4}>
+            {metaData?.templateConfig.title}
+          </Typography.Title>
         </Col>
         <Col span={24} className="template-info-body">
           <TemplateInfoLoader proposalAddress={proposalAddress} />

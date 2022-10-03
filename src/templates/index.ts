@@ -12,12 +12,14 @@ export enum TemplateNames {
 
 export type TemplateConfig<T extends string> = {
   name: TemplateNames
+  title: string
   components: ComponentConfigs<T>[]
 }
 
 // Component Type
-export type PropsCreateComponent = {
+export type PropsCreateComponent<T> = {
   daoAddress: string
+  defaultData?: T
 }
 // System type
 export type TemplateIdl = {

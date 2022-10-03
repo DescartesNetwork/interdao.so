@@ -8,6 +8,7 @@ import MintInput from './mintInput'
 export type ComponentConfigs<T extends string> = {
   id: T
   type: 'number' | 'address' | 'mint-select'
+  disabled?: boolean
   title?: string
   prefix?: ComponentConfigs<T>
 }
@@ -30,7 +31,7 @@ const RenderComponent = ({
   templateData,
   onChange,
 }: RenderComponentProps) => {
-  const { id, prefix, type } = configs
+  const { id, prefix, type, disabled } = configs
 
   const value = templateData[id]
 
@@ -38,12 +39,12 @@ const RenderComponent = ({
     if (!prefix) return
     return (
       <RenderComponent
-        configs={prefix}
+        configs={{ ...prefix, disabled }}
         onChange={onChange}
         templateData={templateData}
       />
     )
-  }, [onChange, prefix, templateData])
+  }, [disabled, onChange, prefix, templateData])
 
   const componentProps = useMemo(() => {
     return {
@@ -51,8 +52,9 @@ const RenderComponent = ({
       prefix: prefixComponent,
       id,
       value,
+      disabled,
     }
-  }, [id, onChange, prefixComponent, value])
+  }, [disabled, id, onChange, prefixComponent, value])
 
   if (type === 'number') return <NumberInput {...componentProps} />
   if (type === 'mint-select') return <MintInput {...componentProps} />
@@ -97,3 +99,31 @@ const TemplateForm = ({
 }
 
 export default TemplateForm
+
+export const TemplateInfo = ({
+  components,
+  templateData,
+}: TemplateFormProps) => {
+  return (
+    <Row gutter={[24, 24]}>
+      {components.map((configs) => {
+        return (
+          <Col span={24} key={configs.id}>
+            <Space direction="vertical" size={4} style={{ width: '100%' }}>
+              {configs.title && (
+                <Typography.Text type="secondary">
+                  {configs.title}
+                </Typography.Text>
+              )}
+              <RenderComponent
+                configs={{ ...configs, disabled: true }}
+                onChange={() => {}}
+                templateData={templateData}
+              />
+            </Space>
+          </Col>
+        )
+      })}
+    </Row>
+  )
+}
