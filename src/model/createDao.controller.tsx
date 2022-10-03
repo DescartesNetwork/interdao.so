@@ -3,7 +3,7 @@ import { DaoRegime, DaoRegimes } from '@interdao/core'
 import { web3 } from '@project-serum/anchor'
 import BN from 'bn.js'
 
-export const DEFAULT_META_DATA: MetaData = {
+export const DEFAULT_META_DATA: DaoMetaData = {
   daoName: '',
   description: '',
   image: '',
@@ -30,14 +30,14 @@ export type DaoType = 'flexible-dao'
 export type CreateDaoData = {
   mintAddress: string
   supply: BN
-  metadata: MetaData
+  metadata: DaoMetaData
   dao?: web3.Keypair
   regime: DaoRegime
   isPublic: boolean
   isNft: boolean
 }
 
-export type MetaData = {
+export type DaoMetaData = {
   daoName: string
   description: string
   image: string | ArrayBuffer | null
@@ -93,7 +93,7 @@ export const submitStepChooseType = createAsyncThunk<
 
 export const submitStepDaoDetail = createAsyncThunk<
   CreateDaoState,
-  { metadata: MetaData },
+  { metadata: DaoMetaData },
   { state: { createDao: CreateDaoState } }
 >(`${NAME}/submitStepDaoDetail`, async ({ metadata }, { getState }) => {
   const { createDao } = getState()

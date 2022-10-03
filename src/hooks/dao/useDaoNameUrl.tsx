@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import useMetaData from 'hooks/useMetaData'
+import { useDaoMetaData } from 'hooks/useDaoMetaData'
 
 export const deriveDaoNameURL = (daoName: string) =>
   daoName.replace(/[\W_]+/gm, '-').toLocaleLowerCase()
 
 const useDaoNameUrl = (daoAddress: string) => {
-  const { metaData } = useMetaData(daoAddress)
+  const metaData = useDaoMetaData(daoAddress)
   const [daoNameUrl, setDaoNameUrl] = useState<string>()
 
   const loadDaoName = useCallback(() => {

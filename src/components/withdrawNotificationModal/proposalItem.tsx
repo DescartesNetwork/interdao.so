@@ -6,7 +6,7 @@ import GradientAvatar from '../gradientAvatar'
 
 import useProposalMetaData from 'hooks/proposal/useProposalMetaData'
 import { AppState } from 'model'
-import useMetaData from 'hooks/useMetaData'
+import { useDaoMetaData } from 'hooks/useDaoMetaData'
 
 type ProposalItemProps = {
   proposalAddress: string
@@ -15,9 +15,7 @@ type ProposalItemProps = {
 const ProposalItem = ({ proposalAddress }: ProposalItemProps) => {
   const proposals = useSelector((state: AppState) => state.proposal)
   const { metaData: proposalMetaData } = useProposalMetaData(proposalAddress)
-  const { metaData: daoMetaData } = useMetaData(
-    proposals[proposalAddress].dao.toBase58(),
-  )
+  const daoMetaData = useDaoMetaData(proposals[proposalAddress].dao.toBase58())
 
   return (
     <Space size={8} style={{ width: '100%' }}>

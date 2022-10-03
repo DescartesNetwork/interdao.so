@@ -13,14 +13,14 @@ import GradientAvatar from 'components/gradientAvatar'
 import AmountMembers from './members'
 
 import { getIcon, validURL } from 'helpers'
-import useMetaData from 'hooks/useMetaData'
+import { useDaoMetaData } from 'hooks/useDaoMetaData'
 import { useDaoData } from 'hooks/dao'
 import { DaoDetailsProps } from './index'
 import { APP_ROUTE } from 'configs/route'
 
 const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
   const history = useHistory()
-  const { metaData, loading } = useMetaData(daoAddress)
+  const metaData = useDaoMetaData(daoAddress)
   const daoData = useDaoData(daoAddress)
   const width = useWidth()
   const walletAddress = useWalletAddress()
@@ -38,7 +38,7 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
 
   return (
     <Card bordered={false} style={{ height: '100%' }}>
-      <Spin spinning={loading} tip="Loading...">
+      <Spin spinning={!metaData} tip="Loading...">
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Row justify="space-between" wrap={false}>

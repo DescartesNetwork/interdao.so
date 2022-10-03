@@ -24,7 +24,7 @@ import { MintAvatar, MintSymbol } from '@sen-use/app'
 import GradientAvatar from 'components/gradientAvatar'
 
 import { AppState } from 'model'
-import useMetaData from 'hooks/useMetaData'
+import { useDaoMetaData } from 'hooks/useDaoMetaData'
 import useValidDaoMember from 'hooks/dao/useValidDaoMember'
 import { getIcon, validURL } from 'helpers'
 
@@ -51,7 +51,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
     (state: AppState) => state.daos[daoAddress],
   )
   const width = useWidth()
-  const { metaData, loading } = useMetaData(daoAddress)
+  const metaData = useDaoMetaData(daoAddress)
   const { validMember } = useValidDaoMember(daoAddress)
   const parseRegime = Object.keys(regime)?.[0]
 
@@ -62,7 +62,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
   }, [width])
 
   const handleClick = async () => {
-    if (loading)
+    if (!metaData)
       return window.notify({
         type: 'warning',
         description: 'Data is loading',
@@ -99,7 +99,7 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
         <RegimeTag regime={regime} special />
       </Col>
       <Col span={24}>
-        <Spin spinning={loading} tip="Loading...">
+        <Spin spinning={!metaData} tip="Loading...">
           <Card bordered={false}>
             <Row gutter={[20, 20]}>
               <Col span={24} style={{ minHeight: 88 }}>

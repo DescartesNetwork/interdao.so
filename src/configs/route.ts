@@ -66,7 +66,7 @@ export const APP_ROUTE = {
   proposalDetails: {
     path: wrapAppRoute(PROPOSAL_DETAILS),
     generatePath: (data: ExtractRouteParams<typeof PROPOSAL_DETAILS>) =>
-      generatePathRaw(wrapAppRoute(LIST_DAOS), data),
+      generatePathRaw(wrapAppRoute(PROPOSAL_DETAILS), data),
     component: ProposalDetails,
   },
   notFound: {

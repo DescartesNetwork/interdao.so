@@ -1,7 +1,7 @@
-import { MetaData } from 'model/createDao.controller'
+import { DaoMetaData } from 'model/createDao.controller'
 import lunr, { Index } from 'lunr'
 
-export type SearchData = { daoAddress: string } & MetaData
+export type SearchData = { daoAddress: string } & DaoMetaData
 export type RegisterDaoData = Record<string, SearchData>
 class DaoProvider {
   private daoMap: Map<string, SearchData>

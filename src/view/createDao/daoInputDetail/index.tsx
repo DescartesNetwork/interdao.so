@@ -7,7 +7,7 @@ import { validURL } from 'helpers'
 
 import { AppDispatch, AppState } from 'model'
 import {
-  MetaData,
+  DaoMetaData,
   revertPrevStep,
   submitStepDaoDetail,
 } from 'model/createDao.controller'
@@ -17,7 +17,7 @@ const DaoInputDetails = () => {
   const defaultMetadata = useSelector(
     (state: AppState) => state.createDao.data.metadata,
   )
-  const [metadata, setMetadata] = useState<MetaData>(defaultMetadata)
+  const [metadata, setMetadata] = useState<DaoMetaData>(defaultMetadata)
   const dispatch = useDispatch<AppDispatch>()
 
   const validLink = useMemo(() => {

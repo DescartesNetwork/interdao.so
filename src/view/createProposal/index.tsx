@@ -23,7 +23,6 @@ import { APP_ROUTE } from 'configs/route'
 
 const {
   sol: { taxman, fee },
-  manifest: { appId },
 } = configs
 
 export type ProposalMetaData = {

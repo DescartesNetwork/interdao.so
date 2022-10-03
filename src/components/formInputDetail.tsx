@@ -15,16 +15,16 @@ import IonIcon from '@sentre/antd-ionicon'
 
 import { UploadChangeParam } from 'antd/lib/upload'
 import { fileToBase64 } from 'helpers'
-import { MetaData } from 'model/createDao.controller'
+import { DaoMetaData } from 'model/createDao.controller'
 
 type FormInputDetailProps = {
-  metadata: MetaData
-  setMetadata: (metadata: MetaData) => void
+  metadata: DaoMetaData
+  setMetadata: (metadata: DaoMetaData) => void
 }
 
 const FormInputDetail = ({ metadata, setMetadata }: FormInputDetailProps) => {
   const formatMetaData = async (imgBase64: string | ArrayBuffer | null) => {
-    const nextMetaData: MetaData = {
+    const nextMetaData: DaoMetaData = {
       ...metadata,
       image: imgBase64,
     }

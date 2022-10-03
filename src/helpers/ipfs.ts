@@ -6,7 +6,7 @@ import { CID } from 'multiformats/cid'
 import { DataLoader } from '@sen-use/web3'
 
 import { CommentProposal } from 'model/comments.controller'
-import { MetaData } from 'model/createDao.controller'
+import { DaoMetaData } from 'model/createDao.controller'
 import { ProposalMetaData } from 'view/createProposal'
 
 const KEY =
@@ -157,7 +157,7 @@ export class IPFS<
 }
 
 type MapTypes = {
-  daoMetadata: MetaData // Dao
+  daoMetadata: DaoMetaData // Dao
   proposalMetaData: ProposalMetaData
   proposalComments: CommentProposal[]
 }

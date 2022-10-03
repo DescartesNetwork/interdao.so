@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Col, Row } from 'antd'
 import ActionButton from './actionButton'
 
-import useMetaData from 'hooks/useMetaData'
+import { useDaoMetaData } from 'hooks/useDaoMetaData'
 import FormInputDetail from 'components/formInputDetail'
 import { DEFAULT_META_DATA } from 'model/createDao.controller'
 import { notifyError, notifySuccess, validURL } from 'helpers'
@@ -11,7 +11,7 @@ import { ipfs } from 'helpers/ipfs'
 
 const Information = ({ daoAddress }: { daoAddress: string }) => {
   const [loading, setLoading] = useState(false)
-  const { metaData } = useMetaData(daoAddress)
+  const metaData = useDaoMetaData(daoAddress)
   const [nextMetadata, setNextMetadata] = useState(metaData)
 
   const updateMetaData = async () => {

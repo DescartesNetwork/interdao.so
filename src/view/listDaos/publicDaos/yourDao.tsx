@@ -10,12 +10,7 @@ import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import DaoCard from './daoCard'
 
 import { AppState } from 'model'
-import configs from 'configs'
 import { APP_ROUTE } from 'configs/route'
-
-const {
-  manifest: { appId },
-} = configs
 
 const YourDaos = () => {
   const walletAddress = useWalletAddress()

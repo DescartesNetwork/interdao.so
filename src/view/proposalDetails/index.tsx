@@ -23,18 +23,19 @@ export type ProposalChildCardProps = {
 
 const ProposalDetails = () => {
   const history = useHistory()
-  const { proposalAddress, daoAddress } = useParams<{
-    daoAddress: string
+  const { proposalAddress } = useParams<{
     proposalAddress: string
   }>()
+  const proposalData = useProposal(proposalAddress)
   const { loading } = useProposalMetaData(proposalAddress)
-  const proposal = useProposal(proposalAddress)
+
+  const daoAddress = proposalData?.dao?.toBase58()
 
   const checkValidProposalAddress = useCallback(() => {
-    if (!proposal) {
+    if (!proposalData) {
       return history.push(APP_ROUTE.notFound.generatePath({}))
     }
-  }, [proposal, history])
+  }, [proposalData, history])
 
   useEffect(() => {
     checkValidProposalAddress()
@@ -49,11 +50,12 @@ const ProposalDetails = () => {
               <Button
                 type="text"
                 icon={<IonIcon name="arrow-back-outline" />}
-                onClick={() =>
-                  history.push(
-                    APP_ROUTE.daoDetails.generatePath({ daoAddress }),
-                  )
-                }
+                onClick={() => {
+                  const listDaoRoute = APP_ROUTE.daoDetails.generatePath({
+                    daoAddress,
+                  })
+                  return history.push(listDaoRoute)
+                }}
               >
                 Back
               </Button>
