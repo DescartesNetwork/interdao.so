@@ -11,6 +11,7 @@ import DaoCard from './daoCard'
 
 import { AppState } from 'model'
 import configs from 'configs'
+import { APP_ROUTE } from 'configs/route'
 
 const {
   manifest: { appId },
@@ -53,7 +54,7 @@ const YourDaos = () => {
               You have no DAO yet!
             </Typography.Text>
             <Button
-              onClick={() => history.push(`/app/${appId}/dao/create-dao`)}
+              onClick={() => history.push(APP_ROUTE.createDao.generatePath({}))}
             >
               Build your DAO
             </Button>

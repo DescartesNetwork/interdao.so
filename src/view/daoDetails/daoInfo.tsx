@@ -16,12 +16,7 @@ import { getIcon, validURL } from 'helpers'
 import useMetaData from 'hooks/useMetaData'
 import { useDaoData } from 'hooks/dao'
 import { DaoDetailsProps } from './index'
-import configs from 'configs'
-import useDaoNameUrl from 'hooks/dao/useDaoNameUrl'
-
-const {
-  manifest: { appId },
-} = configs
+import { APP_ROUTE } from 'configs/route'
 
 const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
   const history = useHistory()
@@ -30,8 +25,6 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
   const width = useWidth()
   const walletAddress = useWalletAddress()
 
-  const { daoNameUrl } = useDaoNameUrl(daoAddress)
-
   const { regime, nonce, mint, authority } = daoData || {
     regime: {},
     nonce: new BN(0),
@@ -39,7 +32,7 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
   }
 
   const onEditDAO = () =>
-    history.push(`/app/${appId}/dao/${daoAddress}/${daoNameUrl}/edit`)
+    history.push(APP_ROUTE.editDao.generatePath({ daoAddress }))
 
   const mobileScreen = width < 768
 

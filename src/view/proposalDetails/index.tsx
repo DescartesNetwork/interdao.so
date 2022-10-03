@@ -10,16 +10,11 @@ import CardProgress from './cardProgress'
 import History from './history'
 import Comments from '../proposal/components/comments'
 
-import configs from 'configs'
 import useProposalMetaData from 'hooks/proposal/useProposalMetaData'
 
 import './index.less'
-import useDaoNameUrl from 'hooks/dao/useDaoNameUrl'
 import useProposal from 'hooks/proposal/useProposal'
-
-const {
-  manifest: { appId },
-} = configs
+import { APP_ROUTE } from 'configs/route'
 
 export type ProposalChildCardProps = {
   proposalAddress: string
@@ -34,11 +29,10 @@ const ProposalDetails = () => {
   }>()
   const { loading } = useProposalMetaData(proposalAddress)
   const proposal = useProposal(proposalAddress)
-  const { daoNameUrl } = useDaoNameUrl(daoAddress)
 
   const checkValidProposalAddress = useCallback(() => {
     if (!proposal) {
-      return history.push(`/app/${appId}/page-not-found`)
+      return history.push(APP_ROUTE.notFound.generatePath({}))
     }
   }, [proposal, history])
 
@@ -56,7 +50,9 @@ const ProposalDetails = () => {
                 type="text"
                 icon={<IonIcon name="arrow-back-outline" />}
                 onClick={() =>
-                  history.push(`/app/${appId}/dao/${daoAddress}/${daoNameUrl}`)
+                  history.push(
+                    APP_ROUTE.daoDetails.generatePath({ daoAddress }),
+                  )
                 }
               >
                 Back

@@ -24,7 +24,7 @@ const EDIT_DAO = `/dao/:daoAddress/edit`
 const DAO_DETAILS = `/dao/:daoAddress`
 
 const CREATE_PROPOSAL = `/create-proposal`
-const PROPOSAL_DETAILS = `/create-proposal`
+const PROPOSAL_DETAILS = `/proposal/:proposalAddress`
 
 const NOT_FOUND = `/page-not-found`
 

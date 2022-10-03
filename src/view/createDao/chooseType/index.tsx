@@ -14,7 +14,7 @@ import {
 
 import { AppDispatch } from 'model'
 import { DaoType, submitStepChooseType } from 'model/createDao.controller'
-import configs from 'configs'
+import { APP_ROUTE } from 'configs/route'
 
 const DAO_TYPE = [
   {
@@ -31,10 +31,6 @@ const DAO_TYPE = [
     disabled: true,
   },
 ]
-
-const {
-  manifest: { appId },
-} = configs
 
 const ChooseDaoType = () => {
   const [daoType, setDaoType] = useState<DaoType>('flexible-dao')
@@ -89,7 +85,7 @@ const ChooseDaoType = () => {
           <Col flex="auto">
             <Button
               type="text"
-              onClick={() => history.push(`/app/${appId}/dao`)}
+              onClick={() => history.push(APP_ROUTE.listDaos.generatePath({}))}
               size="large"
             >
               Cancel

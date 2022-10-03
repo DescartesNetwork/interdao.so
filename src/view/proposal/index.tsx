@@ -8,15 +8,11 @@ import IonIcon from '@sentre/antd-ionicon'
 import ProposalList from './proposalList'
 import DaoDetails from '../daoDetails'
 
-import configs from 'configs'
 import useValidDaoMember from 'hooks/dao/useValidDaoMember'
 import { AppState } from 'model'
 
 import './index.less'
-
-const {
-  manifest: { appId },
-} = configs
+import { APP_ROUTE } from 'configs/route'
 
 const Proposal = () => {
   const history = useHistory()
@@ -32,7 +28,7 @@ const Proposal = () => {
         type: 'warning',
         description: 'You are not a member of this DAO',
       })
-      return history.push(`/app/${appId}/dao`)
+      return history.push(APP_ROUTE.listDaos.generatePath({}))
     }
   }, [checking, daoAddress, history, isPublic, validMember])
 
@@ -44,7 +40,7 @@ const Proposal = () => {
             <Button
               icon={<IonIcon name="arrow-back-outline" />}
               type="text"
-              onClick={() => history.push(`/app/${appId}/dao`)}
+              onClick={() => history.push(APP_ROUTE.listDaos.generatePath({}))}
               style={{ marginLeft: -8 }}
             >
               Back

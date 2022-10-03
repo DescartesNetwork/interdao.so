@@ -1,20 +1,15 @@
-import { useGetMintDecimals } from '@sentre/senhub'
 import { useCallback, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import { useGetMintDecimals } from '@sentre/senhub'
 import { BN } from '@project-serum/anchor'
 
 import { ipfs } from 'helpers/ipfs'
 import { notifySuccess } from 'helpers'
 import { AppState } from 'model'
-import { deriveDaoNameURL } from './useDaoNameUrl'
-import configs from 'configs'
+import { APP_ROUTE } from 'configs/route'
 
-const {
-  manifest: { appId },
-} = configs
-
-const useFlexibleDao = () => {
+const useCreateDao = () => {
   const [loading, setLoading] = useState(false)
   const createDaoData = useSelector((state: AppState) => state.createDao.data)
   const getMintDecimals = useGetMintDecimals()
@@ -40,8 +35,7 @@ const useFlexibleDao = () => {
         isPublic,
       )
       notifySuccess('Create DAO', txId)
-      const daoNameUrl = deriveDaoNameURL(metadata.daoName)
-      return history.push(`/app/${appId}/dao/${daoAddress}/${daoNameUrl}`)
+      return history.push(APP_ROUTE.daoDetails.generatePath({ daoAddress }))
     } catch (er: any) {
       console.log('er', er)
       window.notify({ type: 'error', description: er.message })
@@ -53,4 +47,4 @@ const useFlexibleDao = () => {
   return { createFlexDAO, loading }
 }
 
-export default useFlexibleDao
+export default useCreateDao

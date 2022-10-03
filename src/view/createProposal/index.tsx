@@ -19,6 +19,7 @@ import { useInitProposalIx } from 'hooks/instructions/useInitProposalIx'
 import { useDaoData } from 'hooks/dao'
 import { notifyError, notifySuccess } from 'helpers'
 import { TemplateConfig } from 'templates'
+import { APP_ROUTE } from 'configs/route'
 
 const {
   sol: { taxman, fee },
@@ -112,7 +113,9 @@ const ProposalInitialization = () => {
 
       notifySuccess('Create a new proposal', txIds[0])
       dispatch(clearTemplate())
-      return history.push(`/app/${appId}/proposal/${proposalAddress}`)
+      return history.push(
+        APP_ROUTE.proposalDetails.generatePath({ proposalAddress }),
+      )
     } catch (er) {
       notifyError(er)
     } finally {
@@ -135,7 +138,7 @@ const ProposalInitialization = () => {
 
   useEffect(() => {
     if (!serializedTxs.length || !daoAddress) {
-      return history.push(`/app/${appId}/dao`)
+      return history.push(APP_ROUTE.listDaos.generatePath({}))
     }
   }, [daoAddress, history, serializedTxs, serializedTxs.length])
 
@@ -198,7 +201,9 @@ const ProposalInitialization = () => {
             <Col flex="auto">
               <Button
                 type="text"
-                onClick={() => history.push(`/app/${appId}/dao/${daoAddress}`)}
+                onClick={() =>
+                  history.push(APP_ROUTE.listDaos.generatePath({}))
+                }
                 size="large"
               >
                 Cancel

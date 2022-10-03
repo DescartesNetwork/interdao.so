@@ -73,10 +73,6 @@ const DaoCard = ({ daoAddress }: DaoCardProps) => {
         description: 'You are not a member of this DAO',
       })
 
-    console.log(
-      'APP_ROUTE.daoDetails.generatePath({ daoAddress })',
-      APP_ROUTE.daoDetails.generatePath({ daoAddress }),
-    )
     history.push(APP_ROUTE.daoDetails.generatePath({ daoAddress }))
   }
 

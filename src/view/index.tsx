@@ -23,7 +23,6 @@ const View = () => {
     setBackground({ light: BG_LIGHT, dark: BG })
   }, [setBackground])
 
-  console.log('APP_ROUTE.daoDetails', APP_ROUTE.daoDetails)
   return (
     <Row gutter={[24, 24]} justify="center">
       <Loading>

@@ -1,11 +1,11 @@
 import { Button } from 'antd'
 import { useSelector } from 'react-redux'
 
-import useFlexibleDao from 'hooks/dao/useFlexibleDao'
+import useCreateDao from 'hooks/instructions/useCreateDao'
 import { AppState } from 'model'
 
 const ButtonFlexDao = () => {
-  const { createFlexDAO, loading } = useFlexibleDao()
+  const { createFlexDAO, loading } = useCreateDao()
 
   return (
     <Button

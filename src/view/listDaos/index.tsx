@@ -8,13 +8,8 @@ import YourDaos from './publicDaos/yourDao'
 import AvailableDaos from './availabelDaos'
 import WithdrawNotificationModal from 'components/withdrawNotificationModal'
 
-import configs from 'configs'
-
 import './index.less'
-
-const {
-  manifest: { appId },
-} = configs
+import { APP_ROUTE } from 'configs/route'
 
 const Dao = () => {
   const history = useHistory()
@@ -33,7 +28,9 @@ const Dao = () => {
               tabBarExtraContent={
                 <Button
                   type="primary"
-                  onClick={() => history.push(`/app/${appId}/dao/create-dao`)}
+                  onClick={() =>
+                    history.push(APP_ROUTE.createDao.generatePath({}))
+                  }
                   icon={<IonIcon name="add-outline" />}
                 >
                   Create a DAO

@@ -1,21 +1,17 @@
+import { useHistory } from 'react-router-dom'
 import { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import { web3 } from '@project-serum/anchor'
 
-import configs from 'configs'
 import { AppDispatch } from 'model'
 import { clearTemplate, confirmTemplate } from 'model/template.controller'
 
 import { TemplateConfig } from './../index'
-import { useAppRoute } from '@sentre/senhub'
-
-const {
-  manifest: { appId },
-} = configs
+import { APP_ROUTE } from 'configs/route'
 
 export const useConfirmIdl = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const appRoute = useAppRoute(appId)
+  const history = useHistory()
 
   const confirm = useCallback(
     async (
@@ -43,9 +39,9 @@ export const useConfirmIdl = () => {
         daoAddress,
       }
       await dispatch(confirmTemplate(template))
-      return appRoute.to(`/new-proposal`)
+      history.push(APP_ROUTE.createProposal.generatePath({}))
     },
-    [appRoute, dispatch],
+    [dispatch, history],
   )
 
   const close = useCallback(async () => {
