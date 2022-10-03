@@ -15,7 +15,7 @@ const conf: Record<Net, Conf> = {
    * Development configurations
    */
   devnet: {
-    interDaoProgramId: 'HYXY1dw8aYdy7j81z9bvi4PFzLMbh6gMW6pqS9Eudo4D',
+    interDaoProgramId: '969SsCCV9rQUMwPDHKEVh8Gq8YLdBrh2TT9WnfPg9R16',
     fee: 1000000, // 0.001 SOL
     taxman: '8W6QginLcAydYyMYjxuyKQN56NzeakDE3aRFrAmocS6D',
     taxmanAddress: '8UaZw2jDhJzv5V53569JbCd3bD4BnyCfBH3sjwgajGS9',
