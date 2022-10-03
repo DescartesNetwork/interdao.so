@@ -1,3 +1,4 @@
+import { ComponentConfigs } from './components/templateForm'
 import { RulesData, RulesName } from './core/rule'
 
 // Config
@@ -9,6 +10,11 @@ export enum TemplateNames {
   'ZetaCreate' = 'zeta-create',
 }
 
+export type TemplateConfig<T extends string> = {
+  name: TemplateNames
+  components: ComponentConfigs<T>[]
+}
+
 // Component Type
 export type PropsCreateComponent = {
   daoAddress: string
@@ -16,11 +22,13 @@ export type PropsCreateComponent = {
 // System type
 export type TemplateIdl = {
   name: TemplateNames
-  ixName: string
-  anchor: boolean
-  accounts: (TemplateAccount | TemplateAccountWithRule)[]
-  args: (TemplateArg | TemplateArgWithRule)[]
-  programId: string
+  instructions: {
+    ixName: string
+    anchor: boolean
+    accounts: (TemplateAccount | TemplateAccountWithRule)[]
+    args: (TemplateArg | TemplateArgWithRule)[]
+    programId: string
+  }[]
 }
 
 export type TemplateAccount = {

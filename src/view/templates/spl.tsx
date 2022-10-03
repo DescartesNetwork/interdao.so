@@ -117,7 +117,11 @@ const SPL = ({ daoAddress }: { daoAddress: string }) => {
         </Row>
       </Col>
       <Col xs={24} md={8} className="spl-option-transfer">
-        <TemplateCreateLoader name={template} daoAddress={daoAddress} />
+        <TemplateCreateLoader
+          key={template}
+          name={template}
+          daoAddress={daoAddress}
+        />
       </Col>
     </Row>
   )

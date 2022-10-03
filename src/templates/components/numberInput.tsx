@@ -1,37 +1,32 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
-import { InputProps, Space, Typography } from 'antd'
+import { InputProps } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
-
-import { AppDispatch, AppState } from 'model'
-import { setTemplateData } from 'model/template.controller'
 
 const NumberInput = ({
   id,
-  title,
+  value,
+  handleChange,
   defaultValue,
   ...rest
-}: { id: string; title: string } & InputProps) => {
-  const dispatch = useDispatch<AppDispatch>()
-  const value = useSelector((state: AppState) => state.template.data[id])
-
+}: {
+  id: string
+  value: string
+  handleChange: (id: string, value: string) => void
+  defaultValue?: string
+} & InputProps) => {
   useEffect(() => {
-    if (!!defaultValue && value === undefined)
-      dispatch(setTemplateData({ [id]: defaultValue.toString() }))
-  }, [defaultValue, dispatch, id, value])
+    if (!!defaultValue) handleChange(id, defaultValue)
+  }, [defaultValue, id, handleChange])
 
   return (
-    <Space direction="vertical" size={4} style={{ width: '100%' }}>
-      <Typography.Text type="secondary">{title}</Typography.Text>
-      <NumericInput
-        className="border-less"
-        placeholder="Input Amount"
-        defaultValue={value}
-        onValue={(val) => dispatch(setTemplateData({ [id]: val }))}
-        {...rest}
-      />
-    </Space>
+    <NumericInput
+      className="border-less"
+      placeholder="Input Amount"
+      value={value}
+      onValue={(value) => handleChange(id, value)}
+      {...rest}
+    />
   )
 }
 export default NumberInput

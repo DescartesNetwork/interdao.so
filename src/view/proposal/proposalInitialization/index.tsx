@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { web3, BN } from '@project-serum/anchor'
+import { BN } from '@project-serum/anchor'
 import { ConsensusMechanisms, ConsensusQuorums } from '@interdao/core'
-import { util } from '@sentre/senhub'
 
 import { Button, Card, Col, Divider, Input, Row, Space, Typography } from 'antd'
 import ConsensusMechanismInput from './consensusMechanismInput'
@@ -14,9 +13,11 @@ import ProposalPreview from './proposalPreview'
 import configs from 'configs'
 import { ipfs } from 'helpers/ipfs'
 import { AppState } from 'model'
-import { clearTx } from 'model/template.controller'
-import useDaoNameUrl from 'hooks/dao/useDaoNameUrl'
+import { clearTemplate } from 'model/template.controller'
 import { useAnchorProvider } from 'hooks/useAnchorProvider'
+import { useInitProposalIx } from 'hooks/instructions/useInitProposalIx'
+import { useDaoData } from 'hooks/dao'
+import { notifyError, notifySuccess } from 'helpers'
 
 const {
   sol: { taxman, fee },
@@ -33,25 +34,26 @@ export type ProposalMetaData = {
 const CURRENT_TIME = Number(new Date())
 const ONE_DAY = 24 * 60 * 60 * 1000
 const DEFAULT_DURATION = [CURRENT_TIME + ONE_DAY, CURRENT_TIME + 15 * ONE_DAY]
+const DEFAULT_MECHANISM = ConsensusMechanisms.StakedTokenCounter
 
 const ProposalInitialization = () => {
-  const history = useHistory()
-  const dispatch = useDispatch()
-  const { daoAddress } = useParams<{ daoAddress: string }>()
   const daos = useSelector((state: AppState) => state.daos)
-  const template = useSelector((state: AppState) => state.template)
-
-  const [consensusMechanism, setConsensusMechanism] = useState(
-    ConsensusMechanisms.StakedTokenCounter,
+  const { daoAddress, serializedTxs, templateData, templateName } = useSelector(
+    (state: AppState) => state.template,
   )
+  const daoData = useDaoData(daoAddress)
+
+  const [mechanism, setMechanism] = useState(DEFAULT_MECHANISM)
   const [consensusQuorum, setConsensusQuorum] = useState(ConsensusQuorums.Half)
   const [duration, setDuration] = useState([...DEFAULT_DURATION])
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const { daoNameUrl } = useDaoNameUrl(daoAddress)
+  const history = useHistory()
+  const dispatch = useDispatch()
   const provider = useAnchorProvider()
+  const initProposalIx = useInitProposalIx()
 
   const disabled = !title || !description
 
@@ -59,10 +61,10 @@ const ProposalInitialization = () => {
     return {
       title,
       description,
-      templateName: template.templateName || '',
-      templateData: template.data,
+      templateName: templateName!,
+      templateData,
     }
-  }, [description, template, title])
+  }, [description, templateData, templateName, title])
 
   const uploadMetaData = useCallback(async () => {
     const { digest } = await ipfs.methods.proposalMetaData.set(proposalMetaData)
@@ -71,15 +73,13 @@ const ProposalInitialization = () => {
 
   const newProposal = useCallback(async () => {
     const { authority } = daos[daoAddress]
-    if (!template.tx) return
+    if (!serializedTxs.length) return
+
     try {
       setLoading(true)
       const digest = await uploadMetaData()
-
       const metadata = Buffer.from(digest)
-      const { programId, data, accounts } = template.tx
-      const valueAccounts = Object.values(accounts)
-      const proposalIx = web3.Keypair.generate()
+      let listTxWithSigner: Parameters<typeof provider.sendAll>[0] = []
 
       const { proposalAddress, tx: txCreateProposal } =
         await window.interDao.initializeProposal({
@@ -87,7 +87,7 @@ const ProposalInitialization = () => {
           startDate: Math.floor(duration[0] / 1000),
           endDate: Math.floor(duration[1] / 1000),
           metadata,
-          consensusMechanism,
+          consensusMechanism: mechanism,
           consensusQuorum,
           feeOptions: {
             revenue: new BN(fee),
@@ -97,64 +97,47 @@ const ProposalInitialization = () => {
           },
           sendAndConfirm: false,
         })
+      listTxWithSigner.push({ tx: txCreateProposal })
 
-      const { tx: txCreateInstruction } =
-        await window.interDao.initializeProposalInstruction({
-          proposal: proposalAddress,
+      for (const serializedTx of serializedTxs) {
+        const txWithSigner = await initProposalIx({
           dao: daoAddress,
-          invokedProgramAddress: programId.toBase58(),
-          data,
-          pubkeys: valueAccounts.map(({ pubkey }) => pubkey),
-          isSigners: valueAccounts.map(({ isSigner }) => isSigner),
-          isWritables: valueAccounts.map(({ isWritable }) => isWritable),
-          isMasters: valueAccounts.map(({ isMaster }) => isMaster),
-          proposalInstruction: proposalIx,
-          sendAndConfirm: false,
+          proposal: proposalAddress,
+          master: daoData?.master.toBase58()!,
+          txBase64: serializedTx,
         })
+        listTxWithSigner = listTxWithSigner.concat(txWithSigner)
+      }
+      const txIds = await provider.sendAll(listTxWithSigner)
 
-      const transactions = new web3.Transaction()
-      transactions.add(txCreateProposal)
-      transactions.add(txCreateInstruction)
-      const txId = await provider.sendAndConfirm(transactions, [proposalIx])
-
-      window.notify({
-        type: 'success',
-        description:
-          'Create a new proposal successfully. Click here to view details.',
-        onClick: () => window.open(util.explorer(txId), '_blank'),
-      })
-
-      //Clear tx in redux
-      dispatch(clearTx())
-      return history.push(
-        `/app/${appId}/dao/${daoAddress}/${daoNameUrl}/proposal/${proposalAddress}`,
-      )
-    } catch (er: any) {
-      return window.notify({
-        type: 'error',
-        description: er.message,
-      })
+      notifySuccess('Create a new proposal', txIds[0])
+      dispatch(clearTemplate())
+      return history.push(`/app/${appId}/proposal/${proposalAddress}`)
+    } catch (er) {
+      notifyError(er)
     } finally {
       return setLoading(false)
     }
   }, [
-    consensusMechanism,
-    consensusQuorum,
-    daoAddress,
-    daoNameUrl,
     daos,
-    dispatch,
-    duration,
-    history,
-    provider,
-    template.tx,
+    daoAddress,
+    serializedTxs,
     uploadMetaData,
+    provider,
+    duration,
+    mechanism,
+    consensusQuorum,
+    dispatch,
+    history,
+    initProposalIx,
+    daoData?.master,
   ])
 
   useEffect(() => {
-    if (!template.tx)
-      return history.push(`/app/${appId}/dao/${daoAddress}/${daoNameUrl}`)
-  }, [daoAddress, daoNameUrl, history, template.tx])
+    if (!serializedTxs.length || !daoAddress) {
+      return history.push(`/app/${appId}/dao`)
+    }
+  }, [daoAddress, history, serializedTxs, serializedTxs.length])
 
   return (
     <Row gutter={[24, 24]} justify="center">
@@ -201,8 +184,8 @@ const ProposalInitialization = () => {
             </Col>
             <Col span={24}>
               <ConsensusMechanismInput
-                value={consensusMechanism}
-                onChange={setConsensusMechanism}
+                value={mechanism}
+                onChange={setMechanism}
               />
             </Col>
             <Col span={24}>
@@ -215,9 +198,7 @@ const ProposalInitialization = () => {
             <Col flex="auto">
               <Button
                 type="text"
-                onClick={() =>
-                  history.push(`/app/${appId}/dao/${daoAddress}/${daoNameUrl}`)
-                }
+                onClick={() => history.push(`/app/${appId}/dao/${daoAddress}`)}
                 size="large"
               >
                 Cancel

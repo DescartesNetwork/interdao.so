@@ -1,3 +1,4 @@
+import { Alert } from 'antd'
 import { Component, ErrorInfo, lazy, ReactNode, Suspense } from 'react'
 
 import { useTemplateWithProposal } from './hooks/useTemplateWithProposal'
@@ -11,13 +12,13 @@ export const TemplateCreateLoader = ({
   name,
   daoAddress,
 }: PropsTemplateCreateLoader) => {
-  const Component = lazy(() => import(`./${name}/create`))
+  const Component = lazy(() => import(`./view/${name}/create`))
   return (
-    <ErrorBoundary>
+    <Alert.ErrorBoundary description="Can't not load template!">
       <Suspense fallback={<div />}>
         <Component daoAddress={daoAddress} />
       </Suspense>
-    </ErrorBoundary>
+    </Alert.ErrorBoundary>
   )
 }
 
@@ -26,7 +27,7 @@ export const TemplateProposalLoader = ({
   proposalAddress,
 }: PropsTemplateProposalLoader) => {
   const template = useTemplateWithProposal(proposalAddress)
-  const Component = lazy(() => import(`./${template}/proposal`))
+  const Component = lazy(() => import(`./view/${template}/proposal`))
   return (
     <ErrorBoundary>
       <Suspense fallback={<div />}>
@@ -41,7 +42,7 @@ export const TemplateInfoLoader = ({
   proposalAddress,
 }: PropsTemplateInfoLoader) => {
   const template = useTemplateWithProposal(proposalAddress)
-  const Component = lazy(() => import(`./${template}/info`))
+  const Component = lazy(() => import(`./view/${template}/info`))
   return (
     <ErrorBoundary>
       <Suspense fallback={<div />}>

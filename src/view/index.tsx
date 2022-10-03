@@ -58,7 +58,7 @@ const View = () => {
             />
             <Route
               exact
-              path={`/app/${appId}/dao/:daoAddress/:daoName/new-proposal`}
+              path={`/app/${appId}/new-proposal`}
               component={ProposalInitialization}
             />
             <Route

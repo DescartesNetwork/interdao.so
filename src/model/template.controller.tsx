@@ -1,17 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { TemplateNames } from 'templates'
 
-import { ProposalReturnType } from 'view/templates/types'
-
 /**
  * Interface & Utility
  */
 
 export type TemplateState = {
   visible: boolean
-  tx?: ProposalReturnType
   templateName?: TemplateNames
-  data: Record<string, string>
+  templateData: Record<string, string>
+  serializedTxs: string[]
+  daoAddress: string
 }
 
 /**
@@ -21,9 +20,10 @@ export type TemplateState = {
 const NAME = 'template'
 const initialState: TemplateState = {
   visible: false,
-  tx: undefined,
   templateName: undefined,
-  data: {},
+  templateData: {},
+  serializedTxs: [],
+  daoAddress: '',
 }
 
 /**
@@ -37,35 +37,34 @@ export const setVisible = createAsyncThunk(
   },
 )
 
-export const setTx = createAsyncThunk(
-  `${NAME}/setTx`,
-  async (tx?: ProposalReturnType) => {
-    return { tx }
+export const confirmTemplate = createAsyncThunk(
+  `${NAME}/confirmTemplate`,
+  async (template: {
+    daoAddress: string
+    templateName: TemplateNames
+    serializedTxs?: string[]
+    templateData: Record<string, string>
+  }) => {
+    return { ...template, visible: false }
   },
 )
 
-export const clearTx = createAsyncThunk(`${NAME}/clearTx`, async () => {
-  return { tx: undefined }
-})
-
-export const setTemplateName = createAsyncThunk(
-  `${NAME}/setTemplateName`,
+export const selectTemplate = createAsyncThunk(
+  `${NAME}/selectTemplate`,
   async (name?: TemplateNames) => {
-    return { templateName: name }
-  },
-)
-
-export const setTemplateData = createAsyncThunk(
-  `${NAME}/setTemplateData`,
-  async (templateData: Record<string, string>) => {
-    return templateData
+    return { templateName: name, serializedTxs: [], templateData: {} }
   },
 )
 
 export const clearTemplate = createAsyncThunk(
   `${NAME}/clearTemplate`,
   async () => {
-    return { visible: false, tx: undefined, templateName: undefined, data: {} }
+    return {
+      visible: false,
+      tx: undefined,
+      templateName: undefined,
+      templateData: {},
+    }
   },
 )
 
@@ -80,23 +79,15 @@ const slice = createSlice({
   extraReducers: (builder) =>
     void builder
       .addCase(
-        setTemplateData.fulfilled,
-        (state, { payload }) => void Object.assign(state.data, payload),
+        confirmTemplate.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
         setVisible.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        setTx.fulfilled,
-        (state, { payload }) => void Object.assign(state, payload),
-      )
-      .addCase(
-        setTemplateName.fulfilled,
-        (state, { payload }) => void Object.assign(state, payload),
-      )
-      .addCase(
-        clearTx.fulfilled,
+        selectTemplate.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(

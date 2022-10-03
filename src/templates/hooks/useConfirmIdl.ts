@@ -1,19 +1,13 @@
 import { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
-import { useHistory, useParams } from 'react-router-dom'
+import { web3 } from '@project-serum/anchor'
 
 import configs from 'configs'
 import { AppDispatch } from 'model'
-import {
-  clearTemplate,
-  setTemplateData,
-  setTemplateName,
-  setTx,
-  setVisible,
-} from 'model/template.controller'
-import { TemplateIdl } from '../index'
-import { parserIxData, parserProposalReturnType } from '../core/templateParser'
-import useDaoNameUrl from 'hooks/dao/useDaoNameUrl'
+import { clearTemplate, confirmTemplate } from 'model/template.controller'
+
+import { TemplateNames } from './../index'
+import { useAppRoute } from '@sentre/senhub'
 
 const {
   manifest: { appId },
@@ -21,23 +15,32 @@ const {
 
 export const useConfirmIdl = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const history = useHistory()
-  const { daoAddress } = useParams<{ daoAddress: string }>()
-  const { daoNameUrl } = useDaoNameUrl(daoAddress)
+  const appRoute = useAppRoute(appId)
 
   const confirm = useCallback(
-    async (templateIdl: TemplateIdl, templateData: Record<string, string>) => {
-      const ix = await parserIxData(templateIdl, templateData)
-      const tx = await parserProposalReturnType(templateIdl, ix)
-      await dispatch(setTemplateName(templateIdl.name))
-      await dispatch(setTx(tx))
-      await dispatch(setVisible(false))
-      await dispatch(setTemplateData(templateData))
-      return history.push(
-        `/app/${appId}/dao/${daoAddress}/${daoNameUrl}/new-proposal`,
-      )
+    async (
+      daoAddress: string,
+      templateName: TemplateNames,
+      templateData: Record<string, string>,
+      transactions: web3.Transaction[],
+    ) => {
+      const defaultPublickey = web3.Keypair.generate().publicKey
+      const serializedTxs = transactions.map((transaction) => {
+        // Fix for serialize is require recentBlockhash + feePayer
+        transaction.recentBlockhash = defaultPublickey.toBase58()
+        transaction.feePayer = defaultPublickey
+        // Serialize transaction base64
+        return transaction
+          .serialize({
+            requireAllSignatures: false,
+          })
+          .toString('base64')
+      })
+      const template = { templateName, templateData, serializedTxs, daoAddress }
+      await dispatch(confirmTemplate(template))
+      return appRoute.to(`/new-proposal`)
     },
-    [daoAddress, daoNameUrl, dispatch, history],
+    [appRoute, dispatch],
   )
 
   const close = useCallback(async () => {

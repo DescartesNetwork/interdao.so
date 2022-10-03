@@ -1,43 +1,28 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
-import { Space, Typography } from 'antd'
-
-import { AppDispatch, AppState } from 'model'
-import { setTemplateData } from 'model/template.controller'
 import { MintSelection } from '@sen-use/app'
 
 const MintInput = ({
   id,
-  title,
+  value,
+  handleChange,
   defaultValue,
-  disabled = false,
 }: {
   id: string
-  title?: string
+  value: string
+  handleChange: (id: string, value: string) => void
   defaultValue?: string
-  disabled?: boolean
 }) => {
-  const dispatch = useDispatch<AppDispatch>()
-  const value = useSelector((state: AppState) => state.template.data[id])
-
   useEffect(() => {
-    if (!!defaultValue && value === undefined)
-      dispatch(setTemplateData({ [id]: defaultValue.toString() }))
-  }, [defaultValue, dispatch, id, value])
+    if (!!defaultValue) handleChange(id, defaultValue)
+  }, [defaultValue, id, handleChange])
 
   return (
-    <Space direction="vertical" size={4} style={{ width: '100%' }}>
-      {title && <Typography.Text type="secondary">{title}</Typography.Text>}
-      <MintSelection
-        value={value}
-        onChange={(value) => {
-          dispatch(setTemplateData({ [id]: value }))
-        }}
-        style={{ marginLeft: -7 }}
-        disabled={disabled}
-      />
-    </Space>
+    <MintSelection
+      value={value}
+      onChange={(value) => handleChange(id, value)}
+      style={{ marginLeft: -7 }}
+    />
   )
 }
 export default MintInput
