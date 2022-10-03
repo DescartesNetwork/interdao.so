@@ -7,7 +7,7 @@ import { DataLoader } from '@sen-use/web3'
 
 import { CommentProposal } from 'model/comments.controller'
 import { MetaData } from 'model/createDao.controller'
-import { ProposalMetaData } from 'view/proposal/proposalInitialization'
+import { ProposalMetaData } from 'view/createProposal'
 
 const KEY =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDg4MzdCZUI2ODM5MTcwODZjQUI3OTU0MzI3ZTgwOWU1ZTlCZTc2NTEiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTU0NTU5NzI5MjAsIm5hbWUiOiJTZW50cmUifQ.Jf7oQOKMrBxp5morvs7DR_As4EU9Y5WybyuvY1teFN8'

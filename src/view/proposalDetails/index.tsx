@@ -8,7 +8,7 @@ import CardVote from './cardVote'
 import CardInfo from './cardInfo'
 import CardProgress from './cardProgress'
 import History from './history'
-import Comments from '../components/comments'
+import Comments from '../proposal/components/comments'
 
 import configs from 'configs'
 import useProposalMetaData from 'hooks/proposal/useProposalMetaData'

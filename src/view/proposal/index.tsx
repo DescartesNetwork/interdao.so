@@ -6,7 +6,7 @@ import { DaoData } from '@interdao/core'
 import { Button, Col, Row } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import ProposalList from './proposalList'
-import DaoDetails from '../dao/daoDetails'
+import DaoDetails from '../daoDetails'
 
 import configs from 'configs'
 import useValidDaoMember from 'hooks/dao/useValidDaoMember'

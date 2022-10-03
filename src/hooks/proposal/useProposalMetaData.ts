@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { AppDispatch } from 'model'
-import { ProposalMetaData } from 'view/proposal/proposalInitialization'
+import { ProposalMetaData } from 'view/createProposal'
 import { ipfs } from 'helpers/ipfs'
 import { getProposal } from 'model/proposal.controller'
 import { DataLoader } from '@sentre/senhub'

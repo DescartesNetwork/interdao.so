@@ -5,7 +5,7 @@ import { util } from '@sentre/senhub'
 
 import { Card, Col, Row, Space, Typography, Tooltip, Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
-import ModalTemplateInfo from '../modalTemplateInfo'
+import ModalTemplateInfo from '../proposal/modalTemplateInfo'
 import RowSpaceBetween from 'components/rowSpaceBetween'
 
 import useProposal from 'hooks/proposal/useProposal'

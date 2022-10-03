@@ -2,55 +2,77 @@ import configs from 'configs'
 import { ExtractRouteParams } from 'react-router'
 import { generatePath as generatePathRaw } from 'react-router-dom'
 
+// DAO
+import ListDaos from '../view/listDaos'
+import CreateDao from '../view/createDao'
+import EditDao from '../view/editDao'
+import DaoDetails from '../view/proposal'
+// Proposal
+import CreateProposal from '../view/createProposal'
+import ProposalDetails from '../view/proposalDetails'
+// Not found
+import PageNotFound from 'view/pageNotFound'
+
 const {
   manifest: { appId },
 } = configs
 
-const LIST_DAOS = `/app/${appId}/dao`
+const LIST_DAOS = `/dao`
 
-const CREATE_DAO = `/app/${appId}/dao/create-dao`
-const EDIT_DAO = `/app/${appId}/dao/:daoAddress/edit`
-const DAO_DETAILS = `/app/${appId}/dao/:daoAddress`
+const CREATE_DAO = `/dao/create-dao`
+const EDIT_DAO = `/dao/:daoAddress/edit`
+const DAO_DETAILS = `/dao/:daoAddress`
 
-const CREATE_PROPOSAL = `/app/${appId}/create-proposal`
-const PROPOSAL_DETAILS = `/app/${appId}/create-proposal`
+const CREATE_PROPOSAL = `/create-proposal`
+const PROPOSAL_DETAILS = `/create-proposal`
 
-const NOT_FOUND = `/app/${appId}/page-not-found`
+const NOT_FOUND = `/page-not-found`
+
+function wrapAppRoute(path: string) {
+  return `/app/${appId}${path}`
+}
 
 export const APP_ROUTE = {
   listDaos: {
-    path: LIST_DAOS,
+    path: wrapAppRoute(LIST_DAOS),
     generatePath: (data: ExtractRouteParams<typeof LIST_DAOS>) =>
-      generatePathRaw(LIST_DAOS, data),
+      generatePathRaw(wrapAppRoute(LIST_DAOS), data),
+    component: ListDaos,
   },
   createDao: {
-    path: CREATE_DAO,
+    path: wrapAppRoute(CREATE_DAO),
     generatePath: (data: ExtractRouteParams<typeof CREATE_DAO>) =>
-      generatePathRaw(CREATE_DAO, data),
+      generatePathRaw(wrapAppRoute(CREATE_DAO), data),
+    component: CreateDao,
   },
   editDao: {
-    path: EDIT_DAO,
+    path: wrapAppRoute(EDIT_DAO),
     generatePath: (data: ExtractRouteParams<typeof EDIT_DAO>) =>
-      generatePathRaw(EDIT_DAO, data),
+      generatePathRaw(wrapAppRoute(EDIT_DAO), data),
+    component: EditDao,
   },
   daoDetails: {
-    path: DAO_DETAILS,
+    path: wrapAppRoute(DAO_DETAILS),
     generatePath: (data: ExtractRouteParams<typeof DAO_DETAILS>) =>
-      generatePathRaw(DAO_DETAILS, data),
+      generatePathRaw(wrapAppRoute(DAO_DETAILS), data),
+    component: DaoDetails,
   },
   createProposal: {
-    path: CREATE_PROPOSAL,
+    path: wrapAppRoute(CREATE_PROPOSAL),
     generatePath: (data: ExtractRouteParams<typeof CREATE_PROPOSAL>) =>
-      generatePathRaw(CREATE_PROPOSAL, data),
+      generatePathRaw(wrapAppRoute(CREATE_PROPOSAL), data),
+    component: CreateProposal,
   },
   proposalDetails: {
-    path: PROPOSAL_DETAILS,
+    path: wrapAppRoute(PROPOSAL_DETAILS),
     generatePath: (data: ExtractRouteParams<typeof PROPOSAL_DETAILS>) =>
-      generatePathRaw(PROPOSAL_DETAILS, data),
+      generatePathRaw(wrapAppRoute(LIST_DAOS), data),
+    component: ProposalDetails,
   },
   notFound: {
-    path: NOT_FOUND,
+    path: wrapAppRoute(NOT_FOUND),
     generatePath: (data: ExtractRouteParams<typeof NOT_FOUND>) =>
-      generatePathRaw(NOT_FOUND, data),
+      generatePathRaw(wrapAppRoute(NOT_FOUND), data),
+    component: PageNotFound,
   },
 }

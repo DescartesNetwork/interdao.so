@@ -4,7 +4,7 @@ import { util } from '@sentre/senhub'
 
 import DaoProvider, {
   RegisterDaoData,
-} from 'view/dao/publicDaos/search/daoProvider'
+} from 'view/listDaos/publicDaos/search/daoProvider'
 import { ipfs } from 'helpers/ipfs'
 import { AppState } from 'model'
 
