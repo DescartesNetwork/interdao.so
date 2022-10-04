@@ -1,8 +1,6 @@
 import { useHistory } from 'react-router-dom'
-import { SystemProgram } from '@solana/web3.js'
-import BN from 'bn.js'
-import { useWidth, useWalletAddress } from '@sentre/senhub'
-import { util } from '@sentre/senhub'
+import { BN, web3 } from '@project-serum/anchor'
+import { util, useWidth, useWalletAddress } from '@sentre/senhub'
 
 import { Avatar, Button, Card, Col, Row, Space, Spin, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from '@sen-use/app'
@@ -15,10 +13,9 @@ import AmountMembers from './members'
 import { getIcon, validURL } from 'helpers'
 import { useDaoMetaData } from 'hooks/dao/useDaoMetaData'
 import { useDaoData } from 'hooks/dao'
-import { DaoDetailsProps } from './index'
 import { APP_ROUTE } from 'configs/route'
 
-const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
+const DaoInfo = ({ daoAddress }: { daoAddress: string }) => {
   const history = useHistory()
   const metaData = useDaoMetaData(daoAddress)
   const daoData = useDaoData(daoAddress)
@@ -28,7 +25,7 @@ const DaoInfo = ({ daoAddress }: DaoDetailsProps) => {
   const { regime, nonce, mint, authority } = daoData || {
     regime: {},
     nonce: new BN(0),
-    mint: SystemProgram.programId,
+    mint: web3.SystemProgram.programId,
   }
 
   const onEditDAO = () =>

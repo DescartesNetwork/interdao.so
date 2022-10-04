@@ -8,11 +8,12 @@ import { SystemProgram } from '@solana/web3.js'
 
 import { Button, Col, Empty, Row, Select, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
+import Template from 'view/templates'
 
 import { AppDispatch, AppState } from 'model'
-import Template from 'view/templates'
 import { setVisible } from 'model/template.controller'
 import { TemplateProposalLoader } from 'templates/templateLoader'
+import './index.less'
 
 export type ProposalListProps = { daoAddress: string }
 

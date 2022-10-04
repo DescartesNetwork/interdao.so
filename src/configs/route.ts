@@ -6,7 +6,7 @@ import { generatePath as generatePathRaw } from 'react-router-dom'
 import ListDaos from '../view/listDaos'
 import CreateDao from '../view/createDao'
 import EditDao from '../view/editDao'
-import DaoDetails from '../view/proposal'
+import DaoDetails from '../view/daoDetails'
 // Proposal
 import CreateProposal from '../view/createProposal'
 import ProposalDetails from '../view/proposalDetails'
