@@ -1,19 +1,6 @@
 import { AnchorProvider, Program, BN, web3 } from '@project-serum/anchor'
-import {
-  AccountMeta,
-  Connection,
-  PublicKey,
-  TransactionInstruction,
-} from '@solana/web3.js'
 
 import { rpc } from '@sentre/senhub'
-import {
-  isTemplateAccountWithRule,
-  isTemplateArgWithRule,
-  TemplateArg,
-  TemplateIdl,
-} from 'templates'
-import { TEMPLATE_RULES } from './rule'
 import { ProposalAccountType, ProposalReturnType } from 'view/templates/types'
 import { TEMPLATE_PROGRAMS } from 'templates/programs'
 import { IdlInstruction } from '@project-serum/anchor/dist/cjs/idl'
