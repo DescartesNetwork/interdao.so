@@ -8,25 +8,31 @@ const WrapStatistic = ({
   configs,
   value,
 }: {
-  configs?: ComponentConfigs<any>
+  configs: ComponentConfigs<any>
   value: string
 }) => {
-  if (!configs) return null
-  if (configs.type === 'address') return null
-
   if (configs.type === 'mint-select')
     return (
-      <Typography.Text className="t-16">
-        <Space>
-          <MintAvatar mintAddress={value} />
-          <MintSymbol mintAddress={value} />
-        </Space>
-      </Typography.Text>
+      <RowSpaceVertical
+        label={configs.title}
+        value={
+          <Typography.Text className="t-16">
+            <Space>
+              <MintAvatar mintAddress={value} />
+              <MintSymbol mintAddress={value} />
+            </Space>
+          </Typography.Text>
+        }
+      />
     )
 
   if (configs.type === 'number')
     return (
-      <RowSpaceVertical className="t-16" label="Amount" value={value || '--'} />
+      <RowSpaceVertical
+        className="t-16"
+        label={configs.title}
+        value={value || '--'}
+      />
     )
 
   return null

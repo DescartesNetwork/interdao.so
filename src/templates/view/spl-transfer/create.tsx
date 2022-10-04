@@ -12,6 +12,7 @@ import { PropsCreateComponent } from 'templates/constant'
 import { useConfirmIdl } from 'templates/hooks/useConfirmIdl'
 import { SPL_TOKEN_PROGRAM_ID } from 'templates/programs/spl-token'
 import { useDaoData } from 'hooks/dao'
+import { notifyError } from 'helpers'
 
 type NativeTemplateData = TemplateData<IDS>
 
@@ -22,34 +23,42 @@ const Create = ({
   const daoData = useDaoData(daoAddress)
   const [formData, setFormData] = useSetState<NativeTemplateData>(
     defaultData || {
-      viewAmount: '',
-      viewDelegate: '',
-      viewMint: '',
-      viewSource: daoData?.master.toBase58()!,
+      amount: '',
+      sender: daoData?.master.toBase58()!,
+      mint: '',
+      receiver: '',
     },
   )
   const { confirm, close } = useConfirmIdl()
   const getMintDecimals = useGetMintDecimals()
 
   const handleConfirm = async () => {
-    const tokenAccount = await utils.token.associatedAddress({
-      owner: new web3.PublicKey(formData.viewSource),
-      mint: new web3.PublicKey(formData.viewMint),
-    })
-    const decimals = await getMintDecimals({ mintAddress: formData.viewMint })
-    const amountBN = utilsBN.decimalize(formData.viewAmount, decimals!)
+    try {
+      const srcTokenAccount = await utils.token.associatedAddress({
+        owner: new web3.PublicKey(formData.sender),
+        mint: new web3.PublicKey(formData.mint),
+      })
+      const dstTokenAccount = await utils.token.associatedAddress({
+        owner: new web3.PublicKey(formData.receiver),
+        mint: new web3.PublicKey(formData.mint),
+      })
+      const decimals = await getMintDecimals({ mintAddress: formData.mint })
+      const amountBN = utilsBN.decimalize(formData.amount, decimals!)
 
-    const tx = new web3.Transaction().add(
-      Token.createApproveInstruction(
-        SPL_TOKEN_PROGRAM_ID,
-        tokenAccount,
-        new web3.PublicKey(formData.viewDelegate),
-        new web3.PublicKey(formData.viewSource),
-        [],
-        amountBN.toNumber(),
-      ),
-    )
-    return confirm(daoAddress, TEMPLATE_CONFIGS, formData, [tx])
+      const tx = new web3.Transaction().add(
+        Token.createTransferInstruction(
+          SPL_TOKEN_PROGRAM_ID,
+          srcTokenAccount,
+          dstTokenAccount,
+          new web3.PublicKey(formData.sender),
+          [],
+          amountBN.toNumber(),
+        ),
+      )
+      return confirm(daoAddress, TEMPLATE_CONFIGS, formData, [tx])
+    } catch (error) {
+      notifyError(error)
+    }
   }
 
   return (

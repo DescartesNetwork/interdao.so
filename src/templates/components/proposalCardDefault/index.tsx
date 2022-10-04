@@ -40,13 +40,14 @@ const ProposalCardDefault = ({
             label="Template"
             value={
               <Typography.Text className="t-16">
-                {metaData.title}
+                {metaData.templateConfig.title}
               </Typography.Text>
             }
           />
         </Col>
         {configs.components.map((cpn) => {
           const prefix = cpn.prefix
+
           return (
             <Fragment>
               {prefix && (
@@ -57,9 +58,11 @@ const ProposalCardDefault = ({
                   />
                 </Col>
               )}
-              <Col xs={12} md={6}>
-                <WrapStatistic configs={cpn} value={templateData[cpn.id]} />
-              </Col>
+              {(cpn.type === 'mint-select' || cpn.type === 'number') && (
+                <Col xs={12} md={6}>
+                  <WrapStatistic configs={cpn} value={templateData[cpn.id]} />
+                </Col>
+              )}
             </Fragment>
           )
         })}
