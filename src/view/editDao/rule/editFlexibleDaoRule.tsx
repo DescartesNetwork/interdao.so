@@ -2,13 +2,13 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { DaoRegime } from '@interdao/core'
 import isEqual from 'react-fast-compare'
-import { util } from '@sentre/senhub'
 
 import { Col, Row } from 'antd'
 import ActionButton from '../actionButton'
 import RegimeInput from 'view/createDao/setRule/flexible/regimeInput'
 
 import { AppState } from 'model'
+import { notifyError, notifySuccess } from 'helpers'
 
 const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
   const { regime } = useSelector((state: AppState) => state.daos[daoAddress])
@@ -23,13 +23,9 @@ const EditFlexibleDaoRule = ({ daoAddress }: { daoAddress: string }) => {
         nextRegime,
         daoAddress,
       )
-      return window.notify({
-        type: 'success',
-        description: 'Update regime successfully. Click here to view details',
-        onClick: () => window.open(util.explorer(txId), '_blank'),
-      })
+      return notifySuccess('Update regime', txId)
     } catch (er: any) {
-      window.notify({ type: 'error', description: er.message })
+      return notifyError(er)
     } finally {
       setLoading(false)
     }

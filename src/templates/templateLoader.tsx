@@ -2,7 +2,7 @@ import { Alert, Card, Spin } from 'antd'
 import { Component, ErrorInfo, lazy, ReactNode, Suspense } from 'react'
 
 import { useTemplateWithProposal } from './hooks/useTemplateWithProposal'
-import { TemplateNames } from './index'
+import { TemplateNames } from './constant/index'
 
 export type PropsTemplateCreateLoader = {
   name: TemplateNames

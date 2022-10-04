@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import useProposalMetaData from 'hooks/proposal/useProposalMetaData'
-import { TemplateNames } from '../index'
+import { TemplateNames } from '../constant/index'
 
 export const useTemplateWithProposal = (proposalAddress: string) => {
   const [templateName, setTemplateName] = useState<TemplateNames>()

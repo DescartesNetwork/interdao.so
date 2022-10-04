@@ -8,7 +8,7 @@ import { Button, Col, Row, Space } from 'antd'
 import TemplateForm, { TemplateData } from 'templates/components/templateForm'
 
 import { TEMPLATE_CONFIGS, IDS } from '../spl-approve/configs'
-import { PropsCreateComponent } from 'templates'
+import { PropsCreateComponent } from 'templates/constant'
 import { useConfirmIdl } from 'templates/hooks/useConfirmIdl'
 import { SPL_TOKEN_PROGRAM_ID } from 'templates/programs/spl-token'
 import { useDaoData } from 'hooks/dao'

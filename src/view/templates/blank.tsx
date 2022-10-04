@@ -1,6 +1,6 @@
 import IonIcon from '@sentre/antd-ionicon'
 import { Col, Row, Space, Image, Typography, Button } from 'antd'
-import { TemplateNames } from 'templates'
+import { TemplateNames } from 'templates/constant'
 import { TemplateCreateLoader } from 'templates/templateLoader'
 
 import SENTRE_LOGO from 'static/images/sentre_logo.svg'

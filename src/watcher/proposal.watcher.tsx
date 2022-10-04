@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { PublicKey } from '@solana/web3.js'
 
 import { AppDispatch } from 'model'
-import { getProposal, getProposals } from 'model/proposal.controller'
+import { getProposal, getProposals } from 'model/proposals.controller'
 import { addLoading, clearLoading } from 'model/loading.controller'
 import { addEventListener } from './evens.watch'
 

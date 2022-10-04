@@ -1,4 +1,4 @@
-import { ComponentConfigs } from './components/templateForm'
+import { ComponentConfigs } from '../components/templateForm'
 
 // Config
 export enum TemplateNames {

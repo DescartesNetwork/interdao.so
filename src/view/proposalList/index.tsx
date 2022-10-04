@@ -22,7 +22,7 @@ const currentDate = Math.floor(Number(new Date()) / 1000)
 const ProposalList = ({ daoAddress }: ProposalListProps) => {
   const [status, setStatus] = useState('all-status')
   const daos = useSelector((state: AppState) => state.daos)
-  const proposal = useSelector((state: AppState) => state.proposal)
+  const proposal = useSelector((state: AppState) => state.proposals)
   const dispatch = useDispatch<AppDispatch>()
   const width = useWidth()
   const walletAddress = useWalletAddress()

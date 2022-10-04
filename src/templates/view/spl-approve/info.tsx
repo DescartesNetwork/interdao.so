@@ -2,12 +2,12 @@ import { Col, Row, Spin } from 'antd'
 import { PropsTemplateProposalLoader } from '../../templateLoader'
 import { TemplateInfo } from 'templates/components/templateForm'
 
-import { IDS, TEMPLATE_CONFIGS } from './configs'
-import { useTemplateDataWithProposal } from 'templates/hooks/useTemplateDataWithProposal'
+import { TEMPLATE_CONFIGS } from './configs'
+import useProposalMetaData from 'hooks/proposal/useProposalMetaData'
 
 const Info = ({ proposalAddress }: PropsTemplateProposalLoader) => {
-  const templateData =
-    useTemplateDataWithProposal<Record<IDS, string>>(proposalAddress)
+  const proposalMetaData = useProposalMetaData(proposalAddress)
+  const templateData = proposalMetaData.metaData?.templateData
 
   if (!templateData) return <Spin spinning />
 
@@ -20,7 +20,6 @@ const Info = ({ proposalAddress }: PropsTemplateProposalLoader) => {
           onChange={() => {}}
         />
       </Col>
-      <Col span={24} />
     </Row>
   )
 }

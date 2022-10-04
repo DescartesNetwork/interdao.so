@@ -13,7 +13,7 @@ type ProposalItemProps = {
 }
 
 const ProposalItem = ({ proposalAddress }: ProposalItemProps) => {
-  const proposals = useSelector((state: AppState) => state.proposal)
+  const proposals = useSelector((state: AppState) => state.proposals)
   const { metaData: proposalMetaData } = useProposalMetaData(proposalAddress)
   const daoMetaData = useDaoMetaData(proposals[proposalAddress].dao.toBase58())
 

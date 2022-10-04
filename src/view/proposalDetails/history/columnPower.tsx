@@ -10,7 +10,7 @@ import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const ColumnPower = ({ receipt }: { receipt: ReceiptData }) => {
   const daos = useSelector((state: AppState) => state.daos)
-  const proposal = useSelector((state: AppState) => state.proposal)
+  const proposal = useSelector((state: AppState) => state.proposals)
   const { power, proposal: proposalPubkey } = receipt
   const { dao: daoPubkey } = proposal[proposalPubkey.toBase58()] || {}
   const { mint } = daos[daoPubkey?.toBase58() || ''] || ({} as DaoData)

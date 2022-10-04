@@ -18,7 +18,7 @@ import { useAnchorProvider } from 'hooks/useAnchorProvider'
 import { useInitProposalIx } from 'hooks/instructions/useInitProposalIx'
 import { useDaoData } from 'hooks/dao'
 import { notifyError, notifySuccess } from 'helpers'
-import { TemplateConfig } from 'templates'
+import { TemplateConfig } from 'templates/constant'
 import { APP_ROUTE } from 'configs/route'
 
 const {

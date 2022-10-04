@@ -4,12 +4,12 @@ import { account } from '@senswap/sen-js'
 import { ProposalData } from '@interdao/core'
 
 import { AppDispatch, AppState } from 'model'
-import { getProposal } from 'model/proposal.controller'
+import { getProposal } from 'model/proposals.controller'
 
 const useProposal = (proposalAddress: string) => {
   const dispatch = useDispatch<AppDispatch>()
   const proposal = useSelector(
-    (state: AppState) => state.proposal[proposalAddress],
+    (state: AppState) => state.proposals[proposalAddress],
   )
 
   const proposalData: ProposalData = useMemo(

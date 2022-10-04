@@ -10,7 +10,7 @@ import { AppState } from 'model'
 const currentDate = Math.floor(Number(new Date()) / 1000)
 
 const useProposalStatus = (proposalAddress: string) => {
-  const proposal = useSelector((state: AppState) => state.proposal)
+  const proposal = useSelector((state: AppState) => state.proposals)
   const {
     startDate,
     endDate,

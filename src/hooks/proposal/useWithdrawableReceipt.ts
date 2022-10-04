@@ -4,11 +4,11 @@ import { ReceiptData } from '@interdao/core'
 import { useWalletAddress } from '@sentre/senhub'
 
 import { AppState } from 'model'
-import { ProposalState } from 'model/proposal.controller'
+import { ProposalState } from 'model/proposals.controller'
 
 const useWithdrawable = () => {
   const receipts = useSelector((state: AppState) => state.receipt)
-  const proposals = useSelector((state: AppState) => state.proposal)
+  const proposals = useSelector((state: AppState) => state.proposals)
   const [withdrawableProposals, setWithdrawableProposals] =
     useState<ProposalState>({})
   const [withdrawableReceipts, setWithdrawableReceipts] = useState<

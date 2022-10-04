@@ -3,7 +3,7 @@ import IonIcon from '@sentre/antd-ionicon'
 
 import SOLANA_LOGO from 'static/images/templates/solana.svg'
 import { TemplateCreateLoader } from 'templates/templateLoader'
-import { TemplateNames } from 'templates'
+import { TemplateNames } from 'templates/constant'
 import { useState } from 'react'
 
 type CardOptionProps = {

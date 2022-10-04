@@ -5,12 +5,11 @@ import loading from 'model/loading.controller'
 import daos from 'model/daos.controller'
 import createDao from 'model/createDao.controller'
 import tokenHolder from 'model/tokenHolder.controller'
-import proposal from 'model/proposal.controller'
+import proposals from 'model/proposals.controller'
 import receipt from 'model/receipt.controller'
 import voteBid from 'model/voteBid.controller'
 import template from 'model/template.controller'
 import comments from 'model/comments.controller'
-import pool from 'model/pool.controller'
 
 /**
  * Isolated store
@@ -23,13 +22,12 @@ const model = configureStore({
     createDao,
     daos,
     tokenHolder,
-    proposal,
+    proposals,
     receipt,
     voteBid,
     template,
     loading,
     comments,
-    pool,
   },
 })
 

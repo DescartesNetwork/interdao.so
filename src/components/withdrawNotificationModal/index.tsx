@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { util } from '@sentre/senhub'
 
 import IonIcon from '@sentre/antd-ionicon'
 import { Button, Col, Image, Modal, Row, Space, Typography } from 'antd'
@@ -8,11 +7,11 @@ import ProposalItem from './proposalItem'
 
 import useWithdrawableReceipt from 'hooks/proposal/useWithdrawableReceipt'
 import { AppState } from 'model'
-
+import { notifyError, notifySuccess } from 'helpers'
 import BG_JOIN_DAO from 'static/images/system/bg-join-dao.png'
 
 const WithdrawNotificationModal = () => {
-  const proposals = useSelector((state: AppState) => state.proposal)
+  const proposals = useSelector((state: AppState) => state.proposals)
   const daos = useSelector((state: AppState) => state.daos)
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -35,17 +34,10 @@ const WithdrawNotificationModal = () => {
         if (isNft)
           response = await window.interDao.closeNftVoting(receipt.address)
         else response = await window.interDao.close(receipt.address)
-        window.notify({
-          type: 'success',
-          description: 'Successful withdrawal. Click to view details!',
-          onClick: () => window.open(util.explorer(response.txId), '_blank'),
-        })
+        notifySuccess('Withdraw', response.txId)
       }
     } catch (er: any) {
-      window.notify({
-        type: 'error',
-        description: er.message,
-      })
+      notifyError(er)
     } finally {
       setLoading(false)
       setVisible(false)

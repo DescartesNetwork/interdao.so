@@ -5,7 +5,7 @@ import { useGetMintDecimals } from '@sentre/senhub'
 import { BN } from '@project-serum/anchor'
 
 import { ipfs } from 'helpers/ipfs'
-import { notifySuccess } from 'helpers'
+import { notifySuccess, notifyError } from 'helpers'
 import { AppState } from 'model'
 import { APP_ROUTE } from 'configs/route'
 
@@ -37,8 +37,7 @@ const useCreateDao = () => {
       notifySuccess('Create DAO', txId)
       return history.push(APP_ROUTE.daoDetails.generatePath({ daoAddress }))
     } catch (er: any) {
-      console.log('er', er)
-      window.notify({ type: 'error', description: er.message })
+      notifyError(er)
     } finally {
       setLoading(false)
     }

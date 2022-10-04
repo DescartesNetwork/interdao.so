@@ -7,7 +7,7 @@ import { account } from '@senswap/sen-js'
 import { AppDispatch } from 'model'
 import { getReceipt, getReceipts } from 'model/receipt.controller'
 import { addLoading, clearLoading } from 'model/loading.controller'
-import { getProposal } from 'model/proposal.controller'
+import { getProposal } from 'model/proposals.controller'
 import { addEventListener } from './evens.watch'
 
 const ReceiptWatcher = () => {

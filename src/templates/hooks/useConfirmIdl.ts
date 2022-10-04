@@ -6,7 +6,7 @@ import { web3 } from '@project-serum/anchor'
 import { AppDispatch } from 'model'
 import { clearTemplate, confirmTemplate } from 'model/template.controller'
 
-import { TemplateConfig } from './../index'
+import { TemplateConfig } from '../constant/index'
 import { APP_ROUTE } from 'configs/route'
 
 export const useConfirmIdl = () => {

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { TemplateConfig, TemplateNames } from 'templates'
+import { TemplateConfig, TemplateNames } from 'templates/constant'
 
 /**
  * Interface & Utility

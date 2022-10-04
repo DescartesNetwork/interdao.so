@@ -13,7 +13,7 @@ import './index.less'
 
 const Hero = () => {
   const daos = useSelector((state: AppState) => state.daos)
-  const proposal = useSelector((state: AppState) => state.proposal)
+  const proposal = useSelector((state: AppState) => state.proposals)
 
   const executeProposal = useMemo(() => {
     let total = 0

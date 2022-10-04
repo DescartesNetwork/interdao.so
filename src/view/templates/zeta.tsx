@@ -3,7 +3,7 @@ import IonIcon from '@sentre/antd-ionicon'
 
 import ZETA_LOGO from 'static/images/templates/logo-zeta.jpeg'
 import { TemplateCreateLoader } from 'templates/templateLoader'
-import { TemplateNames } from 'templates'
+import { TemplateNames } from 'templates/constant'
 import { useState } from 'react'
 
 type CardOptionProps = {

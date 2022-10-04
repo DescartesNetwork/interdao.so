@@ -1,5 +1,5 @@
 import { ComponentConfigs } from 'templates/components/templateForm'
-import { TemplateConfig, TemplateNames } from './../../index'
+import { TemplateConfig, TemplateNames } from '../../constant'
 
 export type IDS = 'viewAmount' | 'viewSource' | 'viewMint' | 'viewDelegate'
 export const COMPONENT_CONFIGS: ComponentConfigs<IDS>[] = [
