@@ -45,9 +45,20 @@ const ProposalCardDefault = ({
             }
           />
         </Col>
+        <Col xs={12} md={6}>
+          <RowSpaceVertical
+            label="End time"
+            value={
+              endTime && (
+                <Typography.Text className="t-16">
+                  {moment(endTime).format('hh:mm A, MMM Do, YYYY')}
+                </Typography.Text>
+              )
+            }
+          />
+        </Col>
         {configs.components.map((cpn) => {
           const prefix = cpn.prefix
-
           return (
             <Fragment>
               {prefix && (
@@ -66,19 +77,6 @@ const ProposalCardDefault = ({
             </Fragment>
           )
         })}
-
-        <Col xs={12} md={6}>
-          <RowSpaceVertical
-            label="End time"
-            value={
-              endTime && (
-                <Typography.Text className="t-16">
-                  {moment(endTime).format('hh:mm A, MMM Do, YYYY')}
-                </Typography.Text>
-              )
-            }
-          />
-        </Col>
       </Row>
     </ProposalTemplateCard>
   )

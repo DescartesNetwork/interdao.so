@@ -6,8 +6,9 @@ import { Button, Col, Image, Modal, Row, Space, Typography } from 'antd'
 import ProposalItem from './proposalItem'
 
 import useWithdrawableReceipt from 'hooks/proposal/useWithdrawableReceipt'
+import { useAnchorProvider } from 'hooks/useAnchorProvider'
 import { AppState } from 'model'
-import { notifyError, notifySuccess } from 'helpers'
+import { notifyError } from 'helpers'
 import BG_JOIN_DAO from 'static/images/system/bg-join-dao.png'
 
 const WithdrawNotificationModal = () => {
@@ -17,6 +18,7 @@ const WithdrawNotificationModal = () => {
   const [loading, setLoading] = useState(false)
   const { withdrawableReceipts, withdrawableProposals } =
     useWithdrawableReceipt()
+  const provider = useAnchorProvider()
 
   useEffect(() => {
     if (withdrawableReceipts.length > 0) return setVisible(true)
@@ -27,15 +29,23 @@ const WithdrawNotificationModal = () => {
     if (!withdrawableReceipts.length) return
     setLoading(true)
     try {
-      for (const receipt of withdrawableReceipts) {
-        let response: { txId: string; receiptAddress: string }
-        const { isNft } =
-          daos[proposals[receipt.proposal.toBase58()].dao.toBase58()]
-        if (isNft)
-          response = await window.interDao.closeNftVoting(receipt.address)
-        else response = await window.interDao.close(receipt.address)
-        notifySuccess('Withdraw', response.txId)
-      }
+      const txs = await Promise.all(
+        withdrawableReceipts.map(async (receipt) => {
+          const { isNft } =
+            daos[proposals[receipt.proposal.toBase58()].dao.toBase58()]
+          if (isNft) {
+            const { tx } = await window.interDao.closeNftVoting(
+              receipt.address,
+              false,
+            )
+            return { signers: [], tx }
+          } else {
+            const { tx } = await window.interDao.close(receipt.address, false)
+            return { signers: [], tx }
+          }
+        }),
+      )
+      await provider.sendAll(txs)
     } catch (er: any) {
       notifyError(er)
     } finally {

@@ -7,6 +7,7 @@ export enum TemplateNames {
   'BlankTemplate' = 'blank',
   'ZetaDeposit' = 'zeta-deposit',
   'ZetaCreate' = 'zeta-create',
+  'SenFarmingStake' = 'sen-farming-stake',
 }
 
 export type TemplateConfig<T extends string> = {

@@ -8,6 +8,7 @@ import { AppDispatch, AppState } from 'model'
 import { clearTemplate } from 'model/template.controller'
 
 import './index.less'
+import SenFarming from './senFarming'
 
 const Template = ({ daoAddress }: { daoAddress: string }) => {
   const visible = useSelector((state: AppState) => state.template.visible)
@@ -32,6 +33,9 @@ const Template = ({ daoAddress }: { daoAddress: string }) => {
             </Tabs.TabPane>
             <Tabs.TabPane tab="SPL" key="spl">
               <SPL daoAddress={daoAddress} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Sen Farming" key="sen-farming">
+              <SenFarming daoAddress={daoAddress} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Zeta" key="zeta" disabled />
             <Tabs.TabPane tab="Atrix" key="atrix" disabled />
