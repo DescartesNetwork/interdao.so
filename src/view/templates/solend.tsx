@@ -10,7 +10,7 @@ import { EmbeddedViewData } from 'templates/view/embedded-view/configs'
 const CONFIGS: EmbeddedViewData = {
   appId: 'solend',
   logo: `url(${LOGO})`,
-  title: 'Solend',
+  title: 'Solend template',
   url: 'https://solend.fi/dashboard',
 }
 

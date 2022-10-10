@@ -17,19 +17,14 @@ const Info = ({ proposalAddress }: PropsTemplateProposalLoader) => {
           templateData={templateData}
           components={[
             {
-              id: 'title',
+              id: 'url',
               type: 'address',
-              title: 'Protocol',
+              title: 'URL',
             },
             {
               id: 'appId',
               type: 'address',
               title: 'App ID',
-            },
-            {
-              id: 'url',
-              type: 'address',
-              title: 'URL',
             },
           ]}
           onChange={() => {}}
