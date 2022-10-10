@@ -8,6 +8,7 @@ export enum TemplateNames {
   'ZetaDeposit' = 'zeta-deposit',
   'ZetaCreate' = 'zeta-create',
   'SenFarmingStake' = 'sen-farming-stake',
+  'EmbeddedView' = 'embedded-view',
 }
 
 export type TemplateConfig<T extends string> = {

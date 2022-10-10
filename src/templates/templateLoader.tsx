@@ -1,22 +1,26 @@
-import { Alert, Card, Spin } from 'antd'
-import { Component, ErrorInfo, lazy, ReactNode, Suspense } from 'react'
+import { Alert, Card, Spin, Tabs } from 'antd'
+import { lazy, Suspense } from 'react'
 
 import { useTemplateWithProposal } from './hooks/useTemplateWithProposal'
 import { TemplateNames } from './constant/index'
+import useProposalMetaData from 'hooks/proposal/useProposalMetaData'
+import { ProposalExplorer } from './components/proposalExplorer'
 
 export type PropsTemplateCreateLoader = {
   name: TemplateNames
   daoAddress: string
+  defaultData?: Record<string, string>
 }
 export const TemplateCreateLoader = ({
   name,
   daoAddress,
+  defaultData,
 }: PropsTemplateCreateLoader) => {
   const Component = lazy(() => import(`./view/${name}/create`))
   return (
     <Alert.ErrorBoundary description="Can't not load template!">
       <Suspense fallback={<div />}>
-        <Component daoAddress={daoAddress} />
+        <Component daoAddress={daoAddress} defaultData={defaultData} />
       </Suspense>
     </Alert.ErrorBoundary>
   )
@@ -50,47 +54,35 @@ export const TemplateProposalLoader = ({
 }
 
 export type PropsTemplateInfoLoader = { proposalAddress: string }
+
 export const TemplateInfoLoader = ({
   proposalAddress,
 }: PropsTemplateInfoLoader) => {
-  const template = useTemplateWithProposal(proposalAddress)
-  const Component = lazy(() => import(`./view/${template}/info`))
+  const { metaData } = useProposalMetaData(proposalAddress)
+
+  if (!metaData) return null
+
+  const { templateConfig } = metaData
+  const Component = lazy(() => import(`./view/${templateConfig.name}/info`))
   return (
-    <ErrorBoundary>
+    <Alert.ErrorBoundary>
       <Suspense fallback={<div />}>
-        <Component proposalAddress={proposalAddress} />
+        <Tabs
+          style={{ marginTop: -12 }}
+          items={[
+            {
+              label: 'Template Data',
+              key: 'template-data',
+              children: <Component proposalAddress={proposalAddress} />,
+            },
+            {
+              label: 'Proposal Explorer',
+              key: 'proposal-explorer',
+              children: <ProposalExplorer proposalAddress={proposalAddress} />,
+            },
+          ]}
+        />
       </Suspense>
-    </ErrorBoundary>
+    </Alert.ErrorBoundary>
   )
 }
-
-interface Props {
-  children?: ReactNode
-}
-interface State {
-  hasError: boolean
-}
-class ErrorBoundary extends Component<Props, State> {
-  public state: State = {
-    hasError: false,
-  }
-
-  public static getDerivedStateFromError(_: Error): State {
-    // Update state so the next render will show the fallback UI.
-    return { hasError: true }
-  }
-
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught error:', error, errorInfo)
-  }
-
-  public render() {
-    if (this.state.hasError) {
-      return <h1>Sorry.. there was an error</h1>
-    }
-
-    return this.props.children
-  }
-}
-
-export default ErrorBoundary
