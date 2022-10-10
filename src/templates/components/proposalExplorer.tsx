@@ -34,9 +34,9 @@ export const ProposalExplorer = ({
         <Col span={24}>
           <Space direction="vertical" style={{ width: '100%' }}>
             <Space>
-              <Typography.Text>
+              <Typography.Title level={5}>
                 #{Number(ix.account.index) + 1} Instruction:
-              </Typography.Text>
+              </Typography.Title>
               <ShortenAddress address={ix.publicKey.toBase58()} size={8} />
             </Space>
             <Card>
@@ -56,7 +56,11 @@ export const ProposalExplorer = ({
                   <Space wrap>
                     <Typography.Title level={5}>Data:</Typography.Title>
                     <Typography.Text>
-                      {JSON.stringify(Array.from(ix.account.data as number[]))}
+                      {JSON.stringify(
+                        Array.from(ix.account.data as number[]),
+                        null,
+                        4,
+                      )}
                     </Typography.Text>
                   </Space>
                 </Col>

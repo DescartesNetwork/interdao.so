@@ -8,7 +8,7 @@ import { TemplateData } from 'templates/components/templateForm'
 import { TEMPLATE_CONFIGS, IDS } from './configs'
 import { PropsCreateComponent } from 'templates/constant'
 import { useConfirmIdl } from 'templates/hooks/useConfirmIdl'
-// import { useDaoData } from 'hooks/dao'
+import { useDaoData } from 'hooks/dao'
 
 type NativeTemplateData = TemplateData<IDS>
 
@@ -17,7 +17,7 @@ const Create = ({
   defaultData,
 }: PropsCreateComponent<NativeTemplateData>) => {
   const [visible, setVisible] = useState(false)
-  // const daoData = useDaoData(daoAddress)
+  const daoData = useDaoData(daoAddress)
   const { confirm, close } = useConfirmIdl()
 
   const handleConfirmTransaction = useCallback(
@@ -34,7 +34,7 @@ const Create = ({
   )
 
   const daoWallet: WalletInterface = useMemo(() => {
-    // const masterAddress = daoData?.master.toBase58()
+    const masterAddress = daoData?.master.toBase58()
     return {
       ...window.sentre.wallet,
       disconnect: async () => {
@@ -48,9 +48,9 @@ const Create = ({
         handleConfirmTransaction([tx])
         throw new Error("Dao Wallet can't sign transaction")
       },
-      getAddress: async () => 'ExoMXqxEGY6ZexUhswjLsBiwZP3QBtWZZGvKzEKvCqqp', // masterAddress!,
+      getAddress: async () => masterAddress!,
     }
-  }, [handleConfirmTransaction])
+  }, [daoData?.master, handleConfirmTransaction])
 
   if (!defaultData) return null
   return (
