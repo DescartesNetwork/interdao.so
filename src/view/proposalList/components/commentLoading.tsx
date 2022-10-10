@@ -2,8 +2,7 @@ import { Fragment } from 'react'
 
 import { Avatar, Card, List, Skeleton } from 'antd'
 
-type CardLoadingProps = { loading: boolean }
-const CardLoading = ({ loading }: CardLoadingProps) => {
+const CommentLoading = ({ loading }: { loading: boolean }) => {
   if (!loading) return <Fragment />
 
   return (
@@ -24,4 +23,4 @@ const CardLoading = ({ loading }: CardLoadingProps) => {
   )
 }
 
-export default CardLoading
+export default CommentLoading

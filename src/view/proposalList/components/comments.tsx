@@ -6,11 +6,11 @@ import ListComments from './listComments'
 import RowBetweenNodeTitle from 'components/rowBetweenNodeTitle'
 import ActionCommentOnly from './actionCommentOnly'
 import IonIcon from '@sentre/antd-ionicon'
+import CommentLoading from './commentLoading'
 
 import { CommentProposal, getComments } from 'model/comments.controller'
 import { useContentWatcher } from 'helpers/useContentWatcher'
 import { AppDispatch, AppState } from 'model'
-import CardLoading from 'components/cardLoading'
 
 const DEFAULT_AMOUNT_COMMENTS = 4
 
@@ -73,7 +73,7 @@ const Comments = ({ proposalAddress }: CommentsProps) => {
 
         {/* List comments */}
         <Col span={24}>
-          <CardLoading loading={loading} />
+          <CommentLoading loading={loading} />
           <ListComments comments={mergedComments.slice(0, amount)} />
         </Col>
 
