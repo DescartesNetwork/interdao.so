@@ -1,6 +1,6 @@
 import { MintAvatar, MintSymbol } from '@sen-use/app'
 import { Space, Typography } from 'antd'
-import RowSpaceVertical from 'components/rowSpaceVertical'
+import RowSpaceVertical from 'components/ui/rowSpaceVertical'
 
 import { ComponentConfigs } from '../templateForm'
 

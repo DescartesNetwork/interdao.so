@@ -6,7 +6,7 @@ import QRcode from 'qrcode.react'
 import IonIcon from '@sentre/antd-ionicon'
 import { Col, Row, Space, Tooltip, Typography } from 'antd'
 
-import RowSpaceBetween from 'components/rowSpaceBetween'
+import RowSpaceBetween from 'components/ui/rowSpaceBetween'
 
 const MasterWalletInfo = ({ daoAddress }: { daoAddress: string }) => {
   const [copied, setCopied] = useState(false)

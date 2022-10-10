@@ -2,7 +2,7 @@ import moment from 'moment'
 
 import { Col, Row, Typography } from 'antd'
 import RowSpaceBetween from 'components/rowSpaceBetween'
-import RowSpaceVertical from 'components/rowSpaceVertical'
+import RowSpaceVertical from 'components/ui/rowSpaceVertical'
 
 const BlankTemplateInfo = ({
   isProposalDetail,

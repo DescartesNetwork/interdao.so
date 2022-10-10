@@ -5,7 +5,7 @@ import { util } from '@sentre/senhub'
 
 import { Col, Row, Space } from 'antd'
 import { MintAvatar, MintSymbol } from '@sen-use/app'
-import StatisticCard from 'components/statisticCard'
+import StatisticCard from 'components/ui/statisticCard'
 import RegimeTag from 'components/regimeTag'
 import DaoMember from 'components/dao/daoMember'
 

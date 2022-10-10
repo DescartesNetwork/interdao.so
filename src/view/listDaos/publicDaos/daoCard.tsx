@@ -4,21 +4,10 @@ import { useHistory } from 'react-router-dom'
 import { useWidth } from '@sentre/senhub'
 import { util } from '@sentre/senhub'
 
-import {
-  Avatar,
-  Button,
-  Card,
-  Col,
-  Image,
-  Row,
-  Space,
-  Spin,
-  Tag,
-  Tooltip,
-  Typography,
-} from 'antd'
+import { Row, Space, Spin, Tag, Tooltip, Typography } from 'antd'
+import { Avatar, Button, Card, Col, Image } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
-import StatisticCard from 'components/statisticCard'
+import StatisticCard from 'components/ui/statisticCard'
 import RegimeTag from 'components/regimeTag'
 import { MintAvatar, MintSymbol } from '@sen-use/app'
 import GradientAvatar from 'components/gradientAvatar'

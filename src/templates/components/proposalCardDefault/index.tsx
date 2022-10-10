@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import moment from 'moment'
 
 import { Col, Row, Spin, Typography } from 'antd'
-import RowSpaceVertical from 'components/rowSpaceVertical'
+import RowSpaceVertical from 'components/ui/rowSpaceVertical'
 import ProposalTemplateCard from '../../components/proposalTemplateCard'
 import WrapStatistic from './wrapStatistic'
 

@@ -3,7 +3,7 @@ import { account } from '@senswap/sen-js'
 import { util } from '@sentre/senhub'
 
 import { Col, Input, Row, Space, Typography } from 'antd'
-import RowSpaceVertical from 'components/rowSpaceVertical'
+import RowSpaceVertical from 'components/ui/rowSpaceVertical'
 import ActionButton from './actionButton'
 import IonIcon from '@sentre/antd-ionicon'
 

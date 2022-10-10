@@ -7,7 +7,7 @@ import BN from 'bn.js'
 import { util } from '@sentre/senhub'
 
 import { Card, Col, Row, Space, Typography, Progress } from 'antd'
-import RowSpaceVertical from 'components/rowSpaceVertical'
+import RowSpaceVertical from 'components/ui/rowSpaceVertical'
 
 import { ProposalChildCardProps } from './index'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
