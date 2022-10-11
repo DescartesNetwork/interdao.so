@@ -60,7 +60,7 @@ const ProposalCardDefault = ({
         {configs.components.map((cpn) => {
           const prefix = cpn.prefix
           return (
-            <Fragment>
+            <Fragment key={cpn.id}>
               {prefix && (
                 <Col xs={12} md={6}>
                   <WrapStatistic

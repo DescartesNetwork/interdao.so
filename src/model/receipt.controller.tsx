@@ -1,11 +1,7 @@
-import { AccountInfo, PublicKey } from '@solana/web3.js'
+import { web3 } from '@project-serum/anchor'
+import { util } from '@sentre/senhub'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import {
-  ProposalData,
-  ReceiptData,
-  RECEIPT_DISCRIMINATOR,
-} from '@interdao/core'
-import { account } from '@senswap/sen-js'
+import { ReceiptData, RECEIPT_DISCRIMINATOR } from '@interdao/core'
 
 /**
  * Interface & Utility
@@ -27,30 +23,32 @@ const initialState: ReceiptState = {}
 export const getReceipts = createAsyncThunk(
   `${NAME}/getReceipts`,
   async ({ authorityAddress }: { authorityAddress: string }) => {
-    if (!account.isAddress(authorityAddress)) throw new Error('Invalid address')
+    if (!util.isAddress(authorityAddress)) throw new Error('Invalid address')
     const {
       provider: { connection },
       programId,
       account: { receipt },
     } = window.interDao.program
-    const value: Array<{ pubkey: PublicKey; account: AccountInfo<Buffer> }> =
-      await connection.getProgramAccounts(programId, {
-        filters: [
-          { dataSize: receipt.size },
-          {
-            memcmp: {
-              offset: 0,
-              bytes: RECEIPT_DISCRIMINATOR,
-            },
+    const value: Array<{
+      pubkey: web3.PublicKey
+      account: web3.AccountInfo<Buffer>
+    }> = await connection.getProgramAccounts(programId, {
+      filters: [
+        { dataSize: receipt.size },
+        {
+          memcmp: {
+            offset: 0,
+            bytes: RECEIPT_DISCRIMINATOR,
           },
-          {
-            memcmp: {
-              offset: 16,
-              bytes: authorityAddress,
-            },
+        },
+        {
+          memcmp: {
+            offset: 16,
+            bytes: authorityAddress,
           },
-        ],
-      })
+        },
+      ],
+    })
     let bulk: ReceiptState = {}
     value.forEach(({ pubkey, account: { data: buf } }) => {
       const address = pubkey.toBase58()
@@ -66,7 +64,7 @@ export const getReceipt = createAsyncThunk<
   { address: string; force?: boolean },
   { state: any }
 >(`${NAME}/getReceipt`, async ({ address, force }, { getState }) => {
-  if (!account.isAddress(address)) throw new Error('Invalid address')
+  if (!util.isAddress(address)) throw new Error('Invalid address')
   const {
     receipt: { [address]: data },
   } = getState()
@@ -75,20 +73,10 @@ export const getReceipt = createAsyncThunk<
   return { [address]: raw }
 })
 
-export const upsetReceipt = createAsyncThunk<
-  ReceiptState,
-  { address: string; data: ProposalData },
-  { state: any }
->(`${NAME}/upsetReceipt`, async ({ address, data }) => {
-  if (!account.isAddress(address)) throw new Error('Invalid address')
-  if (!data) throw new Error('Data is empty')
-  return { [address]: data }
-})
-
 export const deleteReceipt = createAsyncThunk(
   `${NAME}/deleteReceipt`,
   async ({ address }: { address: string }) => {
-    if (!account.isAddress(address)) throw new Error('Invalid address')
+    if (!util.isAddress(address)) throw new Error('Invalid address')
     return { address }
   },
 )
@@ -109,10 +97,6 @@ const slice = createSlice({
       )
       .addCase(
         getReceipt.fulfilled,
-        (state, { payload }) => void Object.assign(state, payload),
-      )
-      .addCase(
-        upsetReceipt.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(

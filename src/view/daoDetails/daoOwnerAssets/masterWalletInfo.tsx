@@ -44,7 +44,7 @@ const MasterWalletInfo = ({ daoAddress }: { daoAddress: string }) => {
               <Typography.Text className="t-16">
                 {util.shortenAddress(daoAddress)}
               </Typography.Text>
-              <Tooltip title="Copied" visible={copied}>
+              <Tooltip title="Copied" open={copied}>
                 <CopyToClipboard text={daoAddress} onCopy={onCopy}>
                   <Typography.Text
                     style={{ cursor: 'pointer' }}

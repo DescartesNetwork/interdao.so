@@ -1,7 +1,7 @@
 import { Fragment, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
-import { utilsBN } from 'sentre-web3'
+import { utilsBN } from '@sen-use/web3'
 import { useGetMintDecimals } from '@sentre/senhub'
 
 import { Button, Col, Row } from 'antd'

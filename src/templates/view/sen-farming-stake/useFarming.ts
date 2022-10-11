@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { net, useGetMintDecimals } from '@sentre/senhub'
-import { web3, BN, AnchorProvider } from '@project-serum/anchor'
+import { getAnchorProvider, net, useGetMintDecimals } from '@sentre/senhub'
+import { web3, BN } from '@project-serum/anchor'
 import { utilsBN } from '@sen-use/web3'
 import SenFarming, { DebtData } from '@sentre/farming'
 
@@ -17,11 +17,10 @@ export const useFarming = () => {
 
   const getSenFarming = useCallback((walletPublicKey: web3.PublicKey) => {
     const programId = conf[net].senFarmingProgram
-    const provider = new AnchorProvider(
-      window.sentre.splt.connection,
-      { ...window.sentre.wallet, publicKey: walletPublicKey },
-      {},
-    )
+    const provider = getAnchorProvider({
+      ...window.sentre.solana,
+      publicKey: walletPublicKey,
+    })!
     return new SenFarming(provider, programId)
   }, [])
 

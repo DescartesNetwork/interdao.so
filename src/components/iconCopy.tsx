@@ -15,7 +15,7 @@ const IconCopy = ({ value }: { value: string }) => {
   }
 
   return (
-    <Tooltip title="Copied" visible={copied}>
+    <Tooltip title="Copied" open={copied}>
       <CopyToClipboard text={value}>
         <IonIcon
           style={{ cursor: 'pointer' }}

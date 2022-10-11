@@ -20,7 +20,7 @@ const Address = ({ address }: { address: string }) => {
       <Typography.Text className="t-16">
         NFT collection address: {util.shortenAddress(address)}
       </Typography.Text>
-      <Tooltip title="Copied" visible={copied}>
+      <Tooltip title="Copied" open={copied}>
         <CopyToClipboard text={address} onCopy={onCopy}>
           <Typography.Text style={{ cursor: 'pointer' }} className="t-16">
             <IonIcon name="copy-outline" />

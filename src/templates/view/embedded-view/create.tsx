@@ -36,7 +36,7 @@ const Create = ({
   const daoWallet: WalletInterface = useMemo(() => {
     const masterAddress = daoData?.master.toBase58()
     return {
-      ...window.sentre.wallet,
+      ...window.sentre.solana,
       disconnect: async () => {
         setVisible(false)
       },

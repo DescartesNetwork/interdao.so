@@ -19,7 +19,7 @@ const EmbededView = ({ appId, src, title, background }: EmbededViewProps) => {
   }, [setBackground, theme])
   // Setup wallet gateway
   useEffect(() => {
-    const gateway = new Gateway(window.sentre.wallet)
+    const gateway = new Gateway(window.sentre.solana)
     return gateway.terminate
   }, [])
 

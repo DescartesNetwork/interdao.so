@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react'
-import { rpc, useWalletAddress } from '@sentre/senhub'
+import { getAnchorWallet, rpc, useWalletAddress } from '@sentre/senhub'
 import InterDAO from '@interdao/core'
 import { Utility } from '@sentre/utility'
 
@@ -11,7 +11,7 @@ export const AppLoader: React.FC = ({ children }) => {
 
   useEffect(() => {
     if (loaded) return
-    const wallet: any = window.sentre.wallet
+    const wallet = getAnchorWallet()!
     window.interDao = new InterDAO(wallet, rpc, configs.sol.interDaoProgramId)
     window.senUtility = new Utility(wallet, rpc)
     setLoaded(true)

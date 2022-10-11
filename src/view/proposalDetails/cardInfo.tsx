@@ -81,7 +81,7 @@ const CardInfo = ({ proposalAddress, daoAddress }: ProposalChildCardProps) => {
                   >
                     {util.shortenAddress(authProposalAddress, 3)}
                   </Typography.Text>
-                  <Tooltip title="Copied" visible={copied}>
+                  <Tooltip title="Copied" open={copied}>
                     <CopyToClipboard text={authProposalAddress} onCopy={onCopy}>
                       <IonIcon
                         style={{ cursor: 'pointer' }}

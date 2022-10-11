@@ -2,7 +2,7 @@ import { useSetState } from 'react-use'
 import { utils, web3 } from '@project-serum/anchor'
 import { Token } from '@solana/spl-token'
 import { useGetMintDecimals } from '@sentre/senhub'
-import { utilsBN } from 'sentre-web3'
+import { utilsBN } from '@sen-use/web3'
 
 import { Button, Col, Row, Space } from 'antd'
 import TemplateForm, { TemplateData } from 'templates/components/templateForm'

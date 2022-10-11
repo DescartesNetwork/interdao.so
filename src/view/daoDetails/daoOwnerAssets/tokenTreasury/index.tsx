@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { PublicKey } from '@solana/web3.js'
 import { AccountData } from '@senswap/sen-js'
-import { getMultipleAccounts } from 'sentre-web3/dist/rpc'
-import { util } from '@sentre/senhub'
+import { getMultipleAccounts } from '@sen-use/web3/dist/rpc'
+import { splt, util } from '@sentre/senhub'
 
 import { Col, Empty, Row, Space, Spin, Typography } from 'antd'
 import MintBalance from './mintBalance'
@@ -22,9 +22,7 @@ const TokenTreasury = ({ daoAddress }: { daoAddress: string }) => {
 
   const fetchTokenAccounts = useCallback(async () => {
     if (!daoMasterAddress || !daoData?.master) return
-    const {
-      splt: { connection, spltProgramId, parseAccountData, parseMintData },
-    } = window.sentre
+    const { connection, spltProgramId, parseAccountData, parseMintData } = splt
 
     const { value } = await connection.getTokenAccountsByOwner(daoData.master, {
       programId: spltProgramId,

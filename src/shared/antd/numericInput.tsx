@@ -62,7 +62,7 @@ const NumericInput = forwardRef(
             {error}
           </Space>
         }
-        visible={!!error}
+        open={!!error}
       >
         <Input
           {...props}
