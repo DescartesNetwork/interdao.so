@@ -23,6 +23,7 @@ export const useInitProposalIx = () => {
         instructions.map(async ({ data, keys, programId }) => {
           const proposalIx = web3.Keypair.generate()
           const { tx } = await window.interDao.initializeProposalInstruction({
+            txIndex: 0,
             proposal,
             dao,
             invokedProgramAddress: programId.toBase58(),
