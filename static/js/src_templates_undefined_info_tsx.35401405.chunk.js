@@ -1,2 +1,0 @@
-"use strict";(globalThis.webpackChunkinter_dao=globalThis.webpackChunkinter_dao||[]).push([["src_templates_undefined_info_tsx"],{86617:(a,i,n)=>{n.r(i),n.d(i,{default:()=>e});var s=n(32671),t=n(45263);const e=()=>(0,t.jsx)(s.Spin,{spinning:!0,tip:"Loading Proposal Data...",style:{height:176}})}}]);
-//# sourceMappingURL=src_templates_undefined_info_tsx.35401405.chunk.js.map
