@@ -10,6 +10,8 @@ import { clearTemplate } from 'model/template.controller'
 import './index.less'
 import SenFarming from './senFarming'
 import Solend from './solend'
+import Francium from './francium'
+import Meanfi from './meanfi'
 
 const Template = ({ daoAddress }: { daoAddress: string }) => {
   const visible = useSelector((state: AppState) => state.template.visible)
@@ -40,6 +42,12 @@ const Template = ({ daoAddress }: { daoAddress: string }) => {
             </Tabs.TabPane>
             <Tabs.TabPane tab="Solend" key="solend">
               <Solend daoAddress={daoAddress} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Francium" key="francium">
+              <Francium daoAddress={daoAddress} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Meanfi" key="Meanfi">
+              <Meanfi daoAddress={daoAddress} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Zeta" key="zeta" disabled />
             <Tabs.TabPane tab="Atrix" key="atrix" disabled />

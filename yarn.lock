@@ -1308,6 +1308,14 @@
     "@dnd-kit/utilities" "^3.2.0"
     tslib "^2.0.0"
 
+"@dnd-kit/modifiers@^6.0.0":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/modifiers/-/modifiers-6.0.1.tgz#9e39b25fd6e323659604cc74488fe044d33188c8"
+  integrity sha512-rbxcsg3HhzlcMHVHWDuh9LCjpOVAgqbV78wLGI8tziXY3+qcMQ61qVXIvNKQFuhj75dSfD+o+PYZQ/NUk2A23A==
+  dependencies:
+    "@dnd-kit/utilities" "^3.2.1"
+    tslib "^2.0.0"
+
 "@dnd-kit/sortable@^7.0.1":
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/@dnd-kit/sortable/-/sortable-7.0.1.tgz#99c6012bbab4d8bb726c0eef7b921a338c404fdb"
@@ -1320,6 +1328,13 @@
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@dnd-kit/utilities/-/utilities-3.2.0.tgz#b3e956ea63a1347c9d0e1316b037ddcc6140acda"
   integrity sha512-h65/pn2IPCCIWwdlR2BMLqRkDxpTEONA+HQW3n765HBijLYGyrnTCLa2YQt8VVjjSQD6EfFlTE6aS2Q/b6nb2g==
+  dependencies:
+    tslib "^2.0.0"
+
+"@dnd-kit/utilities@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/utilities/-/utilities-3.2.1.tgz#53f9e2016fd2506ec49e404c289392cfff30332a"
+  integrity sha512-OOXqISfvBw/1REtkSK2N3Fi2EQiLMlWUlqnOK/UpOISqBZPWpE6TqL+jcPtMOkE8TqYGiURvRdPSI9hltNUjEA==
   dependencies:
     tslib "^2.0.0"
 
@@ -1381,10 +1396,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@interdao/core@^2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@interdao/core/-/core-2.0.4.tgz#5d3f5e41a32fe38061180aa65b310a9722c13006"
-  integrity sha512-73DYruXmZE5s+XvxoFK9Bhde0wxZHE5ih/hw7ygHMvmBePAwMLb5PQGyfQRpsfRI2blQpUpDIip4XtA6p8wFJQ==
+"@interdao/core@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@interdao/core/-/core-2.1.1.tgz#5a432d8c6246fa00f44168c343118311de1aac1d"
+  integrity sha512-KEfjqlzcsI4GKJAYOI32lL5TPbyjIRZD48LGQzxdQ2KwOzDE/OTN79IiPpQvJCpGNHXMKMDIEt0v5MtJdQz5Jg==
   dependencies:
     "@metaplex/js" "^4.12.0"
     "@project-serum/anchor" "^0.24.2"
@@ -2106,21 +2121,14 @@
     soprox-abi "^0.0.18"
     tweetnacl "^1.0.3"
 
-"@sentre/antd-ionicon@^1.0.46":
-  version "1.0.46"
-  resolved "https://registry.yarnpkg.com/@sentre/antd-ionicon/-/antd-ionicon-1.0.46.tgz#e93f6f57ffaaf84b55e9a816fc9a2acb22a7782c"
-  integrity sha512-SBz2Tf2+j11KfIDTNV71U3g7UpO9Nncl0jcYYCgQ5BcmfRQnrMQ67RYZNKKAgzF6TY8/JcYDWK64C5EV4t62PQ==
+"@sentre/antd-ionicon@^2.0.2":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@sentre/antd-ionicon/-/antd-ionicon-2.0.4.tgz#73981de6021bd8c8f1b309ddb67aa5b4b07ad760"
+  integrity sha512-VIn2YQSEPX/GxlypYJTiBD7zYmQ9YOVAA6cAGf6s3+ARI/7ij/csPgI/sq4NQNc7gxz4pSdIir3cSPn2LtGReg==
   dependencies:
     react-helmet "^6.1.0"
 
-"@sentre/antd-ionicon@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@sentre/antd-ionicon/-/antd-ionicon-2.0.1.tgz#b889bffa737d0cc1ead7315b475c881eef91dc75"
-  integrity sha512-RRGnq0YyOyXL2A+w8uiWwx1FhDZPGQN3YXgoiEidgCfvwmJ6o568fmWyIE/Bv14HpjZYTJWrIqgQuCkboeIL7A==
-  dependencies:
-    react-helmet "^6.1.0"
-
-"@sentre/connector@^0.1.0":
+"@sentre/connector@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@sentre/connector/-/connector-0.1.2.tgz#ad13dedf3eda00ab0e2262fbbcb5ec539e400eb5"
   integrity sha512-XbL/eivA91vdSVn+wzmhMIrdyga7h/f+2W3vzayEUtgy84LDfv8RaZcfnMKFdNFbVGZr3lGxgDPH+CTirnTWFw==
@@ -2131,10 +2139,10 @@
     tweetnacl "^1.0.3"
     uuid "^8.3.2"
 
-"@sentre/craco-plugins@^1.0.46":
-  version "1.0.46"
-  resolved "https://registry.yarnpkg.com/@sentre/craco-plugins/-/craco-plugins-1.0.46.tgz#cedea61f355b6ee056e88b58d0f1f6fe7f0efedf"
-  integrity sha512-Rs1nMepJvC4BcDfEpCLSPrlRzBaXKDCamRN4HjrnYmLDjm/m5gNrSrYOC0p9JrbiP2gqNx1tPdej1TtJ8Vy4pA==
+"@sentre/craco-plugins@^2.0.2":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@sentre/craco-plugins/-/craco-plugins-2.0.4.tgz#9334b258211e2716d3eb9c05b10f5b86cb00981a"
+  integrity sha512-qEcONUM+JIC6RJLhfCtQcCdSd5Tvko9nQVKxkDEL82BXbcCY4VoRydntOlN+J27X3PvqgN6v8TBGiMTfJA3e3Q==
   dependencies:
     "@babel/cli" "^7.17.10"
     "@babel/core" "^7.18.2"
@@ -2167,12 +2175,12 @@
     util "^0.12.4"
     webpack-bundle-analyzer "^4.5.0"
 
-"@sentre/embeded-view@^1.0.46":
-  version "1.0.46"
-  resolved "https://registry.yarnpkg.com/@sentre/embeded-view/-/embeded-view-1.0.46.tgz#fdfd4f47c6505f63368719ce92e44e209715cfec"
-  integrity sha512-i/1/Zkry+HNt/bZVQoR2nhkJuQGp9iM4HZFE1vC/iCNp+Ak6BA0poO+zr6i/4CqYuaKxtsqVm6r+NRAIDYkarg==
+"@sentre/embeded-view@^2.0.2":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@sentre/embeded-view/-/embeded-view-2.0.4.tgz#1262f8de3f6d03723c82573431802921d7cea823"
+  integrity sha512-mTWtI6PgWr1h6y06gzgHzhlQV3Uw1tdXWMsAI35gcw2smxq3auJd0EEaRNgeYR3noJw8HcvM5xg2amYfnL8MCw==
   dependencies:
-    "@sentre/connector" "^0.1.0"
+    "@sentre/connector" "^0.1.2"
 
 "@sentre/farming@^2.0.1":
   version "2.0.1"
@@ -2194,20 +2202,21 @@
   resolved "https://registry.yarnpkg.com/@sentre/react-lazyload/-/react-lazyload-3.2.2.tgz#f3d921327a2b14b9b3a9e906d01034f11387097a"
   integrity sha512-NKJhz9G8pModoZJaLMziRJtd582pFHbIydNXwRI72ECkjqbc7XIgBX+8kssrUtRxK2rW9VVQnGKDpmyZ8iSIyw==
 
-"@sentre/senhub@^4.0.6":
-  version "4.0.6"
-  resolved "https://registry.yarnpkg.com/@sentre/senhub/-/senhub-4.0.6.tgz#abeece3ff8907b3acae8b51245cfeba6c3f5fba2"
-  integrity sha512-hDjWCsLLzlvOdYVd+mbGbAqi7WBEEhsalZjw/WAhpclNE755Ye9rbF6k4J0LpbIyvQuc7fubxCmX1T56nBpg+w==
+"@sentre/senhub@^4.1.1":
+  version "4.3.5"
+  resolved "https://registry.yarnpkg.com/@sentre/senhub/-/senhub-4.3.5.tgz#d3e0c7128e81d9d3679bc0df43c371a14733b406"
+  integrity sha512-qxHbSXQFhFY3FQqQPmN1TMlWTdXjpIt3b3fEjywDKF6cjOrrdcPodR4z11Ij3vBux6FMisf7GjVvkzuvhxOuKw==
   dependencies:
     "@dnd-kit/core" "^6.0.5"
+    "@dnd-kit/modifiers" "^6.0.0"
     "@dnd-kit/sortable" "^7.0.1"
     "@metaplex/js" "4.12.0"
     "@project-serum/anchor" "^0.24.2"
     "@project-serum/sol-wallet-adapter" "^0.2.6"
     "@reduxjs/toolkit" "^1.8.0"
     "@senswap/sen-js" "^1.4.0"
-    "@sentre/antd-ionicon" "^2.0.1"
-    "@sentre/connector" "^0.1.0"
+    "@sentre/antd-ionicon" "^2.0.2"
+    "@sentre/connector" "^0.1.2"
     "@sentre/react-dynamic-remote-component" "^0.0.8"
     "@sentre/react-lazyload" "^3.2.2"
     "@solana/spl-token-registry" "^0.2.4574"
@@ -2229,7 +2238,7 @@
     swr "^1.3.0"
     tweetnacl "^1.0.3"
 
-"@sentre/utility@^1.0.2":
+"@sentre/utility@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@sentre/utility/-/utility-1.0.3.tgz#843b0c01903d79da7fb115759407cfd5914f7daa"
   integrity sha512-wr4bCIswj/5zoY44Kh3xQPTea/SXwxcoJ+ZNTEWQ6EhENPdMmhhna4ehx7zZZ3UOmcpw/A7RMFnC1xuQNijX0A==
