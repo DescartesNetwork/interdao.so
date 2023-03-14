@@ -48,7 +48,11 @@ const TokenTreasury = ({ daoAddress }: { daoAddress: string }) => {
   }, [daoData?.master, daoMasterAddress])
 
   useEffect(() => {
-    fetchTokenAccounts()
+    // TODO: fix realtime
+    const interval = setInterval(() => {
+      fetchTokenAccounts()
+    }, 5000)
+    return () => clearInterval(interval)
   }, [fetchTokenAccounts])
 
   return (

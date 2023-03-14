@@ -12,6 +12,7 @@ export const AppLoader: React.FC = ({ children }) => {
   useEffect(() => {
     if (loaded) return
     const wallet = getAnchorWallet()!
+    // TODO: fix devnet
     window.interDao = new InterDAO(
       wallet,
       'https://devnet.genesysgo.net',
