@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { web3 } from '@project-serum/anchor'
 import EmbeddedView from '@sentre/embeded-view'
 
-import { Button, Col, Modal, Row, Space } from 'antd'
+import { Button, Col, Modal, Row, Space, Typography } from 'antd'
 import { TemplateData } from 'templates/components/templateForm'
 
 import { TEMPLATE_CONFIGS, IDS } from './configs'
@@ -19,19 +19,18 @@ const Create = ({
   const [visible, setVisible] = useState(false)
   const daoData = useDaoData(daoAddress)
   const { confirm, close } = useConfirmIdl()
+  const [openConfirm, setOpenConfirm] = useState(false)
+  const [txs, setTxs] = useState<web3.Transaction[]>([])
 
-  const handleConfirmTransaction = useCallback(
-    async (txs: web3.Transaction[]) => {
-      setVisible(false)
-      return confirm(
-        daoAddress,
-        { ...TEMPLATE_CONFIGS, title: defaultData?.title! },
-        { ...defaultData },
-        txs,
-      )
-    },
-    [confirm, daoAddress, defaultData],
-  )
+  const handleConfirmTransaction = useCallback(async () => {
+    console.log('txs', txs)
+    return confirm(
+      daoAddress,
+      { ...TEMPLATE_CONFIGS, title: defaultData?.title! },
+      { ...defaultData },
+      txs,
+    )
+  }, [confirm, daoAddress, defaultData, txs])
 
   const daoWallet: WalletInterface = useMemo(() => {
     const masterAddress = daoData?.master.toBase58()
@@ -41,20 +40,43 @@ const Create = ({
         setVisible(false)
       },
       signAllTransactions: async (txs) => {
-        handleConfirmTransaction(txs)
+        setTxs(txs)
+        setOpenConfirm(true)
+        // handleConfirmTransaction(txs)
         throw new Error("Dao Wallet can't sign transaction")
       },
       signTransaction: async (tx) => {
-        handleConfirmTransaction([tx])
+        setTxs([tx])
+        setOpenConfirm(true)
+        // handleConfirmTransaction([tx])
         throw new Error("Dao Wallet can't sign transaction")
       },
       getAddress: async () => masterAddress!,
     }
-  }, [daoData?.master, handleConfirmTransaction])
+  }, [daoData?.master])
 
   if (!defaultData) return null
   return (
     <Row gutter={[24, 24]}>
+      <Modal
+        open={openConfirm}
+        onCancel={() => {
+          setVisible(false)
+          setOpenConfirm(false)
+        }}
+        onOk={() => {
+          handleConfirmTransaction()
+          setVisible(false)
+        }}
+      >
+        <Row>
+          <Col>
+            <Typography.Title level={4}>
+              Do you want to create new proposal?
+            </Typography.Title>
+          </Col>
+        </Row>
+      </Modal>
       <Modal
         title={'InterDao Wallet'}
         open={visible}
@@ -76,6 +98,7 @@ const Create = ({
         }}
         footer={null}
         onCancel={() => setVisible(false)}
+        destroyOnClose={true}
       >
         <EmbeddedView
           wallet={daoWallet}
