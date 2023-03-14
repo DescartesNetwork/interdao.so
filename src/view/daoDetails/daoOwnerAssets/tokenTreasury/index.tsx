@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { PublicKey } from '@solana/web3.js'
+import { Connection, PublicKey } from '@solana/web3.js'
 import { AccountData } from '@senswap/sen-js'
 import { getMultipleAccounts } from '@sen-use/web3/dist/rpc'
 import { splt, util } from '@sentre/senhub'
@@ -22,7 +22,10 @@ const TokenTreasury = ({ daoAddress }: { daoAddress: string }) => {
 
   const fetchTokenAccounts = useCallback(async () => {
     if (!daoMasterAddress || !daoData?.master) return
-    const { connection, spltProgramId, parseAccountData, parseMintData } = splt
+    const connection = new Connection(
+      'https://solitary-autumn-water.solana-mainnet.quiknode.pro/05b03a0cfeb8a5ec38f4c55950eb9b9bad7c8b58',
+    )
+    const { spltProgramId, parseAccountData, parseMintData } = splt
 
     const { value } = await connection.getTokenAccountsByOwner(daoData.master, {
       programId: spltProgramId,
