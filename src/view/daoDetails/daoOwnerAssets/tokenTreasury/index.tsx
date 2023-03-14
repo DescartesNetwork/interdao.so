@@ -35,14 +35,16 @@ const TokenTreasury = ({ daoAddress }: { daoAddress: string }) => {
       connection,
       accounts.map((acc) => new PublicKey(acc.mint)),
     )
-    const filteredAccounts = accounts.filter((acc, idx) => {
-      const mint = mintAccounts[idx]
-      if (!mint) return false
-      const mintData = parseMintData(mint.account.data)
-      const isNft =
-        mintData.decimals === 0 && Number(mintData.supply.toString()) === 1
-      return !isNft
-    })
+    const filteredAccounts = accounts
+      .filter((acc, idx) => {
+        const mint = mintAccounts[idx]
+        if (!mint) return false
+        const mintData = parseMintData(mint.account.data)
+        const isNft =
+          mintData.decimals === 0 && Number(mintData.supply.toString()) === 1
+        return !isNft
+      })
+      .sort((a, b) => Number(a.amount.toString()) - Number(b.amount.toString()))
 
     return setTokenAccounts(filteredAccounts)
   }, [daoData?.master, daoMasterAddress])

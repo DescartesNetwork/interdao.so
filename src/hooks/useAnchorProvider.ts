@@ -11,6 +11,7 @@ export const useAnchorProvider = () => {
 
   useEffect(() => {
     const provider = getAnchorProvider()!
+    // TODO: fix devnet
     const devNetProvider = new AnchorProvider(
       new Connection('https://devnet.genesysgo.net'),
       provider.wallet as any,
